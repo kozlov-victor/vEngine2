@@ -2,8 +2,10 @@ import {DebugError} from "../../debug/debugError";
 import {ObjectPool} from "@engine/misc/objectPool";
 import {ICloneable} from "@engine/core/declarations";
 import {ReleaseableEntity} from "@engine/misc/releaseableEntity";
-import {Vec4} from "@engine/geometry/vec4";
 import {Point2d} from "@engine/geometry/point2d";
+import {IPoint3d} from "@engine/geometry/point3d";
+import {vec3} from "@engine/misc/math/vec3";
+import {Vec4} from "@engine/geometry/vec4";
 
 
 // https://evanw.github.io/lightgl.js/docs/matrix.html
@@ -11,7 +13,6 @@ import {Point2d} from "@engine/geometry/point2d";
 export namespace Mat4 {
 
     import Vec4Holder = Vec4.Vec4Holder;
-    import VEC4 = Vec4.VEC4;
 
     type n = number;
 
@@ -173,6 +174,30 @@ export namespace Mat4 {
         out.identityFlag = false;
 
     };
+
+    export const lookAt = (out:Mat16Holder,cameraPosition:IPoint3d, target:IPoint3d, up:IPoint3d):void=> {
+        const zAxis = vec3.normalize(vec3.subtract(cameraPosition, target));
+        const xAxis = vec3.normalize(vec3.cross(up, zAxis));
+        const yAxis = vec3.normalize(vec3.cross(zAxis, xAxis));
+
+        const dst = out.mat16 as Float32Array;
+        dst[ 0] = xAxis.x;
+        dst[ 1] = xAxis.y;
+        dst[ 2] = xAxis.z;
+        dst[ 3] = 0;
+        dst[ 4] = yAxis.x;
+        dst[ 5] = yAxis.y;
+        dst[ 6] = yAxis.z;
+        dst[ 7] = 0;
+        dst[ 8] = zAxis.x;
+        dst[ 9] = zAxis.y;
+        dst[10] = zAxis.z;
+        dst[11] = 0;
+        dst[12] = cameraPosition.x;
+        dst[13] = cameraPosition.y;
+        dst[14] = cameraPosition.z;
+        dst[15] = 1;
+    }
 
 
     export const makeTranslation = (out:Mat16Holder,tx:n, ty:n, tz:n):void => {
@@ -347,35 +372,39 @@ export namespace Mat4 {
 
     export const matrixMultiply = (out:Mat16Holder,aHolder:Mat16Holder, bHolder:Mat16Holder):void => {
 
-        const r:MAT16 = out.mat16 as MAT16;
+        const dst:MAT16 = out.mat16 as MAT16;
         const a:MAT16 = aHolder.mat16 as MAT16;
         const b:MAT16 = bHolder.mat16 as MAT16;
 
-        const a0 = a[0], a1 = a[1], a2 = a[2], a3 = a[3], a4 = a[4], a5 = a[5], a6 = a[6] , a7 = a[7], a8 = a[8];
-        const a9 = a[9], a10 = a[10], a11 = a[11], a12 = a[12], a13 = a[13], a14 = a[14], a15 = a[15];
+        const b0  = b[0 ], b1  = b[1 ], b2  = b[2 ], b3  = b[3 ];
+        const b4  = b[4 ], b5  = b[5 ], b6  = b[6 ], b7  = b[7 ];
+        const b8  = b[8 ], b9  = b[9 ], b10 = b[10], b11 = b[11];
+        const b12 = b[12], b13 = b[13], b14 = b[14], b15 = b[15];
 
-        const b0 = b[0], b1 = b[1], b2 = b[2], b3 = b[3], b4 = b[4], b5 = b[5], b6 = b[6] , b7 = b[7], b8 = b[8];
-        const b9 = b[9], b10 = b[10], b11 = b[11], b12 = b[12], b13 = b[13], b14 = b[14], b15 = b[15];
+        const a0  = a[0 ], a1  = a[1 ], a2  = a[2 ], a3  = a[3 ];
+        const a4  = a[4 ], a5  = a[5 ], a6  = a[6 ], a7  = a[7 ];
+        const a8  = a[8 ], a9  = a[9 ], a10 = a[10], a11 = a[11];
+        const a12 = a[12], a13 = a[13], a14 = a[14], a15 = a[15];
 
-        r[0 ] =  a0 * b0 +  a1 * b4 +  a2 *  b8 +  a3 * b12;
-        r[1 ] =  a0 * b1 +  a1 * b5 +  a2 *  b9 +  a3 * b13;
-        r[2 ] =  a0 * b2 +  a1 * b6 +  a2 * b10 +  a3 * b14;
-        r[3 ] =  a0 * b3 +  a1 * b7 +  a2 * b11 +  a3 * b15;
+        dst[ 0] = b0  * a0 + b1  * a4  + b2  * a8  + b3  * a12;
+        dst[ 1] = b0  * a1 + b1  * a5  + b2  * a9  + b3  * a13;
+        dst[ 2] = b0  * a2 + b1  * a6  + b2  * a10 + b3  * a14;
+        dst[ 3] = b0  * a3 + b1  * a7  + b2  * a11 + b3  * a15;
 
-        r[4 ] =  a4 * b0 +  a5 * b4 +  a6 *  b8 +  a7 * b12;
-        r[5 ] =  a4 * b1 +  a5 * b5 +  a6 *  b9 +  a7 * b13;
-        r[6 ] =  a4 * b2 +  a5 * b6 +  a6 * b10 +  a7 * b14;
-        r[7 ] =  a4 * b3 +  a5 * b7 +  a6 * b11 +  a7 * b15;
+        dst[ 4] = b4  * a0 + b5  * a4  + b6  * a8  + b7  * a12;
+        dst[ 5] = b4  * a1 + b5  * a5  + b6  * a9  + b7  * a13;
+        dst[ 6] = b4  * a2 + b5  * a6  + b6  * a10 + b7  * a14;
+        dst[ 7] = b4  * a3 + b5  * a7  + b6  * a11 + b7  * a15;
 
-        r[8 ] =  a8 * b0 +  a9 * b4 + a10 *  b8 + a11 * b12;
-        r[9 ] =  a8 * b1 +  a9 * b5 + a10 *  b9 + a11 * b13;
-        r[10] =  a8 * b2 +  a9 * b6 + a10 * b10 + a11 * b14;
-        r[11] =  a8 * b3 +  a9 * b7 + a10 * b11 + a11 * b15;
+        dst[ 8] = b8  * a0 + b9  * a4  + b10 * a8  + b11 * a12;
+        dst[ 9] = b8  * a1 + b9  * a5  + b10 * a9  + b11 * a13;
+        dst[10] = b8  * a2 + b9  * a6  + b10 * a10 + b11 * a14;
+        dst[11] = b8  * a3 + b9  * a7  + b10 * a11 + b11 * a15;
 
-        r[12] = a12 * b0 + a13 * b4 + a14 *  b8 + a15 * b12;
-        r[13] = a12 * b1 + a13 * b5 + a14 *  b9 + a15 * b13;
-        r[14] = a12 * b2 + a13 * b6 + a14 * b10 + a15 * b14;
-        r[15] = a12 * b3 + a13 * b7 + a14 * b11 + a15 * b15;
+        dst[12] = b12 * a0 + b13 * a4  + b14 * a8  + b15 * a12;
+        dst[13] = b12 * a1 + b13 * a5  + b14 * a9  + b15 * a13;
+        dst[14] = b12 * a2 + b13 * a6  + b14 * a10 + b15 * a14;
+        dst[15] = b12 * a3 + b13 * a7  + b14 * a11 + b15 * a15;
 
     };
 
@@ -401,38 +430,90 @@ export namespace Mat4 {
     };
 
     export const inverse = (out:Mat16Holder,mHolder:Mat16Holder):void=>{
-        const r:MAT16 = out.mat16 as MAT16;
+        const dst:MAT16 = out.mat16 as MAT16;
         const m:MAT16 = mHolder.mat16 as MAT16;
 
-        const m0 = m[0], m1 = m[1], m2 = m[2], m3 = m[3], m4 = m[4], m5 = m[5], m6 = m[6], m7 = m[7];
-        const m8 = m[8], m9 = m[9], m10 = m[10], m11 = m[11], m12 = m[12], m13 = m[13], m14 = m[14], m15 = m[15];
+        const m00 = m[0 * 4 + 0];
+        const m01 = m[0 * 4 + 1];
+        const m02 = m[0 * 4 + 2];
+        const m03 = m[0 * 4 + 3];
+        const m10 = m[1 * 4 + 0];
+        const m11 = m[1 * 4 + 1];
+        const m12 = m[1 * 4 + 2];
+        const m13 = m[1 * 4 + 3];
+        const m20 = m[2 * 4 + 0];
+        const m21 = m[2 * 4 + 1];
+        const m22 = m[2 * 4 + 2];
+        const m23 = m[2 * 4 + 3];
+        const m30 = m[3 * 4 + 0];
+        const m31 = m[3 * 4 + 1];
+        const m32 = m[3 * 4 + 2];
+        const m33 = m[3 * 4 + 3];
+        const tmp_0  = m22 * m33;
+        const tmp_1  = m32 * m23;
+        const tmp_2  = m12 * m33;
+        const tmp_3  = m32 * m13;
+        const tmp_4  = m12 * m23;
+        const tmp_5  = m22 * m13;
+        const tmp_6  = m02 * m33;
+        const tmp_7  = m32 * m03;
+        const tmp_8  = m02 * m23;
+        const tmp_9  = m22 * m03;
+        const tmp_10 = m02 * m13;
+        const tmp_11 = m12 * m03;
+        const tmp_12 = m20 * m31;
+        const tmp_13 = m30 * m21;
+        const tmp_14 = m10 * m31;
+        const tmp_15 = m30 * m11;
+        const tmp_16 = m10 * m21;
+        const tmp_17 = m20 * m11;
+        const tmp_18 = m00 * m31;
+        const tmp_19 = m30 * m01;
+        const tmp_20 = m00 * m21;
+        const tmp_21 = m20 * m01;
+        const tmp_22 = m00 * m11;
+        const tmp_23 = m10 * m01;
 
-        r[0] = m5 * m10 * m15 - m5 * m14 * m11 - m6 * m9 * m15 + m6 * m13 * m11 + m7 * m9 * m14 - m7 * m13 * m10;
-        r[1] = -m1 * m10 * m15 + m1 * m14 * m11 + m2 * m9 * m15 - m2 * m13 * m11 - m3 * m9 * m14 + m3 * m13 * m10;
-        r[2] = m1 * m6 * m15 - m1 * m14 * m7 - m2 * m5 * m15 + m2 * m13 * m7 + m3 * m5 * m14 - m3 * m13 * m6;
-        r[3] = -m1 * m6 * m11 + m1 * m10 * m7 + m2 * m5 * m11 - m2 * m9 * m7 - m3 * m5 * m10 + m3 * m9 * m6;
+        const t0 = (tmp_0 * m11 + tmp_3 * m21 + tmp_4 * m31) - (tmp_1 * m11 + tmp_2 * m21 + tmp_5 * m31);
+        const t1 = (tmp_1 * m01 + tmp_6 * m21 + tmp_9 * m31) - (tmp_0 * m01 + tmp_7 * m21 + tmp_8 * m31);
+        const t2 = (tmp_2 * m01 + tmp_7 * m11 + tmp_10 * m31) - (tmp_3 * m01 + tmp_6 * m11 + tmp_11 * m31);
+        const t3 = (tmp_5 * m01 + tmp_8 * m11 + tmp_11 * m21) - (tmp_4 * m01 + tmp_9 * m11 + tmp_10 * m21);
 
-        r[4] = -m4 * m10 * m15 + m4 * m14 * m11 + m6 * m8 * m15 - m6 * m12 * m11 - m7 * m8 * m14 + m7 * m12 * m10;
-        r[5] = m0 * m10 * m15 - m0 * m14 * m11 - m2 * m8 * m15 + m2 * m12 * m11 + m3 * m8 * m14 - m3 * m12 * m10;
-        r[6] = -m0 * m6 * m15 + m0 * m14 * m7 + m2 * m4 * m15 - m2 * m12 * m7 - m3 * m4 * m14 + m3 * m12 * m6;
-        r[7] = m0 * m6 * m11 - m0 * m10 * m7 - m2 * m4 * m11 + m2 * m8 * m7 + m3 * m4 * m10 - m3 * m8 * m6;
-
-        r[8] = m4 * m9 * m15 - m4 * m13 * m11 - m5 * m8 * m15 + m5 * m12 * m11 + m7 * m8 * m13 - m7 * m12 * m9;
-        r[9] = -m0 * m9 * m15 + m0 * m13 * m11 + m1 * m8 * m15 - m1 * m12 * m11 - m3 * m8 * m13 + m3 * m12 * m9;
-        r[10] = m0 * m5 * m15 - m0 * m13 * m7 - m1 * m4 * m15 + m1 * m12 * m7 + m3 * m4 * m13 - m3 * m12 * m5;
-        r[11] = -m0 * m5 * m11 + m0 * m9 * m7 + m1 * m4 * m11 - m1 * m8 * m7 - m3 * m4 * m9 + m3 * m8 * m5;
-
-        r[12] = -m4 * m9 * m14 + m4 * m13 * m10 + m5 * m8 * m14 - m5 * m12 * m10 - m6 * m8 * m13 + m6 * m12 * m9;
-        r[13] = m0 * m9 * m14 - m0 * m13 * m10 - m1 * m8 * m14 + m1 * m12 * m10 + m2 * m8 * m13 - m2 * m12 * m9;
-        r[14] = -m0 * m5 * m14 + m0 * m13 * m6 + m1 * m4 * m14 - m1 * m12 * m6 - m2 * m4 * m13 + m2 * m12 * m5;
-        r[15] = m0 * m5 * m10 - m0 * m9 * m6 - m1 * m4 * m10 + m1 * m8 * m6 + m2 * m4 * m9 - m2 * m8 * m5;
-
-        const det:n = m0*r[0] + m1*r[4] + m2*r[8] + m3*r[12];
-        if (DEBUG && det===0) {
-            console.error(m);
-            throw new DebugError("can not invert matrix with zero determinant");
+        const x = (m00 * t0 + m10 * t1 + m20 * t2 + m30 * t3);
+        if (DEBUG && x===0) {
+            throw new DebugError(`can not calculate determinant: division by zero`);
         }
-        for (let i:n = 0; i < 16; i++) r[i] /= det;
+
+        const d = 1.0 / x;
+
+        dst[0] = d * t0;
+        dst[1] = d * t1;
+        dst[2] = d * t2;
+        dst[3] = d * t3;
+        dst[4] = d * ((tmp_1 * m10 + tmp_2 * m20 + tmp_5 * m30) -
+            (tmp_0 * m10 + tmp_3 * m20 + tmp_4 * m30));
+        dst[5] = d * ((tmp_0 * m00 + tmp_7 * m20 + tmp_8 * m30) -
+            (tmp_1 * m00 + tmp_6 * m20 + tmp_9 * m30));
+        dst[6] = d * ((tmp_3 * m00 + tmp_6 * m10 + tmp_11 * m30) -
+            (tmp_2 * m00 + tmp_7 * m10 + tmp_10 * m30));
+        dst[7] = d * ((tmp_4 * m00 + tmp_9 * m10 + tmp_10 * m20) -
+            (tmp_5 * m00 + tmp_8 * m10 + tmp_11 * m20));
+        dst[8] = d * ((tmp_12 * m13 + tmp_15 * m23 + tmp_16 * m33) -
+            (tmp_13 * m13 + tmp_14 * m23 + tmp_17 * m33));
+        dst[9] = d * ((tmp_13 * m03 + tmp_18 * m23 + tmp_21 * m33) -
+            (tmp_12 * m03 + tmp_19 * m23 + tmp_20 * m33));
+        dst[10] = d * ((tmp_14 * m03 + tmp_19 * m13 + tmp_22 * m33) -
+            (tmp_15 * m03 + tmp_18 * m13 + tmp_23 * m33));
+        dst[11] = d * ((tmp_17 * m03 + tmp_20 * m13 + tmp_23 * m23) -
+            (tmp_16 * m03 + tmp_21 * m13 + tmp_22 * m23));
+        dst[12] = d * ((tmp_14 * m22 + tmp_17 * m32 + tmp_13 * m12) -
+            (tmp_16 * m32 + tmp_12 * m12 + tmp_15 * m22));
+        dst[13] = d * ((tmp_20 * m32 + tmp_12 * m02 + tmp_19 * m22) -
+            (tmp_18 * m22 + tmp_21 * m32 + tmp_13 * m02));
+        dst[14] = d * ((tmp_18 * m12 + tmp_23 * m32 + tmp_15 * m02) -
+            (tmp_22 * m32 + tmp_14 * m02 + tmp_19 * m12));
+        dst[15] = d * ((tmp_22 * m22 + tmp_16 * m02 + tmp_21 * m12) -
+            (tmp_20 * m12 + tmp_23 * m22 + tmp_17 * m02));
 
         out.identityFlag = false;
 

@@ -4,7 +4,7 @@ import {DebugError} from "@engine/debug/debugError";
 import {isNotNumber} from "@engine/misc/object";
 
 export interface IPoint3d extends IPoint2d{
-    readonly z: number;
+    z: number;
 }
 
 export class Point3d extends Point2d implements ICloneable<Point3d>, IPoint3d{

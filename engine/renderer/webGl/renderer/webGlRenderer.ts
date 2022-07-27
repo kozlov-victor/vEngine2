@@ -37,6 +37,10 @@ import {BatchPainter} from "@engine/renderer/webGl/programs/impl/batch/batchPain
 import {BatchedImage} from "@engine/renderable/impl/general/image/batchedImage";
 import {AbstractGradient} from "@engine/renderable/impl/fill/abstract/abstractGradient";
 import {SimpleImagePainter} from "@engine/renderer/webGl/programs/impl/base/simpleImage/simpleImagePainter";
+import {SkyBox} from "@engine/renderable/impl/skyBox";
+import {SkyBoxPainter} from "@engine/renderer/webGl/programs/impl/base/skyBox/skyBoxPainter";
+import {MathEx} from "@engine/misc/math/mathEx";
+import {Point3d} from "@engine/geometry/point3d";
 import Mat16Holder = Mat4.Mat16Holder;
 import glEnumToString = DebugUtil.glEnumToString;
 import IDENTITY = Mat4.IDENTITY;
@@ -130,6 +134,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     private _simpleImagePainterHolder = new InstanceHolder(SimpleImagePainter);
     private _coloredRectPainterHolder = new InstanceHolder(SimpleColoredRectPainter);
     private _meshPainterHolder = new InstanceHolder(MeshPainter);
+    private _skyBoxPainterHolder = new InstanceHolder(SkyBoxPainter);
     private _batchPainterHolder = new InstanceHolder(BatchPainter);
 
     private _nullTexture:Texture;
@@ -248,6 +253,47 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         mp.draw();
         //this._gl.disable(this._gl.CULL_FACE);
         inverseTransposeModelMatrix.release();
+    }
+
+    public drawSkyBox(model:SkyBox):void {
+        this.flush();
+
+        const sbp = this._skyBoxPainterHolder.getInstance(this._gl);
+
+        const projectionMatrix = Mat16Holder.create();
+        Mat4.perspective(
+            projectionMatrix,
+            MathEx.degToRad(60),
+            this._currFrameBufferStack.getTexture().size.width/this._currFrameBufferStack.getTexture().size.height,
+            1,2000);
+
+        const cameraMatrix = Mat16Holder.create();
+        const fi = model.angle3d.x;
+        const theta = model.angle3d.y;
+        const x = Math.cos(fi)*Math.sin(theta);
+        const y = Math.sin(fi)*Math.sin(theta);
+        const z = Math.cos(theta);
+        const cameraPosition = new Point3d(x,y,z);
+        const target = new Point3d(0,0,0);
+        const up = new Point3d(0,1,0);
+        Mat4.lookAt(cameraMatrix,cameraPosition, target, up);
+
+        const viewMatrix = Mat16Holder.create();
+        Mat4.inverse(viewMatrix,cameraMatrix);
+        (viewMatrix.mat16 as Float32Array)[12] = 0;
+        (viewMatrix.mat16 as Float32Array)[13] = 0;
+        (viewMatrix.mat16 as Float32Array)[14] = 0;
+
+        const viewDirectionProjectionMatrix  = Mat16Holder.create();
+        Mat4.matrixMultiply(viewDirectionProjectionMatrix ,projectionMatrix,viewMatrix);
+        Mat4.inverse(viewDirectionProjectionMatrix, viewDirectionProjectionMatrix);
+
+        sbp.setUniformVector(sbp.u_viewDirectionProjectionInverse,viewDirectionProjectionMatrix.mat16);
+
+        sbp.attachTexture(sbp.u_skybox,model.texture);
+        this._glCachedAccessor.setDepthTest(false);
+        sbp.draw();
+        this._glCachedAccessor.setDepthTest(true);
     }
 
     public drawMesh2d(mesh:Mesh2d):void {

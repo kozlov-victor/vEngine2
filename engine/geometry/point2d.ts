@@ -5,8 +5,8 @@ import {DebugError} from "@engine/debug/debugError";
 import {isNotNumber} from "@engine/misc/object";
 
 export interface IPoint2d {
-    readonly x:number;
-    readonly y: number;
+    x:number;
+    y: number;
 }
 
 export class Point2d extends ObservableEntity implements ICloneable<Point2d>, IPoint2d {

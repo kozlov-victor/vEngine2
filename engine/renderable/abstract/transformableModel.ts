@@ -7,11 +7,11 @@ import {Mat4} from "@engine/misc/math/mat4";
 import {ITransformable} from "@engine/core/declarations";
 import {ObservableEntity} from "@engine/geometry/abstract/observableEntity";
 import Mat16Holder = Mat4.Mat16Holder;
-import {Point3d} from "@engine/geometry/point3d";
+import {IPoint3d, Point3d} from "@engine/geometry/point3d";
 import {Vec4} from "@engine/geometry/vec4";
 import {getScreenCoords} from "@engine/renderable/_helper/getScreenCoords";
 
-class AnglePoint3d extends ObservableEntity{
+class AnglePoint3d extends ObservableEntity implements IPoint3d {
 
     private _x:number = 0;
     private _y:number = 0;

@@ -35,7 +35,6 @@ export class MeshPainter extends AbstractPainter {
     private readonly u_specularTextureUsed:string = 'u_specularTextureUsed';
     private readonly u_lightUsed:string = 'u_lightUsed';
     private readonly u_cubeMapTextureUsed:string = 'u_cubeMapTextureUsed';
-    private readonly u_heightMapFactor:string = 'u_heightMapFactor';
 
     constructor(gl:WebGLRenderingContext){
         super(gl);
@@ -104,9 +103,6 @@ export class MeshPainter extends AbstractPainter {
         this.setUniformScalar(this.u_cubeMapTextureUsed,used);
     }
 
-    public setHeightMapFactor(val:number):void{
-        this.setUniformScalar(this.u_heightMapFactor,val);
-    }
 
     public setLightUsed(used:boolean):void{
         this.setUniformScalar(this.u_lightUsed,used);
