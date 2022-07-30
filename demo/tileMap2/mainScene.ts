@@ -13,7 +13,7 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {IRectJSON, Rect} from "@engine/geometry/rect";
 import {AnimatedImage} from "@engine/renderable/impl/general/image/animatedImage";
 import {YamlParser} from "@engine/misc/parsers/yaml/yamlParser";
-import {AtlasFrameAnimation} from "@engine/animation/frameAnimation/atlasFrameAnimation";
+import {AtlasFrameAnimation} from "@engine/animation/frameAnimation/atlas/atlasFrameAnimation";
 import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 import {LightFilter} from "@engine/renderer/webGl/filters/light/lightFilter";
 import {LightSet} from "@engine/lighting/lightSet";

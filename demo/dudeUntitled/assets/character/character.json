@@ -1,0 +1,115 @@
+{
+	"frames": {
+		"character_jump1.png": {
+			"frame": {
+				"x": 1,
+				"y": 1,
+				"w": 93,
+				"h": 108
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 93,
+				"h": 108
+			},
+			"sourceSize": {
+				"w": 93,
+				"h": 108
+			}
+		},
+		"character_jump2.png": {
+			"frame": {
+				"x": 96,
+				"y": 1,
+				"w": 97,
+				"h": 108
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 97,
+				"h": 108
+			},
+			"sourceSize": {
+				"w": 97,
+				"h": 108
+			}
+		},
+		"character_stand.png": {
+			"frame": {
+				"x": 1,
+				"y": 111,
+				"w": 97,
+				"h": 108
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 97,
+				"h": 108
+			},
+			"sourceSize": {
+				"w": 97,
+				"h": 108
+			}
+		},
+		"character_step1.png": {
+			"frame": {
+				"x": 100,
+				"y": 111,
+				"w": 97,
+				"h": 106
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 97,
+				"h": 106
+			},
+			"sourceSize": {
+				"w": 97,
+				"h": 106
+			}
+		},
+		"character_step2.png": {
+			"frame": {
+				"x": 195,
+				"y": 1,
+				"w": 96,
+				"h": 106
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 96,
+				"h": 106
+			},
+			"sourceSize": {
+				"w": 96,
+				"h": 106
+			}
+		}
+	},
+	"meta": {
+		"app": "http://www.codeandweb.com/texturepacker",
+		"version": "1.0",
+		"image": "spritesheet.png",
+		"format": "RGBA8888",
+		"size": {
+			"w": 292,
+			"h": 220
+		},
+		"scale": "1"
+	}
+}
