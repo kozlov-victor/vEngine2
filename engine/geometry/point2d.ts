@@ -41,11 +41,11 @@ export class Point2d extends ObservableEntity implements ICloneable<Point2d>, IP
     protected _arr = new Float32Array([0,0,0]);
 
     public static fromPool():Point2d {
-        return Point2d.pool.getFreeObject()!;
+        return this.pool.getFreeObject()!;
     }
 
     public static toPool(obj:Point2d):void {
-        return Point2d.pool.releaseObject(obj);
+        return this.pool.releaseObject(obj);
     }
 
     // noinspection JSSuspiciousNameCombination

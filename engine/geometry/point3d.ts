@@ -2,6 +2,7 @@ import {IPoint2d, Point2d} from "@engine/geometry/point2d";
 import {ICloneable} from "@engine/core/declarations";
 import {DebugError} from "@engine/debug/debugError";
 import {isNotNumber} from "@engine/misc/object";
+import {ObjectPool} from "@engine/misc/objectPool";
 
 export interface IPoint3d extends IPoint2d{
     z: number;
@@ -17,6 +18,16 @@ export class Point3d extends Point2d implements ICloneable<Point3d>, IPoint3d{
 
     set z(value: number) {
         this.setZ(value);
+    }
+
+    private static _pool = new ObjectPool<Point3d>(Point3d,4);
+
+    public static override fromPool():Point3d {
+        return this._pool.getFreeObject()!;
+    }
+
+    public static override toPool(obj:Point3d):void {
+        return this._pool.releaseObject(obj);
     }
 
     // noinspection JSSuspiciousNameCombination

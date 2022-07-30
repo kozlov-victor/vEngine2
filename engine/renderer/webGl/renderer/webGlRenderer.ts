@@ -260,31 +260,31 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
         const sbp = this._skyBoxPainterHolder.getInstance(this._gl);
 
-        const projectionMatrix = Mat16Holder.create();
+        const projectionMatrix = Mat16Holder.fromPool();
         Mat4.perspective(
             projectionMatrix,
             MathEx.degToRad(60),
             this._currFrameBufferStack.getTexture().size.width/this._currFrameBufferStack.getTexture().size.height,
             1,2000);
 
-        const cameraMatrix = Mat16Holder.create();
+        const cameraMatrix = Mat16Holder.fromPool();
         const fi = model.angle3d.x;
         const theta = model.angle3d.y;
         const x = Math.cos(fi)*Math.sin(theta);
         const y = Math.sin(fi)*Math.sin(theta);
         const z = Math.cos(theta);
-        const cameraPosition = new Point3d(x,y,z);
-        const target = new Point3d(0,0,0);
-        const up = new Point3d(0,1,0);
+        const cameraPosition = Point3d.fromPool().setXYZ(x,y,z);
+        const target = Point3d.fromPool().setXYZ(0,0,0);
+        const up = Point3d.fromPool().setXYZ(0,1,0);
         Mat4.lookAt(cameraMatrix,cameraPosition, target, up);
 
-        const viewMatrix = Mat16Holder.create();
+        const viewMatrix = Mat16Holder.fromPool();
         Mat4.inverse(viewMatrix,cameraMatrix);
         (viewMatrix.mat16 as Float32Array)[12] = 0;
         (viewMatrix.mat16 as Float32Array)[13] = 0;
         (viewMatrix.mat16 as Float32Array)[14] = 0;
 
-        const viewDirectionProjectionMatrix  = Mat16Holder.create();
+        const viewDirectionProjectionMatrix  = Mat16Holder.fromPool();
         Mat4.matrixMultiply(viewDirectionProjectionMatrix ,projectionMatrix,viewMatrix);
         Mat4.inverse(viewDirectionProjectionMatrix, viewDirectionProjectionMatrix);
 
@@ -294,6 +294,14 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this._glCachedAccessor.setDepthTest(false);
         sbp.draw();
         this._glCachedAccessor.setDepthTest(true);
+
+        projectionMatrix.release();
+        cameraMatrix.release();
+        cameraPosition.release();
+        target.release();
+        up.release();
+        viewMatrix.release();
+        viewDirectionProjectionMatrix.release();
     }
 
     public drawMesh2d(mesh:Mesh2d):void {

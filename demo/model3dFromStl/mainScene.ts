@@ -21,29 +21,11 @@ export class MainScene extends Scene {
         './model3dFromStl/textures/miramar_front.png',
         './model3dFromStl/textures/miramar_back.png',
     )
-    // @Resource.CubeTexture(
-    //     './cubeMapTexture/textures/cm_left.jpg',
-    //     './cubeMapTexture/textures/cm_right.jpg',
-    //     './cubeMapTexture/textures/cm_top.jpg',
-    //     './cubeMapTexture/textures/cm_bottom.jpg',
-    //     './cubeMapTexture/textures/cm_front.jpg',
-    //     './cubeMapTexture/textures/cm_back.jpg'
-    // )
-    // @Resource.CubeTexture(
-    //     './model3dFromStl/textures2/pos-x.jpg',
-    //     './model3dFromStl/textures2/neg-x.jpg',
-    //     './model3dFromStl/textures2/pos-y.jpg',
-    //     './model3dFromStl/textures2/neg-y.jpg',
-    //     './model3dFromStl/textures2/neg-z.jpg',
-    //     './model3dFromStl/textures2/pos-z.jpg'
-    // )
     private cubeTexture:CubeMapTexture;
 
 
     public override onReady():void {
 
-        const skyBox = new SkyBox(this.game,this.cubeTexture);
-        skyBox.appendTo(this);
 
         const obj = new StlParser().parse(this.game,{
             meshData: this.data1,
@@ -51,6 +33,9 @@ export class MainScene extends Scene {
         });
         obj.pos.setXY(200,250);
         obj.material.reflectivity = 0.8;
+
+        const skyBox = new SkyBox(this.game,this.cubeTexture);
+        skyBox.prependTo(this);
         obj.angle3d.observe(()=>{
             skyBox.angle3d.setXYZ(
                 -obj.angle3d.x,
