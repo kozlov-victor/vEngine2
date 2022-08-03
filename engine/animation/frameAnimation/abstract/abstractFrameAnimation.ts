@@ -11,7 +11,15 @@ export const enum FRAME_ANIMATION_EVENTS {
     loop      =  'loop',
 }
 
-export type tFrameAnimationDuration = Required<{ duration?: number }> & { durationOfOneFrame?: number };
+interface IDuration {
+    duration: number;
+}
+
+interface IDurationOfOneFrame {
+    durationOfOneFrame: number;
+}
+
+export type tFrameAnimationDuration = IDuration | IDurationOfOneFrame;
 
 export interface IFrameAnimationBaseParams {
     name: string;
@@ -44,8 +52,8 @@ export abstract class AbstractFrameAnimation<T> implements ITargetAnimation, ICl
         this._name = params.name;
         this._frames = params.frames;
 
-        if (params.duration) this._duration = params.duration;
-        else if (params.durationOfOneFrame) this.setDurationOfOneFrame(params.durationOfOneFrame);
+        if ((params as IDuration).duration!==undefined) this._duration = (params as IDuration).duration;
+        else if ((params as IDurationOfOneFrame).durationOfOneFrame) this.setDurationOfOneFrame((params as IDurationOfOneFrame).durationOfOneFrame);
 
         this._isRepeating = params.isRepeating ?? this._isRepeating;
     }

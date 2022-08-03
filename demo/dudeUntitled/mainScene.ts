@@ -3,14 +3,9 @@ import {AnimatedImage} from "@engine/renderable/impl/general/image/animatedImage
 import {Resource} from "@engine/resources/resourceDecorators";
 import {Assets} from "./assets/assets";
 import {AtlasFrameAnimation} from "@engine/animation/frameAnimation/atlas/atlasFrameAnimation";
-import {IRectJSON} from "@engine/geometry/rect";
 import {ColorFactory} from "@engine/renderer/common/colorFactory";
 import {TexturePackerAtlas} from "@engine/animation/frameAnimation/atlas/texturePackerAtlas";
-
-const toFrame = (frame:any):IRectJSON=> {
-    const {x,y,w:width,h:height} = frame;
-    return {x,y,width,height};
-}
+import {TileMap} from "@engine/renderable/impl/general/tileMap/tileMap";
 
 export class MainScene extends Scene {
 
@@ -19,6 +14,14 @@ export class MainScene extends Scene {
     public override onReady():void {
 
         this.backgroundColor = ColorFactory.fromCSS(`#940202`);
+
+        const tileMap:TileMap = new TileMap(this.game,this.assets.tilesTexture);
+        tileMap.fromTiledJSON(this.assets.levelData,{
+            useCollision:true,
+            collideWithTiles:'all',
+            groupNames:['tileMap'],
+        });
+        tileMap.appendTo(this);
 
         const characterImage = new AnimatedImage(this.game,this.assets.characterTexture);
         const texturePackerAtlas = new TexturePackerAtlas(this.assets.characterAtlas);
@@ -30,7 +33,6 @@ export class MainScene extends Scene {
             isRepeating: true,
             name: 'walk',
             durationOfOneFrame: 200,
-            duration: undefined!,
         });
         characterImage.addFrameAnimation(walkAnimation);
         walkAnimation.play();

@@ -211,6 +211,7 @@ export class TileMap extends RenderableModelWithTexture {
             this._drawingSurface = new DrawingSurface(this.game,size);
             this.prependChild(this._drawingSurface);
         }
+        scene.camera.worldTransformDirty = true;
     }
 
 

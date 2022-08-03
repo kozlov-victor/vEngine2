@@ -20,6 +20,7 @@ import {createFontFromAtlas} from "@engine/renderable/impl/general/font/createFo
 import {createFontFromCssDescription} from "@engine/renderable/impl/general/font/createFontMethods/createFontFromCssDescription";
 import {IParser} from "@engine/misc/parsers/iParser";
 import type {YamlParser} from "@engine/misc/parsers/yaml/yamlParser";
+import {path} from "@engine/resources/path";
 
 namespace ResourceCache {
 
@@ -34,6 +35,7 @@ namespace ResourceCache {
 
 export class ResourceLoader {
 
+    public static BASE_URL = '';
 
     public constructor(private readonly game: Game) {
         this.game = game;
@@ -56,14 +58,17 @@ export class ResourceLoader {
         return postProcess(text);
     }
 
-    private static mergeUrl(pageFile:string, baseUrl:string):string {
-        if (!baseUrl) return pageFile;
-        if (baseUrl[baseUrl.length-1]==='/') baseUrl = baseUrl.substr(0,baseUrl.length-1);
-        if (pageFile.indexOf('/')===0) pageFile = pageFile.substr(1);
-        return `${baseUrl}/${pageFile}`;
+    private static _pathJoin(prefix:string|'',req:string | IURLRequest):string | IURLRequest {
+        if ((req as IURLRequest).url) {
+            (req as IURLRequest).url = path.join(this.BASE_URL,prefix,(req as IURLRequest).url);
+            return req;
+        } else {
+            return path.join(this.BASE_URL,prefix,req as string);
+        }
     }
 
     public async loadTexture(req: string|IURLRequest,progress?:(n:number)=>void): Promise<ITexture> {
+        req = ResourceLoader._pathJoin('',req);
         const fromCache:Optional<ITexture> = ResourceCache.cache[(req as IURLRequest).url??req];
         if (fromCache!==undefined) {
             return fromCache;
@@ -83,6 +88,13 @@ export class ResourceLoader {
         frontSide:  string|IURLRequest, backSide:   string|IURLRequest,
         progress?:(n:number)=>void
     ): Promise<ICubeMapTexture> {
+
+        leftSide    = ResourceLoader._pathJoin('',leftSide);
+        rightSide   = ResourceLoader._pathJoin('',rightSide);
+        topSide     = ResourceLoader._pathJoin('',topSide);
+        bottomSide  = ResourceLoader._pathJoin('',bottomSide);
+        frontSide   = ResourceLoader._pathJoin('',frontSide);
+        backSide    = ResourceLoader._pathJoin('',backSide);
 
         let currProgress:number = 0;
         const progressCallBack = (n:number)=>{
@@ -106,6 +118,7 @@ export class ResourceLoader {
     }
 
     public async loadText(req: string|IURLRequest,progress?:(n:number)=>void): Promise<string> {
+        req = ResourceLoader._pathJoin('',req);
         return await ResourceLoader._loadAndProcessText(req, t=>t,progress);
     }
 
@@ -122,11 +135,13 @@ export class ResourceLoader {
     }
 
     public async loadJSON<T>(req: string|IURLRequest,progress?:(n:number)=>void): Promise<T> {
+        req = ResourceLoader._pathJoin('',req);
         const postPrecessFn:(t:string)=>T = t=>JSON.parse(t);
         return await ResourceLoader._loadAndProcessText<T>(req,postPrecessFn,progress);
     }
 
     public async loadSound(req: string|IURLRequest,progress?:(n:number)=>void): Promise<Sound> {
+        req = ResourceLoader._pathJoin('',req);
         const loader:UrlLoader<ArrayBuffer> = ResourceLoader.createUrlLoader<ArrayBuffer>(req as (URI|IURLRequest),'arraybuffer');
         if (progress!==undefined) loader.onProgress = progress;
         const buff:ArrayBuffer = await loader.load();
@@ -136,6 +151,7 @@ export class ResourceLoader {
     }
 
     public async loadBinary(req: string|IURLRequest,progress?:(n:number)=>void): Promise<ArrayBuffer> {
+        req = ResourceLoader._pathJoin('',req);
         const loader:UrlLoader<ArrayBuffer> = ResourceLoader.createUrlLoader<ArrayBuffer>(req as (URI|IURLRequest),'arraybuffer');
         if (progress!==undefined) loader.onProgress = progress;
         return await loader.load();
@@ -146,6 +162,7 @@ export class ResourceLoader {
     }
 
     public async loadFontFromAtlas(baseUrl:string|IURLRequest, doc:XmlDocument, progress?:(n:number)=>void):Promise<Font>{
+        baseUrl = ResourceLoader._pathJoin(((baseUrl as IURLRequest).url??baseUrl),baseUrl);
         const texturePages:ITextureWithId[] = [];
         const pages:XmlNode[] = doc.querySelectorAll('page');
         if (DEBUG && !pages.length) throw new DebugError(`no 'page' node`);
@@ -154,10 +171,10 @@ export class ResourceLoader {
             const pageFile:string = page.getAttribute('file');
             if (DEBUG && !pageFile) throw new DebugError(`no 'file' attribute for 'page' node`);
             if (isString(baseUrlCopy)) {
-                baseUrlCopy = ResourceLoader.mergeUrl(pageFile,baseUrlCopy);
+                baseUrlCopy = path.join(baseUrlCopy,pageFile);
             } else {
                 baseUrlCopy = {...baseUrlCopy};
-                baseUrlCopy.url = ResourceLoader.mergeUrl(pageFile,baseUrlCopy.url);
+                baseUrlCopy.url = path.join(baseUrlCopy.url,pageFile);
             }
             const texturePage:ITexture =
                 await this.loadTexture(baseUrlCopy,n=>{
@@ -171,13 +188,13 @@ export class ResourceLoader {
     }
 
     public async loadFontFromAtlasUrl(baseUrl:string|IURLRequest,docFileName:string,docParser:{new(str:string):IParser<IXmlNode>}, progress?:(n:number)=>void):Promise<Font>{
-        let docUrl:string|IURLRequest
-        if (isString(baseUrl)) {
-            docUrl = ResourceLoader.mergeUrl(docFileName,baseUrl);
+        let docUrl = ResourceLoader._pathJoin(((baseUrl as IURLRequest).url??baseUrl),baseUrl);
+        if (isString(docUrl)) {
+            docUrl = path.join(docUrl,docFileName);
         } else {
             docUrl = {
-                ...baseUrl,
-                url:ResourceLoader.mergeUrl(docFileName,baseUrl.url)
+                ...docUrl,
+                url:path.join(docUrl.url,docFileName)
             }
         }
         const plainText = await this.loadText(docUrl,n=>progress && progress(n/2));

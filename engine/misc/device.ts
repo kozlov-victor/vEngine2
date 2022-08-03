@@ -18,6 +18,7 @@ export class Device {
             isIPhone: Device.isIPhone,
             buildAt:BUILD_AT,
             embeddedEngine: Device.embeddedEngine,
+            screenResolution: `${this.getScreenResolution()[0]}x${this.getScreenResolution()[1]}`,
         });
     }
 
