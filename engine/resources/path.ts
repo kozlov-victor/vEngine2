@@ -17,7 +17,7 @@ export namespace path {
             parts[i] = trimStart(parts[i]);
             if (i!==parts.length-1) parts[i] = trimEnd(parts[i]);
         }
-        return `./${parts.join('/')}`;
+        return `./${parts.filter(it=>it.length>0).join('/')}`;
     }
 
 }

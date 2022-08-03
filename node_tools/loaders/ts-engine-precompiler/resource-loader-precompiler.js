@@ -73,7 +73,7 @@ module.exports = function(content) {
                     const loadingStatements = createStatementsForPreloadingMethod(
                         `
                          <%=taskQueue%>.addNextTask(async (progress:(n:number)=>void):Promise<void>=>{
-                            this.<%=fieldName%> = await <%=taskQueue%>.getLoader().load${decoratorName}(<%=args%>,progress);
+                            (this as any).<%=fieldName%> = await <%=taskQueue%>.getLoader().load${decoratorName}(<%=args%>,progress);
                         });
                         `,
                         {

@@ -5,10 +5,10 @@ import {ITiledJSON} from "@engine/renderable/impl/general/tileMap/tileMap";
 
 export class Assets extends ResourceAutoHolder {
 
-    @Resource.Texture(`character/character.png`) public characterTexture:ITexture;
-    @Resource.JSON(`character/character.json`) public characterAtlas:any;
+    @Resource.Texture(`character/character.png`) public readonly characterTexture:ITexture;
+    @Resource.JSON(`character/character.json`) public readonly characterAtlas:any;
 
-    @Resource.Texture('tiles/voda_pesok_trava_revision_2.png') public tilesTexture:ITexture;
-    @Resource.JSON('tiles/level.json') public levelData:ITiledJSON;
+    @Resource.Texture('tiles/voda_pesok_trava_revision_2.png') public readonly tilesTexture:ITexture;
+    @Resource.JSON('tiles/level.json') public readonly levelData:ITiledJSON;
 
 }
