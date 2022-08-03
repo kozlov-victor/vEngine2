@@ -6,6 +6,12 @@ import {IPrimitive} from "@engine/renderer/webGl/primitives/abstractPrimitive";
 import {BufferInfo} from "@engine/renderer/webGl/base/bufferInfo";
 import {MeshMaterial} from "@engine/renderable/impl/3d/meshMaterial";
 
+export const enum CullFace {
+    front,
+    back,
+    none
+}
+
 export abstract class Mesh3d extends Mesh2d {
 
     public declare fillColor:never;
@@ -15,6 +21,7 @@ export abstract class Mesh3d extends Mesh2d {
     public normalsTexture:Optional<ITexture>;
     public specularTexture:Optional<ITexture>;
     public invertY:boolean = false;
+    public cullFace:CullFace = CullFace.none;
 
     public material:MeshMaterial = new MeshMaterial();
 

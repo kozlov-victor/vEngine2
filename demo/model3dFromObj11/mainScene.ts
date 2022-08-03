@@ -5,6 +5,7 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {TrackBall} from "../model3dFromFbx/trackBall";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Model3d} from "@engine/renderable/impl/3d/model3d";
+import {CullFace} from "@engine/renderable/impl/3d/mesh3d";
 
 
 export class MainScene extends Scene {
@@ -21,7 +22,9 @@ export class MainScene extends Scene {
         });
         obj.pos.setXY(200,250);
         obj.size.setWH(200,200);
+        obj.scale.setXYZ(15);
         (obj.getChildAt(0) as Model3d).acceptLight(false);
+        (obj.getChildAt(0) as Model3d).cullFace = CullFace.front;
 
         this.appendChild(obj);
         const timer = this.setInterval(()=>{

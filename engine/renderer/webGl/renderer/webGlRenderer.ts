@@ -45,6 +45,7 @@ import Mat16Holder = Mat4.Mat16Holder;
 import glEnumToString = DebugUtil.glEnumToString;
 import IDENTITY = Mat4.IDENTITY;
 import MAT16 = Mat4.MAT16;
+import {CullFace} from "@engine/renderable/impl/3d/mesh3d";
 
 
 const getCtx = (el:HTMLCanvasElement):Optional<WebGLRenderingContext>=>{
@@ -246,12 +247,11 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         mp.setColorMix(mesh.material.diffuseColorMix);
         mp.setSpecular(mesh.material.specular);
 
-        //this._gl.enable(this._gl.CULL_FACE);
+        this._glCachedAccessor.setCullFace(mesh.cullFace);
         this._glCachedAccessor.setDepthTest(mesh.depthTest);
         this._blender.setBlendMode(mesh.blendMode);
         mesh.onUpdatingBuffers();
         mp.draw();
-        //this._gl.disable(this._gl.CULL_FACE);
         inverseTransposeModelMatrix.release();
     }
 
@@ -292,6 +292,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
         sbp.attachTexture(sbp.u_skybox,model.texture);
         this._glCachedAccessor.setDepthTest(false);
+        this._glCachedAccessor.setCullFace(CullFace.none);
         sbp.draw();
         this._glCachedAccessor.setDepthTest(true);
 
@@ -339,6 +340,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
         this._glCachedAccessor.setDepthTest(mesh.depthTest);
         this._blender.setBlendMode(mesh.blendMode);
+        this._glCachedAccessor.setCullFace(CullFace.none);
         mp.draw();
     }
 
@@ -399,12 +401,14 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         sp.setUniformScalar(sp.u_arcAngleTo,ellipse.arcAngleTo % (2*Math.PI));
         sp.setUniformScalar(sp.u_anticlockwise,ellipse.anticlockwise);
         sp.attachTexture('texture',this._nullTexture);
+        this._glCachedAccessor.setCullFace(CullFace.none);
         sp.draw();
 
     }
 
     public flush() {
         this._glCachedAccessor.setDepthTest(false);
+        this._glCachedAccessor.setCullFace(CullFace.none);
         this._batchPainterHolder.getInstance(this._gl).flush(this);
     }
 
@@ -588,6 +592,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
         // gl.depthFunc(gl.LEQUAL);
         //gl.enable(gl.CULL_FACE);
+        gl.cullFace(gl.FRONT);
     }
 
     // optimised version of rectangle drawing
@@ -613,6 +618,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         );
         scp.setUniformScalar(scp.u_alpha,rectangle.getChildrenCount()===0?rectangle.alpha:1);
         scp.setUniformVector(scp.u_color,rectangle.fillColor.asGL());
+        this._glCachedAccessor.setCullFace(CullFace.none);
         scp.draw();
     }
 
@@ -630,6 +636,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         sp.setUniformScalar(sp.u_borderRadius,Math.min(rectangle.borderRadius/maxSize,1));
         sp.setUniformScalar(sp.u_shapeType,SHAPE_TYPE.RECT);
         sp.attachTexture('texture',this._nullTexture);
+        this._glCachedAccessor.setCullFace(CullFace.none);
         sp.draw();
     }
 
@@ -671,6 +678,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         sp.setUniformVector(sp.u_texOffset,offSetArr);
         sp.setUniformScalar(sp.u_stretchMode,img.stretchMode);
         sp.attachTexture('texture',texture);
+        this._glCachedAccessor.setCullFace(CullFace.none);
         sp.draw();
     }
 
@@ -716,7 +724,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
         this._blender.setBlendMode(img.blendMode);
         this._glCachedAccessor.setDepthTest(img.depthTest);
-
+        this._glCachedAccessor.setCullFace(CullFace.none);
         sip.draw();
     }
 
