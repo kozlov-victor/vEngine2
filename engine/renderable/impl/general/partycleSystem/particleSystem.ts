@@ -4,11 +4,13 @@ import {DebugError} from "@engine/debug/debugError";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {noop} from "@engine/misc/object";
 import {Point2d} from "@engine/geometry/point2d";
-import {Optional} from "@engine/core/declarations";
+import {IUpdatable, Optional} from "@engine/core/declarations";
 import {SimpleGameObjectContainer} from "../simpleGameObjectContainer";
 import {Scene} from "@engine/scene/scene";
 import {Layer} from "@engine/scene/layer";
 import {IRigidBody} from "@engine/physics/common/interfaces";
+import {ArcadePhysicsSystem} from "@engine/physics/arcade/arcadePhysicsSystem";
+import {has} from "@phenomnomnominal/tsquery/dist/src/matchers/has";
 
 const rnd:(obj:IParticlePropertyDesc)=>number
     = (obj:IParticlePropertyDesc)=>MathEx.random(obj.from,obj.to);
@@ -53,6 +55,7 @@ export class ParticleSystem extends SimpleGameObjectContainer {
     public emissionRadius:number = 0;
     public emissionPosition:Point2d = new Point2d();
     public maxParticlesInCache:Optional<number>;
+    public gravity:Point2d = new Point2d(0,0);
 
     private _particles:IParticleHolder[] = [];
     private _prototypes:RenderableCloneable[] = [];
@@ -82,9 +85,14 @@ export class ParticleSystem extends SimpleGameObjectContainer {
         if (!this.enabled) return;
         super.update();
         const time:number = this.game.getCurrentTime();
+        const hasGravity = !this.gravity.equals(0);
         for (const holder of this._particles) {
             if (!holder.active) continue;
             this._onUpdateParticle(holder.particle);
+            if (hasGravity) {
+                holder.particle.velocity.x += this.gravity.x;
+                holder.particle.velocity.y += this.gravity.y;
+            }
             if (time - holder.createdTime > holder.lifeTime) {
                 holder.active = false;
                 this.removeChild(holder.particle);
@@ -116,7 +124,7 @@ export class ParticleSystem extends SimpleGameObjectContainer {
         const num:number = rnd(this.numOfParticlesToEmit);
         for (let i:number = 0;i<num;i++) {
             let append = true;
-            let particle:RenderableCloneable;
+            let particle:RenderableCloneable & IUpdatable;
             let holder:Optional<IParticleHolder> =
                 this._particles.find(it=>!it.active);
             if (holder===undefined) {
