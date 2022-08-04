@@ -60,10 +60,13 @@ export class ResourceLoader {
 
     private static _pathJoin(prefix:string|'',req:string | IURLRequest):string | IURLRequest {
         if ((req as IURLRequest).url) {
-            (req as IURLRequest).url = path.join(this.BASE_URL,prefix,(req as IURLRequest).url);
+            const segment = (req as IURLRequest).url;
+            if (!segment.startsWith('data:')) (req as IURLRequest).url = path.join(this.BASE_URL,prefix,segment);
             return req;
         } else {
-            return path.join(this.BASE_URL,prefix,req as string);
+            const segment = req as string;
+            if (!segment.startsWith('data:')) return path.join(this.BASE_URL,prefix,segment);
+            else return req;
         }
     }
 
@@ -162,7 +165,6 @@ export class ResourceLoader {
     }
 
     public async loadFontFromAtlas(baseUrl:string|IURLRequest, doc:XmlDocument, progress?:(n:number)=>void):Promise<Font>{
-        baseUrl = ResourceLoader._pathJoin(((baseUrl as IURLRequest).url??baseUrl),baseUrl);
         const texturePages:ITextureWithId[] = [];
         const pages:XmlNode[] = doc.querySelectorAll('page');
         if (DEBUG && !pages.length) throw new DebugError(`no 'page' node`);
@@ -171,10 +173,10 @@ export class ResourceLoader {
             const pageFile:string = page.getAttribute('file');
             if (DEBUG && !pageFile) throw new DebugError(`no 'file' attribute for 'page' node`);
             if (isString(baseUrlCopy)) {
-                baseUrlCopy = path.join(baseUrlCopy,pageFile);
+                baseUrlCopy = path.join(ResourceLoader.BASE_URL,baseUrlCopy,pageFile);
             } else {
                 baseUrlCopy = {...baseUrlCopy};
-                baseUrlCopy.url = path.join(baseUrlCopy.url,pageFile);
+                baseUrlCopy.url = path.join(ResourceLoader.BASE_URL,baseUrlCopy.url,pageFile);
             }
             const texturePage:ITexture =
                 await this.loadTexture(baseUrlCopy,n=>{
@@ -188,13 +190,13 @@ export class ResourceLoader {
     }
 
     public async loadFontFromAtlasUrl(baseUrl:string|IURLRequest,docFileName:string,docParser:{new(str:string):IParser<IXmlNode>}, progress?:(n:number)=>void):Promise<Font>{
-        let docUrl = ResourceLoader._pathJoin(((baseUrl as IURLRequest).url??baseUrl),baseUrl);
+        let docUrl = baseUrl;
         if (isString(docUrl)) {
-            docUrl = path.join(docUrl,docFileName);
+            docUrl = path.join(ResourceLoader.BASE_URL,docUrl,docFileName);
         } else {
             docUrl = {
                 ...docUrl,
-                url:path.join(docUrl.url,docFileName)
+                url:path.join(ResourceLoader.BASE_URL,docUrl.url,docFileName)
             }
         }
         const plainText = await this.loadText(docUrl,n=>progress && progress(n/2));

@@ -20,6 +20,8 @@ class MouseEventTrottler {
     private lastY:number;
 
     public checkSameEventAndSet(event:MOUSE_EVENTS, x:number, y:number):boolean {
+        x = ~~x; // pointer events can generate coordinates with decimal part
+        y = ~~y;
         if (
             this.event===event &&
             this.lastX===x &&
@@ -194,7 +196,7 @@ export class MouseControl implements IControl {
             [
             'mouseMove','ontouchstart','onmousedown',
             'ontouchend','onmouseup','ontouchmove',
-            'onpointerup', 'onpointermove',
+            'onpointerup', 'onpointermove','onpointerdown',
             'onmousemove','ondblclick'].forEach((evtName:string)=>{
                 // eslint-disable-next-line @typescript-eslint/ban-types
             (this._container as unknown as Record<string,null>)[evtName] = null;

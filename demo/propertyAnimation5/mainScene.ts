@@ -36,6 +36,7 @@ export class MainScene extends Scene {
         ps.addParticlePrefab(rect);
         ps.emissionRadius = 5;
         ps.forceDrawChildrenOnNewSurface = true;
+        ps.particleGravity.y = 5;
 
 
         ps.numOfParticlesToEmit = {from:10,to:50};

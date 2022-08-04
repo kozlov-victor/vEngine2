@@ -55,7 +55,7 @@ export class ParticleSystem extends SimpleGameObjectContainer {
     public emissionRadius:number = 0;
     public emissionPosition:Point2d = new Point2d();
     public maxParticlesInCache:Optional<number>;
-    public gravity:Point2d = new Point2d(0,0);
+    public particleGravity:Point2d = new Point2d(0,0);
 
     private _particles:IParticleHolder[] = [];
     private _prototypes:RenderableCloneable[] = [];
@@ -85,13 +85,13 @@ export class ParticleSystem extends SimpleGameObjectContainer {
         if (!this.enabled) return;
         super.update();
         const time:number = this.game.getCurrentTime();
-        const hasGravity = !this.gravity.equals(0);
+        const hasGravity = !this.particleGravity.equals(0);
         for (const holder of this._particles) {
             if (!holder.active) continue;
             this._onUpdateParticle(holder.particle);
             if (hasGravity) {
-                holder.particle.velocity.x += this.gravity.x;
-                holder.particle.velocity.y += this.gravity.y;
+                holder.particle.velocity.x += this.particleGravity.x;
+                holder.particle.velocity.y += this.particleGravity.y;
             }
             if (time - holder.createdTime > holder.lifeTime) {
                 holder.active = false;

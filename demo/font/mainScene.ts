@@ -6,7 +6,6 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {IObjectMouseEvent} from "@engine/control/mouse/mousePoint";
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 import {Button} from "@engine/renderable/impl/ui/button/button";
-import {TaskQueue} from "@engine/resources/taskQueue";
 
 
 export class MainScene extends Scene {

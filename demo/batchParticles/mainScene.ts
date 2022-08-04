@@ -29,10 +29,12 @@ export class MainScene extends Scene {
         ps.addParticlePrefab(particle2);
         ps.emissionRadius = 20;
         ps.forceDrawChildrenOnNewSurface = true;
+        ps.particleGravity.y = 5;
 
         ps.numOfParticlesToEmit = {from:30,to:100};
         ps.particleLiveTime = {from:2000,to:6000};
         ps.particleAngle = {from:MathEx.degToRad(270-30),to:MathEx.degToRad(270+30)};
+        ps.particleVelocity = {from: 100, to: 200};
         ps.onEmitParticle(p=>{
             const b = p as BatchedImage;
             b.fillColor.a=255;
