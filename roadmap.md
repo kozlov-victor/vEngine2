@@ -114,7 +114,10 @@ preRender: false
 
 RotateTransition, TranslateTransition,
 setFrom, setTo, setBy
-ReflectionFilter
+ReflectionFilter, scaleTransition,
+SetNode, setReverse, setNode, fadeTransition
+FillTransition, StrokeTransition, SequentialTransition
+
 
 
 
