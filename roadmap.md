@@ -112,6 +112,13 @@ preRender: false
 
 
 
+RotateTransition, TranslateTransition,
+setFrom, setTo, setBy
+ReflectionFilter
+
+
+
+
 /**
 * Convert this vector into isometric coordinate space
 * @name toIso
