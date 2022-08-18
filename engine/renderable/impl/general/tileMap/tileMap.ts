@@ -161,7 +161,7 @@ export class TileMap extends RenderableModelWithTexture {
         for (let y:number=0;y<this._numOfTilesInMapByY;y++) {
             for (let x:number=0;x<this._numOfTilesInMapByX;x++) {
                 const tileId:number =this._data[y][x] - 1;
-                if (tileId>0 && TileMap._isTileCollideable(tileId,collisionInfo)) {
+                if (tileId>-1 && TileMap._isTileCollideable(tileId,collisionInfo)) {
                     const rigidBody = this.game.getPhysicsSystem<ArcadePhysicsSystem>().createRigidBody({
                         type: ARCADE_RIGID_BODY_TYPE.KINEMATIC,
                         rect: new Rect(0,0,this._tileWidth,this._tileHeight),

@@ -93,7 +93,7 @@ class PromisePolyfill<T> {
                     }
                 });
             }
-        },0);
+        },1);
     }
 
     private _resolve(result:any):void {

@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name ="viewport" content="width=device-width,initial-scale=1,user-scalable=1">
     <title></title>
-    <style type="text/css">
+    <style>
         * {
             box-sizing: border-box;
             margin: 0;
@@ -17,6 +17,22 @@
             box-shadow: 0 0 2px black;
             margin: 5px;
         }
+
+        @media screen and (max-width: 320px){
+            #frame {
+                width: 240px;
+                height: 240px;
+                padding: 0;
+                margin: 0 auto;
+            }
+            .even_odd a {
+                font-size: 10px;
+            }
+            .selectItem {
+                padding: 2px;
+            }
+        }
+
         #frameLoadingInfo {
             position: absolute;
             top: 20px;
@@ -103,68 +119,7 @@
 
 <script>
 
-    if (window.external && window.external.V_ENGINE_NAVIGATOR) {
-
-        window.console = window.console || new function(e){
-            this.log = this.error = function(e){alert(e)}
-        };
-
-
-        var readAsBin = function(url){
-            try {
-                var jsonArr = window.external.LoadDataAsBin(url);
-                return JSON.parse("[" + jsonArr + "]");
-            } catch (e) {
-                alert('readAsBin error: ' + url + " " + e);
-            }
-        };
-
-        var readAsText = function(url){
-            try {
-                return window.external.LoadDataAsText(url);
-            } catch (e) {
-                alert('readAsText error: ' + url + " " + e);
-            }
-        };
-
-        window.XMLHttpRequest = function(){
-            var self = this;
-            self.status = 0;
-            self.url = '';
-            var respHeaders = {};
-
-
-            self.setRequestHeader = function(key,val){
-
-            };
-
-            self.open = function(method,url){
-                self.url = url;
-            };
-            self.send = function(){
-                setTimeout(function(){
-                    var currUrl = self.url.split('?')[0];
-                    currUrl = currUrl.replace('file:///','');
-                    var asBin = (self.responseType==='blob' || self.responseType==='arraybuffer')
-                    var resp = asBin?readAsBin(currUrl):readAsText(currUrl);
-                    respHeaders['Content-Type'] = asBin?'':'application/json';
-                    self.readyState = 4;
-                    self.status = 200;
-                    self.response = resp;
-                    if (resp && resp.toUpperCase) self.responseText = resp;
-                    self.onload && self.onload();
-                    self.onreadystatechange && self.onreadystatechange();
-                },1);
-            };
-            self.getResponseHeader = function(key){
-                return respHeaders[key];
-            };
-
-        };
-
-    }
-
-    if ( ![].fill)  {
+    if (![].fill)  {
         Array.prototype.fill = function( value ) {
 
             var O = Object( this );
@@ -199,8 +154,6 @@
             return a>=0?1:-1;
         }
     }
-
-    if (!window.Blob) window.Blob = undefined;
 
 </script>
 
