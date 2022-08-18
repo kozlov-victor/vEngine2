@@ -7,7 +7,7 @@ import {WaveFilter} from "@engine/renderer/webGl/filters/texture/waveFilter";
 import {BlackWhiteFilter} from "@engine/renderer/webGl/filters/texture/blackWhiteFilter";
 import {NoiseFilter} from "@engine/renderer/webGl/filters/texture/noiseFilter";
 import {Barrel2DistortionFilter} from "@engine/renderer/webGl/filters/texture/barrel2DistortionFilter";
-import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
+import {DraggableBehaviour} from "@engine/behaviour/impl/draggable/draggable";
 import {Resource} from "@engine/resources/resourceDecorators";
 
 export class MainScene extends Scene {

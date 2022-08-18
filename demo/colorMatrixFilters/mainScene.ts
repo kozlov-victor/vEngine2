@@ -2,7 +2,7 @@ import {Scene} from "@engine/scene/scene";
 import {Image} from "@engine/renderable/impl/general/image/image";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Resource} from "@engine/resources/resourceDecorators";
-import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
+import {DraggableBehaviour} from "@engine/behaviour/impl/draggable/draggable";
 import {DebugLayer} from "@engine/scene/debugLayer";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {BrightnessColorMatrixFilter} from "@engine/renderer/webGl/filters/colorMatrix/brightnessColorMatrixFilter";

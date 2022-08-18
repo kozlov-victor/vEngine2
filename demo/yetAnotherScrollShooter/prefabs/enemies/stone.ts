@@ -1,9 +1,8 @@
-import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 import {Game} from "@engine/core/game";
 import {Scene} from "@engine/scene/scene";
 import {AssetsHolder} from "../../assets/assetsHolder";
 import {ObjParser} from "@engine/renderable/impl/3d/objParser/objParser";
-import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
+import {DraggableBehaviour} from "@engine/behaviour/impl/draggable/draggable";
 import {Model3d} from "@engine/renderable/impl/3d/model3d";
 import {AbstractEntity} from "../common/abstractEntity";
 

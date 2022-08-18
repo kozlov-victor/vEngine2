@@ -1,16 +1,14 @@
-import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 import {Game} from "@engine/core/game";
 import {AssetsHolder} from "../assets/assetsHolder";
 import {ObjParser} from "@engine/renderable/impl/3d/objParser/objParser";
 import {Model3d} from "@engine/renderable/impl/3d/model3d";
-import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
+import {DraggableBehaviour} from "@engine/behaviour/impl/draggable/draggable";
 import {Tween} from "@engine/animation/tween";
 import {Scene} from "@engine/scene/scene";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {BLEND_MODE, RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {MathEx} from "@engine/misc/math/mathEx";
 import {ParticleSystem} from "@engine/renderable/impl/general/partycleSystem/particleSystem";
-import {Color} from "@engine/renderer/common/color";
 import {AbstractEntity} from "./common/abstractEntity";
 import {ColorFactory} from "@engine/renderer/common/colorFactory";
 

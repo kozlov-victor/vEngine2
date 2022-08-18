@@ -1,6 +1,6 @@
 import {Scene} from "@engine/scene/scene";
 import {Sphere} from "@engine/renderer/webGl/primitives/sphere";
-import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
+import {DraggableBehaviour} from "@engine/behaviour/impl/draggable/draggable";
 import {Model3d} from "@engine/renderable/impl/3d/model3d";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Image} from "@engine/renderable/impl/general/image/image";

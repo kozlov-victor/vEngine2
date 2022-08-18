@@ -1,6 +1,6 @@
 import {Scene} from "@engine/scene/scene";
 import {DrawingSurface, IDrawingSession} from "@engine/renderable/impl/surface/drawingSurface";
-import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
+import {DraggableBehaviour} from "@engine/behaviour/impl/draggable/draggable";
 
 export class MainScene extends Scene {
 

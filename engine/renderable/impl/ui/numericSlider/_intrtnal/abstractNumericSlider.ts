@@ -14,9 +14,9 @@ import {DebugError} from "@engine/debug/debugError";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
 import {Size} from "@engine/geometry/size";
-import {DraggableBehaviour, IDraggableBehaviourParameters} from "@engine/behaviour/impl/draggable";
+import {DraggableBehaviour, IDraggableBehaviourParameters} from "@engine/behaviour/impl/draggable/draggable";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {DRAG_EVENTS} from "@engine/behaviour/impl/dragEvents";
+import {DRAG_EVENTS} from "@engine/behaviour/impl/draggable/dragEvents";
 import {EventEmitterDelegate} from "@engine/delegates/eventDelegates/eventEmitterDelegate";
 import {TOGGLE_BUTTON_EVENTS} from "@engine/renderable/impl/ui/toggleButton/_internal/toggleButtonEvents";
 

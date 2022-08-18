@@ -1,6 +1,6 @@
 import {Scene} from "@engine/scene/scene";
 import {Mesh2d} from "@engine/renderable/abstract/mesh2d";
-import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
+import {DraggableBehaviour} from "@engine/behaviour/impl/draggable/draggable";
 import {Model3d} from "@engine/renderable/impl/3d/model3d";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Torus} from "@engine/renderer/webGl/primitives/torus";

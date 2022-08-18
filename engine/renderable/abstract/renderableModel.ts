@@ -32,11 +32,10 @@ import {TransformableModel} from "@engine/renderable/abstract/transformableModel
 import {Scene} from "@engine/scene/scene";
 import {IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
 import {IAnimation, ITargetAnimation} from "@engine/animation/iAnimation";
-import {Color} from "@engine/renderer/common/color";
 import {IRigidBody} from "@engine/physics/common/interfaces";
 import {MouseEventEmitterDelegate} from "@engine/delegates/eventDelegates/mouseEventEmitterDelegate";
-import {DRAG_EVENTS} from "@engine/behaviour/impl/dragEvents";
-import {IDragPoint} from "@engine/behaviour/impl/dragPoint";
+import {DRAG_EVENTS} from "@engine/behaviour/impl/draggable/dragEvents";
+import {IDragPoint} from "@engine/behaviour/impl/draggable/dragPoint";
 
 export const enum BLEND_MODE {
     NORMAL,

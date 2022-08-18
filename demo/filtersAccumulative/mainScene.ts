@@ -3,7 +3,7 @@ import {ITexture} from "@engine/renderer/common/texture";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {LinearGradient} from "@engine/renderable/impl/fill/linearGradient";
 import {Color} from "@engine/renderer/common/color";
-import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
+import {DraggableBehaviour} from "@engine/behaviour/impl/draggable/draggable";
 import {SimpleAccumulativeFilter} from "@engine/renderer/webGl/filters/accumulative/simpleAccumulativeFilter";
 import {FadeAccumulativeFilter} from "@engine/renderer/webGl/filters/accumulative/fadeAccumulativeFilter";
 import {KernelBlurAccumulativeFilter} from "@engine/renderer/webGl/filters/accumulative/kernelBlurAccumulativeFilter";

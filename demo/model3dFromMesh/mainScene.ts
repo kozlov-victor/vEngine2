@@ -1,6 +1,6 @@
 import {Scene} from "@engine/scene/scene";
 import {Mesh2d} from "@engine/renderable/abstract/mesh2d";
-import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
+import {DraggableBehaviour} from "@engine/behaviour/impl/draggable/draggable";
 import {AbstractPrimitive} from "@engine/renderer/webGl/primitives/abstractPrimitive";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Model3d} from "@engine/renderable/impl/3d/model3d";

@@ -3,7 +3,7 @@ import {ITexture} from "@engine/renderer/common/texture";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {TextureQuad} from "@engine/renderable/impl/geometry/textureQuad";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
-import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
+import {DraggableBehaviour} from "@engine/behaviour/impl/draggable/draggable";
 
 export class MainScene extends Scene {
 

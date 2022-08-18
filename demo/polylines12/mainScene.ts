@@ -1,5 +1,5 @@
 import {Scene} from "@engine/scene/scene";
-import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
+import {DraggableBehaviour} from "@engine/behaviour/impl/draggable/draggable";
 import {FaceTypeToSvg} from "./FaceTypeToSvg";
 import {Polygon} from "@engine/renderable/impl/geometry/polygon";
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";

@@ -1,5 +1,5 @@
 import {Scene} from "@engine/scene/scene";
-import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
+import {DraggableBehaviour} from "@engine/behaviour/impl/draggable/draggable";
 import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 import {TaskQueue} from "@engine/resources/taskQueue";

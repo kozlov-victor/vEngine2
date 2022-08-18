@@ -3,7 +3,7 @@ import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Image, STRETCH_MODE} from "@engine/renderable/impl/general/image/image";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {Layer, LayerTransformType} from "@engine/scene/layer";
-import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
+import {DraggableBehaviour} from "@engine/behaviour/impl/draggable/draggable";
 import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
 import {IGamePadEvent} from "@engine/control/gamepad/iGamePadEvent";
 import {ResourceHolder} from "./resources/resourceHolder";

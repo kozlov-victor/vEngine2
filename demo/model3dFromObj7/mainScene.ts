@@ -1,6 +1,4 @@
 import {Scene} from "@engine/scene/scene";
-import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
-import {Model3d} from "@engine/renderable/impl/3d/model3d";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {ObjParser} from "@engine/renderable/impl/3d/objParser/objParser";

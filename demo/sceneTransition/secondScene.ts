@@ -4,7 +4,7 @@ import {Color} from "@engine/renderer/common/color";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {LinearGradient} from "@engine/renderable/impl/fill/linearGradient";
-import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
+import {DraggableBehaviour} from "@engine/behaviour/impl/draggable/draggable";
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 import {TaskQueue} from "@engine/resources/taskQueue";
 import {Resource} from "@engine/resources/resourceDecorators";

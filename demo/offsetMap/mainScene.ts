@@ -2,7 +2,7 @@ import {Scene} from "@engine/scene/scene";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Image} from "@engine/renderable/impl/general/image/image";
 import {ITexture} from "@engine/renderer/common/texture";
-import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
+import {DraggableBehaviour} from "@engine/behaviour/impl/draggable/draggable";
 import {OffsetMapFilter} from "@engine/renderer/webGl/filters/texture/offsetMapFilter";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {TaskQueue} from "@engine/resources/taskQueue";

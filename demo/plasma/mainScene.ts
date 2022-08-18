@@ -3,7 +3,7 @@ import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Image} from "@engine/renderable/impl/general/image/image";
 import {ITexture} from "@engine/renderer/common/texture";
 import {PalletOffsetFilter} from "@engine/renderer/webGl/filters/texture/palletOffsetFilter";
-import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
+import {DraggableBehaviour} from "@engine/behaviour/impl/draggable/draggable";
 import {WaveFilter} from "@engine/renderer/webGl/filters/texture/waveFilter";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {TaskQueue} from "@engine/resources/taskQueue";

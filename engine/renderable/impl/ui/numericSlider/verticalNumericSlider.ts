@@ -1,6 +1,6 @@
 import {AbstractNumericSlider} from "@engine/renderable/impl/ui/numericSlider/_intrtnal/abstractNumericSlider";
 import {Direction} from "@engine/renderable/impl/ui/_internal/sideHelperFunctions";
-import {IDraggableBehaviourParameters} from "@engine/behaviour/impl/draggable";
+import {IDraggableBehaviourParameters} from "@engine/behaviour/impl/draggable/draggable";
 
 export class VerticalNumericSlider extends AbstractNumericSlider{
     protected direction:Direction = Direction.VERTICAL;

@@ -4,7 +4,7 @@ import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {ResourceLoader} from "@engine/resources/resourceLoader";
 import {YamlParser} from "@engine/misc/parsers/yaml/yamlParser";
 import {AnimatedImage} from "@engine/renderable/impl/general/image/animatedImage";
-import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
+import {DraggableBehaviour} from "@engine/behaviour/impl/draggable/draggable";
 import {AtlasFrameAnimation} from "@engine/animation/frameAnimation/atlas/atlasFrameAnimation";
 import {IRectJSON} from "@engine/geometry/rect";
 import {DebugLayer} from "@engine/scene/debugLayer";

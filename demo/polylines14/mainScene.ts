@@ -1,6 +1,6 @@
 import {Scene} from "@engine/scene/scene";
 import {Color} from "@engine/renderer/common/color";
-import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
+import {DraggableBehaviour} from "@engine/behaviour/impl/draggable/draggable";
 import {Polygon} from "@engine/renderable/impl/geometry/polygon";
 import {TaskQueue} from "@engine/resources/taskQueue";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";

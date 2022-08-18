@@ -2,7 +2,7 @@ import {Scene} from "@engine/scene/scene";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {LinearGradient} from "@engine/renderable/impl/fill/linearGradient";
 import {Color} from "@engine/renderer/common/color";
-import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
+import {DraggableBehaviour} from "@engine/behaviour/impl/draggable/draggable";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 
 export class MainScene extends Scene {

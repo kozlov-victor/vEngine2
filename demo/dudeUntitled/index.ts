@@ -1,5 +1,5 @@
 import {KeyboardControl} from "@engine/control/keyboard/keyboardControl";
-import {Game} from "@engine/core/game";
+import {Game, SCALE_STRATEGY} from "@engine/core/game";
 import {Scene} from "@engine/scene/scene";
 import {MainScene} from "./mainScene";
 import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
@@ -11,7 +11,7 @@ import {ArcadePhysicsSystem} from "@engine/physics/arcade/arcadePhysicsSystem";
 ResourceLoader.BASE_URL = './dudeUntitled/assets';
 document.body.style.backgroundColor = 'black';
 
-const game = new Game({width:848*2,height:414*2});
+const game = new Game({width:240,height:320, scaleStrategy: SCALE_STRATEGY.NO_SCALE});
 game.setPhysicsSystem(ArcadePhysicsSystem);
 game.setRenderer(WebGlRenderer);
 game.getRenderer<WebGlRenderer>().setPixelPerfect(true);

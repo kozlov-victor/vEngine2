@@ -3,10 +3,9 @@ import {Game} from "@engine/core/game";
 import {Scene} from "@engine/scene/scene";
 import {AssetsHolder} from "../../assets/assetsHolder";
 import {ObjParser} from "@engine/renderable/impl/3d/objParser/objParser";
-import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
+import {DraggableBehaviour} from "@engine/behaviour/impl/draggable/draggable";
 import {Model3d} from "@engine/renderable/impl/3d/model3d";
 import {Tween} from "@engine/animation/tween";
-import {EasingElastic} from "@engine/misc/easing/functions/elastic";
 
 export class Engine extends AbstractEntity {
     constructor(game:Game, scene:Scene,private r:AssetsHolder) {

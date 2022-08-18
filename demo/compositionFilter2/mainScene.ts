@@ -2,10 +2,9 @@ import {Scene} from "@engine/scene/scene";
 import {Image} from "@engine/renderable/impl/general/image/image";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Resource} from "@engine/resources/resourceDecorators";
-import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
+import {DraggableBehaviour} from "@engine/behaviour/impl/draggable/draggable";
 import {EvenOddCompositionFilter} from "@engine/renderer/webGl/filters/composition/evenOddCompositionFilter";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
-import {Color} from "@engine/renderer/common/color";
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 import {ColorFactory} from "@engine/renderer/common/colorFactory";
 

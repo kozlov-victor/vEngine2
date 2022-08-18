@@ -1,5 +1,5 @@
 import {Scene} from "@engine/scene/scene";
-import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
+import {DraggableBehaviour} from "@engine/behaviour/impl/draggable/draggable";
 import {Polygon} from "@engine/renderable/impl/geometry/polygon";
 import {ICubeMapTexture} from "@engine/renderer/common/texture";
 import {TaskQueue} from "@engine/resources/taskQueue";

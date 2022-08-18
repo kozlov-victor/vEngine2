@@ -1,6 +1,6 @@
 import {Scene} from "@engine/scene/scene";
 import {Image, STRETCH_MODE} from "@engine/renderable/impl/general/image/image";
-import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
+import {DraggableBehaviour} from "@engine/behaviour/impl/draggable/draggable";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Resource} from "@engine/resources/resourceDecorators";
 

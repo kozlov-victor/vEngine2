@@ -10,7 +10,7 @@ import {ColorFactory} from "@engine/renderer/common/colorFactory";
 import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
 import {AlphaMaskFilter} from "@engine/renderer/webGl/filters/texture/alphaMaskFilter";
 import {BitmapCacheHelper} from "@engine/renderable/bitmapCacheHelper";
-import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
+import {DraggableBehaviour} from "@engine/behaviour/impl/draggable/draggable";
 import {InsetBorder} from "@engine/renderable/impl/geometry/insetBorder";
 
 

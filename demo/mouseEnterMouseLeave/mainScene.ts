@@ -2,11 +2,10 @@ import {Scene} from "@engine/scene/scene";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {MathEx} from "@engine/misc/math/mathEx";
-import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
+import {DraggableBehaviour} from "@engine/behaviour/impl/draggable/draggable";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {DRAG_EVENTS} from "@engine/behaviour/impl/dragEvents";
+import {DRAG_EVENTS} from "@engine/behaviour/impl/draggable/dragEvents";
 import {ColorFactory} from "@engine/renderer/common/colorFactory";
-import {Color} from "@engine/renderer/common/color";
 
 export class MainScene extends Scene {
 

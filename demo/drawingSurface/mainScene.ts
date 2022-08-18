@@ -2,8 +2,7 @@ import {Scene} from "@engine/scene/scene";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
 import {Size} from "@engine/geometry/size";
-import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
-import {Color} from "@engine/renderer/common/color";
+import {DraggableBehaviour} from "@engine/behaviour/impl/draggable/draggable";
 import {ColorFactory} from "@engine/renderer/common/colorFactory";
 
 export class MainScene extends Scene {

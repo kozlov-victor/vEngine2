@@ -1,14 +1,14 @@
-import {BaseAbstractBehaviour} from "../abstract/baseAbstractBehaviour";
-import {Game} from "../../core/game";
-import {Scene} from "../../scene/scene";
+import {BaseAbstractBehaviour} from "../../abstract/baseAbstractBehaviour";
+import {Game} from "../../../core/game";
+import {Scene} from "../../../scene/scene";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {IObjectMouseEvent, ISceneMouseEvent} from "@engine/control/mouse/mousePoint";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {Int, Optional} from "@engine/core/declarations";
 import {DebugError} from "@engine/debug/debugError";
 import {LayerTransformType} from "@engine/scene/layer";
-import {IDragPoint} from "@engine/behaviour/impl/dragPoint";
-import {DRAG_EVENTS} from "@engine/behaviour/impl/dragEvents";
+import {IDragPoint} from "@engine/behaviour/impl/draggable/dragPoint";
+import {DRAG_EVENTS} from "@engine/behaviour/impl/draggable/dragEvents";
 
 export interface IDraggableBehaviourParameters {
     constrainX?:boolean;

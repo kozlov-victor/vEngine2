@@ -1,5 +1,4 @@
 import {Scene} from "@engine/scene/scene";
-import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {Model3d} from "@engine/renderable/impl/3d/model3d";
 import {DRAW_METHOD} from "@engine/renderer/webGl/base/bufferInfo";
 import {Sphere} from "@engine/renderer/webGl/primitives/sphere";

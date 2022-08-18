@@ -1,10 +1,9 @@
 import {Scene} from "@engine/scene/scene";
 import {ITiledJSON, TileMap} from "@engine/renderable/impl/general/tileMap/tileMap";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Resource} from "@engine/resources/resourceDecorators";
-import {ARCADE_RIGID_BODY_TYPE, ArcadeRigidBody} from "@engine/physics/arcade/arcadeRigidBody";
+import {ARCADE_RIGID_BODY_TYPE} from "@engine/physics/arcade/arcadeRigidBody";
 import {ArcadePhysicsSystem} from "@engine/physics/arcade/arcadePhysicsSystem";
 import {ParticleSystem} from "@engine/renderable/impl/general/partycleSystem/particleSystem";
 import {MathEx} from "@engine/misc/math/mathEx";
@@ -14,12 +13,12 @@ import {IRectJSON, Rect} from "@engine/geometry/rect";
 import {AnimatedImage} from "@engine/renderable/impl/general/image/animatedImage";
 import {YamlParser} from "@engine/misc/parsers/yaml/yamlParser";
 import {AtlasFrameAnimation} from "@engine/animation/frameAnimation/atlas/atlasFrameAnimation";
-import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 import {LightFilter} from "@engine/renderer/webGl/filters/light/lightFilter";
 import {LightSet} from "@engine/lighting/lightSet";
 import {DirectionalLight} from "@engine/lighting/impl/directionalLight";
 import {PointLight} from "@engine/lighting/impl/pointLight";
 import {Tween} from "@engine/animation/tween";
+import {ArcadeSideScrollControl} from "@engine/behaviour/impl/arcadeSideScrollControl";
 
 interface IUnityMeta {
     TextureImporter: {
@@ -52,7 +51,15 @@ export class MainScene extends Scene {
             restitution: 0.1,
         });
 
+        const phys = this.game.getPhysicsSystem<ArcadePhysicsSystem>();
+
         const hero = new AnimatedImage(this.game,this.heroTexture);
+        hero.setRigidBody(phys.createRigidBody({
+            type:ARCADE_RIGID_BODY_TYPE.DYNAMIC,
+            ignoreCollisionWithGroupNames:['particles'],
+            rect: new Rect(0,0,30,60),
+            restitution:0.2,
+        }));
 
         const animationName = 'Run (32x32)';
         const frames = this.heroAnimationMeta.TextureImporter.spriteSheet.sprites.filter(it=>it.name.indexOf(animationName)===0).map(it=>it.rect);
@@ -63,13 +70,28 @@ export class MainScene extends Scene {
                 height: this.heroTexture.size.height,
             })
         }
-        const anim: AtlasFrameAnimation = new AtlasFrameAnimation(this.game,{
-            name: 'run',
-            frames,
-            isRepeating: true,
-            duration: 600,
-        });
-        hero.addFrameAnimation(anim);
+        hero.addFrameAnimation(
+            new AtlasFrameAnimation(this.game,{
+                name: 'run',
+                frames,
+                isRepeating: true,
+                duration: 600,
+            })
+        );
+        hero.addFrameAnimation(
+            new AtlasFrameAnimation(this.game,{
+                name: 'idle',
+                frames:[frames[4]],
+                isRepeating: true,
+                duration: 600,
+            })
+        );
+        hero.addBehaviour(new ArcadeSideScrollControl(this.game,{
+            velocity: 300,
+            jumpVelocity: 500,
+            idleAnimation: 'idle',
+            runAnimation: 'run'
+        }));
 
         this.appendChild(tileMap);
         this.appendChild(hero);
@@ -79,8 +101,6 @@ export class MainScene extends Scene {
         hero.size.setWH(32);
         hero.scale.setXY(3);
         hero.transformPoint.setToCenter();
-        hero.gotoAndStop('run',4);
-
 
         const l = new DirectionalLight(this.game);
         l.pos.setXY(20,20);
@@ -120,59 +140,7 @@ export class MainScene extends Scene {
         const lightFilter = new LightFilter(this.game,lightSet);
         this.filters = [lightFilter];
 
-        const phys = this.game.getPhysicsSystem<ArcadePhysicsSystem>();
-        hero.setRigidBody(phys.createRigidBody({
-            type:ARCADE_RIGID_BODY_TYPE.DYNAMIC,
-            ignoreCollisionWithGroupNames:['particles'],
-            rect: new Rect(0,0,30,60),
-            restitution:0.2,
-        }));
-
-
-        this.listenToKeys(hero);
         this.initParticleSystem();
-    }
-
-    private listenToKeys(model:AnimatedImage):void {
-        const velocity = 300;
-        const body = model.getRigidBody<ArcadeRigidBody>()!;
-        const jumpVelocity = 500;
-        this.game.getCurrentScene().keyboardEventHandler.on(KEYBOARD_EVENTS.keyPressed, e=>{
-            switch (e.button) {
-                case KEYBOARD_KEY.LEFT:
-                    body.velocity.x = -velocity;
-                    model.scale.x = -Math.abs(model.scale.x);
-                    if (model.getCurrentFrameAnimationName()!=='run') model.playFrameAnimation('run');
-                    break;
-                case KEYBOARD_KEY.RIGHT:
-                    body.velocity.x = velocity;
-                    model.scale.x = Math.abs(model.scale.x);
-                    if (model.getCurrentFrameAnimationName()!=='run') model.playFrameAnimation('run');
-                    break;
-
-            }
-        });
-        this.game.getCurrentScene().keyboardEventHandler.on(KEYBOARD_EVENTS.keyHold, e=>{
-            switch (e.button) {
-                case KEYBOARD_KEY.SPACE:
-                    if (model.getRigidBody<ArcadeRigidBody>().collisionFlags.bottom) {
-                        body.velocity.y -=jumpVelocity;
-                    }
-                    break;
-
-            }
-        });
-        this.game.getCurrentScene().keyboardEventHandler.on(KEYBOARD_EVENTS.keyReleased, e=>{
-            switch (e.button) {
-                case KEYBOARD_KEY.LEFT:
-                case KEYBOARD_KEY.RIGHT:
-                    body.velocity.x = 0;
-                    model.gotoAndStop('run',4);
-                    break;
-                default:
-                    break;
-            }
-        });
     }
 
     private initParticleSystem():void {

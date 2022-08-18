@@ -1,7 +1,7 @@
 import {Scene} from "@engine/scene/scene";
 import {Color} from "@engine/renderer/common/color";
 import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
-import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
+import {DraggableBehaviour} from "@engine/behaviour/impl/draggable/draggable";
 import {Font} from "@engine/renderable/impl/general/font/font";
 
 export class MainScene extends Scene {

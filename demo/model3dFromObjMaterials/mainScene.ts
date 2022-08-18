@@ -1,5 +1,4 @@
 import {Scene} from "@engine/scene/scene";
-import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {ObjParser} from "@engine/renderable/impl/3d/objParser/objParser";
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";

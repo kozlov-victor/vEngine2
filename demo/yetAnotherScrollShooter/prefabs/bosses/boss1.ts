@@ -3,13 +3,12 @@ import {Game} from "@engine/core/game";
 import {Scene} from "@engine/scene/scene";
 import {AssetsHolder} from "../../assets/assetsHolder";
 import {ObjParser} from "@engine/renderable/impl/3d/objParser/objParser";
-import {DraggableBehaviour} from "@engine/behaviour/impl/draggable";
+import {DraggableBehaviour} from "@engine/behaviour/impl/draggable/draggable";
 import {Model3d} from "@engine/renderable/impl/3d/model3d";
 import {Tween} from "@engine/animation/tween";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {ParticleSystem} from "@engine/renderable/impl/general/partycleSystem/particleSystem";
 import {MathEx} from "@engine/misc/math/mathEx";
-import {Color} from "@engine/renderer/common/color";
 import {BLEND_MODE} from "@engine/renderable/abstract/renderableModel";
 import {ColorFactory} from "@engine/renderer/common/colorFactory";
 
