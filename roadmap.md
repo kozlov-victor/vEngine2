@@ -112,6 +112,18 @@ preRender: false
 
 
 
+RotateTransition, TranslateTransition,
+setFrom, setTo, setBy
+ReflectionFilter, scaleTransition,
+SetNode, setReverse, setNode, fadeTransition
+FillTransition, StrokeTransition, SequentialTransition
+PathTransition
+
+selfIlluminationMap
+drawingMode fill, line
+
+
+
 /**
 * Convert this vector into isometric coordinate space
 * @name toIso
