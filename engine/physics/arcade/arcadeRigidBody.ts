@@ -90,23 +90,26 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
     private _model:RenderableModel;
     private _debugRectangle:Rectangle;
 
+    private _dirtyBoundRect:boolean = true;
+
     private constructor(private game:Game) {
     }
 
     public nextTick():void {
-        this._oldPos.setFrom(this._pos);
-        const delta:number = this.game.getDeltaTime() / 1000;
-        (this._collisionFlagsOld as CollisionFlags).copyFrom(this.collisionFlags as CollisionFlags);
-        (this.collisionFlags as CollisionFlags).reset();
 
-        this.velocity.x += this.acceleration.x * delta;
-        if (!this._collisionFlagsOld.bottom) this.velocity.y += this.acceleration.y * delta;
         if (this._modelType===ARCADE_RIGID_BODY_TYPE.DYNAMIC) {
+            this._oldPos.setFrom(this._pos);
+            const delta:number = this.game.getDeltaTime() / 1000;
+            (this._collisionFlagsOld as CollisionFlags).copyFrom(this.collisionFlags as CollisionFlags);
+            (this.collisionFlags as CollisionFlags).reset();
+
+            this.velocity.x += this.acceleration.x * delta;
+            if (!this._collisionFlagsOld.bottom) this.velocity.y += this.acceleration.y * delta;
             this.velocity.x += ArcadePhysicsSystem.gravity.x;
             this.velocity.y += ArcadePhysicsSystem.gravity.y;
+            this._pos.x  += this.velocity.x * delta;
+            this._pos.y  += this.velocity.y * delta;
         }
-        this._pos.x  += this.velocity.x * delta;
-        this._pos.y  += this.velocity.y * delta;
 
         const spatialSpace = this.game.getCurrentScene()._spatialSpace;
         if (spatialSpace) {
@@ -118,6 +121,8 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
         model.revalidate();
         this._model = model;
         this.setBounds(model.pos,model.size);
+        model.size.observe(()=>this._dirtyBoundRect = true);
+        model.pos.observe(()=>this._dirtyBoundRect = true);
         if (this._modelType===ARCADE_RIGID_BODY_TYPE.KINEMATIC) {
             let oldX:Optional<number>;
             this._pos.observe(()=>{
@@ -168,12 +173,14 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
     }
 
     public calcAndGetBoundRect():IRectJSON {
+        if (!this._dirtyBoundRect) return this._boundRect;
         this._boundRect.setXYWH(
             this._pos.x + this._rect.x,
             this._pos.y + this._rect.y,
             this._rect.width,
             this._rect.height
         );
+        this._dirtyBoundRect = false;
         return this._boundRect;
     }
 

@@ -38,12 +38,15 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
 
     protected rendererHelper:RendererHelper = new RendererHelper(this.game);
 
+    private mat = new Mat4.Mat16Holder();
+
     private readonly ctx:CanvasRenderingContext2D;
 
     constructor(game:Game){
         super(game);
         this.registerResize();
         this.ctx = getCtx(this.container as HTMLCanvasElement);
+        Mat4.makeIdentity(this.mat);
     }
 
     public override setPixelPerfect():void{
@@ -166,7 +169,7 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
     }
 
     public transformGet(): Readonly<Mat16Holder> {
-        return undefined!;
+        return this.mat;
     }
 
     public transformRestore():void {

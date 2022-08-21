@@ -3,6 +3,7 @@ import {AbstractKeypad, KEY_STATE} from "@engine/control/abstract/abstractKeypad
 import {KeyBoardEvent} from "@engine/control/keyboard/keyboardEvent";
 import {Optional} from "@engine/core/declarations";
 import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
+import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 
 
 export class KeyboardControl extends AbstractKeypad<KeyBoardEvent> implements IControl {
@@ -39,7 +40,10 @@ export class KeyboardControl extends AbstractKeypad<KeyBoardEvent> implements IC
     public listenTo():void {
 
         this._keyDownListener = (e:KeyboardEvent)=>{
-            e.preventDefault();
+            // important for kai os, preventDefault invocation disallow correct exit by backSpace
+            if (e.keyCode!==KEYBOARD_KEY.BACKSPACE) {
+                e.preventDefault();
+            }
             e.stopPropagation(); // to prevent page scroll
             const code:number = e.keyCode;
             this.triggerKeyPress(code,e);

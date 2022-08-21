@@ -4,20 +4,28 @@ import {Scene} from "@engine/scene/scene";
 import {MainScene} from "./mainScene";
 import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
 import {GamePadControl} from "@engine/control/gamepad/gamePadControl";
-import {MouseControl} from "@engine/control/mouse/mouseControl";
 import {ResourceLoader} from "@engine/resources/resourceLoader";
 import {ArcadePhysicsSystem} from "@engine/physics/arcade/arcadePhysicsSystem";
+import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 
 ResourceLoader.BASE_URL = './dudeUntitled/assets';
-document.body.style.backgroundColor = 'black';
 
-const game = new Game({width:240,height:320, scaleStrategy: SCALE_STRATEGY.NO_SCALE});
+const game = new Game({width:240,height:320, scaleStrategy: SCALE_STRATEGY.FIT_CANVAS_TO_SCREEN});
+ArcadePhysicsSystem.SPATIAL_CELL_SIZE.setWH(128);
 game.setPhysicsSystem(ArcadePhysicsSystem);
 game.setRenderer(WebGlRenderer);
 game.getRenderer<WebGlRenderer>().setPixelPerfect(true);
 game.addControl(KeyboardControl);
-game.addControl(GamePadControl);
-game.addControl(MouseControl);
+
+game.getControl<GamePadControl>('KeyboardControl')!.reflectToControl(
+    game.getControl<KeyboardControl>('KeyboardControl')!,
+    {
+        [KEYBOARD_KEY.CENTER]: KEYBOARD_KEY.SPACE,
+    }
+);
+
+//game.addControl(GamePadControl);
+//game.addControl(MouseControl);
 const mainScene: Scene = new MainScene(game);
 game.runScene(mainScene);
 

@@ -29,7 +29,7 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
     public manage(gameObject: AnimatedImage): void {
 
         const params = this.parameters;
-
+        gameObject.transformPoint.setToCenter();
         gameObject.playFrameAnimation(params.idleAnimation);
 
         const body = gameObject.getRigidBody<ArcadeRigidBody>()!;

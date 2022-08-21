@@ -41,6 +41,7 @@ export const enum KEYBOARD_KEY {
     UP = 38,
     RIGHT = 39,
     DOWN = 40,
+    CENTER = 0, // this is specific key for kai os pad (central button)
 
     ALT = 18,
     BACKSPACE = 8,

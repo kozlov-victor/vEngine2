@@ -8,6 +8,7 @@ import {Scene} from "@engine/scene/scene";
 import {SpatialSpace} from "@engine/physics/common/spatialSpace";
 import {CollisionGroup} from "@engine/physics/arcade/collisionGroup";
 import {Int} from "@engine/core/declarations";
+import {Size} from "@engine/geometry/size";
 
 export interface ICreateRigidBodyParams {
     type?: ARCADE_RIGID_BODY_TYPE;
@@ -33,6 +34,7 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
 
     public static readonly gravity:Point2d = new Point2d(0,5);
     public static STICKY_THRESHOLD:number = 0.01;
+    public static SPATIAL_CELL_SIZE = new Size(32,32);
 
 
     constructor(private game:Game) {
@@ -57,14 +59,18 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
                 body.ignoreCollisionWithGroupNames = ((body.ignoreCollisionWithGroupNames as number) | (mask as number)) as Int;
             });
         }
-
-        return body as unknown as ArcadeRigidBody;
+        return body;
     }
 
     public nextTick(scene:Scene):void {
 
         if (scene._spatialSpace===undefined) {
-            scene._spatialSpace = new SpatialSpace(this.game,32,32, scene.size.width, scene.size.height);
+            scene._spatialSpace =
+                new SpatialSpace(
+                    this.game,
+                    ArcadePhysicsSystem.SPATIAL_CELL_SIZE.width,ArcadePhysicsSystem.SPATIAL_CELL_SIZE.height,
+                    scene.size.width, scene.size.height
+                );
         }
 
         testedCollisionsCache.clear();
