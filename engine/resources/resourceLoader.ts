@@ -36,9 +36,7 @@ export class ResourceLoader {
         const url:string = (imgUrl as IURLRequest).url?(imgUrl as IURLRequest).url:(imgUrl as string);
         return new Promise<HTMLImageElement>((resolve,reject)=>{
             const img = new window.Image() as HTMLImageElement;
-            alert('img created ' + url);
             img.onload = () => {
-                alert('onloaded')
                 resolve(img);
             };
             img.onerror = (e:string|Event) => {
@@ -50,7 +48,6 @@ export class ResourceLoader {
                 if (progress!==undefined && e.total) progress(e.loaded/e.total);
             };
             img.src = url;
-            alert('img url set');
         });
     };
 
