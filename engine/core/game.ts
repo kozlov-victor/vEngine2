@@ -188,8 +188,7 @@ export class Game {
         this.revalidate();
         if (this._currScene.lifeCycleState===SceneLifeCycleState.CREATED) {
             this._currScene.lifeCycleState = SceneLifeCycleState.PRELOADING;
-            const taskQueue:TaskQueue = new TaskQueue(this);
-            const resourceLoader:ResourceLoader = taskQueue.getLoader();
+            const taskQueue = new TaskQueue(this);
             taskQueue.
                 scheduleStart().
                 catch(e=>{
@@ -199,6 +198,7 @@ export class Game {
             this._currScene.sceneEventHandler.trigger(SCENE_EVENTS.PRELOADING,{taskQueue});
             this.loadEventHandler.trigger(GAME_EVENTS.PRELOADING,{taskQueue});
             scene.onPreloading(taskQueue);
+            const resourceLoader = taskQueue.getLoader();
             resourceLoader.onProgress((n:number)=>{
                 this._currScene.sceneEventHandler.trigger(SCENE_EVENTS.PROGRESS,{taskQueue});
                 scene.onProgress(n);

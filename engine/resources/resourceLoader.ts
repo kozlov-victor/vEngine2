@@ -2,7 +2,6 @@ import {Game} from "../core/game";
 import {IURLRequest, UrlLoader} from "@engine/resources/urlLoader";
 import {ICubeMapTexture, ITexture} from "@engine/renderer/common/texture";
 import {Base64, Optional, URI} from "@engine/core/declarations";
-import {ResourceUtil} from "@engine/resources/resourceUtil";
 import type {IXmlNode, XmlDocument, XmlNode} from "@engine/misc/parsers/xml/xmlELements";
 import type {Font} from "@engine/renderable/impl/general/font/font";
 import {Sound} from "@engine/media/sound";
@@ -10,28 +9,18 @@ import {ITask, Queue} from "@engine/resources/queue";
 import {UploadedSoundLink} from "@engine/media/interface/iAudioPlayer";
 import {DebugError} from "@engine/debug/debugError";
 import {isString} from "@engine/misc/object";
-import createImageFromData = ResourceUtil.createImageFromData;
 import {FontTypes} from "@engine/renderable/impl/general/font/fontTypes";
-import ICssFontParameters = FontTypes.ICssFontParameters;
-import ITextureWithId = FontTypes.ITextureWithId;
 import {Image} from "@engine/renderable/impl/general/image/image";
 import type {XmlParser} from "@engine/misc/parsers/xml/xmlParser";
 import {createFontFromAtlas} from "@engine/renderable/impl/general/font/createFontMethods/createFontFromAtlas";
-import {createFontFromCssDescription} from "@engine/renderable/impl/general/font/createFontMethods/createFontFromCssDescription";
+import {
+    createFontFromCssDescription
+} from "@engine/renderable/impl/general/font/createFontMethods/createFontFromCssDescription";
 import {IParser} from "@engine/misc/parsers/iParser";
 import type {YamlParser} from "@engine/misc/parsers/yaml/yamlParser";
 import {path} from "@engine/resources/path";
-
-namespace ResourceCache {
-
-    export const cache:Record<string, ITexture> = {};
-
-    export const clear = ():void=>{
-        const keys:string[] = Object.keys(cache);
-        keys.forEach(k=>delete cache[k]);
-    };
-
-}
+import ICssFontParameters = FontTypes.ICssFontParameters;
+import ITextureWithId = FontTypes.ITextureWithId;
 
 export class ResourceLoader {
 
@@ -43,7 +32,29 @@ export class ResourceLoader {
 
     private readonly q:Queue = new Queue();
 
-    private static createUrlLoader<T extends string|ArrayBuffer>(req: URI|IURLRequest,responseType:'arraybuffer'|'text' = 'text'):UrlLoader<T>{
+    private static _loadHtmlImage = (imgUrl:URI|IURLRequest|Base64,progress?:(n:number)=>void):Promise<HTMLImageElement>=>{
+        const url:string = (imgUrl as IURLRequest).url?(imgUrl as IURLRequest).url:(imgUrl as string);
+        return new Promise<HTMLImageElement>((resolve,reject)=>{
+            const img = new window.Image() as HTMLImageElement;
+            alert('img created ' + url);
+            img.onload = () => {
+                alert('onloaded')
+                resolve(img);
+            };
+            img.onerror = (e:string|Event) => {
+                console.error(e);
+                const msg:string = DEBUG?`can not load image with url: ${url}`:url;
+                reject(msg);
+            };
+            img.onprogress = (e:ProgressEvent)=>{
+                if (progress!==undefined && e.total) progress(e.loaded/e.total);
+            };
+            img.src = url;
+            alert('img url set');
+        });
+    };
+
+    private static _createUrlLoader<T extends string|ArrayBuffer>(req: URI|IURLRequest,responseType:'arraybuffer'|'text' = 'text'):UrlLoader<T>{
         let iReq:IURLRequest;
         if ((req as string).substr!==undefined){
             iReq = {url:req as string,responseType,method:'GET'};
@@ -52,7 +63,7 @@ export class ResourceLoader {
     }
 
     private static async _loadAndProcessText<T>(req: string|IURLRequest, postProcess:(s:string)=>T,progressFn?:(n:number)=>void): Promise<T> {
-        const loader:UrlLoader<string> = ResourceLoader.createUrlLoader<string>(req as (URI|IURLRequest));
+        const loader:UrlLoader<string> = ResourceLoader._createUrlLoader<string>(req as (URI|IURLRequest));
         if (progressFn!==undefined) loader.onProgress = progressFn;
         const text:string = await loader.load();
         return postProcess(text);
@@ -72,11 +83,7 @@ export class ResourceLoader {
 
     public async loadTexture(req: string|IURLRequest,progress?:(n:number)=>void): Promise<ITexture> {
         req = ResourceLoader._pathJoin('',req);
-        const fromCache:Optional<ITexture> = ResourceCache.cache[(req as IURLRequest).url??req];
-        if (fromCache!==undefined) {
-            return fromCache;
-        }
-        const img:HTMLImageElement|ImageBitmap = await createImageFromData(req as (URI|Base64|IURLRequest),progress);
+        const img:HTMLImageElement|ImageBitmap = await ResourceLoader._loadHtmlImage(req as (URI|Base64|IURLRequest),progress);
         return this.game.getRenderer().createTexture(img);
     }
 
@@ -106,17 +113,17 @@ export class ResourceLoader {
         };
 
         const imgLeft:HTMLImageElement|ImageBitmap =
-            await createImageFromData(leftSide as (URI|Base64|IURLRequest),progressCallBack);
+            await ResourceLoader._loadHtmlImage(leftSide as (URI|Base64|IURLRequest),progressCallBack);
         const imgRight:HTMLImageElement|ImageBitmap =
-            await createImageFromData(rightSide as (URI|Base64|IURLRequest),progressCallBack);
+            await ResourceLoader._loadHtmlImage(rightSide as (URI|Base64|IURLRequest),progressCallBack);
         const imgTop:HTMLImageElement|ImageBitmap =
-            await createImageFromData(topSide as (URI|Base64|IURLRequest),progressCallBack);
+            await ResourceLoader._loadHtmlImage(topSide as (URI|Base64|IURLRequest),progressCallBack);
         const imgBottom:HTMLImageElement|ImageBitmap =
-            await createImageFromData(bottomSide as (URI|Base64|IURLRequest),progressCallBack);
+            await ResourceLoader._loadHtmlImage(bottomSide as (URI|Base64|IURLRequest),progressCallBack);
         const imgFront:HTMLImageElement|ImageBitmap =
-            await createImageFromData(frontSide as (URI|Base64|IURLRequest),progressCallBack);
+            await ResourceLoader._loadHtmlImage(frontSide as (URI|Base64|IURLRequest),progressCallBack);
         const imgBack:HTMLImageElement|ImageBitmap =
-            await createImageFromData(backSide as (URI|Base64|IURLRequest),progressCallBack);
+            await ResourceLoader._loadHtmlImage(backSide as (URI|Base64|IURLRequest),progressCallBack);
         return this.game.getRenderer().createCubeTexture(imgLeft,imgRight,imgTop,imgBottom,imgFront,imgBack);
     }
 
@@ -145,7 +152,7 @@ export class ResourceLoader {
 
     public async loadSound(req: string|IURLRequest,progress?:(n:number)=>void): Promise<Sound> {
         req = ResourceLoader._pathJoin('',req);
-        const loader:UrlLoader<ArrayBuffer> = ResourceLoader.createUrlLoader<ArrayBuffer>(req as (URI|IURLRequest),'arraybuffer');
+        const loader:UrlLoader<ArrayBuffer> = ResourceLoader._createUrlLoader<ArrayBuffer>(req as (URI|IURLRequest),'arraybuffer');
         if (progress!==undefined) loader.onProgress = progress;
         const buff:ArrayBuffer = await loader.load();
         const url:string = ((req as string).substr!==undefined)?req as string: (req as IURLRequest).url;
@@ -155,7 +162,7 @@ export class ResourceLoader {
 
     public async loadBinary(req: string|IURLRequest,progress?:(n:number)=>void): Promise<ArrayBuffer> {
         req = ResourceLoader._pathJoin('',req);
-        const loader:UrlLoader<ArrayBuffer> = ResourceLoader.createUrlLoader<ArrayBuffer>(req as (URI|IURLRequest),'arraybuffer');
+        const loader:UrlLoader<ArrayBuffer> = ResourceLoader._createUrlLoader<ArrayBuffer>(req as (URI|IURLRequest),'arraybuffer');
         if (progress!==undefined) loader.onProgress = progress;
         return await loader.load();
     }
@@ -219,10 +226,6 @@ export class ResourceLoader {
 
     public async start():Promise<void>{
         return this.q.start();
-    }
-
-    public clearCache():void {
-        ResourceCache.clear();
     }
 
     public isResolved():boolean {

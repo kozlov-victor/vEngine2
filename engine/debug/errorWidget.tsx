@@ -144,6 +144,12 @@ export class ErrorWidget extends VEngineTsxComponent {
 let errorWidget:ErrorWidget;
 
 export const renderError = (error:IErrorInfo):void=>{
+
+    if (!document.body) {
+        alert(error.runtimeInfo);
+        return;
+    }
+
     if (errorWidget===undefined) {
         errorWidget = new ErrorWidget();
         const errDiv:HTMLElement = document.createElement('div');

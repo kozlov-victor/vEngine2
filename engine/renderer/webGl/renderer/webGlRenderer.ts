@@ -579,7 +579,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         if (DEBUG && gl===undefined) throw new DebugError(`WebGLRenderingContext is not supported by this device`);
         this._gl = gl;
 
-        this._glCachedAccessor = new GlCachedAccessor(this._gl);
+        this._glCachedAccessor = new GlCachedAccessor(gl);
         this._nullTexture = new Texture(gl);
         this._nullCubeMapTexture = new CubeMapTexture(gl);
         this._nullCubeMapTexture.setAsZero();
