@@ -1,4 +1,4 @@
-import {Game, SCALE_STRATEGY} from "../../core/game";
+import {Game} from "../../core/game";
 import {Rect} from "../../geometry/rect";
 import {Color} from "../common/color";
 import {ISize, Size} from "../../geometry/size";
@@ -11,12 +11,12 @@ import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {ICubeMapTexture, ITexture} from "@engine/renderer/common/texture";
 import {IDestroyable, Optional} from "@engine/core/declarations";
 import {RendererHelper} from "@engine/renderer/abstract/rendererHelper";
-import {IMatrixTransformable} from "@engine/misc/math/matrixStack";
+import {IMatrixTransformable, MatrixStack} from "@engine/misc/math/matrixStack";
 import {IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
 import {Mat4} from "@engine/misc/math/mat4";
 import {Mesh3d} from "@engine/renderable/impl/3d/mesh3d";
-import Mat16Holder = Mat4.Mat16Holder;
 import {ScaleStrategyFactory} from "@engine/renderer/abstract/scaleStrategy/factory/ScaleStrategyFactory";
+import Mat16Holder = Mat4.Mat16Holder;
 
 interface IHTMLElement extends HTMLElement{
     requestFullScreen:()=>Promise<void>;
@@ -33,6 +33,8 @@ interface IDocument extends Document {
 export interface IRenderTarget {
     getTexture():ITexture;
     destroy():void;
+    bind():void;
+    clear(color:Color,withDepth?:boolean,alphaBlendValue?:number):void;
 }
 
 export abstract class AbstractRenderer implements IDestroyable,IMatrixTransformable {
@@ -45,6 +47,7 @@ export abstract class AbstractRenderer implements IDestroyable,IMatrixTransforma
     public readonly viewPortSize:ISize = new Size(this.game.width,this.game.height);
 
     protected abstract rendererHelper: RendererHelper;
+    protected readonly _matrixStack = new MatrixStack();
 
     private _fullScreenRequested:boolean = false;
     private _destroyed:boolean = false;
@@ -118,33 +121,72 @@ export abstract class AbstractRenderer implements IDestroyable,IMatrixTransforma
 
     public abstract drawEllipse(ellispe:Ellipse):void;
 
-    public abstract transformReset():void;
+    public transformSave():void {
+        this._matrixStack.save();
+    }
 
-    public abstract transformSave():void;
+    public transformScale(x:number, y:number, z: number = 1):void {
+        if (x===1 && y===1 && z===1) return;
+        this._matrixStack.scale(x,y,z);
+    }
 
-    public abstract transformRestore():void;
+    public transformReset():void{
+        this._matrixStack.resetTransform();
+    }
 
-    public abstract transformTranslate(x:number, y:number, z?:number):void;
+    public transformRotateX(angleInRadians:number):void {
+        if (angleInRadians===0) return;
+        this._matrixStack.rotateX(angleInRadians);
+    }
 
-    public abstract transformRotationReset():void;
+    public transformRotateY(angleInRadians:number):void {
+        if (angleInRadians===0) return;
+        this._matrixStack.rotateY(angleInRadians);
+    }
 
-    public abstract transformScale(x:number, y:number, z?:number):void;
+    public transformRotateZ(angleInRadians:number):void {
+        if (angleInRadians===0) return;
+        this._matrixStack.rotateZ(angleInRadians);
+    }
 
-    public abstract transformRotateX(a:number):void;
+    public transformTranslate(x:number, y:number, z:number=0):void{
+        if (x===0 && y===0 && z===0) return;
+        this._matrixStack.translate(x,y,z);
+    }
 
-    public abstract transformSkewX(a:number):void;
+    public transformRotationReset():void{
+        this._matrixStack.rotationReset();
+    }
 
-    public abstract transformSkewY(a:number):void;
+    public transformSkewX(angle:number):void{
+        if (angle===0) return;
+        this._matrixStack.skewX(angle);
+    }
 
-    public abstract transformRotateY(a:number):void;
+    public transformSkewY(angle:number):void{
+        if (angle===0) return;
+        this._matrixStack.skewY(angle);
+    }
 
-    public abstract transformRotateZ(a:number):void;
+    public transformRestore():void{
+        this._matrixStack.restore();
+    }
 
-    public abstract transformSet(val:Readonly<Mat16Holder>): void;
+    public transformSet(val:Readonly<Mat16Holder>): void {
+        this._matrixStack.setMatrix(val);
+    }
 
-    public abstract transformGet():Readonly<Mat16Holder>;
+    public transformGet(): Readonly<Mat16Holder> {
+        return this._matrixStack.getCurrentValue();
+    }
+
+
+    public abstract setRenderTarget(rt:IRenderTarget):void;
+
+    public abstract getRenderTarget():IRenderTarget;
 
     public killObject(r:RenderableModel):void {}
+
 
     public getHelper():RendererHelper{
         return this.rendererHelper;

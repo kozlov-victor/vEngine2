@@ -236,7 +236,7 @@ export abstract class RenderableModel
             this._scene._renderingObjectStack.add(this, this._scene._renderingSessionInfo.currentConstrainObjects);
         }
 
-        const renderer: AbstractRenderer = this.game.getRenderer();
+        const renderer = this.game.getRenderer();
 
         renderer.transformSave();
         if (this._scene.camera.worldTransformDirty) this.worldTransformDirty = true;

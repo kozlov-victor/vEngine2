@@ -92,10 +92,10 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
         this._getLast().frameBuffer.bind();
     }
 
-    public clear(color:Color,alphaBlend?:number):void{
+    public clear(color:Color,widthDepth:boolean,alphaBlend?:number):void{
         for (const b of this._stack) {
             b.frameBuffer.bind();
-            b.frameBuffer.clear(color,true,alphaBlend);
+            b.frameBuffer.clear(color,widthDepth,alphaBlend);
         }
     }
 

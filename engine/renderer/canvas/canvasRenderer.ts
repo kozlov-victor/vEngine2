@@ -2,29 +2,19 @@ import {DebugError} from "../../debug/debugError";
 import {Game} from "../../core/game";
 import {Rect} from "../../geometry/rect";
 import {AbstractCanvasRenderer} from "../abstract/abstractCanvasRenderer";
-import {Size} from "../../geometry/size";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Image} from "@engine/renderable/impl/general/image/image";
 import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
-import {ICubeMapTexture, ITexture} from "@engine/renderer/common/texture";
+import {ICubeMapTexture} from "@engine/renderer/common/texture";
 import {Mesh2d} from "@engine/renderable/abstract/mesh2d";
 import {Line} from "@engine/renderable/impl/geometry/line";
-import {RendererHelper} from "@engine/renderer/abstract/rendererHelper";
 import {Mat4} from "@engine/misc/math/mat4";
 import {Mesh3d} from "@engine/renderable/impl/3d/mesh3d";
-import {noop} from "@engine/misc/object";
+import {CanvasRendererHelper} from "@engine/renderer/canvas/canvasRendererHelper";
+import {CanvasRenderTarget} from "@engine/renderer/canvas/canvasRenderTarget";
+import {CanvasTexture} from "@engine/renderer/canvas/canvasTexture";
 import Mat16Holder = Mat4.Mat16Holder;
 
-
-const getCtx = (el:HTMLCanvasElement):CanvasRenderingContext2D=>{
-    return (
-        el.getContext("2d") as CanvasRenderingContext2D
-    );
-};
-
-interface ICanvasTexture extends ITexture{
-    source: CanvasImageSource;
-}
 
 interface ICanvasRenderingContext2D extends CanvasRenderingContext2D {
     webkitImageSmoothingEnabled:boolean;
@@ -36,20 +26,20 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
 
     public readonly type:string = 'CanvasRenderer';
 
-    protected rendererHelper:RendererHelper = new RendererHelper(this.game);
+    protected rendererHelper = new CanvasRendererHelper(this.game);
 
     private mat = new Mat4.Mat16Holder();
 
-    private readonly ctx:CanvasRenderingContext2D;
+    private renderTarget:CanvasRenderTarget;
 
     constructor(game:Game){
         super(game);
         this.registerResize();
-        this.ctx = getCtx(this.container as HTMLCanvasElement);
         Mat4.makeIdentity(this.mat);
+        this.renderTarget = new CanvasRenderTarget(this.game,this.game.size,this.container);
     }
 
-    public override setPixelPerfect():void{
+    public override setPixelPerfect(val:boolean):void{ // todo val
 
         this.container.style.cssText += 'image-rendering: optimizeSpeed;' + // FireFox < 6.0
             'image-rendering: -moz-crisp-edges;' + // FireFox
@@ -72,24 +62,25 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
         const srcRect:Rect = img.getSrcRect();
         const dstRect:Rect = img.getSrcRect();
 
+        const ctx = this.renderTarget.getTexture().getContext();
         if (img.offset.x || img.offset.y) {
-            const pattern:CanvasPattern = this.ctx.createPattern(
-                (img.getTexture() as unknown as ICanvasTexture).source,
+            const pattern:CanvasPattern = ctx.createPattern(
+                (img.getTexture() as CanvasTexture).getCanvas(),
                 'repeat') as CanvasPattern;
-            this.ctx.fillStyle = pattern;
+            ctx.fillStyle = pattern;
 
-            this.ctx.save();
-            this.ctx.translate(-img.offset.x,-img.offset.y);
+            ctx.save();
+            ctx.translate(-img.offset.x,-img.offset.y);
 
-            this.ctx.fillRect(
+            ctx.fillRect(
                 0,0,
                 dstRect.width + Math.abs(img.offset.x),
                 dstRect.height + Math.abs(img.offset.y)
             );
-            this.ctx.restore();
+            ctx.restore();
         } else {
-            this.ctx.drawImage(
-                (img.getTexture() as unknown as ICanvasTexture).source,
+            ctx.drawImage(
+                (img.getTexture() as CanvasTexture).getCanvas(),
                 srcRect.x,
                 srcRect.y,
                 srcRect.width,
@@ -105,15 +96,16 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
 
 
     public drawRectangle(rectangle:Rectangle):void{
-        this.ctx.fillStyle = rectangle.fillColor.asCssRgba();
-        this.ctx.strokeStyle = rectangle.color.asCssRgba();
-        this.ctx.lineWidth = rectangle.lineWidth;
-        this.ctx.fillRect(0,0,rectangle.size.width,rectangle.size.height);
-        this.ctx.strokeRect(0,0,rectangle.size.width,rectangle.size.height);
+        const ctx = this.renderTarget.getTexture().getContext();
+        ctx.fillStyle = rectangle.fillColor.asCssRgba();
+        ctx.strokeStyle = rectangle.color.asCssRgba();
+        ctx.lineWidth = rectangle.lineWidth;
+        ctx.fillRect(0,0,rectangle.size.width,rectangle.size.height);
+        ctx.strokeRect(0,0,rectangle.size.width,rectangle.size.height);
     }
 
     public drawEllipse(e:Ellipse):void{
-        const ctx:CanvasRenderingContext2D = this.ctx;
+        const ctx = this.renderTarget.getTexture().getContext();
         ctx.fillStyle = e.fillColor.asCssRgba();
         ctx.strokeStyle = e.color.asCssRgba();
         ctx.beginPath();
@@ -124,86 +116,102 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
 
 
     public setAlpha(a:number):void{
-        this.ctx.globalAlpha = a;
+        const ctx = this.renderTarget.getTexture().getContext();
+        ctx.globalAlpha = a;
     }
 
     public setLockRect(rect:Rect):void {
-        this.ctx.save();
-        this.ctx.beginPath();
-        this.ctx.rect(rect.x,rect.y,rect.width,rect.height);
-        this.ctx.clip();
+        const ctx = this.renderTarget.getTexture().getContext();
+        ctx.save();
+        ctx.beginPath();
+        ctx.rect(rect.x,rect.y,rect.width,rect.height);
+        ctx.clip();
     }
 
     public unsetLockRect():void {
-        this.ctx.restore();
+        const ctx = this.renderTarget.getTexture().getContext();
+        ctx.restore();
     }
 
-    public transformSave():void {
-        this.ctx.save();
+    public override transformSave():void {
+        super.transformSave();
+        const ctx = this.renderTarget.getTexture().getContext();
+        ctx.save();
     }
 
-    public transformScale(x:number, y:number):void {
-        this.ctx.scale(x,y);
+    public override transformScale(x:number, y:number):void {
+        super.transformScale(x,y);
+        const ctx = this.renderTarget.getTexture().getContext();
+        ctx.scale(x,y);
     }
 
-    public transformReset():void {
-        this.ctx.resetTransform();
+    public override transformReset():void {
+        super.transformReset();
+        const ctx = this.renderTarget.getTexture().getContext();
+        ctx.resetTransform();
     }
 
-    public transformRotateZ(angleInRadians:number):void {
-        this.ctx.rotate(angleInRadians);
+    public override transformRotateZ(angleInRadians:number):void {
+        super.transformRotateZ(angleInRadians);
+        const ctx = this.renderTarget.getTexture().getContext();
+        ctx.rotate(angleInRadians);
     }
 
-    public transformRotateY(angleInRadians:number):void {
-
+    public override transformSkewX(a: number): void {
+        super.transformSkewX(a);
     }
 
-    public transformTranslate(x:number, y:number):void {
-        this.ctx.translate(x,y);
+    public override transformSkewY(a: number): void {
+        super.transformSkewY(a);
     }
 
-    public transformRotationReset(): void {
+    public override transformTranslate(x:number, y:number):void {
+        super.transformTranslate(x,y);
+        const ctx = this.renderTarget.getTexture().getContext();
+        ctx.translate(x,y);
     }
 
-    public transformSet(val:Readonly<Mat16Holder>): void {
+
+    public override transformSet(val:Readonly<Mat16Holder>): void {
+        super.transformSet(val);
+        const ctx = this.renderTarget.getTexture().getContext();
+
+        // a (m11) Horizontal scaling. A value of 1 results in no scaling.
+        // b (m12) Vertical skewing.
+        // c (m21) Horizontal skewing.
+        // d (m22) Vertical scaling. A value of 1 results in no scaling.
+        // e (dx) Horizontal translation (moving).
+        // f (dy) Vertical translation (moving).
+
+        const a = val.mat16[0];
+        const b = val.mat16[1];
+        const c = val.mat16[4];
+        const d = val.mat16[5];
+        const e = val.mat16[12];
+        const f = val.mat16[13];
+
+        ctx.setTransform(a,b,c,d,e,f);
     }
 
-    public transformGet(): Readonly<Mat16Holder> {
-        return this.mat;
+
+    public override transformRestore():void {
+        super.transformRestore();
+        const ctx = this.renderTarget.getTexture().getContext();
+        ctx.restore();
     }
 
-    public transformRestore():void {
-        this.ctx.restore();
-    }
 
-    public beginFrameBuffer():void {
-        this.transformSave();
-    }
-    public flipFrameBuffer():void {
-        this.transformRestore();
-    }
 
     public override beforeFrameDraw(): void {
         if (!this.clearBeforeRender) return;
-        this.ctx.fillStyle = this.clearColor.asCssRgba();
-        this.ctx.fillRect(0,0,this.game.size.width,this.game.size.height);
+        this.renderTarget.clear(this.clearColor);
     }
 
 
-    public createTexture(bitmap:HTMLImageElement|ImageBitmap|HTMLCanvasElement):ICanvasTexture{
-        const c:HTMLCanvasElement = document.createElement('canvas');
-        c.setAttribute('width',bitmap.width.toString());
-        c.setAttribute('height',bitmap.height.toString());
-        const ctx:CanvasRenderingContext2D = c.getContext('2d') as CanvasRenderingContext2D;
-        ctx.drawImage(bitmap,0,0);
-        const size:Size = new Size(bitmap.width,bitmap.height);
-        return {
-            size,
-            source: c,
-            destroy: noop,
-            isDestroyed: ()=> false,
-            kind: 'texture',
-        };
+    public createTexture(bitmap:HTMLImageElement|ImageBitmap|HTMLCanvasElement):CanvasTexture {
+        const texture = new CanvasTexture(this.game,{width:bitmap.width,height:bitmap.height});
+        texture.getContext().drawImage(bitmap,0,0);
+        return texture;
     }
 
     public createCubeTexture(
@@ -233,15 +241,15 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
         return undefined;
     }
 
-
-    public transformRotateX(a: number): void {
+    public getRenderTarget(): CanvasRenderTarget {
+        return this.renderTarget;
     }
 
-    public transformSkewX(a: number): void {
+    public setRenderTarget(rt: CanvasRenderTarget): void {
+        this.renderTarget = rt;
     }
 
-    public transformSkewY(a: number): void {
-    }
+
 
 
 

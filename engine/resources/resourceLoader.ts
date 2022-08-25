@@ -1,5 +1,5 @@
 import {Game} from "../core/game";
-import {IURLRequest, UrlLoader} from "@engine/resources/urlLoader";
+import {addUrlParameter, IURLRequest, UrlLoader} from "@engine/resources/urlLoader";
 import {ICubeMapTexture, ITexture} from "@engine/renderer/common/texture";
 import {Base64, Optional, URI} from "@engine/core/declarations";
 import type {IXmlNode, XmlDocument, XmlNode} from "@engine/misc/parsers/xml/xmlELements";
@@ -33,9 +33,11 @@ export class ResourceLoader {
     private readonly q:Queue = new Queue();
 
     private static _loadHtmlImage = (imgUrl:URI|IURLRequest|Base64,progress?:(n:number)=>void):Promise<HTMLImageElement>=>{
-        const url:string = (imgUrl as IURLRequest).url?(imgUrl as IURLRequest).url:(imgUrl as string);
+        let url:string = (imgUrl as IURLRequest).url?(imgUrl as IURLRequest).url:(imgUrl as string);
+        url = addUrlParameter(url,'modified',BUILD_AT);
         return new Promise<HTMLImageElement>((resolve,reject)=>{
             const img = new window.Image() as HTMLImageElement;
+            img.src = url;
             img.onload = () => {
                 resolve(img);
             };
@@ -47,9 +49,40 @@ export class ResourceLoader {
             img.onprogress = (e:ProgressEvent)=>{
                 if (progress!==undefined && e.total) progress(e.loaded/e.total);
             };
-            img.src = url;
         });
     };
+
+    // private static async _loadHtmlImage(imgUrl:URI|IURLRequest|Base64,progress?:(n:number)=>void) {
+    //     const loadArrayBuffer = async (req: string|IURLRequest,progress?:(n:number)=>void):Promise<ArrayBuffer>=>{
+    //         let iReq:IURLRequest;
+    //         if ((req as string).substr!==undefined){
+    //             iReq = {url:req as string,responseType:'arraybuffer',method:'GET'};
+    //         } else iReq = req as IURLRequest;
+    //         const loader:UrlLoader<ArrayBuffer> = new UrlLoader(iReq);
+    //         if (progress!==undefined) loader.onProgress = progress;
+    //         return await loader.load();
+    //     };
+    //
+    //     const arrayBuff = await loadArrayBuffer(imgUrl,progress);
+    //     log('loaded array buffer ' + arrayBuff.byteLength);
+    //     const arrayBufferView = new Uint8Array(arrayBuff);
+    //     const imgBlob = new Blob([arrayBufferView]);
+    //     log('created blob ' + imgBlob);
+    //     try {
+    //         const bitmap = await createImageBitmap(imgBlob,0,0,100,100,{
+    //             imageOrientation: 'none',
+    //             premultiplyAlpha: 'none',
+    //             resizeWidth: 10,
+    //             resizeHeight: 10,
+    //             resizeQuality: 'high'
+    //         });
+    //         log('created bitmap ' + bitmap);
+    //         return bitmap;
+    //     } catch (e) {
+    //         log('error creating bitmap: ' + e);
+    //         return Promise.reject(e);
+    //     }
+    // }
 
     private static _createUrlLoader<T extends string|ArrayBuffer>(req: URI|IURLRequest,responseType:'arraybuffer'|'text' = 'text'):UrlLoader<T>{
         let iReq:IURLRequest;

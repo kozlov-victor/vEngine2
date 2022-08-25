@@ -10,11 +10,14 @@ export class Texture extends AbstractTexture{
 
     constructor(gl:WebGLRenderingContext){
         super(gl);
+
+        gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true);
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, false);
+
         // Fill the texture with a 1x1 blue pixel.
         this.setRawData(new Uint8Array([0, 0, 0, 255]),1,1);
     }
 
-    // gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, true); for bitmap textures
     /**
      * @param img - if image is undefined, width and height must be specified
      * @param size -unused if image specified
@@ -40,7 +43,6 @@ export class Texture extends AbstractTexture{
 
         this.beforeOperation();
 
-        gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, 1); // 1 or true
         if (img) {
             gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
         } else {

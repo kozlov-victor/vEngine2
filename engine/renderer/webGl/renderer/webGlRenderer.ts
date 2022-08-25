@@ -46,6 +46,7 @@ import glEnumToString = DebugUtil.glEnumToString;
 import IDENTITY = Mat4.IDENTITY;
 import MAT16 = Mat4.MAT16;
 import {CullFace} from "@engine/renderable/impl/3d/mesh3d";
+import {IRenderTarget} from "@engine/renderer/abstract/abstractRenderer";
 
 
 const getCtx = (el:HTMLCanvasElement):Optional<WebGLRenderingContext>=>{
@@ -103,10 +104,13 @@ const makeModelViewMatrix = (rect:Rect,matrixStack:MatrixStack):Mat16Holder=>{
 
 class InstanceHolder<T extends IDestroyable> {
     private instance:Optional<T>;
-    constructor(private clazz:ClazzEx<T,WebGLRenderingContext>){}
+    constructor(private clazz:ClazzEx<T,WebGLRenderingContext>,private afterCreated?:(instance:T)=>void){}
 
     public getInstance(gl:WebGLRenderingContext):T{
-        if (this.instance===undefined) this.instance = new this.clazz(gl);
+        if (this.instance===undefined) {
+            this.instance = new this.clazz(gl);
+            if (this.afterCreated!==undefined) this.afterCreated(this.instance);
+        }
         return this.instance;
     }
 
@@ -129,7 +133,6 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     protected rendererHelper:RendererHelper = new WebGlRendererHelper(this.game);
 
     private _gl:WebGLRenderingContext;
-    private readonly _matrixStack = new MatrixStack();
 
     private _shapePainterHolder = new InstanceHolder(ShapePainter);
     private _simpleImagePainterHolder = new InstanceHolder(SimpleImagePainter);
@@ -138,8 +141,8 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     private _skyBoxPainterHolder = new InstanceHolder(SkyBoxPainter);
     private _batchPainterHolder = new InstanceHolder(BatchPainter);
 
-    private _nullTexture:Texture;
-    private _nullCubeMapTexture:CubeMapTexture;
+    private _nullTextureHolder = new  InstanceHolder(Texture);
+    private _nullCubeMapTextureHolder = new InstanceHolder(CubeMapTexture,(it)=>it.setAsZero());
 
     private _origFrameBufferStack:FrameBufferStack;
     private _currFrameBufferStack:FrameBufferStack;
@@ -217,24 +220,35 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         const isTextureUsed:boolean = mesh.texture!==undefined;
         if (DEBUG && isTextureUsed && mesh._modelPrimitive.texCoordArr===undefined) throw new DebugError(`can not apply texture without texture coordinates`);
         mp.setTextureUsed(isTextureUsed);
-        mp.attachTexture('u_texture',isTextureUsed?mesh.texture as Texture:this._nullTexture);
+        mp.attachTexture(
+            'u_texture',
+            isTextureUsed?mesh.texture as Texture:this._nullTextureHolder.getInstance(this._gl)
+        );
 
         const isVertexColorUsed:boolean = mesh._modelPrimitive.vertexColorArr!==undefined;
         mp.setVertexColorUsed(isVertexColorUsed);
 
         const isNormalsTextureUsed:boolean = mesh.normalsTexture!==undefined;
         mp.setNormalsTextureUsed(isNormalsTextureUsed);
-        mp.attachTexture('u_normalsTexture',isNormalsTextureUsed?mesh.normalsTexture as Texture:this._nullTexture);
+        mp.attachTexture(
+            'u_normalsTexture',
+            isNormalsTextureUsed?mesh.normalsTexture as Texture:this._nullTextureHolder.getInstance(this._gl)
+        );
 
         const isSpecularTextureUsed:boolean = mesh.specularTexture!==undefined;
         mp.setSpecularTextureUsed(isSpecularTextureUsed);
-        mp.attachTexture('u_specularTexture',isSpecularTextureUsed?mesh.specularTexture as Texture:this._nullTexture);
+        mp.attachTexture(
+            'u_specularTexture',
+            isSpecularTextureUsed?mesh.specularTexture as Texture:this._nullTextureHolder.getInstance(this._gl)
+        );
 
         const isCubeMapTextureUsed:boolean = mesh.cubeMapTexture!==undefined;
         if (DEBUG && !isCubeMapTextureUsed && mesh.material.reflectivity!==0) throw new DebugError(`can not apply reflectivity without cubeMapTexture`);
         mp.setCubeMapTextureUsed(isCubeMapTextureUsed);
         mp.setReflectivity(mesh.material.reflectivity);
-        mp.attachTexture('u_cubeMapTexture',isCubeMapTextureUsed?mesh.cubeMapTexture as CubeMapTexture:this._nullCubeMapTexture);
+        mp.attachTexture(
+            'u_cubeMapTexture',
+            isCubeMapTextureUsed?mesh.cubeMapTexture as CubeMapTexture:this._nullCubeMapTextureHolder.getInstance(this._gl));
 
         if (DEBUG && mesh.isLightAccepted()) {
             if (!mesh.getBufferInfo().normalBuffer) {
@@ -321,17 +335,17 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         mp.setProjectionMatrix(getProjectionMatrix(this._currFrameBufferStack.id,this._currFrameBufferStack.getCurrentTargetSize()).mat16);
         mp.setAlpha(mesh.getChildrenCount()===0?mesh.alpha:1);
         mp.setTextureUsed(false);
-        mp.attachTexture('u_texture',this._nullTexture);
+        mp.attachTexture('u_texture',this._nullTextureHolder.getInstance(this._gl));
 
         mp.setNormalsTextureUsed(false);
-        mp.attachTexture('u_normalsTexture',this._nullTexture);
+        mp.attachTexture('u_normalsTexture',this._nullTextureHolder.getInstance(this._gl));
 
         mp.setSpecularTextureUsed(false);
-        mp.attachTexture('u_specularTexture',this._nullTexture);
+        mp.attachTexture('u_specularTexture',this._nullTextureHolder.getInstance(this._gl));
 
         mp.setCubeMapTextureUsed(false);
         mp.setReflectivity(0);
-        mp.attachTexture('u_cubeMapTexture',this._nullCubeMapTexture);
+        mp.attachTexture('u_cubeMapTexture',this._nullCubeMapTextureHolder.getInstance(this._gl));
 
         mp.setLightUsed(false);
         mp.setColor(mesh.fillColor);
@@ -400,7 +414,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         sp.setUniformScalar(sp.u_arcAngleFrom,ellipse.arcAngleFrom % (2*Math.PI));
         sp.setUniformScalar(sp.u_arcAngleTo,ellipse.arcAngleTo % (2*Math.PI));
         sp.setUniformScalar(sp.u_anticlockwise,ellipse.anticlockwise);
-        sp.attachTexture('texture',this._nullTexture);
+        sp.attachTexture('texture',this._nullTextureHolder.getInstance(this._gl));
         this._glCachedAccessor.setCullFace(CullFace.none);
         sp.draw();
 
@@ -410,65 +424,6 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this._glCachedAccessor.setDepthTest(false);
         this._glCachedAccessor.setCullFace(CullFace.none);
         this._batchPainterHolder.getInstance(this._gl).flush(this);
-    }
-
-    public transformSave():void {
-        this._matrixStack.save();
-    }
-
-    public transformScale(x:number, y:number, z: number = 1):void {
-        if (x===1 && y===1 && z===1) return;
-        this._matrixStack.scale(x,y,z);
-    }
-
-    public transformReset():void{
-        this._matrixStack.resetTransform();
-    }
-
-    public transformRotateX(angleInRadians:number):void {
-        if (angleInRadians===0) return;
-        this._matrixStack.rotateX(angleInRadians);
-    }
-
-    public transformRotateY(angleInRadians:number):void {
-        if (angleInRadians===0) return;
-        this._matrixStack.rotateY(angleInRadians);
-    }
-
-    public transformRotateZ(angleInRadians:number):void {
-        if (angleInRadians===0) return;
-        this._matrixStack.rotateZ(angleInRadians);
-    }
-
-    public transformTranslate(x:number, y:number, z:number=0):void{
-        if (x===0 && y===0 && z===0) return;
-        this._matrixStack.translate(x,y,z);
-    }
-
-    public transformRotationReset():void{
-        this._matrixStack.rotationReset();
-    }
-
-    public transformSkewX(angle:number):void{
-        if (angle===0) return;
-        this._matrixStack.skewX(angle);
-    }
-
-    public transformSkewY(angle:number):void{
-        if (angle===0) return;
-        this._matrixStack.skewY(angle);
-    }
-
-    public transformRestore():void{
-        this._matrixStack.restore();
-    }
-
-    public transformSet(val:Readonly<Mat16Holder>): void {
-        this._matrixStack.setMatrix(val);
-    }
-
-    public transformGet(): Readonly<Mat16Holder> {
-        return this._matrixStack.getCurrentValue();
     }
 
     public setLockRect(rect:IRectJSON):void {
@@ -490,7 +445,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
     public override beforeFrameDraw():void{
         if (this.clearBeforeRender) {
-            this._currFrameBufferStack.clear(this.clearColor, 1);
+            this._currFrameBufferStack.clear(this.clearColor, true,1);
         }
     }
 
@@ -543,10 +498,10 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         return this._gl;
     }
 
-    public setRenderTarget(fbs:FrameBufferStack):void{
+    public setRenderTarget(fbs:IRenderTarget):void{
         if (DEBUG && fbs===undefined) throw new DebugError('undefined parameter: setRenderTarget(undefined)');
         if (this._currFrameBufferStack!==fbs) this.flush();
-        this._currFrameBufferStack = fbs;
+        this._currFrameBufferStack = fbs as FrameBufferStack;
     }
 
     public getRenderTarget():FrameBufferStack {
@@ -556,8 +511,8 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     public override destroy():void{
         super.destroy();
         this._origFrameBufferStack.destroy();
-        this._nullTexture.destroy();
-        this._nullCubeMapTexture.destroy();
+        this._nullTextureHolder.destroy();
+        this._nullCubeMapTextureHolder.destroy();
         this._shapePainterHolder.destroy();
         this._meshPainterHolder.destroy();
         Texture.destroyAll();
@@ -580,9 +535,6 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this._gl = gl;
 
         this._glCachedAccessor = new GlCachedAccessor(gl);
-        this._nullTexture = new Texture(gl);
-        this._nullCubeMapTexture = new CubeMapTexture(gl);
-        this._nullCubeMapTexture.setAsZero();
         this._blender = Blender.getSingleton(gl);
         this._blender.enable();
         this._blender.setBlendMode(BLEND_MODE.NORMAL);
@@ -635,7 +587,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.prepareShapeFillUniformInfo(rectangle);
         sp.setUniformScalar(sp.u_borderRadius,Math.min(rectangle.borderRadius/maxSize,1));
         sp.setUniformScalar(sp.u_shapeType,SHAPE_TYPE.RECT);
-        sp.attachTexture('texture',this._nullTexture);
+        sp.attachTexture('texture',this._nullTextureHolder.getInstance(this._gl));
         this._glCachedAccessor.setCullFace(CullFace.none);
         sp.draw();
     }

@@ -1,8 +1,7 @@
-import {AbstractRenderer} from "@engine/renderer/abstract/abstractRenderer";
+import {AbstractRenderer, IRenderTarget} from "@engine/renderer/abstract/abstractRenderer";
 import {Image} from "@engine/renderable/impl/general/image/image";
 import {Game} from "@engine/core/game";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
-import {MatrixStack} from "@engine/misc/math/matrixStack";
 import {Line} from "@engine/renderable/impl/geometry/line";
 import {ICubeMapTexture, ITexture} from "@engine/renderer/common/texture";
 import {MathEx} from "@engine/misc/math/mathEx";
@@ -11,13 +10,11 @@ import {Mesh2d} from "@engine/renderable/abstract/mesh2d";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Rect} from "@engine/geometry/rect";
 import {Optional} from "@engine/core/declarations";
-import {RendererHelper} from "@engine/renderer/abstract/rendererHelper";
 import {DebugError} from "@engine/debug/debugError";
-import {Mat4} from "@engine/misc/math/mat4";
 import {Incrementer} from "@engine/resources/incrementer";
 import {Mesh3d} from "@engine/renderable/impl/3d/mesh3d";
 import {noop} from "@engine/misc/object";
-import Mat16Holder = Mat4.Mat16Holder;
+import {DomRendererHelper} from "@engine/renderer/dom/domRendererHelper";
 
 
 interface ICSSStyleDeclaration extends CSSStyleDeclaration{
@@ -85,15 +82,13 @@ export class DomRenderer extends AbstractRenderer {
 
     public readonly type:string = 'DomRenderer';
 
-    protected rendererHelper:RendererHelper = new RendererHelper(this.game);
+    protected rendererHelper = new DomRendererHelper(this.game);
 
-    private _matrixStack:MatrixStack;
     private _nodes:Nodes;
 
 
     constructor(game:Game){
         super(game);
-        this._matrixStack = new MatrixStack();
         const container:HTMLDivElement = document.createElement('div');
         container.style.cssText = 'position:relative';
         document.body.appendChild(container);
@@ -165,47 +160,6 @@ export class DomRenderer extends AbstractRenderer {
         return undefined!;
     }
 
-    public transformSave():void {
-        this._matrixStack.save();
-    }
-
-    public transformScale(x:number, y:number):void {
-        this._matrixStack.scale(x,y);
-    }
-
-    public transformReset():void{
-        this._matrixStack.resetTransform();
-    }
-
-    public transformRotateX(angleInRadians:number):void {
-        this._matrixStack.rotateX(angleInRadians);
-    }
-
-    public transformRotateY(angleInRadians:number):void {
-        this._matrixStack.rotateY(angleInRadians);
-    }
-
-    public transformRotateZ(angleInRadians:number):void {
-        this._matrixStack.rotateZ(angleInRadians);
-    }
-
-    public transformTranslate(x:number, y:number, z:number=0):void{
-        this._matrixStack.translate(x,y,z);
-    }
-
-    public transformRotationReset(): void {
-    }
-
-    public transformRestore():void{
-        this._matrixStack.restore();
-    }
-
-    public transformSet(val:Readonly<Mat16Holder>): void {
-    }
-
-    public transformGet(): Readonly<Mat16Holder> {
-        return undefined!;
-    }
 
     public drawEllipse(ellispe: Ellipse): void {
     }
@@ -226,16 +180,15 @@ export class DomRenderer extends AbstractRenderer {
     public setLockRect(rect: Rect): void {
     }
 
-    public transformSkewX(a: number): void {
-    }
-
-    public transformSkewY(a: number): void {
-    }
-
     public unsetLockRect(): void {
     }
 
+    public getRenderTarget(): IRenderTarget {
+        return undefined!;
+    }
 
+    public setRenderTarget(rt: IRenderTarget): void {
+    }
 
     private _drawBasicElement(node:VNode,model:RenderableModel):void{
         if (model.pos.x!==node.properties.pos_x) {

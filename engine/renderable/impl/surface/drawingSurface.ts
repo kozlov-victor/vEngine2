@@ -93,7 +93,7 @@ class DrawingSession implements IDrawingSession {
     }
 
     public clear():void{
-        this._renderTarget.clear(Color.NONE,0);
+        this._renderTarget.clear(Color.NONE,true,0);
     }
 
     public drawRoundedRect(x:number,y:number,width:number,height:number, radius:number):void {

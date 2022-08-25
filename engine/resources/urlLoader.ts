@@ -1,3 +1,5 @@
+
+
 export interface IURLRequestHeader {
     name:string;
     value:string;
@@ -10,7 +12,7 @@ export interface IURLRequest {
     responseType:'arraybuffer'|'blob'|'text';
 }
 
-const addUrlParameter = (url:string,param:string,value:string|number):string=>{
+export const addUrlParameter = (url:string,param:string,value:string|number):string=>{
     if (url.indexOf('?')>-1) url+='&';
     else url+='?';
     return `${url}${param}=${value}`;
@@ -82,7 +84,7 @@ export class UrlLoader<T extends string|ArrayBuffer> {
     }
 
     public async load():Promise<T>{
-        if (this.getUrl().indexOf('data:')===0) return loadBase64(this.urlRequest) as Promise<T>;
-        else return loadViaXmlHttp(this.urlRequest,this.onProgress);
+        if (this.getUrl().indexOf('data:')===0) return await loadBase64(this.urlRequest) as T;
+        else return await loadViaXmlHttp(this.urlRequest,this.onProgress);
     }
 }
