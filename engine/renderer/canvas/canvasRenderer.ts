@@ -16,7 +16,7 @@ import {CanvasTexture} from "@engine/renderer/canvas/canvasTexture";
 import Mat16Holder = Mat4.Mat16Holder;
 
 
-interface ICanvasRenderingContext2D extends CanvasRenderingContext2D {
+interface ICanvasRenderingContext2DEx extends CanvasRenderingContext2D {
     webkitImageSmoothingEnabled:boolean;
     mozImageSmoothingEnabled:boolean;
     msImageSmoothingEnabled:boolean;
@@ -50,7 +50,7 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
             'image-rendering: pixelated; ' + // Future browsers
             '-ms-interpolation-mode: nearest-neighbor;'; // IE
 
-        const context:ICanvasRenderingContext2D = this.container.getContext('2d')! as ICanvasRenderingContext2D;
+        const context = this.container.getContext('2d') as ICanvasRenderingContext2DEx;
         context.webkitImageSmoothingEnabled = false;
         context.mozImageSmoothingEnabled = false;
         context.msImageSmoothingEnabled = false;

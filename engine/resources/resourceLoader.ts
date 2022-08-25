@@ -34,9 +34,9 @@ export class ResourceLoader {
 
     private static _loadHtmlImage = (imgUrl:URI|IURLRequest|Base64,progress?:(n:number)=>void):Promise<HTMLImageElement>=>{
         let url:string = (imgUrl as IURLRequest).url?(imgUrl as IURLRequest).url:(imgUrl as string);
-        url = addUrlParameter(url,'modified',BUILD_AT);
+        if (url.indexOf('data:')!==0) url = addUrlParameter(url,'modified',BUILD_AT);
         return new Promise<HTMLImageElement>((resolve,reject)=>{
-            const img = new window.Image() as HTMLImageElement;
+            const img = new window.Image();
             img.src = url;
             img.onload = () => {
                 resolve(img);

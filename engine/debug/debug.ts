@@ -113,7 +113,7 @@ const handleCatchError = async (e:ErrorEvent)=>{
 };
 
 const extractPromiseError = (e:any):string=>{
-    let r:string = 'Async error\n';
+    let r = 'Async error\n';
     if ((e as string).substr!==undefined) r+=e;
     if (e.message) r+=`${e.message}\n`;
     if (e.stack) r+=e.stack;

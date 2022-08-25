@@ -145,14 +145,14 @@ let errorWidget:ErrorWidget;
 
 export const renderError = (error:IErrorInfo):void=>{
 
-    if (!document.body) {
+    if (!document.body && window.alert!==undefined) {
         alert(error.runtimeInfo);
         return;
     }
 
     if (errorWidget===undefined) {
         errorWidget = new ErrorWidget();
-        const errDiv:HTMLElement = document.createElement('div');
+        const errDiv = document.createElement('div');
         document.body.appendChild(errDiv);
         errorWidget.mountTo(new HTMLElementWrap(errDiv));
     }

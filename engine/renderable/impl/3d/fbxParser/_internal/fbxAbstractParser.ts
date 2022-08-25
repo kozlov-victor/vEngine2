@@ -231,7 +231,6 @@ export abstract class FbxAbstractParser {
                 (fileNameNode?.props?.[0] as string) ??
                 ((t.props[1] || '') as string).replace('Texture::','');
             texture.tag = Utils.extractNameWithoutExtension(Utils.extractFileNameFromPath(fileName));
-            console.log(texture.tag);
             textures.push(texture);
         });
         return textures;

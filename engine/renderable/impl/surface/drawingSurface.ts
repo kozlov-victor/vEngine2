@@ -111,9 +111,7 @@ class DrawingSession implements IDrawingSession {
             y-=height;
             height=-height;
         }
-        const userExperimental = true;
         if (
-            userExperimental &&
             this._matrixStack.getCurrentValue().identityFlag &&
             this.pathParams.lineWidth===0 &&
             this._rect.borderRadius===0
