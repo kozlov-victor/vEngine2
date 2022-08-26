@@ -18,6 +18,8 @@ interface IParams extends IKeyVal<any>{
 export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
 
     protected declare parameters: IParams;
+    private gameObject:AnimatedImage;
+    private onGround = false;
 
     constructor(game: Game, parameters: IParams) {
         super(game, parameters);
@@ -29,6 +31,7 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
 
     public manage(gameObject: AnimatedImage): void {
 
+        this.gameObject = gameObject;
         const params = this.parameters;
         gameObject.transformPoint.setToCenter();
         gameObject.playFrameAnimation(params.idleAnimation);
@@ -39,8 +42,8 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
         }
 
 
-        body.collisionEventHandler.on(ARCADE_COLLISION_EVENT.COLLIDED, e=>{
-            if (body.collisionFlags.bottom && gameObject.getCurrentFrameAnimationName()===params.jumpAnimation) {
+        body.collisionEventHandler.on(ARCADE_COLLISION_EVENT.COLLIDED, _=>{
+            if (this.onGround && gameObject.getCurrentFrameAnimationName()===params.jumpAnimation) {
                 if (body.velocity.x) {
                     gameObject.playFrameAnimation(params.runAnimation);
                 }
@@ -55,12 +58,20 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
                 case KEYBOARD_KEY.LEFT:
                     body.velocity.x = -params.velocity;
                     gameObject.scale.x = -Math.abs(gameObject.scale.x);
-                    if (gameObject.getCurrentFrameAnimationName()!==params.runAnimation) gameObject.playFrameAnimation(params.runAnimation);
+                    if (gameObject.getCurrentFrameAnimationName()!==params.runAnimation) {
+                        if (this.onGround) {
+                            gameObject.playFrameAnimation(params.runAnimation);
+                        }
+                    }
                     break;
                 case KEYBOARD_KEY.RIGHT:
                     body.velocity.x = params.velocity;
                     gameObject.scale.x = Math.abs(gameObject.scale.x);
-                    if (gameObject.getCurrentFrameAnimationName()!==params.runAnimation) gameObject.playFrameAnimation(params.runAnimation);
+                    if (gameObject.getCurrentFrameAnimationName()!==params.runAnimation) {
+                        if (this.onGround) {
+                            gameObject.playFrameAnimation(params.runAnimation);
+                        }
+                    }
                     break;
 
             }
@@ -83,7 +94,7 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
                 case KEYBOARD_KEY.LEFT:
                 case KEYBOARD_KEY.RIGHT:
                     body.velocity.x = 0;
-                    gameObject.playFrameAnimation(params.idleAnimation);
+                    if (this.onGround) gameObject.playFrameAnimation(params.idleAnimation);
                     break;
                 default:
                     break;
@@ -92,4 +103,14 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
 
     }
 
+
+    public override update() {
+        super.update();
+        this.onGround = this.gameObject.getRigidBody<ArcadeRigidBody>().collisionFlags.bottom;
+        if (!this.onGround && this.gameObject.getCurrentFrameAnimationName()!==this.parameters.jumpAnimation) {
+            if (this.parameters.jumpAnimation!==undefined) {
+                this.gameObject.playFrameAnimation(this.parameters.jumpAnimation);
+            }
+        }
+    }
 }
