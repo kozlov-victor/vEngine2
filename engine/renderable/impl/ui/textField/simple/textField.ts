@@ -284,7 +284,7 @@ export class TextField extends WidgetContainer {
 
 export class TextFieldWithoutCache extends TextField {
 
-    public override type:'TextFieldWithoutCache' = 'TextFieldWithoutCache';
+    public override type = 'TextFieldWithoutCache' as const;
 
     constructor(game: Game, font: Font) {
         super(game, font, false);

@@ -39,7 +39,7 @@ export class Font {
 
     private readonly DEFAULT_SYMBOL_IN_CONTEXT:IFontSymbolInfo;
 
-    public readonly type:'Font' = 'Font';
+    public readonly type = 'Font' as const;
 
     private static isDefaultChar(char:string):boolean {
         return char===' ' || char==='\n';

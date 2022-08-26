@@ -61,8 +61,8 @@ module.exports = function(content) {
 
         const statements = [];
         allDecoratedFields.forEach(f=> {
-            const newDecorators = [];
-            f.decorators.forEach((d) => {
+            const newModifiers = [];
+            f.modifiers.forEach((d) => {
                 const decoratorName =
                     d.expression &&
                     d.expression.expression &&
@@ -84,10 +84,10 @@ module.exports = function(content) {
                     );
                     statements.push(...loadingStatements);
                 } else {
-                    newDecorators.push(d);
+                    newModifiers.push(d);
                 }
             });
-            f.decorators = newDecorators;
+            f.modifiers = newModifiers;
         });
 
         preloadingMethod.body.statements = [...preloadingMethod.body.statements, ...statements];
@@ -99,8 +99,8 @@ module.exports = function(content) {
         if (allDecoratedFields.length === 0) return;
         modified = true;
         allDecoratedFields.forEach(f => {
-            const newDecorators = [];
-            f.decorators.forEach((d) => {
+            const newModifiers = [];
+            f.modifiers.forEach((d) => {
                 const decoratorName =
                     d.expression &&
                     d.expression.expression &&
@@ -127,10 +127,10 @@ module.exports = function(content) {
                         )
                     f.initializer = callExpression;
                 } else {
-                    newDecorators.push(d);
+                    newModifiers.push(d);
                 }
             });
-            f.decorators = newDecorators;
+            f.modifiers = newModifiers;
         });
     });
 

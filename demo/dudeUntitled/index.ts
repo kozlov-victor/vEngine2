@@ -18,8 +18,7 @@ game.setRenderer(CanvasRenderer);
 game.getRenderer<AbstractCanvasRenderer>().setPixelPerfect(true);
 game.addControl(KeyboardControl);
 
-game.getControl<GamePadControl>('KeyboardControl')!.reflectToControl(
-    game.getControl<KeyboardControl>('KeyboardControl')!,
+game.getControl<GamePadControl>('KeyboardControl')!.reflectToSelf(
     {
         [KEYBOARD_KEY.CENTER]: KEYBOARD_KEY.SPACE,
     }

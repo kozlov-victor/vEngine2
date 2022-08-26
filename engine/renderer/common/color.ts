@@ -68,7 +68,7 @@ export class Color extends ObservableEntity implements ICloneable<Color>, IColor
     public static BLACK = Color.RGB(0,0,0).freeze();
     public static NONE  = Color.RGBA(0,0,0,0).freeze();
 
-    public readonly type:'Color' = 'Color';
+    public readonly type = 'Color' as const;
 
     private _r:Uint8;
     private _g:Uint8;

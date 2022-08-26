@@ -116,7 +116,7 @@ const emitVariableDeclaration = (node:ts.VariableDeclaration):void=>{
     codeBuilder.println(';');
 }
 
-const emitModifiers = (node: ts.ClassDeclaration | ts.MethodDeclaration | ts.PropertyDeclaration, modifiers: ts.NodeArray<ts.Modifier> | undefined):void=> {
+const emitModifiers = (node: ts.ClassDeclaration | ts.MethodDeclaration | ts.PropertyDeclaration, modifiers: ts.NodeArray<ts.ModifierLike> | undefined):void=> {
     if (modifiers && modifiers.length) {
         modifiers.forEach((m,i)=>{
             codeBuilder.print(m.getText(sourceFile));

@@ -39,6 +39,11 @@ export abstract class AbstractKeypad<T extends KeyPadEvent> {
         this.reflectKey.map = map;
     }
 
+    public reflectToSelf(map: Record<number, number>): void {
+        this.reflectKey.control = this;
+        this.reflectKey.map = map;
+    }
+
     public press(event: T): void {
         event.keyState = KEY_STATE.KEY_PRESSED;
         this.buffer.push(event);

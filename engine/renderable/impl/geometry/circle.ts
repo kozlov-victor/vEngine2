@@ -15,7 +15,7 @@ export class Circle extends Ellipse implements ICloneable<Circle>, ICircleProps{
         return this._radius;
     }
 
-    public override readonly type:'Circle' = 'Circle';
+    public override readonly type = 'Circle' as const;
 
     // @ts-ignore
     declare public radiusX:never;
