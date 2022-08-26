@@ -1,19 +1,15 @@
 import {Game} from "@engine/core/game";
 import {FontContextCanvasFactory} from "@engine/renderable/impl/general/font/factory/fontContextCanvasFactory";
-import {ResourceLoader} from "@engine/resources/resourceLoader";
-import {ITexture} from "@engine/renderer/common/texture";
 import {Font} from "@engine/renderable/impl/general/font/font";
 import {FontTypes} from "@engine/renderable/impl/general/font/fontTypes";
-import ICssFontParameters = FontTypes.ICssFontParameters;
-import IPartialFontContext = FontTypes.IPartialFontContext;
-import ITextureWithId = FontTypes.ITextureWithId;
-import IFontContext = FontTypes.IFontContext;
 import {
     CYR_CHARS,
-    DEFAULT_FONT_PARAMS, LAT_CHARS,
+    DEFAULT_FONT_PARAMS,
+    LAT_CHARS,
     STANDARD_SYMBOLS
 } from "@engine/renderable/impl/general/font/createFontMethods/params/createFontParams";
 import {fontAsCss} from "@engine/renderable/impl/general/font/helpers";
+import ICssFontParameters = FontTypes.ICssFontParameters;
 
 export const createFontFromCssDescription = (game:Game,params:ICssFontParameters):Font=>{
 

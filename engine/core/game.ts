@@ -11,7 +11,6 @@ import {Stack} from "@engine/misc/collection/stack";
 import {ISize, Size} from "@engine/geometry/size";
 import {IPhysicsSystem} from "@engine/physics/common/interfaces";
 import {SceneLifeCycleState} from "@engine/scene/sceneLifeCicleState";
-import {ResourceLoader} from "@engine/resources/resourceLoader";
 import {TaskQueue} from "@engine/resources/taskQueue";
 import {EventEmitterDelegate} from "@engine/delegates/eventDelegates/eventEmitterDelegate";
 import {FpsCounter} from "@engine/core/fpsCounter";

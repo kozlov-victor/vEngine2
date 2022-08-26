@@ -2,19 +2,19 @@ import {AbstractRenderer, IRenderTarget} from "@engine/renderer/abstract/abstrac
 import {Image} from "@engine/renderable/impl/general/image/image";
 import {Game} from "@engine/core/game";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
-import {Line} from "@engine/renderable/impl/geometry/line";
+import type {Line} from "@engine/renderable/impl/geometry/line";
 import {ICubeMapTexture, ITexture} from "@engine/renderer/common/texture";
 import {MathEx} from "@engine/misc/math/mathEx";
-import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
+import type {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
 import {Mesh2d} from "@engine/renderable/abstract/mesh2d";
-import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
+import type {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Rect} from "@engine/geometry/rect";
 import {Optional} from "@engine/core/declarations";
 import {DebugError} from "@engine/debug/debugError";
-import {Incrementer} from "@engine/resources/incrementer";
-import {Mesh3d} from "@engine/renderable/impl/3d/mesh3d";
-import {noop} from "@engine/misc/object";
+import type {Mesh3d} from "@engine/renderable/impl/3d/mesh3d";
 import {DomRendererHelper} from "@engine/renderer/dom/domRendererHelper";
+import {DomTexture} from "@engine/renderer/dom/domTexture";
+import {Size} from "@engine/geometry/size";
 
 
 interface ICSSStyleDeclaration extends CSSStyleDeclaration{
@@ -97,6 +97,10 @@ export class DomRenderer extends AbstractRenderer {
         this.registerResize();
     }
 
+    public setPixelPerfect():void {
+
+    }
+
     public override beforeFrameDraw():void{
         if (this._nodes.properties.bg_color!==this.clearColor.asCssRgba()) {
             this.container.style.backgroundColor = this.clearColor.asCssRgba();
@@ -114,10 +118,7 @@ export class DomRenderer extends AbstractRenderer {
             node.properties.offset_y = img.offset.y;
             node.domEl.style.backgroundPositionY = `${img.offset.y}px`;
         }
-        // if ((img.getTexture() as IDomTexture)!==node.properties.textureId) {
-        //     node.properties.textureId = (img.getTexture() );
-        //     node.domEl.style.backgroundImage = `url(${img.getResourceLink().url})`;
-        // } todo
+        node.domEl.style.backgroundImage = `url(${(img.getTexture() as DomTexture).imageUrl})`
 
     }
 
@@ -135,17 +136,10 @@ export class DomRenderer extends AbstractRenderer {
         this._nodes.kill(r.id);
     }
 
-    public createTexture(bitmap:ImageBitmap|HTMLImageElement|HTMLCanvasElement):IDomTexture {
-        return {
-            uid:Incrementer.getValue(),
-            size:{
-                width:bitmap.width,
-                height:bitmap.height
-            },
-            destroy:noop,
-            kind : 'texture',
-            isDestroyed: ()=> false,
-        };
+    public createTexture(image:HTMLImageElement):DomTexture {
+        const texture = new DomTexture(this.game,new Size(image.width,image.height));
+        texture.imageUrl = image.src;
+        return texture;
     }
 
     public createCubeTexture(
