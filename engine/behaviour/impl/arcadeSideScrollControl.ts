@@ -1,5 +1,5 @@
 import {BaseAbstractBehaviour} from "@engine/behaviour/abstract/baseAbstractBehaviour";
-import {ArcadeRigidBody} from "@engine/physics/arcade/arcadeRigidBody";
+import {ARCADE_COLLISION_EVENT, ArcadeRigidBody} from "@engine/physics/arcade/arcadeRigidBody";
 import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {AnimatedImage} from "@engine/renderable/impl/general/image/animatedImage";
@@ -12,6 +12,7 @@ interface IParams extends IKeyVal<any>{
     jumpVelocity: number;
     runAnimation: string;
     idleAnimation: string;
+    jumpAnimation?: string;
 }
 
 export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
@@ -37,6 +38,18 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
             throw new DebugError(`cannot apply behaviour: ${this.constructor.name}, rigid body is not set`);
         }
 
+
+        body.collisionEventHandler.on(ARCADE_COLLISION_EVENT.COLLIDED, e=>{
+            if (body.collisionFlags.bottom && gameObject.getCurrentFrameAnimationName()===params.jumpAnimation) {
+                if (body.velocity.x) {
+                    gameObject.playFrameAnimation(params.runAnimation);
+                }
+                else {
+                    gameObject.playFrameAnimation(params.idleAnimation);
+                }
+            }
+        });
+
         this.game.getCurrentScene().keyboardEventHandler.on(KEYBOARD_EVENTS.keyPressed, e=>{
             switch (e.button) {
                 case KEYBOARD_KEY.LEFT:
@@ -57,6 +70,9 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
                 case KEYBOARD_KEY.SPACE:
                     if (gameObject.getRigidBody<ArcadeRigidBody>().collisionFlags.bottom) {
                         body.velocity.y -=params.jumpVelocity;
+                        if (params.jumpAnimation) {
+                            gameObject.playFrameAnimation(params.jumpAnimation);
+                        }
                     }
                     break;
 
@@ -75,6 +91,5 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
         });
 
     }
-
 
 }

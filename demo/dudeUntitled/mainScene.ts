@@ -36,7 +36,7 @@ export class MainScene extends Scene {
         characterImage.setRigidBody(this.game.getPhysicsSystem<ArcadePhysicsSystem>().createRigidBody({
             type:ARCADE_RIGID_BODY_TYPE.DYNAMIC,
             debug: false,
-            rect: new Rect(0,0,36,39),
+            rect: new Rect(4,2,30,41),
             restitution:0.3,
         }));
         const texturePackerAtlas = new TexturePackerAtlas(this.assets.characterAtlas);
@@ -54,19 +54,32 @@ export class MainScene extends Scene {
 
         const idleAnimation = new AtlasFrameAnimation(this.game,{
             frames: [
-                texturePackerAtlas.getFrameByKey('character_stand'),
+                texturePackerAtlas.getFrameByKey('character_stand1'),
+                texturePackerAtlas.getFrameByKey('character_stand2'),
             ],
             isRepeating: true,
             name: 'idle',
-            durationOfOneFrame: 200,
+            durationOfOneFrame: 2000,
         });
         characterImage.addFrameAnimation(idleAnimation);
+
+        const jumpAnimation = new AtlasFrameAnimation(this.game,{
+            frames: [
+                texturePackerAtlas.getFrameByKey('character_jump1'),
+                texturePackerAtlas.getFrameByKey('character_jump2'),
+            ],
+            isRepeating: true,
+            name: 'jump',
+            durationOfOneFrame: 200,
+        });
+        characterImage.addFrameAnimation(jumpAnimation);
 
         characterImage.addBehaviour(new ArcadeSideScrollControl(this.game,{
             velocity: 100,
             jumpVelocity: 300,
             runAnimation: 'walk',
             idleAnimation: 'idle',
+            jumpAnimation: 'jump',
         }));
 
         this.camera.followTo(characterImage);

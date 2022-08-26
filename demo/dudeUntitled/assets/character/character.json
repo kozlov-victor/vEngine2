@@ -4,87 +4,107 @@
 			"frame": {
 				"x": 1,
 				"y": 1,
-				"w": 36,
-				"h": 40
+				"w": 37,
+				"h": 42
 			},
 			"rotated": false,
 			"trimmed": false,
 			"spriteSourceSize": {
 				"x": 0,
 				"y": 0,
-				"w": 36,
-				"h": 40
+				"w": 37,
+				"h": 42
 			},
 			"sourceSize": {
-				"w": 36,
-				"h": 40
+				"w": 37,
+				"h": 42
 			}
 		},
 		"character_jump2.png": {
 			"frame": {
-				"x": 39,
+				"x": 40,
 				"y": 1,
-				"w": 36,
-				"h": 39
+				"w": 38,
+				"h": 41
 			},
 			"rotated": false,
 			"trimmed": false,
 			"spriteSourceSize": {
 				"x": 0,
 				"y": 0,
-				"w": 36,
-				"h": 39
+				"w": 38,
+				"h": 41
 			},
 			"sourceSize": {
-				"w": 36,
-				"h": 39
+				"w": 38,
+				"h": 41
 			}
 		},
-		"character_stand.png": {
+		"character_stand1.png": {
 			"frame": {
-				"x": 39,
-				"y": 42,
-				"w": 36,
-				"h": 40
+				"x": 40,
+				"y": 44,
+				"w": 38,
+				"h": 42
 			},
 			"rotated": false,
 			"trimmed": false,
 			"spriteSourceSize": {
 				"x": 0,
 				"y": 0,
-				"w": 36,
-				"h": 40
+				"w": 38,
+				"h": 42
 			},
 			"sourceSize": {
-				"w": 36,
-				"h": 40
+				"w": 38,
+				"h": 42
+			}
+		},
+		"character_stand2.png": {
+			"frame": {
+				"x": 80,
+				"y": 1,
+				"w": 38,
+				"h": 42
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 38,
+				"h": 42
+			},
+			"sourceSize": {
+				"w": 38,
+				"h": 42
 			}
 		},
 		"character_step1.png": {
 			"frame": {
-				"x": 77,
-				"y": 1,
-				"w": 36,
-				"h": 38
+				"x": 80,
+				"y": 45,
+				"w": 38,
+				"h": 42
 			},
 			"rotated": false,
 			"trimmed": false,
 			"spriteSourceSize": {
 				"x": 0,
 				"y": 0,
-				"w": 36,
-				"h": 38
+				"w": 38,
+				"h": 42
 			},
 			"sourceSize": {
-				"w": 36,
-				"h": 38
+				"w": 38,
+				"h": 42
 			}
 		},
 		"character_step2.png": {
 			"frame": {
-				"x": 77,
-				"y": 41,
-				"w": 36,
+				"x": 1,
+				"y": 89,
+				"w": 38,
 				"h": 40
 			},
 			"rotated": false,
@@ -92,11 +112,11 @@
 			"spriteSourceSize": {
 				"x": 0,
 				"y": 0,
-				"w": 36,
+				"w": 38,
 				"h": 40
 			},
 			"sourceSize": {
-				"w": 36,
+				"w": 38,
 				"h": 40
 			}
 		}
@@ -107,8 +127,8 @@
 		"image": "spritesheet.png",
 		"format": "RGBA8888",
 		"size": {
-			"w": 114,
-			"h": 83
+			"w": 119,
+			"h": 130
 		},
 		"scale": "1"
 	}

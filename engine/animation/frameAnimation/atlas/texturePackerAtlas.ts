@@ -21,7 +21,8 @@ export class TexturePackerAtlas {
         const keys = Object.keys(this.json.frames);
         let target:Optional<{frame:IRect}> = undefined;
         for (const currKey of keys) {
-            if (currKey.startsWith(key)) {
+            const fileName = currKey.split('.')[0];
+            if (fileName===key) {
                 target = this.json.frames[currKey] as {frame:IRect};
             }
         }

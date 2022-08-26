@@ -113,12 +113,12 @@ export class ResourceLoader {
 
     public async loadTexture(req: string|IURLRequest,progress?:(n:number)=>void): Promise<ITexture> {
         req = ResourceLoader._pathJoin('',req);
-        const img:HTMLImageElement|ImageBitmap = await ResourceLoader._loadHtmlImage(req as (URI|Base64|IURLRequest),progress);
+        const img = await ResourceLoader._loadHtmlImage(req as (URI|Base64|IURLRequest),progress);
         return this.game.getRenderer().createTexture(img);
     }
 
     public async loadImage(req: string|IURLRequest,progress?:(n:number)=>void): Promise<Image> {
-        const texture:ITexture = await this.loadTexture(req,progress);
+        const texture = await this.loadTexture(req,progress);
         return new Image(this.game,texture);
     }
 

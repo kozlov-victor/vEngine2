@@ -60,7 +60,7 @@ let cnt = 0;
 
 export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> {
 
-    // collideWorldBounds
+    // todo collideWorldBounds
 
     public readonly type:'ArcadeRigidBody';
     public readonly velocity:Point2d = new Point2d();

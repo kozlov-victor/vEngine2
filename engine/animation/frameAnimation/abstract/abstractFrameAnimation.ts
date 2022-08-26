@@ -118,11 +118,12 @@ export abstract class AbstractFrameAnimation<T> implements ITargetAnimation, ICl
     public update():void {
         if (!this._isPlaying) return;
         const time:number = this.game.getCurrentTime();
-        if (!this._startTime) this._startTime = time;
+        const firstFrame = this._startTime===0;
+        if (firstFrame) this._startTime = time;
         const delta:number = (time - this._startTime) % this._duration;
         let currFrame:number = ~~((this._frames.length) * delta / this._duration);
         currFrame = currFrame % this._frames.length;
-        if (currFrame===this._currFrame) return;
+        if (currFrame===this._currFrame && !firstFrame) return; // "firstFrame" flag fixed bug with animation of one frame, witch mill not start otherwise
         if (this._loopReached && !this._isRepeating) {
             this.stop();
             this.animationEventHandler.trigger(FRAME_ANIMATION_EVENTS.completed);

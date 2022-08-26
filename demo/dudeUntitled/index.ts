@@ -7,6 +7,7 @@ import {ResourceLoader} from "@engine/resources/resourceLoader";
 import {ArcadePhysicsSystem} from "@engine/physics/arcade/arcadePhysicsSystem";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {CanvasRenderer} from "@engine/renderer/canvas/canvasRenderer";
+import {AbstractCanvasRenderer} from "@engine/renderer/abstract/abstractCanvasRenderer";
 
 ResourceLoader.BASE_URL = './dudeUntitled/assets';
 
@@ -14,7 +15,7 @@ const game = new Game({width:240,height:320, scaleStrategy: SCALE_STRATEGY.FIT_C
 ArcadePhysicsSystem.SPATIAL_CELL_SIZE.setWH(128);
 game.setPhysicsSystem(ArcadePhysicsSystem);
 game.setRenderer(CanvasRenderer);
-game.getRenderer<CanvasRenderer>().setPixelPerfect(true);
+game.getRenderer<AbstractCanvasRenderer>().setPixelPerfect(true);
 game.addControl(KeyboardControl);
 
 game.getControl<GamePadControl>('KeyboardControl')!.reflectToControl(
