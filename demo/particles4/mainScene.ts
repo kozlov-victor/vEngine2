@@ -12,6 +12,10 @@ import {ScreenCompositionFilter} from "@engine/renderer/webGl/filters/compositio
 import {DebugLayer} from "@engine/scene/debugLayer";
 import {Layer} from "@engine/scene/layer";
 import {ITexture} from "@engine/renderer/common/texture";
+import {MultiplyCompositionFilter} from "@engine/renderer/webGl/filters/composition/multiplyCompositionFilter";
+import {
+    InvertBgColorCompositionFilter
+} from "@engine/renderer/webGl/filters/composition/invertBgColorCompositionFilter";
 
 
 export class MainScene extends Scene {
@@ -40,20 +44,22 @@ export class MainScene extends Scene {
         const particle = new Image(this.game,this.img);
 
         const filters = [
+            new InvertBgColorCompositionFilter(this.game),
             new EvenOddCompositionFilter(this.game),
             new LightenCompositionFilter(this.game),
             new DarkenCompositionFilter(this.game),
             new ScreenCompositionFilter(this.game),
+            new MultiplyCompositionFilter(this.game),
         ];
         let i = 0;
 
         let ps:ParticleSystem;
         const setNextFilter = ():void=>{
-            particle.filters[0] = filters[i];
+            root.filters[0] = filters[i];
             i++;
             i%=filters.length;
             debugLayer.clearLog();
-            debugLayer.log(particle.filters[0]);
+            debugLayer.log(root.filters[0]);
 
             if (ps) {
                 ps.removeSelf();

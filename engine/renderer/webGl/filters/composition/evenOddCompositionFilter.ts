@@ -5,22 +5,21 @@ export class EvenOddCompositionFilter extends AbstractCompositionFilter {
 
     constructor(game:Game) {
         super(game);
-        //language=GLSL
-        this.simpleRectPainter.gen.setFragmentMainFn(`
-            void main(){
-                vec4 destColor = texture2D(destTexture, v_texCoord);
-                vec4 sourceColor = texture2D(texture, v_texCoord);
+    }
 
+    protected getBlendFunctionCode(): string {
+        //language=GLSL
+        return `
+            vec4 blend(vec4 destColor,vec4 sourceColor) {
                 bool isDestColorSet = destColor.a>0.;
                 bool isSourceColorSet = sourceColor.a>0.;
 
-                if (isDestColorSet && isSourceColorSet) gl_FragColor = vec4(0., 0., 0., 0.);
-                else if (isDestColorSet) gl_FragColor = destColor;
-                else if (isSourceColorSet) gl_FragColor = sourceColor;
-                else gl_FragColor = vec4(0., 0., 0., 0.);
-            }`
-        );
-        this.simpleRectPainter.initProgram();
+                if (isDestColorSet && isSourceColorSet) return vec4(0., 0., 0., 0.);
+                else if (isDestColorSet) return destColor;
+                else if (isSourceColorSet) return sourceColor;
+                else return vec4(0., 0., 0., 0.);
+            }
+        `
     }
 
 }

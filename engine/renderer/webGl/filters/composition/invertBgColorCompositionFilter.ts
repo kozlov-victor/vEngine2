@@ -24,4 +24,13 @@ export class InvertBgColorCompositionFilter extends AbstractCompositionFilter {
         this.simpleRectPainter.initProgram();
     }
 
+    protected getBlendFunctionCode(): string {
+        //language=GLSL
+        return `
+            vec4 blend(vec4 destColor,vec4 sourceColor) {
+                return 1.-destColor;
+            }
+        `
+    }
+
 }

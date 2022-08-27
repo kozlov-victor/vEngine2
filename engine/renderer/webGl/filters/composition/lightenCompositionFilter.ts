@@ -6,15 +6,15 @@ export class LightenCompositionFilter extends AbstractCompositionFilter {
 
     constructor(game:Game) {
         super(game);
+    }
+
+    protected getBlendFunctionCode(): string {
         //language=GLSL
-        this.simpleRectPainter.gen.setFragmentMainFn(`
-            void main(){
-                vec4 destColor = texture2D(destTexture, v_texCoord);
-                vec4 sourceColor = texture2D(texture, v_texCoord);
-                gl_FragColor = max(destColor,sourceColor);
-            }`
-        );
-        this.simpleRectPainter.initProgram();
+        return `
+            vec4 blend(vec4 destColor,vec4 sourceColor) {
+                return max(destColor,sourceColor);
+            }
+        `
     }
 
 }

@@ -1,25 +1,21 @@
 import {AbstractCompositionFilter} from "@engine/renderer/webGl/filters/composition/abstract/abstractCompositionFilter";
 import {Game} from "@engine/core/game";
 
-// https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/globalCompositeOperation
+// todo
 
-// Retains the darkest pixels of both layers
-export class DarkenCompositionFilter extends AbstractCompositionFilter {
+export class ColorDodgeCompositionFilter extends AbstractCompositionFilter {
 
     constructor(game:Game) {
         super(game);
-        //language=GLSL
-        this.simpleRectPainter.gen.setFragmentMainFn(`
-            void main(){
-                vec4 destColor = texture2D(destTexture, v_texCoord);
-                vec4 sourceColor = texture2D(texture, v_texCoord);
-                gl_FragColor = min(destColor,sourceColor);
+    }
 
-                float a = destColor.a*sourceColor.a;
-                gl_FragColor.rgb*=a;
-            }`
-        );
-        this.simpleRectPainter.initProgram();
+    protected getBlendFunctionCode(): string {
+        //language=GLSL
+        return `
+            vec4 blend(vec4 destColor,vec4 sourceColor) {
+                return min(destColor,sourceColor);
+            }
+        `
     }
 
 }

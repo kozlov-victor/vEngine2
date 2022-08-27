@@ -8,15 +8,15 @@ export class CopyDestCompositionFilter extends AbstractCompositionFilter {
     constructor(game:Game) {
         super(game);
         this.clearNextFrameBuffer = false;
+    }
+
+    protected getBlendFunctionCode(): string {
         //language=GLSL
-        this.simpleRectPainter.gen.setFragmentMainFn(`
-            void main(){
-                vec4 destColor = texture2D(destTexture, v_texCoord);
-                vec4 sourceColor = texture2D(texture, v_texCoord);
-                gl_FragColor = destColor;
-            }`
-        );
-        this.simpleRectPainter.initProgram();
+        return `
+            vec4 blend(vec4 destColor,vec4 sourceColor) {
+                return destColor;
+            }
+        `
     }
 
 }

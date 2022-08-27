@@ -16,6 +16,8 @@ export abstract class AbstractCompositionFilter extends AbstractGlFilter {
 
     protected clearNextFrameBuffer = true;
 
+    protected abstract getBlendFunctionCode():string;
+
 
     protected constructor(game:Game) {
         super(game);
@@ -23,6 +25,18 @@ export abstract class AbstractCompositionFilter extends AbstractGlFilter {
         this._simpleRectCopyPainter = new SimpleRectPainter(gl);
         this._simpleRectCopyPainter.initProgram();
         this.simpleRectPainter.gen.addScalarFragmentUniform(GL_TYPE.SAMPLER_2D,'destTexture');
+        this.simpleRectPainter.gen.appendFragmentCodeBlock(this.getBlendFunctionCode());
+        this.simpleRectPainter.gen.setFragmentMainFn(
+            //language=GLSL
+            `
+            void main(){
+                vec4 destColor = texture2D(destTexture, v_texCoord);
+                vec4 sourceColor = texture2D(texture, v_texCoord);
+                vec4 result = blend(destColor, sourceColor);
+                gl_FragColor = sourceColor.a*result + (1. - sourceColor.a) * destColor;
+            }`
+        );
+        this.simpleRectPainter.initProgram();
     }
 
     private watchFrameBuffer(destFrameBuffer:FrameBuffer):void {
