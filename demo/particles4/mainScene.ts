@@ -16,6 +16,9 @@ import {MultiplyCompositionFilter} from "@engine/renderer/webGl/filters/composit
 import {
     InvertBgColorCompositionFilter
 } from "@engine/renderer/webGl/filters/composition/invertBgColorCompositionFilter";
+import {ColorDodgeCompositionFilter} from "@engine/renderer/webGl/filters/composition/colorDodgeCompositionFilter";
+import {ColorBurnCompositionFilter} from "@engine/renderer/webGl/filters/composition/colorBurnCompositionFilter";
+import {DifferenceCompositionFilter} from "@engine/renderer/webGl/filters/composition/differenceCompositionFilter";
 
 
 export class MainScene extends Scene {
@@ -26,11 +29,18 @@ export class MainScene extends Scene {
     @Resource.Texture('./assets/repeat.jpg')
     public bgTexture:ITexture;
 
+    @Resource.Texture('./assets/logo.png')
+    private logoTexture:ITexture;
+
     public override onReady():void {
 
         const image = new Image(this.game,this.bgTexture);
         image.pos.setXY(50);
         image.appendTo(this);
+
+        const logo = new Image(this.game,this.logoTexture);
+        logo.pos.setXY(250,120);
+        logo.appendTo(this);
 
         const debugLayer = new DebugLayer(this.game);
         this.appendChild(debugLayer);
@@ -44,6 +54,9 @@ export class MainScene extends Scene {
         const particle = new Image(this.game,this.img);
 
         const filters = [
+            new ColorDodgeCompositionFilter(this.game),
+            new ColorBurnCompositionFilter(this.game),
+            new DifferenceCompositionFilter(this.game),
             new InvertBgColorCompositionFilter(this.game),
             new EvenOddCompositionFilter(this.game),
             new LightenCompositionFilter(this.game),
