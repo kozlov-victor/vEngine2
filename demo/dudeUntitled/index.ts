@@ -9,6 +9,10 @@ import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {CanvasRenderer} from "@engine/renderer/canvas/canvasRenderer";
 import {AbstractCanvasRenderer} from "@engine/renderer/abstract/abstractCanvasRenderer";
 
+// window.requestAnimationFrame =  (f:FrameRequestCallback):number=>{
+//     return setTimeout(f,1000/25);
+// };
+
 ResourceLoader.BASE_URL = './dudeUntitled/assets';
 
 const game = new Game({width:240,height:320, scaleStrategy: SCALE_STRATEGY.FIT_CANVAS_TO_SCREEN});

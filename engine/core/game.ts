@@ -242,7 +242,7 @@ export class Game {
         if (this._destroyed) return;
         this._lastTime = this._currTime;
         this._currTime = Date.now();
-        const currTimeCopy:number = this._currTime;
+        const currTimeOrig:number = this._currTime;
         if (!this._lastTime) this._lastTime = this._currTime;
         this._deltaTime = this._currTime - this._lastTime;
         const dt = this._deltaTime;
@@ -255,12 +255,17 @@ export class Game {
         }
 
         const numOfLoops:number = (~~(this._deltaTime / Game._UPDATE_TIME_RATE))||1;
-        this._currTime = this._currTime - numOfLoops * Game._UPDATE_TIME_RATE;
+        this._currTime = currTimeOrig - numOfLoops * Game._UPDATE_TIME_RATE;
+
         const currentScene:Scene = this._currScene;
         let loopCnt:number = 0;
         do {
             this._lastTime = this._currTime;
-            this._currTime += Game._UPDATE_TIME_RATE;
+            if (loopCnt===numOfLoops-1) { // last loop
+                this._currTime = currTimeOrig;
+            } else {
+                this._currTime += Game._UPDATE_TIME_RATE;
+            }
             this._deltaTime = this._currTime - this._lastTime;
 
             if (this._currSceneTransition!==undefined) this._currSceneTransition.update();
@@ -270,8 +275,8 @@ export class Game {
                 c.update();
             }
             loopCnt++;
-            if (loopCnt>10) { // to avoid too much iterations
-                this._lastTime = this._currTime = currTimeCopy;
+            if (loopCnt>10) { // to avoid too many iterations
+                this._lastTime = this._currTime = currTimeOrig;
                 break;
             }
         } while (loopCnt<numOfLoops);
