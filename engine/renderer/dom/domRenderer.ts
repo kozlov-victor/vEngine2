@@ -22,9 +22,6 @@ interface ICSSStyleDeclaration extends CSSStyleDeclaration{
     msTransform:string;
 }
 
-interface IDomTexture extends ITexture{
-    uid:number;
-}
 
 class Nodes  {
     public properties:{[key:string]:string} = {};
@@ -72,7 +69,7 @@ class VNode {
 
     constructor(){
         this.domEl = document.createElement('div');
-        this.domEl.style.cssText = 'position:absolute;';
+        this.domEl.style.cssText = 'position:absolute;pointer-events:none;';
     }
 
 }
@@ -80,7 +77,7 @@ class VNode {
 
 export class DomRenderer extends AbstractRenderer {
 
-    public readonly type:string = 'DomRenderer';
+    public readonly type = 'DomRenderer' as const;
 
     protected rendererHelper = new DomRendererHelper(this.game);
 
@@ -90,7 +87,7 @@ export class DomRenderer extends AbstractRenderer {
     constructor(game:Game){
         super(game);
         const container:HTMLDivElement = document.createElement('div');
-        container.style.cssText = 'position:relative';
+        container.style.cssText = `position:relative;margin:0 auto;width:${game.width}px;height:${game.height}px;`;
         document.body.appendChild(container);
         this.container = container;
         this._nodes = new Nodes(container);

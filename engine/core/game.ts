@@ -63,7 +63,7 @@ export class Game {
         return this.size.height;
     }
 
-    private static _UPDATE_TIME_RATE:number = 20;
+    private static readonly _UPDATE_TIME_RATE:number = ~~(1000 / 60);
     private static _instance:Game;
 
     public readonly size:ISize = new Size();

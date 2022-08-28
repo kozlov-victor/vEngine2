@@ -2,9 +2,9 @@ import {KeyboardControl} from "@engine/control/keyboard/keyboardControl";
 import {Game} from "@engine/core/game";
 import {Scene} from "@engine/scene/scene";
 import {MainScene} from "./mainScene";
-import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
 import {GamePadControl} from "@engine/control/gamepad/gamePadControl";
 import {MouseControl} from "@engine/control/mouse/mouseControl";
+import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
 
 const game = new Game();
 game.setRenderer(WebGlRenderer);

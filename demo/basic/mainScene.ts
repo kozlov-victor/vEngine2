@@ -13,8 +13,8 @@ export class MainScene extends Scene {
     private logoTexture:ITexture;
 
     public override onReady():void {
-        const spr: Image = new Image(this.game, this.logoTexture);
-        spr.pos.fromJSON({x: 10, y: 10});
+        const spr = new Image(this.game, this.logoTexture);
+        spr.pos.setXY(10);
         spr.transformPoint.setToCenter();
         spr.addBehaviour(new DraggableBehaviour(this.game));
         this.appendChild(spr);
