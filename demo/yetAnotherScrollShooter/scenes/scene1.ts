@@ -13,7 +13,7 @@ import {Resource} from "@engine/resources/resourceDecorators";
 
 export class Scene1 extends Scene {
 
-    @Resource.ResourceHolder() private r:AssetsHolder;
+    @Resource.ResourceHolder() public readonly r:AssetsHolder;
 
     public override onReady():void {
 

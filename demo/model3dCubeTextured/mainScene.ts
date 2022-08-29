@@ -7,7 +7,7 @@ import {Resource} from "@engine/resources/resourceDecorators";
 export class MainScene extends Scene {
 
     @Resource.Texture('./model3dCubeTextured/logo.png')
-    private logoLink:ITexture;
+    public readonly logoLink:ITexture;
 
 
     public override onReady():void {

@@ -7,7 +7,7 @@ import {Character} from "./objects/character";
 
 export class MainScene extends Scene {
 
-    @Resource.ResourceHolder() private assets:Assets;
+    @Resource.ResourceHolder() public readonly assets:Assets;
 
     public override onReady():void {
         document.body.style.backgroundColor = 'black';
@@ -25,7 +25,15 @@ export class MainScene extends Scene {
         });
         tileMap.appendTo(this);
 
-        new Character(this.game, this,this.assets);
+        this.assets.levelData.layers.find(it=>it.type==='objectgroup')!.objects.forEach(obj=>{
+            const typeProp = obj.properties.find(it=>it.name==='class');
+            const cl = typeProp!.value;
+            switch (cl) {
+                case 'character':
+                    new Character(this.game, this,this.assets,obj);
+                    break;
+            }
+        });
 
     }
 }

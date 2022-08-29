@@ -23,7 +23,7 @@ export abstract class BaseAbstractIntroScene extends Scene {
     protected abstract spriteSheetLabel:ITexture;
 
     @Resource.Texture('./catGame/res/sprite/wall1.png')
-    private wall1: ITexture;
+    public readonly wall1: ITexture;
 
     private level: LEVEL_SCHEMA = intro as unknown as LEVEL_SCHEMA;
 

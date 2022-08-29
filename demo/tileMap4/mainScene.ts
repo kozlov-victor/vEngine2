@@ -15,8 +15,8 @@ export class MainScene extends Scene {
     private tileMap:TileMap;
     private rect:Rectangle;
 
-    @Resource.Texture('./tileMap4/grass.png') private tilesTexture:ITexture;
-    @Resource.JSON('./tileMap4/level.json') private levelData:ITiledJSON;
+    @Resource.Texture('./tileMap4/grass.png') public readonly tilesTexture:ITexture;
+    @Resource.JSON('./tileMap4/level.json') public readonly levelData:ITiledJSON;
 
     public override onReady():void {
 

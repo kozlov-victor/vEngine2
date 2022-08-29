@@ -11,7 +11,7 @@ import {CubeMapTexture} from "@engine/renderer/webGl/base/cubeMapTexture";
 export class MainScene extends Scene {
 
     @Resource.Binary('./model3dFromStl/keystone.stl')
-    private data1:ArrayBuffer;
+    public readonly data1:ArrayBuffer;
 
     @Resource.CubeTexture(
         './model3dFromStl/textures/miramar_right.png',
@@ -21,7 +21,7 @@ export class MainScene extends Scene {
         './model3dFromStl/textures/miramar_front.png',
         './model3dFromStl/textures/miramar_back.png',
     )
-    private cubeTexture:CubeMapTexture;
+    public readonly cubeTexture:CubeMapTexture;
 
 
     public override onReady():void {

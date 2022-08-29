@@ -9,16 +9,16 @@ export class MainScene extends Scene {
 
 
     @Resource.Text('./model3dFromObj/cow-nonormals.obj')
-    private data1:string;
+    public readonly data1:string;
 
     @Resource.Text('./model3dFromObj/cube_texture2.obj')
-    private data2:string;
+    public readonly data2:string;
 
     @Resource.Text('./model3dFromObj/diamond.obj')
-    private data3:string;
+    public readonly data3:string;
 
     @Resource.Texture('./assets/repeat.jpg')
-    private dataTextureLink:ITexture;
+    public readonly dataTextureLink:ITexture;
 
 
     public override onReady():void {

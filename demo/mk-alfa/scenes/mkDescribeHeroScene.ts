@@ -29,12 +29,12 @@ export class MkDescribeHeroScene extends MkAbstractScene {
 
 
     @Resource.FontFromCssDescription({fontSize: 80, fontFamily: 'MK4'})
-    private fnt:Font;
+    public readonly fnt:Font;
 
     private logoLink:ITexture;
 
     @Resource.Sound('./mk-alfa/assets/sounds/btn3.mp3')
-    private sndBtn:Sound;
+    public readonly sndBtn:Sound;
 
     private lightContainer:SimpleGameObjectContainer = new SimpleGameObjectContainer(this.game);
     private tfInfo:TextField;

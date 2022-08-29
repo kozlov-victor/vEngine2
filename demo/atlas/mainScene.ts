@@ -12,10 +12,10 @@ import {TexturePackerAtlas} from "@engine/animation/frameAnimation/atlas/texture
 export class MainScene extends Scene {
 
     @Resource.Texture("./atlas/player.png")
-    private spriteTexture: ITexture;
+    public readonly spriteTexture: ITexture;
 
     @Resource.JSON("./atlas/player.atlas")
-    private atlas: any;
+    public readonly atlas: any;
 
     constructor(game:Game){
         super(game);

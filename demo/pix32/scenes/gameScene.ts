@@ -72,16 +72,16 @@ class Car {
 export class GameScene extends BasePix32Scene {
 
     @Resource.Texture('./pix32/resources/images/car.png')
-    private carLink:ITexture;
+    public readonly carLink:ITexture;
 
     @Resource.Texture('./pix32/resources/images/hill.png')
-    private hillLink:ITexture;
+    public readonly hillLink:ITexture;
 
     @Resource.Texture('./pix32/resources/images/life.png')
-    private lifeLink:ITexture;
+    public readonly lifeLink:ITexture;
 
     @Resource.Texture('./pix32/resources/images/stopSign.png')
-    private stopSignLink:ITexture;
+    public readonly stopSignLink:ITexture;
 
     private themeAudioLink:Sound;
 

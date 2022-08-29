@@ -11,10 +11,10 @@ import {TaskQueue} from "@engine/resources/taskQueue";
 export class MainScene extends Scene {
 
     @Resource.Texture('./plasma/Plasma_effect.jpg')
-    private plasmaLink:ITexture;
+    public readonly plasmaLink:ITexture;
 
     @Resource.Texture('./plasma/gradient.png')
-    private palletLink:ITexture;
+    public readonly palletLink:ITexture;
 
     public override onPreloading(taskQueue:TaskQueue):void {
         const rect = new Rectangle(this.game);

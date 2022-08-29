@@ -24,7 +24,7 @@ export class MainScene extends Scene {
     private logoObj:Mesh2d;
 
     @Resource.Texture('./model3d/Texture-67.jpg')
-    private logoLink:ITexture;
+    public readonly logoLink:ITexture;
 
 
     public override onReady():void {

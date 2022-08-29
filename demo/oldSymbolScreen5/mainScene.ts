@@ -11,7 +11,7 @@ import {TaskQueue} from "@engine/resources/taskQueue";
 export class MainScene extends Scene {
 
     @Resource.FontFromCssDescription({fontSize:25})
-    private fnt:Font;
+    public readonly fnt:Font;
 
     public override onPreloading(taskQueue:TaskQueue):void{
         this.backgroundColor = Color.RGB(10,10,30);

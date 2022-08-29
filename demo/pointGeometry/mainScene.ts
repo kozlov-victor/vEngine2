@@ -12,7 +12,7 @@ export class MainScene extends Scene {
     private ship:RenderableModel;
 
     @Resource.Texture('./pointGeometry/ship.png')
-    private link:ITexture;
+    public readonly link:ITexture;
 
 
     public override onReady():void {

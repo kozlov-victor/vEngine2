@@ -16,11 +16,11 @@ import {TextTable} from "@engine/renderable/impl/ui/textHelpers/textTable";
 export class MainScene extends Scene {
 
     @Resource.FontFromCssDescription({fontSize:12,fontFamily:'monospace'})
-    private fnt:Font;
+    public readonly fnt:Font;
 
     // from https://www.mockaroo.com/
     @Resource.Text('./uiPrintTable2/test.csv')
-    private textLink:string;
+    public readonly textLink:string;
 
     public override onReady():void {
 

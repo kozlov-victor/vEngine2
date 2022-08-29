@@ -32,7 +32,7 @@ export class Camera implements IUpdatable, ITransformable, IRevalidatable  {
     public readonly worldTransformMatrix:Mat16Holder = new Mat16Holder();
 
     private _objFollowTo:Optional<RenderableModel>;
-    private _objFollowToPrevPos:Point2d;
+    private _objFollowToPrevPos = new Point2d();
     private _directionCorrection:DIRECTION_CORRECTION;
     private _angle:number = 0;
 
@@ -75,8 +75,7 @@ export class Camera implements IUpdatable, ITransformable, IRevalidatable  {
             return;
         }
         this._objFollowTo = gameObject;
-        this._objFollowToPrevPos = new Point2d();
-        this._objFollowToPrevPos.setFrom(this._objFollowTo.pos);
+        this.pos.setXY(this._objFollowTo.pos.x - this.game.width/2, this._objFollowTo.pos.y - this.game.height/2);
         this.revalidate();
     }
 

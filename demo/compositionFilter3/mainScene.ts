@@ -8,7 +8,7 @@ import {Polygon} from "@engine/renderable/impl/geometry/polygon";
 export class MainScene extends Scene {
 
     @Resource.Texture('./assets/logo.png')
-    private logoTexture:ITexture;
+    public readonly logoTexture:ITexture;
 
     public override onReady():void {
 

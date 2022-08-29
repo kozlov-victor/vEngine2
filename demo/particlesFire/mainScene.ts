@@ -12,7 +12,7 @@ import {Resource} from "@engine/resources/resourceDecorators";
 export class MainScene extends Scene {
 
     @Resource.Texture('./particlesFire/fire-texture-atlas.jpg')
-    private resourceLink:ITexture;
+    public readonly resourceLink:ITexture;
 
     public override onReady():void {
 

@@ -9,7 +9,7 @@ export class MainScene extends Scene {
 
 
     @Resource.Texture('./alphaMask/mask.png')
-    private mask:ITexture;
+    public readonly mask:ITexture;
 
 
     private surface:DrawingSurface;

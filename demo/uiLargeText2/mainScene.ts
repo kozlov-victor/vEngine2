@@ -15,10 +15,10 @@ import * as fontXml from "xml/angelcode-loader!./font.fnt";
 export class MainScene extends Scene {
 
     @Resource.FontFromAtlas('uiLargeText2/',fontXml)
-    private fontLink:Font;
+    public readonly fontLink:Font;
 
     @Resource.Text('uiLargeText2/text.txt')
-    private textLink:string;
+    public readonly textLink:string;
 
 
     public override onReady():void {

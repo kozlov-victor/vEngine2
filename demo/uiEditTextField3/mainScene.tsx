@@ -17,7 +17,7 @@ import {ColorFactory} from "@engine/renderer/common/colorFactory";
 export class MainScene extends Scene {
 
     @Resource.FontFromAtlas('./uiEditTextField3/font/',fntXML)
-    private fnt:Font;
+    public readonly fnt:Font;
 
 
     public override onReady():void {

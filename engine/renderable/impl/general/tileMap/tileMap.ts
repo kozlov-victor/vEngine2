@@ -25,7 +25,31 @@ export interface ITiledJSON {
     layers: {
         name: string,
         type: 'objectgroup'|'tilelayer',
-        data: number[],
+        data?: number[],
+        id:number,
+        opacity:number,
+        visible:boolean,
+        width:number,
+        height:number,
+        x:number,
+        y:number,
+        objects:({
+            gid:number,
+            id:number,
+            name:string,
+            properties:({
+                name:string,
+                type:string,
+                value:string,
+            })[],
+            rotation:number,
+            type:number,
+            visible:boolean,
+            width:number,
+            height:number,
+            x:number,
+            y:number,
+        })[],
     }[]
 }
 
@@ -146,7 +170,11 @@ export class TileMap extends RenderableModelWithTexture {
             }
         }
 
-        const source = tileMapLayer.data;
+        const source = tileMapLayer.data!;
+        if (source===undefined) {
+            if (DEBUG) throw new DebugError(`no data provided im tiled map`);
+        }
+
         const mapWidth = map.width;
         const mapHeight = map.height;
         const tileWidth = map.tilesets[0].tilewidth;

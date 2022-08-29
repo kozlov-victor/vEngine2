@@ -17,7 +17,7 @@ export class MainScene extends Scene {
 
     // created with http://kvazars.com/littera/
     @Resource.FontFromAtlas('./fnt4/',fntXML)
-    private font:Font;
+    public readonly font:Font;
 
 
     public override onReady():void {

@@ -10,7 +10,7 @@ import {TrackBall} from "../model3dFromFbx/trackBall";
 export class MainScene extends Scene {
 
     @Resource.Text('./model3dFromObj9/dogPaint3d.obj')
-    private data1:string;
+    public readonly data1:string;
 
     @Resource.CubeTexture(
         './cubeMapTexture/textures/cm_left.jpg',
@@ -20,7 +20,7 @@ export class MainScene extends Scene {
         './cubeMapTexture/textures/cm_front.jpg',
         './cubeMapTexture/textures/cm_back.jpg',
     )
-    private cubeTexture:ICubeMapTexture;
+    public readonly cubeTexture:ICubeMapTexture;
 
 
     public override onReady():void {

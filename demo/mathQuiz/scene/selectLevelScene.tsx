@@ -89,7 +89,7 @@ class SelectLevelSceneUI extends VEngineTsxComponent {
 
 export class SelectLevelScene extends Scene {
 
-    @Resource.ResourceHolder() private assets:Assets;
+    @Resource.ResourceHolder() public readonly assets:Assets;
 
     constructor(game:Game) {
         super(game);

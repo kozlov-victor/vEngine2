@@ -34,11 +34,11 @@ interface IUnityMeta {
 export class MainScene extends Scene {
 
 
-    @Resource.Texture('./tileMap2/tiles2.png') private tilesTexture:ITexture;
-    @Resource.JSON('./tileMap2/level.json') private levelData:ITiledJSON;
+    @Resource.Texture('./tileMap2/tiles2.png') public readonly tilesTexture:ITexture;
+    @Resource.JSON('./tileMap2/level.json') public readonly levelData:ITiledJSON;
 
-    @Resource.Texture('./unityAssets/textures/Ninja Frog/Run (32x32).png') private heroTexture:ITexture;
-    @Resource.YAML(YamlParser,'./unityAssets/textures/Ninja Frog/Run (32x32).png.meta') private heroAnimationMeta:IUnityMeta;
+    @Resource.Texture('./unityAssets/textures/Ninja Frog/Run (32x32).png') public readonly heroTexture:ITexture;
+    @Resource.YAML(YamlParser,'./unityAssets/textures/Ninja Frog/Run (32x32).png.meta') public readonly heroAnimationMeta:IUnityMeta;
 
 
     public override onReady():void {

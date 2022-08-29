@@ -23,7 +23,7 @@ commodo consequat.`;
 export class MainScene extends Scene {
 
     @Resource.FontFromCssDescription({fontSize:20,fontFamily:'monospace'})
-    private fnt:Font;
+    public readonly fnt:Font;
 
 
     public override onReady():void {

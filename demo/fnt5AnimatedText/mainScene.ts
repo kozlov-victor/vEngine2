@@ -17,7 +17,7 @@ import {KernelBlurAccumulativeFilter} from "@engine/renderer/webGl/filters/accum
 export class MainScene extends Scene {
 
     @Resource.FontFromAtlas('./fnt3/',fntXML)
-    private font:Font;
+    public readonly font:Font;
 
     public override onReady():void {
         this.backgroundColor.setRGB(12,12,12);

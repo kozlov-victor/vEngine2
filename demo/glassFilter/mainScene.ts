@@ -28,7 +28,7 @@ const text:string=
 export class MainScene extends Scene {
 
     @Resource.FontFromCssDescription({fontSize:15,fontFamily:'monospace'})
-    private fnt:Font;
+    public readonly fnt:Font;
 
     public override onReady():void {
         const tf = new TextField(this.game,this.fnt);

@@ -8,7 +8,7 @@ import {DraggableBehaviour} from "@engine/behaviour/impl/draggable/draggable";
 export class MainScene extends Scene {
 
     @Resource.Texture('./assets/logo.png')
-    private logoTexture:ITexture;
+    public readonly logoTexture:ITexture;
 
     public override onReady():void {
         const quad = new TextureQuad(this.game,this.logoTexture);

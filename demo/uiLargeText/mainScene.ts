@@ -14,10 +14,10 @@ import {
 export class MainScene extends Scene {
 
     @Resource.FontFromCssDescription({fontFamily:'monospace',fontSize:15})
-    private fnt:Font;
+    public readonly fnt:Font;
 
     @Resource.Text('uiLargeText/text.txt')
-    private textLink:string;
+    public readonly textLink:string;
 
 
     public override onReady():void {

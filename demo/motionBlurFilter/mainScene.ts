@@ -12,7 +12,7 @@ import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 export class MainScene extends Scene {
 
     @Resource.Texture('./assets/logo.png')
-    private logoLink:ITexture;
+    public readonly logoLink:ITexture;
 
     public override onPreloading(taskQueue:TaskQueue):void {
         const rect = new Rectangle(this.game);

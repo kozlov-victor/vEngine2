@@ -66,7 +66,7 @@ class ResultSceneUI extends VEngineTsxComponent {
 
 export class ResultScene extends Scene {
 
-    @Resource.ResourceHolder() private assets:Assets;
+    @Resource.ResourceHolder() public readonly assets:Assets;
 
     constructor(game:Game, private correct:number,private total:number) {
         super(game);

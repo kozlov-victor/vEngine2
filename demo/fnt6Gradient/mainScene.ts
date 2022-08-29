@@ -17,7 +17,7 @@ import {InsetBorder} from "@engine/renderable/impl/geometry/insetBorder";
 export class MainScene extends Scene {
 
     @Resource.FontFromAtlasUrl('./fnt6/','atari-smooth.xml',XmlParser)
-    private font:Font;
+    public readonly font:Font;
 
     public override onReady():void {
 

@@ -11,7 +11,7 @@ import {Resource} from "@engine/resources/resourceDecorators";
 export class MainScene extends Scene {
 
     @Resource.Texture('./assets/star.png')
-    private spriteLink:ITexture;
+    public readonly spriteLink:ITexture;
 
     private points:Image[] = [];
     private minZ:number = -6000;

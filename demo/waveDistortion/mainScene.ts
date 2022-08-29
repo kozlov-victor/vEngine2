@@ -13,10 +13,10 @@ import {Resource} from "@engine/resources/resourceDecorators";
 export class MainScene extends Scene {
 
     @Resource.Texture('./assets/logo.png')
-    private logoLink:ITexture;
+    public readonly logoLink:ITexture;
 
     @Resource.Texture('./assets/repeat.jpg')
-    private repeatLink:ITexture;
+    public readonly repeatLink:ITexture;
 
     private img:Image;
 

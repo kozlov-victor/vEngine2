@@ -11,7 +11,7 @@ import {Image} from "@engine/renderable/impl/general/image/image";
 export class MainScene extends Scene {
 
     @Resource.Texture('./particlesFire2/fire.png')
-    private resourceLink:ITexture;
+    public readonly resourceLink:ITexture;
 
     public override onReady():void {
 

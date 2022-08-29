@@ -12,7 +12,7 @@ import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 export class MainScene extends Scene {
 
     @Resource.Texture('./catGame/res/sprite/tree.png')
-    private treeTexture:ITexture;
+    public readonly treeTexture:ITexture;
 
     public override onReady():void {
 

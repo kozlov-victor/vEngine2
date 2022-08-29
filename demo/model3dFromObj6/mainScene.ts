@@ -9,10 +9,10 @@ import {TrackBall} from "../model3dFromFbx/trackBall";
 export class MainScene extends Scene {
 
     @Resource.Text('./model3dFromObj6/tiger.x.obj')
-    private data1:string;
+    public readonly data1:string;
 
     @Resource.Texture('./model3dFromObj6/tiger.png')
-    private dataTexture:ITexture;
+    public readonly dataTexture:ITexture;
 
     public override onReady():void {
         const obj = new ObjParser().parse(this.game,{

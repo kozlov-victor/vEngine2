@@ -10,10 +10,10 @@ import {TaskQueue} from "@engine/resources/taskQueue";
 export class MainScene extends Scene {
 
     @Resource.Texture('./assets/logo.png')
-    private logoLink:ITexture;
+    public readonly logoLink:ITexture;
 
     @Resource.Texture('./offsetMap/glass.jpg')
-    private offsetMapLink:ITexture;
+    public readonly offsetMapLink:ITexture;
 
     public override onPreloading(taskQueue:TaskQueue):void {
         super.onPreloading(taskQueue);

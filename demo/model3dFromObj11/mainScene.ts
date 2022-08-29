@@ -10,8 +10,8 @@ import {CullFace} from "@engine/renderable/impl/3d/mesh3d";
 
 export class MainScene extends Scene {
 
-    @Resource.Text('./model3dFromObj11/skull.obj') private readonly modelData:string;
-    @Resource.Texture('./model3dFromObj11/texture.png') private readonly texture:ITexture;
+    @Resource.Text('./model3dFromObj11/skull.obj') public readonly modelData:string;
+    @Resource.Texture('./model3dFromObj11/texture.png') public readonly texture:ITexture;
 
 
     public override onReady():void {

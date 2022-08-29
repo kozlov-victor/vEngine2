@@ -8,7 +8,7 @@ import {Resource} from "@engine/resources/resourceDecorators";
 export class MainScene extends Scene {
 
     @Resource.Sound('./sound/sound.mp3')
-    private resourceLink:Sound;
+    public readonly resourceLink:Sound;
 
 
     public override onReady():void {

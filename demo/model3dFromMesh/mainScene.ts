@@ -32,7 +32,7 @@ export class MainScene extends Scene {
     private logoObj:Mesh2d;
 
     @Resource.JSON('./model3dFromMesh/skull.json')
-    private dataLink:IMeshData;
+    public readonly dataLink:IMeshData;
 
     public override onPreloading(taskQueue:TaskQueue):void {
         const rect = new Rectangle(this.game);

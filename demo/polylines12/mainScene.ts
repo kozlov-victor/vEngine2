@@ -10,7 +10,7 @@ export class MainScene extends Scene {
 
     @Resource.JSON('./polylines12/Mortal Kombat 4_Regular.json')
     //@Resource.JSON('./polylines12/Press Start 2P_Regular.json')
-    private fontJsonLink:any;
+    public readonly fontJsonLink:any;
 
     // https://gero3.github.io/facetype.js/
 

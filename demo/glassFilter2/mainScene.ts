@@ -31,16 +31,16 @@ const text:string=
 export class MainScene extends Scene {
 
     @Resource.Texture('./glassFilter2/cursor/cursor-mask.png')
-    private cursorMaskTexture:ITexture;
+    public readonly cursorMaskTexture:ITexture;
 
     @Resource.Texture('./glassFilter2/cursor/cursor.png')
-    private cursorTexture:ITexture;
+    public readonly cursorTexture:ITexture;
 
     @Resource.FontFromCssDescription({fontSize:15,fontFamily:'monospace'})
-    private fnt:Font;
+    public readonly fnt:Font;
 
     @Resource.Texture('./alphaMask/mask.png')
-    private mask:ITexture;
+    public readonly mask:ITexture;
 
     public override onReady():void {
 

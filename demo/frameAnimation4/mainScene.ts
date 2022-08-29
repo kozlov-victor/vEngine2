@@ -11,10 +11,10 @@ import {ColorFactory} from "@engine/renderer/common/colorFactory";
 
 export class MainScene extends Scene {
 
-    @Resource.Texture('./frameAnimation4/Flying eye/Attack.png') private attack:ITexture;
-    @Resource.Texture('./frameAnimation4/Flying eye/Death.png') private death:ITexture;
-    @Resource.Texture('./frameAnimation4/Flying eye/Flight.png') private flight:ITexture;
-    @Resource.Texture('./frameAnimation4/Flying eye/Take Hit.png') private takeHit:ITexture;
+    @Resource.Texture('./frameAnimation4/Flying eye/Attack.png') public attack:ITexture;
+    @Resource.Texture('./frameAnimation4/Flying eye/Death.png') public death:ITexture;
+    @Resource.Texture('./frameAnimation4/Flying eye/Flight.png') public flight:ITexture;
+    @Resource.Texture('./frameAnimation4/Flying eye/Take Hit.png') public takeHit:ITexture;
 
     private createAnimation(name:string,frames:{resource:ITexture,rect:IRectJSON}[],isRepeating:boolean,duration:number):MultiImageAtlasFrameAnimation {
         return new MultiImageAtlasFrameAnimation(this.game, {

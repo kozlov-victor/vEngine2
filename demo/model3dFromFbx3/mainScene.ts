@@ -18,7 +18,7 @@ export class MainScene extends Scene {
         './cubeMapTexture/textures/cm_front.jpg',
         './cubeMapTexture/textures/cm_back.jpg'
     )
-    private cubeTexture:ICubeMapTexture;
+    public readonly cubeTexture:ICubeMapTexture;
 
     private models:string[] = [
         'test_cinema_4d','test1'

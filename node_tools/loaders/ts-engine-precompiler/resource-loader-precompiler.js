@@ -77,7 +77,7 @@ module.exports = function(content) {
                         });
                         `,
                         {
-                            fieldName: ts.createIdentifier(f.name.escapedText),
+                            fieldName: ts.factory.createIdentifier(f.name.escapedText),
                             args: decoratorArgs,
                             taskQueue:preloadingMethodFirstArg
                         }
@@ -109,7 +109,7 @@ module.exports = function(content) {
                 if (decoratorName && decoratorName === 'ResourceHolder') {
                     const factory = ts.factory;
                     // require("@engine/resources/injectResourceHolderHelper").injectResourceHolder(this,Assets);
-                    const callExpression =
+                    f.initializer =
                         factory.createCallExpression(
                             factory.createPropertyAccessExpression(
                                 factory.createCallExpression(
@@ -125,7 +125,6 @@ module.exports = function(content) {
                                 factory.createIdentifier(f.type?.typeName?.escapedText || 'undefined')
                             ]
                         )
-                    f.initializer = callExpression;
                 } else {
                     newModifiers.push(d);
                 }

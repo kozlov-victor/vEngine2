@@ -9,14 +9,14 @@ import {TrackBall} from "../model3dFromFbx/trackBall";
 export class MainScene extends Scene {
 
     @Resource.Text('./model3dFromObj7/mushroom_tube_A.obj')
-    private data1:string;
+    public readonly data1:string;
 
     @Resource.Texture('./model3dFromObj7/mushroom_tube_tex.png')
-    private dataTexture:ITexture;
+    public readonly dataTexture:ITexture;
 
     // //https://www.reinerstilesets.de/graphics/3d-grafiken/3d-plants/
     @Resource.Texture('./model3dFromObj7/mushroom_tube_NM.png')
-    private dataTextureNormal:ITexture;
+    public readonly dataTextureNormal:ITexture;
 
     public override onReady():void {
 

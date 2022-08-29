@@ -9,7 +9,7 @@ import {WordBrake} from "@engine/renderable/impl/ui/textField/textAlign";
 export class MainScene extends Scene {
 
     @Resource.FontFromAtlas('./fnt-angelcode-format/',fntXML)
-    private font:Font;
+    public readonly font:Font;
 
     public override onReady():void {
 

@@ -14,13 +14,13 @@ export class MainScene extends Scene {
     private logoObj:Mesh2d;
 
     @Resource.Texture('./assets/repeat.jpg')
-    private logoLink:ITexture;
+    public readonly logoLink:ITexture;
 
     @Resource.Texture('./model3d/Texture-67.jpg')
-    private logo2Link:ITexture;
+    public readonly logo2Link:ITexture;
 
     @Resource.Texture('./model3d/normals.png')
-    private logoNormalsLink:ITexture;
+    public readonly logoNormalsLink:ITexture;
 
     public override onReady():void {
         const obj:Model3d = new Model3d(this.game,new Cylinder(50,100));

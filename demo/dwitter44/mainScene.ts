@@ -10,7 +10,7 @@ export class MainScene extends Scene {
     private surface:DrawingSurface;
 
     @Resource.FontFromCssDescription({fontFamily:'monospace',fontSize:32})
-    private fnt:Font;
+    public readonly fnt:Font;
 
     private renderScene:(session:IDrawingSession)=>void = ():void=>{};
 

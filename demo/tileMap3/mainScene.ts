@@ -15,8 +15,8 @@ export class MainScene extends Scene {
     private tileMap:TileMap;
     private rect:Rectangle;
 
-    @Resource.Texture('./tileMap3/voda_pesok_trava_revision_2.png') private tilesTexture:ITexture;
-    @Resource.JSON('./tileMap3/level.json') private levelData:ITiledJSON;
+    @Resource.Texture('./tileMap3/voda_pesok_trava_revision_2.png') public readonly tilesTexture:ITexture;
+    @Resource.JSON('./tileMap3/level.json') public readonly levelData:ITiledJSON;
 
     public override onReady():void {
 

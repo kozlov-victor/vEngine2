@@ -9,13 +9,13 @@ import {TrackBall} from "../model3dFromFbx/trackBall";
 export class MainScene extends Scene {
 
     @Resource.Text('./model3dFromObj3/planet.obj')
-    private data1:string;
+    public readonly data1:string;
 
     @Resource.Texture('./model3dFromObj5/moon.jpg')
-    private texture:ITexture;
+    public readonly texture:ITexture;
 
     @Resource.Texture('./model3dFromObj5/moon_normal.jpg')
-    private textureNormal:ITexture;
+    public readonly textureNormal:ITexture;
 
 
     public override onReady():void {

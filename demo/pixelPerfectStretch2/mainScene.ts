@@ -8,20 +8,20 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 export class MainScene extends Scene {
 
     @Resource.Texture('./pixelPerfectStretch2/images/pig.png')
-    private img1:ITexture;
+    public readonly img1:ITexture;
 
 
     @Resource.Texture('./pixelPerfectStretch2/images/cow.png')
-    private img2:ITexture;
+    public readonly img2:ITexture;
 
     @Resource.Texture('./pixelPerfectStretch2/images/dog.png')
-    private img3:ITexture;
+    public readonly img3:ITexture;
 
     @Resource.Texture('./pixelPerfectStretch2/images/girl.png')
-    private img4:ITexture;
+    public readonly img4:ITexture;
 
     @Resource.Texture('./pixelPerfectStretch2/images/eagle.png')
-    private img5:ITexture;
+    public readonly img5:ITexture;
 
     private cnt:number = 0;
     private links:ITexture[];

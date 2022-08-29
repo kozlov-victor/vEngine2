@@ -10,13 +10,13 @@ import {TrackBall} from "../model3dFromFbx/trackBall";
 export class MainScene extends Scene {
 
     @Resource.Text('./model3dFromObjMaterials2/windmill/windmill.obj')
-    private meshData:string;
+    public readonly meshData:string;
 
     @Resource.Text('./model3dFromObjMaterials2/windmill/windmill.mtl')
-    private materialData:string;
+    public readonly materialData:string;
 
     @Resource.Texture('./model3dFromObjMaterials2/windmill/windmill.jpg')
-    private texture:ITexture;
+    public readonly texture:ITexture;
 
     public override onReady():void {
 

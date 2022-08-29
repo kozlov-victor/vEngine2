@@ -8,7 +8,7 @@ import {Resource} from "@engine/resources/resourceDecorators";
 export class MainScene extends Scene {
 
     @Resource.Texture('./assets/logo.png')
-    private logoTexture:ITexture;
+    public readonly logoTexture:ITexture;
 
 
     public override onReady():void {

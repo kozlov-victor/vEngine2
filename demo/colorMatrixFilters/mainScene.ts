@@ -13,7 +13,7 @@ import {SepiaColorMatrixFilter} from "@engine/renderer/webGl/filters/colorMatrix
 export class MainScene extends Scene {
 
     @Resource.Texture('./assets/logo.png')
-    private logoTexture:ITexture;
+    public readonly logoTexture:ITexture;
 
     public override onReady():void {
         const spr: Image = new Image(this.game, this.logoTexture);

@@ -220,19 +220,19 @@ class TabStrip {
 export class MkSelectHeroScene extends MkAbstractScene {
 
     @Resource.FontFromCssDescription({fontSize:80,fontFamily:'MK4'})
-    private fnt:Font;
+    public readonly fnt:Font;
 
     @Resource.Texture('./mk-alfa/assets/images/mkLogo.png')
-    private logoLink:ITexture;
+    public readonly logoLink:ITexture;
 
     @Resource.Sound('./mk-alfa/assets/sounds/btn2.wav')
-    private soundLink1:Sound;
+    public readonly soundLink1:Sound;
 
     @Resource.Sound('./mk-alfa/assets/sounds/btn.wav')
-    private soundLink2:Sound;
+    public readonly soundLink2:Sound;
 
     @Resource.Sound('./mk-alfa/assets/sounds/theme.mp3')
-    private soundLinkTheme:Sound;
+    public readonly soundLinkTheme:Sound;
 
     private tabStrip:TabStrip;
 

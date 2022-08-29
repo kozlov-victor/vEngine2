@@ -24,13 +24,13 @@ import {DifferenceCompositionFilter} from "@engine/renderer/webGl/filters/compos
 export class MainScene extends Scene {
 
     @Resource.Texture('./assets/star.png')
-    private img:Texture;
+    public readonly img:Texture;
 
     @Resource.Texture('./assets/repeat.jpg')
-    public bgTexture:ITexture;
+    public readonly bgTexture:ITexture;
 
     @Resource.Texture('./assets/logo.png')
-    private logoTexture:ITexture;
+    public readonly logoTexture:ITexture;
 
     public override onReady():void {
 

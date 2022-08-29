@@ -9,10 +9,10 @@ export class MainScene extends Scene {
 
 
     @Resource.Texture('./model3dCubeNormalMap/wood.png')
-    private logoLink:ITexture;
+    public readonly logoLink:ITexture;
 
     @Resource.Texture('./model3dCubeNormalMap/wood_normal.png')
-    private normalsLink:ITexture;
+    public readonly normalsLink:ITexture;
 
     public override onReady():void {
 

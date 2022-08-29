@@ -10,7 +10,7 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 export class MainScene extends Scene {
 
     @Resource.FontFromCssDescription({fontFamily:'monospace',fontSize:35})
-    private fnt:Font;
+    public readonly fnt:Font;
 
     public override onReady():void {
 

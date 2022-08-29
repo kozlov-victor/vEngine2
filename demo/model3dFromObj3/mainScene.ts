@@ -11,13 +11,13 @@ import {SkyBox} from "@engine/renderable/impl/skyBox";
 export class MainScene extends Scene {
 
     @Resource.Text('./model3dFromObj3/planet.obj')
-    private data1:string;
+    public readonly data1:string;
 
     @Resource.Texture('./model3dFromObj3/earth.jpg')
-    private dataTexture:ITexture;
+    public readonly dataTexture:ITexture;
 
     @Resource.Texture('./model3dFromObj3/earth_normal.jpg')
-    private dataTextureNormal:ITexture;
+    public readonly dataTextureNormal:ITexture;
 
     @Resource.CubeTexture(
         './model3dFromObj3/cube/right.png',
@@ -27,7 +27,7 @@ export class MainScene extends Scene {
         './model3dFromObj3/cube/back.png',
         './model3dFromObj3/cube/front.png',
     )
-    private cubeTexture:CubeMapTexture;
+    public readonly cubeTexture:CubeMapTexture;
 
     public override onReady():void {
 

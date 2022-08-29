@@ -10,13 +10,13 @@ import {TrackBall} from "../model3dFromFbx/trackBall";
 export class MainScene extends Scene {
 
     @Resource.Text('./model3dFromObjMaterials4/Nightmare/Nightmare.obj')
-    private meshData:string;
+    public readonly meshData:string;
 
     @Resource.Text('./model3dFromObjMaterials4/Nightmare/Nightmare.mtl')
-    private materialData:string;
+    public readonly materialData:string;
 
     @Resource.Texture('./model3dFromObjMaterials4/Nightmare/NIT.png')
-    private texture:ITexture;
+    public readonly texture:ITexture;
 
     public override onReady():void {
 

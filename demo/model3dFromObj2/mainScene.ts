@@ -8,10 +8,10 @@ import {ObjParser} from "@engine/renderable/impl/3d/objParser/objParser";
 export class MainScene extends Scene {
 
     @Resource.Text('./model3dFromObj2/dog.obj')
-    private data1:string;
+    public readonly data1:string;
 
     @Resource.Texture('./model3dFromObj2/dog.jpg')
-    private dataTexture:ITexture;
+    public readonly dataTexture:ITexture;
 
     public override onReady():void {
         const obj = new ObjParser().parse(this.game,{

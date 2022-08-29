@@ -11,7 +11,7 @@ export class MainScene extends Scene {
     private img2:Image;
 
     @Resource.Texture('./assets/repeat.jpg')
-    private link:ITexture;
+    public readonly link:ITexture;
 
     public override onReady():void {
 

@@ -11,7 +11,7 @@ import {Resource} from "@engine/resources/resourceDecorators";
 export class MainScene extends Scene {
 
     @Resource.Texture('./assets/star.png')
-    private textureResource:ITexture;
+    public readonly textureResource:ITexture;
 
 
     public override onReady():void {

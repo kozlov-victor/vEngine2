@@ -13,7 +13,7 @@ import {wait} from "../longLoading/mainScene";
 export class SecondScene extends Scene {
 
     @Resource.FontFromCssDescription({fontSize:25})
-    private fnt:Font;
+    public readonly fnt:Font;
 
     public override onPreloading(taskQueue:TaskQueue):void{
 

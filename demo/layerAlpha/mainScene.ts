@@ -8,7 +8,7 @@ import {Layer} from "@engine/scene/layer";
 export class MainScene extends Scene {
 
     @Resource.Texture('./assets/logo.png')
-    private logoTexture:ITexture;
+    public readonly logoTexture:ITexture;
 
     private createLayer(y:number):Layer {
         const layer = new Layer(this.game);

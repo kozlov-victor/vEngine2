@@ -7,7 +7,7 @@ import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 export class MainScene extends Scene {
 
     @Resource.FontFromCssDescription({fontFamily:'monospace',fontSize:50})
-    private fnt:Font;
+    public readonly fnt:Font;
 
     public override onReady():void {
         const tf:TextField = new TextField(this.game,this.fnt);

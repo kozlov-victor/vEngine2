@@ -8,11 +8,12 @@ import {TexturePackerAtlas} from "@engine/animation/frameAnimation/atlas/texture
 import {AtlasFrameAnimation} from "@engine/animation/frameAnimation/atlas/atlasFrameAnimation";
 import {ArcadeSideScrollControl} from "@engine/behaviour/impl/arcadeSideScrollControl";
 import {Game} from "@engine/core/game";
+import {ITiledJSON} from "@engine/renderable/impl/general/tileMap/tileMap";
 
 export class Character {
-    constructor(game: Game, scene:Scene, assets:Assets) {
+    constructor(game: Game, scene:Scene, assets:Assets,tiledObject:ITiledJSON['layers'][0]['objects'][0]) {
         const characterImage = new AnimatedImage(game,assets.characterTexture);
-        characterImage.pos.setXY(100,100); // todo
+        characterImage.pos.setXY(tiledObject.x,tiledObject.y);
         characterImage.setRigidBody(game.getPhysicsSystem<ArcadePhysicsSystem>().createRigidBody({
             type:ARCADE_RIGID_BODY_TYPE.DYNAMIC,
             debug: false,

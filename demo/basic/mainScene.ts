@@ -10,7 +10,7 @@ import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 export class MainScene extends Scene {
 
     @Resource.Texture('./assets/logo.png')
-    private logoTexture:ITexture;
+    public readonly logoTexture:ITexture;
 
     public override onReady():void {
         const spr = new Image(this.game, this.logoTexture);

@@ -13,7 +13,7 @@ export class MainScene extends Scene {
     private player:SpriterObject;
 
     @Resource.Sound('./moonAnimation/moon_sound.wav')
-    private sound:Sound;
+    public readonly sound:Sound;
 
     public override async onPreloading(taskQueue:TaskQueue):Promise<void> {
         const rect = new Rectangle(this.game);

@@ -41,13 +41,13 @@ export const loadSound = async (game:Game,track:AbstractChipTrack):Promise<Sound
 export abstract class BasePix32Scene extends Scene {
 
     @Resource.FontFromAtlas('./pix32/resources/font/',fntXML)
-    private fontLink:Font;
+    public readonly fontLink:Font;
 
     @Resource.Texture('./pix32/resources/images/pallet.png')
-    private palletLink:ITexture;
+    public readonly palletLink:ITexture;
 
     @Resource.Texture('./pix32/resources/images/container.png')
-    protected containerLink:ITexture;
+    public readonly containerLink:ITexture;
 
     private btmLayer:Layer;
     public topLayer:Layer;

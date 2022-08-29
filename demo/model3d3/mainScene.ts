@@ -12,7 +12,7 @@ export class MainScene extends Scene {
 
 
     @Resource.Texture('./model3d/Texture-67.jpg')
-    private texture:ITexture;
+    public readonly texture:ITexture;
 
 
     public override onReady():void {

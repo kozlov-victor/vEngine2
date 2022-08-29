@@ -9,10 +9,10 @@ import {Resource} from "@engine/resources/resourceDecorators";
 export class MainScene extends Scene {
 
     @Resource.Texture('./frameAnimation2/imgs/can.png')
-    private resourceLink1:ITexture;
+    public readonly resourceLink1:ITexture;
 
     @Resource.Texture('./frameAnimation2/imgs/settings.png')
-    private resourceLink2:ITexture;
+    public readonly resourceLink2:ITexture;
 
     private cnt:number = 0;
     private links:ITexture[] = [];

@@ -9,7 +9,8 @@ import {Resource} from "@engine/resources/resourceDecorators";
 
 export class MainScene extends Scene {
 
-    @Resource.ResourceHolder() private resourceHolder:ResourceHolder;
+    @Resource.ResourceHolder()
+    public readonly resourceHolder:ResourceHolder;
 
     public override onReady():void {
 

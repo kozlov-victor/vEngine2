@@ -9,7 +9,7 @@ import {TrackBall} from "../model3dFromFbx/trackBall";
 export class MainScene extends Scene {
 
     @Resource.Text('./model3dFromObjMaterials3/book/book.obj')
-    private meshData:string;
+    public readonly meshData:string;
 
 
     public override onReady():void {

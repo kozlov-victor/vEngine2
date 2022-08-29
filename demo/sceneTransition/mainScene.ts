@@ -83,7 +83,7 @@ import {LIST_VIEW_EVENTS} from "@engine/renderable/impl/ui/scrollViews/direction
 export class MainScene extends Scene {
 
     @Resource.FontFromCssDescription({fontSize: 25,fontFamily:'monospace'})
-    private fnt:Font;
+    public readonly fnt:Font;
     public override backgroundColor: Color = Color.RGB(233);
 
     private listView:VerticalList;

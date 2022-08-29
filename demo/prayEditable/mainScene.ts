@@ -27,7 +27,7 @@ import {Resource} from "@engine/resources/resourceDecorators";
 
 export class MainScene extends Scene {
 
-    @Resource.ResourceHolder() private r:PrayResourcesHolder;
+    @Resource.ResourceHolder() public readonly r:PrayResourcesHolder;
 
     public override onReady():void {
 

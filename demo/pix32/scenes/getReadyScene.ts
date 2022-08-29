@@ -8,7 +8,7 @@ import {GameScene} from "./gameScene";
 export class GetReadyScene extends BasePix32Scene {
 
     @Resource.Texture('./pix32/resources/images/flag.png')
-    private flagLink:ITexture;
+    public readonly flagLink:ITexture;
 
     override onReady():void {
         super.onReady();

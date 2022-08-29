@@ -48,7 +48,7 @@ export class MainScene extends Scene {
     public fnt:Font;
 
     @Resource.Texture('./chipTunePlayer/skin.png')
-    private skinTexture:ITexture;
+    public readonly skinTexture:ITexture;
 
     public override onPreloading(taskQueue:TaskQueue):void {
         super.onPreloading(taskQueue);

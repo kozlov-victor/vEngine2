@@ -10,7 +10,7 @@ import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleG
 export class MainScene extends Scene {
 
     @Resource.Texture('./assets/logo.png')
-    private logoTexture:ITexture;
+    public readonly logoTexture:ITexture;
 
     public override onReady():void {
 

@@ -8,7 +8,7 @@ import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleG
 export class MainScene extends Scene {
 
     @Resource.Texture('./assets/star.png')
-    private link:ITexture;
+    public readonly link:ITexture;
 
     public override onReady():void {
         const root = new SimpleGameObjectContainer(this.game);

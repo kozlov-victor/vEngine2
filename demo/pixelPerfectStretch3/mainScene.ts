@@ -7,7 +7,7 @@ import {CellFrameAnimation} from "@engine/animation/frameAnimation/cellFrameAnim
 export class MainScene extends Scene {
 
     @Resource.Texture('./pixelPerfectStretch3/data/Sprite1.png')
-    private sprite:ITexture;
+    public readonly sprite:ITexture;
 
 
     public override onReady():void {

@@ -36,10 +36,10 @@ commodo consequat.`;
 export class MainScene extends Scene {
 
     @Resource.FontFromCssDescription({fontSize:15,fontFamily:'monospace'})
-    private fnt:Font;
+    public readonly fnt:Font;
 
     @Resource.FontFromCssDescription({fontSize:17,fontFamily:'Times New Roman'})
-    private fnt2:Font;
+    public readonly fnt2:Font;
 
 
     public override onReady():void {

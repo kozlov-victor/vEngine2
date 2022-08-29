@@ -11,13 +11,14 @@ module.exports = function(content) {
             ...tsquery(ast, `JsxSelfClosingElement`),
         ];
     allTsxNodes.forEach(node=>{
+        const factory = ts.factory;
         node.attributes.properties.push(
             // https://ts-ast-viewer.com/#code/G4QwTgBCELwQPAEwJbAgZxgbwMwF8A+eAehWAKA
-            ts.factory.createJsxAttribute(
-                ts.factory.createIdentifier("__id"),
-                ts.factory.createJsxExpression(
+            factory.createJsxAttribute(
+                factory.createIdentifier("__id"),
+                factory.createJsxExpression(
                     undefined,
-                    ts.factory.createNumericLiteral(`${id}`)
+                    factory.createNumericLiteral(`${id}`)
                 )
             )
         );

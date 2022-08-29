@@ -16,7 +16,7 @@ export class MainScene extends Scene {
     private rect:Rectangle;
 
     @Resource.Texture('./tileMap/tiles.png')
-    private tilesTexture:ITexture;
+    public readonly tilesTexture:ITexture;
 
     public override onPreloading(taskQueue:TaskQueue):void {
         const rect = new Rectangle(this.game);

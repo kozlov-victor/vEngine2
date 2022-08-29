@@ -53,7 +53,7 @@ export const loadScript = (taskQueue:TaskQueue)=>{
 export class MainScene extends Scene {
 
     @Resource.FontFromCssDescription({fontSize:30,fontFamily:'Droid Sans'})
-    private fnt:Font;
+    public readonly fnt:Font;
 
     public override onPreloading(taskQueue:TaskQueue):void {
         loadScript(taskQueue);

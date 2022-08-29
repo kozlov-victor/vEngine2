@@ -9,7 +9,7 @@ import {StlParser} from "@engine/renderable/impl/3d/stlParser/stlParser";
 export class MainScene extends Scene {
 
     @Resource.Text('./model3dFromStl2/polymer.stl')
-    private data1:string;
+    public readonly data1:string;
 
     @Resource.CubeTexture(
         './model3dFromStl/textures/miramar_left.png',
@@ -19,7 +19,7 @@ export class MainScene extends Scene {
         './model3dFromStl/textures/miramar_front.png',
         './model3dFromStl/textures/miramar_back.png',
     )
-    private cubeTexture:ICubeMapTexture;
+    public readonly cubeTexture:ICubeMapTexture;
 
 
     public override onReady():void {

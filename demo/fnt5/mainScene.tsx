@@ -1,7 +1,6 @@
 import {Scene} from "@engine/scene/scene";
 import {Font} from "@engine/renderable/impl/general/font/font";
 import * as fntXML1 from "xml/angelcode-loader!../fnt4/font.fnt";
-import * as fntXML2 from "xml/angelcode-loader!../fnt3/font.fnt";
 import * as fntXML3 from "xml/xml-loader!../fnt/font.fnt";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {
@@ -17,11 +16,11 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 export class MainScene extends Scene {
 
     @Resource.FontFromAtlas('./fnt4',fntXML1)
-    private font1:Font;
+    public readonly font1:Font;
 
 
     @Resource.FontFromAtlas('./fnt',fntXML3)
-    private font3:Font;
+    public readonly font3:Font;
 
     public override onReady():void {
         this.backgroundColor.setRGB(12,12,12);

@@ -39,7 +39,7 @@ const createRichText = ()=>{
 export class MainScene extends Scene {
 
     @Resource.FontFromCssDescription({fontSize:25,fontFamily:'monospace',extraChars:['🥰']})
-    private fnt:Font;
+    public readonly fnt:Font;
 
     public override onReady():void {
 

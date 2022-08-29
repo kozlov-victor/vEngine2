@@ -13,7 +13,7 @@ export class MainScene extends Scene {
     private obj:NinePatchImage;
 
     @Resource.Texture('./ninePatchImage/ninePatchImage.png')
-    private imgLink:ITexture;
+    public readonly imgLink:ITexture;
 
     public override onPreloading(taskQueue:TaskQueue):void {
         const rect = new Rectangle(this.game);

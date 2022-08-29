@@ -7,7 +7,7 @@ import {Resource} from "@engine/resources/resourceDecorators";
 export class MainScene extends Scene {
 
     @Resource.Texture(logoBase64)
-    private resourceTexture: ITexture;
+    public readonly resourceTexture: ITexture;
 
     public override onReady():void {
         const spr: Image = new Image(this.game,this.resourceTexture);

@@ -15,7 +15,7 @@ export class IntroScene extends Scene {
 
 
     @Resource.FontFromCssDescription({fontFamily:'monospace',fontSize:50})
-    private fnt:Font;
+    public readonly fnt:Font;
 
     public override onReady():void {
         const btn:Button = new Button(this.game,this.fnt);

@@ -14,7 +14,7 @@ import {Resource} from "@engine/resources/resourceDecorators";
 export class MainScene extends Scene {
 
     @Resource.Texture('./assets/logo.png')
-    private logoLink:ITexture;
+    public readonly logoLink:ITexture;
 
     public override onReady():void {
         this.camera.scale.setXY(0.6);

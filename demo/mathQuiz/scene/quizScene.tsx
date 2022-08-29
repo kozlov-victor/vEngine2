@@ -216,7 +216,7 @@ class QuizSceneUI extends VEngineTsxComponent {
 
 export class QuizScene extends Scene {
 
-    @Resource.ResourceHolder() private assets:Assets;
+    @Resource.ResourceHolder() public readonly assets:Assets;
 
     constructor(game:Game, private level:number) {
         super(game);

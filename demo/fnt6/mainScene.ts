@@ -9,7 +9,7 @@ import {XmlParser} from "@engine/misc/parsers/xml/xmlParser";
 export class MainScene extends Scene {
 
     @Resource.FontFromAtlasUrl('./fnt6/','atari-smooth.xml',XmlParser)
-    private font:Font;
+    public readonly font:Font;
 
     public override onReady():void {
 

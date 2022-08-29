@@ -9,7 +9,7 @@ import {Resource} from "@engine/resources/resourceDecorators";
 export class MainScene extends Scene {
 
     @Resource.Texture('./assets/repeat.jpg')
-    private logoLink:ITexture;
+    public readonly logoLink:ITexture;
 
 
     public override onProgress(val: number):void {

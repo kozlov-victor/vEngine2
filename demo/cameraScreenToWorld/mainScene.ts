@@ -12,8 +12,8 @@ import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 
 export class MainScene extends Scene {
 
-    @Resource.Texture('./assets/logo.png') private logoTexture:ITexture;
-    @Resource.Texture('./assets/repeat.jpg')  private bgTexture:ITexture;
+    @Resource.Texture('./assets/logo.png') public logoTexture:ITexture;
+    @Resource.Texture('./assets/repeat.jpg')  public bgTexture:ITexture;
 
     public override onReady():void {
 

@@ -7,7 +7,7 @@ import {Resource} from "@engine/resources/resourceDecorators";
 export class MainScene extends Scene {
 
     @Resource.Texture('./assets/repeat.jpg')
-    private baseTextureLink:ITexture;
+    public readonly baseTextureLink:ITexture;
 
     @Resource.CubeTexture(
         './cubeMapTexture/textures/cm_left.jpg',
@@ -17,7 +17,7 @@ export class MainScene extends Scene {
         './cubeMapTexture/textures/cm_front.jpg',
         './cubeMapTexture/textures/cm_back.jpg'
     )
-    private cubeTexture:ICubeMapTexture;
+    public readonly cubeTexture:ICubeMapTexture;
 
 
     public override onReady():void {

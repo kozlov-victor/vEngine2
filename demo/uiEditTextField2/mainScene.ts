@@ -15,7 +15,7 @@ gg `;
 export class MainScene extends Scene {
 
     @Resource.FontFromAtlas('./fnt/',fntXML)
-    private fnt:Font;
+    public readonly fnt:Font;
 
 
     public override onReady():void {

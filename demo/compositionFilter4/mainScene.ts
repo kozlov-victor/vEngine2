@@ -16,13 +16,13 @@ import {CrtScreenFilter} from "@engine/renderer/webGl/filters/texture/crtScreenF
 export class MainScene extends Scene {
 
     @Resource.Texture('./plasma/Plasma_effect.jpg')
-    private plasmaLink:ITexture;
+    public readonly plasmaLink:ITexture;
 
     @Resource.Texture('./plasma/gradient.png')
-    private palletLink:ITexture;
+    public readonly palletLink:ITexture;
 
     @Resource.Texture('./assets/logo.png')
-    private logoTexture:ITexture;
+    public readonly logoTexture:ITexture;
 
     public override onReady():void {
 
