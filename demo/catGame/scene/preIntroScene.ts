@@ -14,7 +14,7 @@ import {TaskQueue} from "@engine/resources/taskQueue";
 export class PreIntroScene extends Scene {
 
     @Resource.Texture('./catGame/res/sprite/contest.png')
-    private spriteSheetLogo: ITexture;
+    public readonly spriteSheetLogo: ITexture;
 
 
     public override onPreloading(taskQueue:TaskQueue): void {

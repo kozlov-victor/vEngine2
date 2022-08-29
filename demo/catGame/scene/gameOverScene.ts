@@ -9,10 +9,10 @@ export class GameOverScene extends BaseAbstractIntroScene {
 
 
     @Resource.Sound('./catGame/res/sound/gameOver.mp3')
-    protected soundTheme:Sound;
+    public readonly soundTheme:Sound;
 
     @Resource.Texture('./catGame/res/sprite/gameOver.png')
-    protected spriteSheetLabel: ITexture;
+    public readonly spriteSheetLabel: ITexture;
 
 
     protected override startSound(): void {

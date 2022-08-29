@@ -13,11 +13,11 @@ module.exports = function(content) {
     allTsxNodes.forEach(node=>{
         node.attributes.properties.push(
             // https://ts-ast-viewer.com/#code/G4QwTgBCELwQPAEwJbAgZxgbwMwF8A+eAehWAKA
-            ts.createJsxAttribute(
-                ts.createIdentifier("__id"),
-                ts.createJsxExpression(
+            ts.factory.createJsxAttribute(
+                ts.factory.createIdentifier("__id"),
+                ts.factory.createJsxExpression(
                     undefined,
-                    ts.createNumericLiteral(`${id}`)
+                    ts.factory.createNumericLiteral(`${id}`)
                 )
             )
         );

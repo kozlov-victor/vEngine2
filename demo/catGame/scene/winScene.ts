@@ -8,10 +8,10 @@ import {Sound} from "@engine/media/sound";
 export class WinScene extends BaseAbstractIntroScene {
 
     @Resource.Sound('./catGame/res/sound/win.mp3')
-    protected soundTheme: Sound;
+    public readonly soundTheme: Sound;
 
     @Resource.Texture('./catGame/res/sprite/win.png')
-    protected spriteSheetLabel: ITexture;
+    public readonly spriteSheetLabel: ITexture;
 
     protected override startSound(): void {
         super.startSound();

@@ -9,10 +9,10 @@ import {Sound} from "@engine/media/sound";
 export class IntroScene extends BaseAbstractIntroScene {
 
     @Resource.Sound('./catGame/res/sound/theme1.mp3')
-    protected soundTheme: Sound;
+    public readonly soundTheme: Sound;
 
     @Resource.Texture('./catGame/res/sprite/pressKeyToStart.png')
-    protected spriteSheetLabel: ITexture;
+    public readonly spriteSheetLabel: ITexture;
 
 
     protected override listenUI():void {

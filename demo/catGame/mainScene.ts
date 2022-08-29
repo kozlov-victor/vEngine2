@@ -32,55 +32,55 @@ type LEVEL_SCHEMA = typeof import("./level/l1.json");
 export class MainScene extends Scene {
 
     @Resource.Texture('./catGame/res/sprite/cat.png')
-    private spriteSheetHero: ITexture;
+    public readonly spriteSheetHero: ITexture;
 
     @Resource.Texture('./catGame/res/sprite/wall1.png')
-    private wall1: ITexture;
+    public readonly wall1: ITexture;
 
     @Resource.Texture('./catGame/res/sprite/wall2.png')
-    private wall2: ITexture;
+    public readonly wall2: ITexture;
 
     @Resource.Texture('./catGame/res/sprite/monster1.png')
-    private spriteSheetMonster1: ITexture;
+    public readonly spriteSheetMonster1: ITexture;
 
     @Resource.Texture('./catGame/res/sprite/lava.png')
-    private spriteSheetLava: ITexture;
+    public readonly spriteSheetLava: ITexture;
 
     @Resource.Texture('./catGame/res/sprite/water.png')
-    private spriteSheetWater: ITexture;
+    public readonly spriteSheetWater: ITexture;
 
     @Resource.Texture('./catGame/res/sprite/monster2.png')
-    private spriteSheetMonster2: ITexture;
+    public readonly spriteSheetMonster2: ITexture;
 
     @Resource.Texture('./catGame/res/sprite/zombie.png')
-    private spriteSheetZombie: ITexture;
+    public readonly spriteSheetZombie: ITexture;
 
     @Resource.Texture('./catGame/res/sprite/bloodDrop.png')
-    private spriteSheetBloodDrop: ITexture;
+    public readonly spriteSheetBloodDrop: ITexture;
 
     @Resource.Texture('./catGame/res/sprite/testTube.png')
-    private spriteSheetTestTube: ITexture;
+    public readonly spriteSheetTestTube: ITexture;
 
     @Resource.Texture('./catGame/res/sprite/bullet3.png')
-    private spriteSheetBullet: ITexture;
+    public readonly spriteSheetBullet: ITexture;
 
     @Resource.Sound('./catGame/res/sound/theme2.ogg')
-    private soundTheme1: Sound;
+    public readonly soundTheme1: Sound;
 
     @Resource.Sound('./catGame/res/sound/hurt.ogg')
-    private soundHurt: Sound;
+    public readonly soundHurt: Sound;
 
     @Resource.Sound('./catGame/res/sound/hurt.ogg')
-    private soundHurt2: Sound;
+    public readonly soundHurt2: Sound;
 
     @Resource.Sound('./catGame/res/sound/shoot.ogg')
-    private soundShoot: Sound;
+    public readonly soundShoot: Sound;
 
     @Resource.Sound('./catGame/res/sound/jump.ogg')
-    private soundJump: Sound;
+    public readonly soundJump: Sound;
 
     @Resource.Sound('./catGame/res/sound/pick.ogg')
-    private soundPick: Sound;
+    public readonly soundPick: Sound;
 
     private level: LEVEL_SCHEMA;
 

@@ -34,76 +34,76 @@ type LEVEL_SCHEMA = typeof import("../level/l1.json");
 export class MainScene extends Scene {
 
     @Resource.Texture('./catGame/res/sprite/cat.png')
-    private spriteSheetHero: ITexture;
+    public readonly spriteSheetHero: ITexture;
 
     @Resource.Texture('./catGame/res/sprite/wall1.png')
-    private wall1: ITexture;
+    public readonly wall1: ITexture;
 
     @Resource.Texture('./catGame/res/sprite/wall2.png')
-    private wall2: ITexture;
+    public readonly wall2: ITexture;
 
     @Resource.Texture('./catGame/res/sprite/monster1.png')
-    private spriteSheetMonster1: ITexture;
+    public readonly spriteSheetMonster1: ITexture;
 
     @Resource.Texture('./catGame/res/sprite/lava.png')
-    private spriteSheetLava: ITexture;
+    public readonly spriteSheetLava: ITexture;
 
     @Resource.Texture('./catGame/res/sprite/water.png')
-    private spriteSheetWater: ITexture;
+    public readonly spriteSheetWater: ITexture;
 
     @Resource.Texture('./catGame/res/sprite/monster2.png')
-    private spriteSheetMonster2: ITexture;
+    public readonly spriteSheetMonster2: ITexture;
 
     @Resource.Texture('./catGame/res/sprite/virus.png')
-    private spriteSheetVirus: ITexture;
+    public readonly spriteSheetVirus: ITexture;
 
     @Resource.Texture('./catGame/res/sprite/zombie.png')
-    private spriteSheetZombie: ITexture;
+    public readonly spriteSheetZombie: ITexture;
 
     @Resource.Texture('./catGame/res/sprite/fan.png')
-    private spriteSheetFan: ITexture;
+    public readonly spriteSheetFan: ITexture;
 
     @Resource.Texture('./catGame/res/sprite/bloodDrop.png')
-    private spriteSheetBloodDrop: ITexture;
+    public readonly spriteSheetBloodDrop: ITexture;
 
     @Resource.Texture('./catGame/res/sprite/cloud.png')
-    private spriteSheetCloud: ITexture;
+    public readonly spriteSheetCloud: ITexture;
 
     @Resource.Texture('./catGame/res/sprite/ironCar.png')
-    private spriteSheetIronCar: ITexture;
+    public readonly spriteSheetIronCar: ITexture;
 
     @Resource.Texture('./catGame/res/sprite/car.png')
-    private spriteSheetCar: ITexture;
+    public readonly spriteSheetCar: ITexture;
 
     @Resource.Texture('./catGame/res/sprite/testTube.png')
-    private spriteSheetTestTube: ITexture;
+    public readonly spriteSheetTestTube: ITexture;
 
     @Resource.Texture('./catGame/res/sprite/bullet3.png')
-    private spriteSheetBullet: ITexture;
+    public readonly spriteSheetBullet: ITexture;
 
     @Resource.Texture('./catGame/res/sprite/tree.png')
-    private spriteSheetTree: ITexture;
+    public readonly spriteSheetTree: ITexture;
 
     @Resource.Texture('./catGame/res/sprite/table.png')
-    private spriteSheetTable: ITexture;
+    public readonly spriteSheetTable: ITexture;
 
     @Resource.Sound('./catGame/res/sound/theme2.mp3')
-    private soundTheme: Sound;
+    public readonly soundTheme: Sound;
 
     @Resource.Sound('./catGame/res/sound/hurt.mp3')
-    private soundHurt: Sound;
+    public readonly soundHurt: Sound;
 
     @Resource.Sound('./catGame/res/sound/hurt.mp3')
-    private soundHurt2: Sound;
+    public readonly soundHurt2: Sound;
 
     @Resource.Sound('./catGame/res/sound/shoot.mp3')
-    private soundShoot: Sound;
+    public readonly soundShoot: Sound;
 
     @Resource.Sound('./catGame/res/sound/jump.mp3')
-    private soundJump: Sound;
+    public readonly soundJump: Sound;
 
     @Resource.Sound('./catGame/res/sound/pick.mp3')
-    private soundPick: Sound;
+    public readonly soundPick: Sound;
 
     private level: LEVEL_SCHEMA;
 
