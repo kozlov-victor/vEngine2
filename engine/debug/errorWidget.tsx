@@ -18,6 +18,7 @@ interface IErrorInfo {
     debugInfo?:IDebugInfo;
 }
 
+//language=css
 const css:string = `
     .errorHeader {text-align: center;}
     .errorText {

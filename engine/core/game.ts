@@ -107,7 +107,7 @@ export class Game {
         instance.listenTo();
     }
 
-    public hasControl(type:string):boolean {
+    public hasControl(type:'KeyboardControl'|'MouseControl'|'GamePadControl'|string):boolean {
         return this.getControl(type)!==undefined;
     }
 
@@ -120,8 +120,8 @@ export class Game {
         return undefined;
     }
 
-    public setPhysicsSystem(s:ClazzEx<IPhysicsSystem,Game>):void{
-        this._physicsSystem = new s(this);
+    public setPhysicsSystem(clz:ClazzEx<IPhysicsSystem,Game>):void{
+        this._physicsSystem = new clz(this);
     }
 
     public getPhysicsSystem<T extends IPhysicsSystem>():T {

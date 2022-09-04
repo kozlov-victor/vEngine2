@@ -77,7 +77,7 @@ export namespace HttpClient {
         xhr.open(data.method,data.url,true);
         if (data.setup) data.setup(xhr);
         if (data.requestType) {
-            if (data.requestType!=='multipart/form-data') // at this case header needs to be auto generated
+            if (data.requestType!=='multipart/form-data') // in this case header needs to be auto generated
                 xhr.setRequestHeader("Content-Type", data.requestType);
         } else {
             xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");

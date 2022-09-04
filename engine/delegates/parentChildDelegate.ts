@@ -1,6 +1,5 @@
 import {DebugError} from "@engine/debug/debugError";
 import {IParentChild, Optional} from "@engine/core/declarations";
-import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 
 type OnTreeModifiedCallback<T> = (c:T)=>void;
 

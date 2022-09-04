@@ -1,4 +1,4 @@
-import {IAnimation, ITargetAnimation} from "@engine/animation/iAnimation";
+import {ITargetAnimation} from "@engine/animation/iAnimation";
 import {Game} from "@engine/core/game";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Optional} from "@engine/core/declarations";

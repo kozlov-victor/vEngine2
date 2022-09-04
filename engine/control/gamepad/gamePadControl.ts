@@ -49,11 +49,11 @@ const gamePadGetterFactory = ():[GamePadGetter,boolean]=>{
     if (navigator.getGamepads) return [(()=>navigator.getGamepads()) as GamePadGetter,true];
     else if (navigator.webkitGetGamepads) return [(()=>navigator.webkitGetGamepads()) as GamePadGetter,true];
     else {
-        const possibles:string[] = ['webkitGamepads','mozGamepads','msGamepads','msGamepads'];
+        const possibleProperties:string[] = ['webkitGamepads','mozGamepads','msGamepads'];
         let possible:string = '';
-        for (let i:number = 0; i < possibles.length; i++) {
-            if ((navigator as unknown as INavigator)[possibles[i]]) {
-                possible = possibles[i];
+        for (let i:number = 0; i < possibleProperties.length; i++) {
+            if ((navigator as unknown as INavigator)[possibleProperties[i]]) {
+                possible = possibleProperties[i];
                 if (DEBUG) console.log(`gamepad control with prefix is used (${possible})`);
                 break;
             }
@@ -73,7 +73,7 @@ export class GamePadControl extends AbstractKeypad<GamePadEvent> implements ICon
         super(game);
     }
 
-    public static readonly enabled:boolean = isEnabled;
+    public enabled:boolean = isEnabled;
 
     public static SENSITIVITY:number = 0.05;
 
@@ -94,6 +94,7 @@ export class GamePadControl extends AbstractKeypad<GamePadEvent> implements ICon
     }
 
     public override update():void{
+        if (!this.enabled) return;
 
         super.update();
 

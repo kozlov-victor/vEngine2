@@ -76,6 +76,7 @@ export class Camera implements IUpdatable, ITransformable, IRevalidatable  {
         }
         this._objFollowTo = gameObject;
         this.pos.setXY(this._objFollowTo.pos.x - this.game.width/2, this._objFollowTo.pos.y - this.game.height/2);
+        this._objFollowToPrevPos.setFrom(this.pos);
         this.revalidate();
     }
 
@@ -105,7 +106,7 @@ export class Camera implements IUpdatable, ITransformable, IRevalidatable  {
 
             const currCorrection:Point2d =
                 this._cameraPosCorrection.max.
-                substract(this._cameraPosCorrection.current).
+                subtract(this._cameraPosCorrection.current).
                 multiply(0.05);
 
             this._cameraPosCorrection.current.add(currCorrection);

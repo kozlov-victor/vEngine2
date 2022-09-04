@@ -1,44 +1,43 @@
 import {Game} from "@engine/core/game";
 import {DebugError} from "@engine/debug/debugError";
-import {AudioPlayer} from "@engine/media/audioPlayer";
 import {UploadedSoundLink} from "@engine/media/interface/iAudioPlayer";
 
 export class Sound {
 
     private readonly url:string;
 
-    get loop(): boolean {
+    public get loop(): boolean {
         return this._loop;
     }
 
-    set loop(value: boolean) {
+    public set loop(value: boolean) {
         this._loop = value;
         this.game.getAudioPlayer().loop(this);
     }
 
-    get gain(): number {
+    public get gain(): number {
         return this._gain;
     }
 
-    set gain(value: number) {
+    public set gain(value: number) {
         this._gain = value;
         this.game.getAudioPlayer().setGain(this);
     }
 
-    get velocity(): number {
+    public get velocity(): number {
         return this._velocity;
     }
 
-    set velocity(value: number) {
+    public set velocity(value: number) {
         this._velocity = value;
     }
 
 
-    get stereoPan(): number {
+    public get stereoPan(): number {
         return this._stereoPan;
     }
 
-    set stereoPan(value: number) {
+    public set stereoPan(value: number) {
         this._stereoPan = value;
     }
 

@@ -13,20 +13,21 @@ export class TexturePackerAtlas {
 
     constructor(private json:any) {
         if (DEBUG) {
+            if (!json) throw new DebugError(`expected object, but ${json} was passed`);
             if (!json.frames) throw new DebugError(`wrong structure, "frames" field not found`);
         }
     }
 
     public getFrameByKey(key:string):IRectJSON {
         const keys = Object.keys(this.json.frames);
-        let target:Optional<{frame:IRect}> = undefined;
+        let target:{frame:IRect} = undefined!;
         for (const currKey of keys) {
             const fileName = currKey.split('.')[0];
             if (fileName===key) {
                 target = this.json.frames[currKey] as {frame:IRect};
             }
         }
-        if (target===undefined) throw new DebugError(`no such rect: ${key}`);
+        if (DEBUG && target===undefined) throw new DebugError(`no such rect: ${key}`);
         if (target.frame===undefined) throw new DebugError(`wrong rect structure: {rect:{x,y,w,h}} expected`);
         const frame = target.frame;
         if (frame.x===undefined || frame.y===undefined || frame.w===undefined || frame.h===undefined) {

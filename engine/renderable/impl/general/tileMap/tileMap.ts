@@ -76,6 +76,7 @@ export class TileMap extends RenderableModelWithTexture {
     private readonly _drawInfo = {
         firstTileToDrawByX: NaN,
         firstTileToDrawByY: NaN,
+        changed: false,
     };
 
 
@@ -245,13 +246,13 @@ export class TileMap extends RenderableModelWithTexture {
 
     public override update(): void {
         if (this._rigidBodyDelegate!==undefined) this._rigidBodyDelegate.nextTick();
-        this.prepareDrawableInfo();
         super.update();
     }
 
     public draw(): void {
-        const camera:Camera = this.game.getCurrentScene().camera;
-        if (!camera.worldTransformDirty) {
+
+        this.prepareDrawableInfo();
+        if (!this._drawInfo.changed) {
             this.updateDrawingSurfacePos();
             return;
         }
@@ -340,6 +341,10 @@ export class TileMap extends RenderableModelWithTexture {
         const camera:Camera = this.game.getCurrentScene().camera;
         const firstTileToDrawByX:number = ~~((camera.pos.x) / this._tileWidth) - 1;
         const firstTileToDrawByY:number = ~~((camera.pos.y) / this._tileHeight) - 1;
+
+        this._drawInfo.changed =
+            this._drawInfo.firstTileToDrawByX !== firstTileToDrawByX ||
+            this._drawInfo.firstTileToDrawByY !== firstTileToDrawByY;
 
         this._drawInfo.firstTileToDrawByX = firstTileToDrawByX;
         this._drawInfo.firstTileToDrawByY = firstTileToDrawByY;

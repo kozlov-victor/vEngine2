@@ -1,4 +1,3 @@
-import {DebugError} from "../../debug/debugError";
 import {Game} from "../../core/game";
 import {IKeyVal} from "../../misc/object";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";

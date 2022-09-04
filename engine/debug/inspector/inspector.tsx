@@ -65,7 +65,6 @@ class InspectorWidget extends VEngineTsxComponent{
     }
 
     render(): VirtualNode {
-        //return <></>;
         if (!game || !this._shown) return <></>;
         return (
             <>

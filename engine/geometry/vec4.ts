@@ -9,22 +9,22 @@ export namespace Vec4 {
 
     export class Vec4Holder extends ReleaseableEntity {
 
-
-        get x():n{
+        public get x():n{
             return this.vec4[0];
         }
 
-        get y():n{
+        public get y():n{
             return this.vec4[1];
         }
 
-        get z():n{
+        public get z():n{
             return this.vec4[2];
         }
 
-        get w():n{
+        public get w():n{
             return this.vec4[3];
         }
+
         private static pool = new ObjectPool<Vec4Holder>(Vec4Holder,32);
 
         public readonly vec4:Readonly<VEC4> = (new Float32Array(4) as unknown) as VEC4; // exports only readonly arr

@@ -5,7 +5,7 @@ import {Game} from "@engine/core/game";
 
 export const getControlErrorMessage = (controlName:string,controlClassName:string):string=>{
     if (!DEBUG) return '';
-    return `can not listen ${controlName} events: ${controlName} control is not added;\ninvoke "game.addControl(${controlClassName});"`;
+    return `can not listen to ${controlName} events: ${controlName} control is not added;\ninvoke "game.addControl(${controlClassName});"`;
 };
 
 

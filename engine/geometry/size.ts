@@ -11,7 +11,7 @@ export interface ISize {
 
 export class Size extends ObservableEntity implements ICloneable<ISize>{
 
-    set width(val:number) {
+    public set width(val:number) {
         if (DEBUG && isNotNumber(val)) {
             console.trace();
             throw new DebugError(`Size.width: wrong numeric argument  ${val}`);
@@ -23,11 +23,11 @@ export class Size extends ObservableEntity implements ICloneable<ISize>{
         }
     }
 
-    get width(): number {
+    public get width(): number {
         return this._width;
     }
 
-    set height(val:number) {
+    public set height(val:number) {
         if (DEBUG && isNotNumber(val)) {
             console.trace();
             throw new DebugError(`Size.height: wrong numeric argument  ${val}`);
@@ -39,7 +39,7 @@ export class Size extends ObservableEntity implements ICloneable<ISize>{
         }
     }
 
-    get height(): number {
+    public get height(): number {
         return this._height;
     }
 

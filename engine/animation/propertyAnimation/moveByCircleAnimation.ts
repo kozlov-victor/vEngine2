@@ -2,11 +2,11 @@ import {MoveByEllipseAnimation} from "@engine/animation/propertyAnimation/moveBy
 
 export class MoveByCircleAnimation extends MoveByEllipseAnimation {
 
-    set radius(val:number) {
+    public set radius(val:number) {
         (this as MoveByEllipseAnimation).radiusX = (this as MoveByEllipseAnimation).radiusY = val;
     }
 
-    get radius():number{
+    public get radius():number {
         return (this as MoveByEllipseAnimation).radiusX;
     }
 

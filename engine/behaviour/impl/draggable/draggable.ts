@@ -1,6 +1,6 @@
 import {BaseAbstractBehaviour} from "../../abstract/baseAbstractBehaviour";
-import {Game} from "../../../core/game";
-import {Scene} from "../../../scene/scene";
+import {Game} from "@engine/core/game";
+import {Scene} from "@engine/scene/scene";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {IObjectMouseEvent, ISceneMouseEvent} from "@engine/control/mouse/mousePoint";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
@@ -23,7 +23,7 @@ export class DraggableBehaviour extends BaseAbstractBehaviour {
 
     constructor(game:Game, private params?:IDraggableBehaviourParameters){
         super(game,{});
-        if (params!==undefined) this.updateConstrains(params); // is needed
+        if (params!==undefined) this.updateConstrains(params);
     }
 
     private constrainX:boolean;
