@@ -9,6 +9,7 @@ import {AtlasFrameAnimation} from "@engine/animation/frameAnimation/atlas/atlasF
 import {ArcadeSideScrollControl} from "@engine/behaviour/impl/arcadeSideScrollControl";
 import {Game} from "@engine/core/game";
 import {ITiledJSON} from "@engine/renderable/impl/general/tileMap/tileMap";
+import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 
 export class Character {
     constructor(game: Game, scene:Scene, assets:Assets,tiledObject:ITiledJSON['layers'][0]['objects'][0]) {
@@ -55,13 +56,31 @@ export class Character {
         });
         characterImage.addFrameAnimation(jumpAnimation);
 
-        characterImage.addBehaviour(new ArcadeSideScrollControl(game,{
+        const fireAnimation = new AtlasFrameAnimation(game,{
+            frames: [
+                texturePackerAtlas.getFrameByKey('character_fire1'),
+                texturePackerAtlas.getFrameByKey('character_fire2'),
+            ],
+            isRepeating: false,
+            name: 'fire',
+            durationOfOneFrame: 200,
+        });
+        characterImage.addFrameAnimation(fireAnimation);
+
+        const bh = new ArcadeSideScrollControl(game,{
             velocity: 100,
             jumpVelocity: 300,
             runAnimation: 'walk',
             idleAnimation: 'idle',
             jumpAnimation: 'jump',
-        }));
+            fireAnimation: 'fire'
+        });
+
+        characterImage.addBehaviour(bh);
+
+        scene.keyboardEventHandler.onKeyPressed(KEYBOARD_KEY.CONTROL, e=>{
+            bh.fire();
+        });
 
         characterImage.appendTo(scene);
         scene.camera.followTo(characterImage);

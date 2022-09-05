@@ -51,11 +51,13 @@ export class AnimatedImage extends Image implements ICloneable<AnimatedImage>{
         return frameAnimation;
     }
 
-    public playFrameAnimation(fr:string|AbstractFrameAnimation<any>):void{
+    public playFrameAnimation(fr:string|AbstractFrameAnimation<any>):AbstractFrameAnimation<any>{
         const frameAnimation = this.findFrameAnimation(fr);
+        if (frameAnimation===this._currFrameAnimation) return this._currFrameAnimation;
         if (this._currFrameAnimation) this._currFrameAnimation.stop();
         this._currFrameAnimation = frameAnimation;
         frameAnimation.play();
+        return frameAnimation;
     }
 
     public gotoAndPlay(fr:string|AbstractFrameAnimation<any>,frame:number):void{

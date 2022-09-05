@@ -70,10 +70,10 @@ export abstract class AbstractFrameAnimation<T> implements ITargetAnimation, ICl
         if (DEBUG) {
             if (!this._target) throw new DebugError(`can not play frame animation: it is not attached to parent`);
         }
-        if (this._target.getCurrentFrameAnimation()?._isPlaying) {
-            this._target.getCurrentFrameAnimation()!.animationEventHandler.trigger(FRAME_ANIMATION_EVENTS.canceled);
-        }
         if (this._target.getCurrentFrameAnimation()!==this) {
+            if (this._target.getCurrentFrameAnimation()?._isPlaying) {
+                this._target.getCurrentFrameAnimation()!.animationEventHandler.trigger(FRAME_ANIMATION_EVENTS.canceled);
+            }
             this._target.playFrameAnimation(this);
         }
         this._isPlaying = true;

@@ -90,7 +90,7 @@ export class MainScene extends Scene {
             velocity: 300,
             jumpVelocity: 500,
             idleAnimation: 'idle',
-            runAnimation: 'run'
+            runAnimation: 'run',
         }));
 
         this.appendChild(tileMap);

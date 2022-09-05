@@ -25,6 +25,7 @@ game.addControl(KeyboardControl);
 game.getControl<GamePadControl>('KeyboardControl')!.reflectToSelf(
     {
         [KEYBOARD_KEY.CENTER]: KEYBOARD_KEY.SPACE,
+        [KEYBOARD_KEY.DIGIT_5]: KEYBOARD_KEY.CONTROL,
     }
 );
 

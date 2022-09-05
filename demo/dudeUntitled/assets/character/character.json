@@ -1,9 +1,49 @@
 {
 	"frames": {
-		"character_jump1.png": {
+		"character_fire1.png": {
 			"frame": {
 				"x": 1,
 				"y": 1,
+				"w": 38,
+				"h": 41
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 38,
+				"h": 41
+			},
+			"sourceSize": {
+				"w": 38,
+				"h": 41
+			}
+		},
+		"character_fire2.png": {
+			"frame": {
+				"x": 41,
+				"y": 1,
+				"w": 38,
+				"h": 41
+			},
+			"rotated": false,
+			"trimmed": false,
+			"spriteSourceSize": {
+				"x": 0,
+				"y": 0,
+				"w": 38,
+				"h": 41
+			},
+			"sourceSize": {
+				"w": 38,
+				"h": 41
+			}
+		},
+		"character_jump1.png": {
+			"frame": {
+				"x": 1,
+				"y": 44,
 				"w": 37,
 				"h": 42
 			},
@@ -23,7 +63,7 @@
 		"character_jump2.png": {
 			"frame": {
 				"x": 40,
-				"y": 1,
+				"y": 44,
 				"w": 38,
 				"h": 41
 			},
@@ -42,8 +82,8 @@
 		},
 		"character_stand1.png": {
 			"frame": {
-				"x": 40,
-				"y": 44,
+				"x": 81,
+				"y": 1,
 				"w": 38,
 				"h": 42
 			},
@@ -63,7 +103,7 @@
 		"character_stand2.png": {
 			"frame": {
 				"x": 80,
-				"y": 1,
+				"y": 45,
 				"w": 38,
 				"h": 42
 			},
@@ -82,8 +122,8 @@
 		},
 		"character_step1.png": {
 			"frame": {
-				"x": 80,
-				"y": 45,
+				"x": 1,
+				"y": 89,
 				"w": 38,
 				"h": 42
 			},
@@ -102,7 +142,7 @@
 		},
 		"character_step2.png": {
 			"frame": {
-				"x": 1,
+				"x": 41,
 				"y": 89,
 				"w": 38,
 				"h": 40
@@ -127,8 +167,8 @@
 		"image": "spritesheet.png",
 		"format": "RGBA8888",
 		"size": {
-			"w": 119,
-			"h": 130
+			"w": 120,
+			"h": 132
 		},
 		"scale": "1"
 	}
