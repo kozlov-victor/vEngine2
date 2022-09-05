@@ -45,9 +45,7 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
         }
 
         body.collisionEventHandler.on(ARCADE_COLLISION_EVENT.COLLIDED, _=>{
-            if (!this.isFire) {
-                this.doGroundAnimation();
-            }
+            this.doGroundAnimation();
         });
 
         this.game.getCurrentScene().keyboardEventHandler.on(KEYBOARD_EVENTS.keyPressed, e=>{
@@ -55,16 +53,12 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
                 case KEYBOARD_KEY.LEFT:
                     body.velocity.x = -params.velocity;
                     gameObject.scale.x = -Math.abs(gameObject.scale.x);
-                    if (this.onGround) {
-                        gameObject.playFrameAnimation(params.runAnimation);
-                    }
+                    this.doGroundAnimation();
                     break;
                 case KEYBOARD_KEY.RIGHT:
                     body.velocity.x = params.velocity;
                     gameObject.scale.x = Math.abs(gameObject.scale.x);
-                    if (this.onGround) {
-                        gameObject.playFrameAnimation(params.runAnimation);
-                    }
+                    this.doGroundAnimation();
                     break;
 
             }
