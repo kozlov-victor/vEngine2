@@ -17,6 +17,7 @@ export interface ICreateRigidBodyParams {
     debug?:boolean;
     groupNames?:string[];
     ignoreCollisionWithGroupNames?:string[];
+    gravityImpact?:number; // 0..1
 }
 
 const intersect = (a:Int,b:Int):boolean=> {
@@ -45,6 +46,7 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
         const body:ArcadeRigidBody = new (ArcadeRigidBody as Clazz)(this.game);
         body._modelType = params?.type??body._modelType;
         body._restitution = params?.restitution??body._restitution;
+        body.gravityImpact = params?.gravityImpact??body.gravityImpact;
         if (params?.rect!==undefined) body._rect = params.rect.clone();
         if (params?.debug!==undefined) body.debug = params.debug;
         if (params?.groupNames) {

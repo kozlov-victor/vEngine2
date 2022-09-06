@@ -74,6 +74,8 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
     public debug:boolean = false;
     public readonly id:number = cnt++;
 
+    public gravityImpact:number = 1;
+
     public addInfo:Record<any, any> = {};
     public _modelType: ARCADE_RIGID_BODY_TYPE = ARCADE_RIGID_BODY_TYPE.DYNAMIC;
     public readonly _boundRect:Rect = new Rect();
@@ -106,7 +108,7 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
             this.velocity.x += this.acceleration.x * delta;
             if (!this._collisionFlagsOld.bottom) this.velocity.y += this.acceleration.y * delta;
             this.velocity.x += ArcadePhysicsSystem.gravity.x;
-            this.velocity.y += ArcadePhysicsSystem.gravity.y;
+            this.velocity.y += ArcadePhysicsSystem.gravity.y*this.gravityImpact;
             this._pos.x  += this.velocity.x * delta;
             this._pos.y  += this.velocity.y * delta;
         }
@@ -234,6 +236,7 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
         body.groupNames = this.groupNames;
         body.ignoreCollisionWithGroupNames = this.ignoreCollisionWithGroupNames;
         body.setBoundsAndObserveModel(this._model);
+        body.gravityImpact = this.gravityImpact;
     }
 
 }
