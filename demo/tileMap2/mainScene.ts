@@ -70,27 +70,21 @@ export class MainScene extends Scene {
                 height: this.heroTexture.size.height,
             })
         }
-        hero.addFrameAnimation(
-            new AtlasFrameAnimation(this.game,{
-                name: 'run',
-                frames,
-                isRepeating: true,
-                duration: 600,
-            })
-        );
-        hero.addFrameAnimation(
-            new AtlasFrameAnimation(this.game,{
+        hero.addBehaviour(new ArcadeSideScrollControl(this.game,{
+            velocity: 300,
+            jumpVelocity: 500,
+            idleAnimation: new AtlasFrameAnimation(this.game,{
                 name: 'idle',
                 frames:[frames[4]],
                 isRepeating: true,
                 duration: 600,
-            })
-        );
-        hero.addBehaviour(new ArcadeSideScrollControl(this.game,{
-            velocity: 300,
-            jumpVelocity: 500,
-            idleAnimation: 'idle',
-            runAnimation: 'run',
+            }),
+            runAnimation: new AtlasFrameAnimation(this.game,{
+                name: 'run',
+                frames,
+                isRepeating: true,
+                duration: 600,
+            }),
         }));
 
         this.appendChild(tileMap);

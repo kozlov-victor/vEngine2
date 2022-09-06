@@ -71,7 +71,7 @@ export abstract class AbstractFrameAnimation<T> implements ITargetAnimation, ICl
             if (!this._target) throw new DebugError(`can not play frame animation: it is not attached to parent`);
         }
         if (this._target.getCurrentFrameAnimation()!==this) {
-            if (this._target.getCurrentFrameAnimation()?._isPlaying) {
+            if (this._target.getCurrentFrameAnimation()?.isPlaying()) {
                 this._target.getCurrentFrameAnimation()!.animationEventHandler.trigger(FRAME_ANIMATION_EVENTS.canceled);
             }
             this._target.playFrameAnimation(this);
@@ -113,6 +113,10 @@ export abstract class AbstractFrameAnimation<T> implements ITargetAnimation, ICl
 
     public getName():string {
         return this._name;
+    }
+
+    public isPlaying():boolean {
+        return this._isPlaying;
     }
 
     public update():void {

@@ -1,7 +1,10 @@
 import {Game} from "@engine/core/game";
 import {ICloneable, Optional} from "@engine/core/declarations";
 import {DebugError} from "@engine/debug/debugError";
-import {AbstractFrameAnimation} from "@engine/animation/frameAnimation/abstract/abstractFrameAnimation";
+import {
+    AbstractFrameAnimation,
+    FRAME_ANIMATION_EVENTS
+} from "@engine/animation/frameAnimation/abstract/abstractFrameAnimation";
 import {Image} from "@engine/renderable/impl/general/image/image";
 import {ITexture} from "@engine/renderer/common/texture";
 
@@ -54,7 +57,12 @@ export class AnimatedImage extends Image implements ICloneable<AnimatedImage>{
     public playFrameAnimation(fr:string|AbstractFrameAnimation<any>):AbstractFrameAnimation<any>{
         const frameAnimation = this.findFrameAnimation(fr);
         if (frameAnimation===this._currFrameAnimation) return this._currFrameAnimation;
-        if (this._currFrameAnimation) this._currFrameAnimation.stop();
+        if (this._currFrameAnimation) {
+            if (this._currFrameAnimation.isPlaying()) {
+                this._currFrameAnimation.stop();
+                this._currFrameAnimation.animationEventHandler.trigger(FRAME_ANIMATION_EVENTS.canceled);
+            }
+        }
         this._currFrameAnimation = frameAnimation;
         frameAnimation.play();
         return frameAnimation;

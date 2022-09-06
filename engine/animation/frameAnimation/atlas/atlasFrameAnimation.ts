@@ -8,7 +8,7 @@ export class AtlasFrameAnimation extends AbstractFrameAnimation<IRectJSON> imple
     public readonly type:string = 'AtlasFrameAnimation';
 
     public clone():this{
-        const cloned:AtlasFrameAnimation = new AtlasFrameAnimation(this.game,{
+        const cloned = new AtlasFrameAnimation(this.game,{
             frames: [...this._frames],
             duration: this._duration,
             isRepeating: this._isRepeating,

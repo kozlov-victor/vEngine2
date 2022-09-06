@@ -99,9 +99,11 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
         const ctx = this.renderTarget.getTexture().getContext();
         ctx.fillStyle = rectangle.fillColor.asCssRgba();
         ctx.strokeStyle = rectangle.color.asCssRgba();
-        ctx.lineWidth = rectangle.lineWidth;
         ctx.fillRect(0,0,rectangle.size.width,rectangle.size.height);
-        ctx.strokeRect(0,0,rectangle.size.width,rectangle.size.height);
+        if (rectangle.lineWidth) {
+            ctx.lineWidth = rectangle.lineWidth;
+            ctx.strokeRect(0,0,rectangle.size.width,rectangle.size.height);
+        }
     }
 
     public drawEllipse(e:Ellipse):void{

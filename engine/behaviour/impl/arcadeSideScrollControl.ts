@@ -6,15 +6,19 @@ import {AnimatedImage} from "@engine/renderable/impl/general/image/animatedImage
 import {Game} from "@engine/core/game";
 import {IKeyVal} from "@engine/misc/object";
 import {DebugError} from "@engine/debug/debugError";
-import {FRAME_ANIMATION_EVENTS} from "@engine/animation/frameAnimation/abstract/abstractFrameAnimation";
+import {
+    AbstractFrameAnimation,
+    FRAME_ANIMATION_EVENTS
+} from "@engine/animation/frameAnimation/abstract/abstractFrameAnimation";
+import {IRectJSON} from "@engine/geometry/rect";
 
 interface IParams extends IKeyVal<any>{
     velocity: number;
     jumpVelocity: number;
-    runAnimation: string;
-    idleAnimation: string;
-    jumpAnimation?: string;
-    fireAnimation?:string;
+    runAnimation: AbstractFrameAnimation<IRectJSON>;
+    idleAnimation: AbstractFrameAnimation<IRectJSON>;
+    jumpAnimation?: AbstractFrameAnimation<IRectJSON>;
+    fireAnimation?:AbstractFrameAnimation<IRectJSON>;
 }
 
 export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
@@ -34,10 +38,19 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
 
     public manage(gameObject: AnimatedImage): void {
 
+        if (DEBUG && this.gameObject) {
+            throw new DebugError(`this behaviour instance is already applied`);
+        }
+
+        const parameters = this.parameters;
+        gameObject.addFrameAnimation(parameters.runAnimation);
+        gameObject.addFrameAnimation(parameters.idleAnimation);
+        if (parameters.jumpAnimation) gameObject.addFrameAnimation(parameters.jumpAnimation);
+        if (parameters.fireAnimation) gameObject.addFrameAnimation(parameters.fireAnimation);
+
         this.gameObject = gameObject;
-        const params = this.parameters;
         gameObject.transformPoint.setToCenter();
-        gameObject.playFrameAnimation(params.idleAnimation);
+        gameObject.playFrameAnimation(parameters.idleAnimation);
 
         const body = gameObject.getRigidBody<ArcadeRigidBody>()!;
         if (DEBUG && body===undefined) {
@@ -51,14 +64,10 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
         this.game.getCurrentScene().keyboardEventHandler.on(KEYBOARD_EVENTS.keyPressed, e=>{
             switch (e.button) {
                 case KEYBOARD_KEY.LEFT:
-                    body.velocity.x = -params.velocity;
-                    gameObject.scale.x = -Math.abs(gameObject.scale.x);
-                    this.doGroundAnimation();
+                    this.goLeft();
                     break;
                 case KEYBOARD_KEY.RIGHT:
-                    body.velocity.x = params.velocity;
-                    gameObject.scale.x = Math.abs(gameObject.scale.x);
-                    this.doGroundAnimation();
+                    this.goRight();
                     break;
 
             }
@@ -66,12 +75,7 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
         this.game.getCurrentScene().keyboardEventHandler.on(KEYBOARD_EVENTS.keyHold, e=>{
             switch (e.button) {
                 case KEYBOARD_KEY.SPACE:
-                    if (this.gameObject.getRigidBody<ArcadeRigidBody>().collisionFlags.bottom) {
-                        body.velocity.y -=params.jumpVelocity;
-                        if (params.jumpAnimation) {
-                            gameObject.playFrameAnimation(params.jumpAnimation);
-                        }
-                    }
+                    this.jump();
                     break;
 
             }
@@ -80,8 +84,7 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
             switch (e.button) {
                 case KEYBOARD_KEY.LEFT:
                 case KEYBOARD_KEY.RIGHT:
-                    body.velocity.x = 0;
-                    if (this.onGround) gameObject.playFrameAnimation(params.idleAnimation);
+                    this.stop();
                     break;
                 default:
                     break;
@@ -90,15 +93,55 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
 
     }
 
+    public goLeft():void {
+        const gameObject = this.gameObject;
+        const body = gameObject.getRigidBody<ArcadeRigidBody>()!;
+        body.velocity.x = -this.parameters.velocity;
+        gameObject.scale.x = -Math.abs(gameObject.scale.x);
+        this.doGroundAnimation();
+    }
+
+    public goRight():void {
+        const gameObject = this.gameObject;
+        const body = gameObject.getRigidBody<ArcadeRigidBody>()!;
+        body.velocity.x = this.parameters.velocity;
+        gameObject.scale.x = Math.abs(gameObject.scale.x);
+        this.doGroundAnimation();
+    }
+
+    public stop():void {
+        const gameObject = this.gameObject;
+        const body = gameObject.getRigidBody<ArcadeRigidBody>()!;
+        body.velocity.x = this.parameters.velocity;
+        body.velocity.x = 0;
+        if (this.onGround) gameObject.playFrameAnimation(this.parameters.idleAnimation);
+    }
+
     public fire():void {
         if (this.parameters.fireAnimation) {
             this.isFire = true;
-            this.gameObject.
-                playFrameAnimation(this.parameters.fireAnimation).
-                animationEventHandler.once(FRAME_ANIMATION_EVENTS.completed, ()=>{
-                    this.isFire = false;
-                    this.doGroundAnimation();
-                });
+            const an = this.gameObject.playFrameAnimation(this.parameters.fireAnimation);
+            an.animationEventHandler.once(FRAME_ANIMATION_EVENTS.completed, ()=>{
+                this.isFire = false;
+                this.doGroundAnimation();
+            });
+            an.animationEventHandler.once(FRAME_ANIMATION_EVENTS.canceled, ()=>{
+                this.isFire = false;
+                this.doGroundAnimation();
+            });
+
+        }
+    }
+
+    public jump():void {
+        const gameObject = this.gameObject;
+        const body = gameObject.getRigidBody<ArcadeRigidBody>()!;
+        const parameters = this.parameters;
+        if (this.gameObject.getRigidBody<ArcadeRigidBody>().collisionFlags.bottom) {
+            body.velocity.y -=parameters.jumpVelocity;
+            if (parameters.jumpAnimation) {
+                gameObject.playFrameAnimation(parameters.jumpAnimation);
+            }
         }
     }
 
