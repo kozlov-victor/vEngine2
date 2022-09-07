@@ -1,6 +1,6 @@
 import {DebugError} from "../../debug/debugError";
 import {Game} from "../../core/game";
-import {Rect} from "../../geometry/rect";
+import type {Rect} from "../../geometry/rect";
 import {AbstractCanvasRenderer} from "../abstract/abstractCanvasRenderer";
 import type {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import type {Image} from "@engine/renderable/impl/general/image/image";
@@ -14,6 +14,7 @@ import {CanvasRendererHelper} from "@engine/renderer/canvas/canvasRendererHelper
 import {CanvasRenderTarget} from "@engine/renderer/canvas/canvasRenderTarget";
 import {CanvasTexture} from "@engine/renderer/canvas/canvasTexture";
 import Mat16Holder = Mat4.Mat16Holder;
+import type {BatchedImage} from "@engine/renderable/impl/general/image/batchedImage";
 
 
 interface ICanvasRenderingContext2DEx extends CanvasRenderingContext2D {
@@ -90,10 +91,13 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
                 dstRect.height
             );
         }
-
-
     }
 
+    public drawBatchedImage(img: BatchedImage): void {
+        const ctx = this.renderTarget.getTexture().getContext();
+        ctx.fillStyle = img.fillColor.asCssRgba();
+        ctx.fillRect(img.pos.x,img.pos.y,img.size.width,img.size.height);
+    }
 
     public drawRectangle(rectangle:Rectangle):void{
         const ctx = this.renderTarget.getTexture().getContext();

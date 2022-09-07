@@ -41,7 +41,6 @@ export class BatchedImage extends RenderableModel implements ICloneable<BatchedI
     }
 
     public override draw() {
-        const glRenderer = this.game.getRenderer<WebGlRenderer>();
-        glRenderer.drawBatchedImage(this);
+        this.game.getRenderer().drawBatchedImage(this);
     }
 }

@@ -23,6 +23,9 @@ export class CharacterBullet {
         this.container.getRigidBody<ArcadeRigidBody>().collisionEventHandler.on(ARCADE_COLLISION_EVENT.COLLIDED, e=>{
             this.container.getRigidBody<ArcadeRigidBody>().gravityImpact = 2;
             this.container.fillColor = ColorFactory.fromCSS(`rgba(114, 114, 114, 0.57)`);
+            this.container.setTimeout(()=>{
+                if (!this.container.isDetached()) this.container.removeSelf();
+            },600);
         })
         this.container.setTimeout(()=>{
             if (!this.container.isDetached()) this.container.removeSelf();

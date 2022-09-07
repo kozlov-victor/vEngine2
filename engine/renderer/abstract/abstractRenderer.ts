@@ -2,21 +2,22 @@ import {Game} from "../../core/game";
 import {Rect} from "../../geometry/rect";
 import {Color} from "../common/color";
 import {ISize, Size} from "../../geometry/size";
-import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
-import {Image} from "@engine/renderable/impl/general/image/image";
+import type {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
+import type {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
+import type {Image} from "@engine/renderable/impl/general/image/image";
 import {Mesh2d} from "@engine/renderable/abstract/mesh2d";
-import {Line} from "@engine/renderable/impl/geometry/line";
-import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
+import type {Line} from "@engine/renderable/impl/geometry/line";
+import type {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {ICubeMapTexture, ITexture} from "@engine/renderer/common/texture";
 import {IDestroyable, Optional} from "@engine/core/declarations";
 import {RendererHelper} from "@engine/renderer/abstract/rendererHelper";
 import {IMatrixTransformable, MatrixStack} from "@engine/misc/math/matrixStack";
 import {IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
 import {Mat4} from "@engine/misc/math/mat4";
-import {Mesh3d} from "@engine/renderable/impl/3d/mesh3d";
+import type {Mesh3d} from "@engine/renderable/impl/3d/mesh3d";
 import {ScaleStrategyFactory} from "@engine/renderer/abstract/scaleStrategy/factory/ScaleStrategyFactory";
 import Mat16Holder = Mat4.Mat16Holder;
+import type {BatchedImage} from "@engine/renderable/impl/general/image/batchedImage";
 
 interface IHTMLElement extends HTMLElement{
     requestFullScreen:()=>Promise<void>;
@@ -43,7 +44,7 @@ export abstract class AbstractRenderer implements IDestroyable,IMatrixTransforma
 
     public container:HTMLElement;
     public clearBeforeRender:boolean = true;
-    public readonly clearColor:Color = Color.RGB(0,0,0);
+    public readonly clearColor = Color.RGB(0,0,0);
     public readonly viewPortSize:ISize = new Size(this.game.width,this.game.height);
 
     protected abstract rendererHelper: RendererHelper;
@@ -99,13 +100,15 @@ export abstract class AbstractRenderer implements IDestroyable,IMatrixTransforma
         this._destroyed = true;
     }
 
-    isDestroyed(): boolean {
+    public isDestroyed(): boolean {
         return this._destroyed;
     }
 
     public abstract getError():Optional<{code:number,desc:string}>;
 
     public abstract drawImage(img:Image):void;
+
+    public abstract drawBatchedImage(img:BatchedImage):void;
 
     public abstract drawRectangle(rectangle:Rectangle):void;
 

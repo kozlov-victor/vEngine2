@@ -15,6 +15,7 @@ import type {Mesh3d} from "@engine/renderable/impl/3d/mesh3d";
 import {DomRendererHelper} from "@engine/renderer/dom/domRendererHelper";
 import {DomTexture} from "@engine/renderer/dom/domTexture";
 import {Size} from "@engine/geometry/size";
+import {BatchedImage} from "@engine/renderable/impl/general/image/batchedImage";
 
 
 interface ICSSStyleDeclaration extends CSSStyleDeclaration{
@@ -117,6 +118,10 @@ export class DomRenderer extends AbstractRenderer {
         }
         node.domEl.style.backgroundImage = `url(${(img.getTexture() as DomTexture).imageUrl})`
 
+    }
+
+    public drawBatchedImage(img: BatchedImage): void {
+        throw new Error('not implemented');
     }
 
 
