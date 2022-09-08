@@ -9,8 +9,7 @@ import {SimpleGameObjectContainer} from "../simpleGameObjectContainer";
 import {Scene} from "@engine/scene/scene";
 import {Layer} from "@engine/scene/layer";
 import {IRigidBody} from "@engine/physics/common/interfaces";
-import {ArcadePhysicsSystem} from "@engine/physics/arcade/arcadePhysicsSystem";
-import {has} from "@phenomnomnominal/tsquery/dist/src/matchers/has";
+import {EasingLinear} from "@engine/misc/easing/functions/linear";
 
 const rnd:(obj:IParticlePropertyDesc)=>number
     = (obj:IParticlePropertyDesc)=>MathEx.random(obj.from,obj.to);
@@ -20,6 +19,11 @@ interface IParticlePropertyDesc {
     to:number;
 }
 
+interface IParticleTimedPropertyDesc {
+    start: IParticlePropertyDesc;
+    end: IParticlePropertyDesc;
+}
+
 type RenderableCloneable = RenderableModel & {clone:()=>RenderableCloneable};
 
 interface IParticleHolder {
@@ -27,6 +31,8 @@ interface IParticleHolder {
     lifeTime:number;
     createdTime:number;
     active:boolean;
+    alpha?:{start:number,end:number};
+    scale?:{start:number,end:number};
 }
 
 const getMin = <T>(arr:T[],predicate:(item:T)=>number):T=>{
@@ -56,6 +62,8 @@ export class ParticleSystem extends SimpleGameObjectContainer {
     public emissionPosition:Point2d = new Point2d();
     public maxParticlesInCache:Optional<number>;
     public particleGravity:Point2d = new Point2d(0,0);
+    public particleAlpha:Optional<IParticleTimedPropertyDesc>;
+    public particleScale:Optional<IParticleTimedPropertyDesc>;
 
     private _particles:IParticleHolder[] = [];
     private _prototypes:RenderableCloneable[] = [];
@@ -93,7 +101,16 @@ export class ParticleSystem extends SimpleGameObjectContainer {
                 holder.particle.velocity.x += this.particleGravity.x;
                 holder.particle.velocity.y += this.particleGravity.y;
             }
-            if (time - holder.createdTime > holder.lifeTime) {
+            const timePassed = time - holder.createdTime;
+            if (holder.alpha) {
+                holder.particle.alpha =
+                    EasingLinear(timePassed,holder.alpha.start,holder.alpha.end - holder.alpha.start, holder.lifeTime);
+            }
+            if (holder.scale) {
+                const val = EasingLinear(timePassed,holder.scale.start,holder.scale.end - holder.scale.start, holder.lifeTime);
+                holder.particle.scale.setXY(val);
+            }
+            if (timePassed > holder.lifeTime) {
                 holder.active = false;
                 this.removeChild(holder.particle);
             }
@@ -155,6 +172,15 @@ export class ParticleSystem extends SimpleGameObjectContainer {
             const a = MathEx.random(0,Math.PI*2);
             particle.pos.x = emissionRadius*Math.cos(a) + this.emissionPosition.x;
             particle.pos.y = emissionRadius*Math.sin(a) + this.emissionPosition.y;
+
+            if (this.particleAlpha) {
+                holder.alpha = {start:rnd(this.particleAlpha.start),end:rnd(this.particleAlpha.end)};
+                particle.alpha = holder.alpha.start;
+            }
+            if (this.particleScale) {
+                holder.scale = {start:rnd(this.particleScale.start),end:rnd(this.particleScale.end)};
+                particle.scale.setXY(holder.scale.start);
+            }
 
             holder.lifeTime = rnd(this.particleLiveTime);
             holder.createdTime = this.game.getCurrentTime();

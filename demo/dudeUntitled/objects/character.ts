@@ -14,8 +14,6 @@ import {CharacterBullet} from "./characterBullet";
 
 export class Character {
 
-    //private bh:ArcadeSideScrollControl;
-
     constructor(game: Game, scene:Scene, assets:Assets,tiledObject:ITiledJSON['layers'][0]['objects'][0]) {
         const characterImage = new AnimatedImage(game,assets.characterTexture);
         characterImage.pos.setXY(tiledObject.x,tiledObject.y);

@@ -37,6 +37,31 @@ export class KeyboardControl extends AbstractKeypad<KeyBoardEvent> implements IC
         return event.keyState === KEY_STATE.KEY_JUST_RELEASED;
     }
 
+    /*
+keydown { target: <body>, key: "ArrowUp", charCode: 0, keyCode: 38 }
+keydown { target: <body>, key: "ArrowDown", charCode: 0, keyCode: 40 }
+keydown { target: <body>, key: "ArrowLeft", charCode: 0, keyCode: 37 }
+keydown { target: <body>, key: "ArrowRight", charCode: 0, keyCode: 39 }
+keydown { target: <body>, key: "Enter", charCode: 0, keyCode: 13 }
+keydown { target: <body>, key: "MicrophoneToggle", charCode: 0, keyCode: 0 }
+keydown { target: <body>, key: "SoftRight", charCode: 0, keyCode: 0 }
+keydown { target: <body>, key: "SoftLeft", charCode: 0, keyCode: 0 }
+keydown { target: <body>, key: "Call", charCode: 0, keyCode: 0 }
+keydown { target: <body>, key: "EndCall", charCode: 0, keyCode: 95 }
+keydown { target: <body>, key: "1", charCode: 0, keyCode: 49 }
+keydown { target: <body>, key: "2", charCode: 0, keyCode: 50 }
+keydown { target: <body>, key: "3", charCode: 0, keyCode: 51 }
+keydown { target: <body>, key: "4", charCode: 0, keyCode: 52 }
+keydown { target: <body>, key: "5", charCode: 0, keyCode: 53 }
+keydown { target: <body>, key: "6", charCode: 0, keyCode: 54 }
+keydown { target: <body>, key: "7", charCode: 0, keyCode: 55 }
+keydown { target: <body>, key: "8", charCode: 0, keyCode: 56 }
+keydown { target: <body>, key: "9", charCode: 0, keyCode: 57 }
+keydown { target: <body>, key: "*", charCode: 0, keyCode: 170 }
+keydown { target: <body>, key: "0", charCode: 0, keyCode: 48 }
+keydown { target: <body>, key: "#", charCode: 0, keyCode: 163 }
+     */
+
     public listenTo():void {
 
         this._keyDownListener = (e:KeyboardEvent)=>{

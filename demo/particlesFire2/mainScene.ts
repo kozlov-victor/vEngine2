@@ -29,6 +29,8 @@ export class MainScene extends Scene {
         ps.numOfParticlesToEmit = {from:1,to:1};
         ps.particleLiveTime = {from:500,to:800};
         ps.particleAngle = {from:-pi/2 - pi/4,to:pi/2 + pi/4};
+        ps.particleAlpha = {start:{from:0.1,to:0},end:{from:1,to:0.8}};
+        ps.particleScale = {start:{from:1,to:0.8},end:{from:0.1,to:0}};
         this.appendChild(ps);
         this.mouseEventHandler.on(MOUSE_EVENTS.click,()=>{
             this.game.getRenderer().requestFullScreen();

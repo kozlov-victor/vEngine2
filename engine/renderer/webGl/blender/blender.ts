@@ -49,7 +49,7 @@ export class Blender {
                 gl.blendEquation(gl.FUNC_SUBTRACT);
                 gl.blendFunc(gl.ONE,gl.ONE);
                 break;
-            case BLEND_MODE.REVERSE_SUBSTRACTIVE:
+            case BLEND_MODE.REVERSE_SUBTRACTIVE:
                 gl.blendEquation(gl.FUNC_REVERSE_SUBTRACT);
                 gl.blendFunc(gl.ONE,gl.ONE);
                 break;
