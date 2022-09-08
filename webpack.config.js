@@ -5,6 +5,7 @@ const fs = require('fs');
 const TerserPlugin = require('terser-webpack-plugin');
 const cliUI = require('./node_tools/cliUI');
 const ESLintPlugin = require('eslint-webpack-plugin');
+const storage = require('./node_tools/common/storage');
 
 let project;
 let allProjectsGrouped;
@@ -187,6 +188,7 @@ module.exports = async (env={})=>{
     const mode = await cliUI.choose('Choose option',[
         'Compile all projects',
         'Choose project from list',
+        'Last compiled project',
         'Enter project name to compile'
         ]
     );
@@ -194,9 +196,18 @@ module.exports = async (env={})=>{
         const projectsToSelect = [...allProjectsFlat,'build_tools'];
         const index = await cliUI.choose('Select a project',projectsToSelect);
         project = projectsToSelect[index];
-    } if (mode===2) {
+    }
+    else if (mode===2) {
+        project = storage.get('project');
+        if (!project) {
+            throw new Error(`no last compiled project found`);
+        }
+    }
+    else if (mode===3) {
         project = await cliUI.prompt("Enter project name to compile")
     }
+    storage.set('project',project);
+
 
     const debug = env.debug==='true';
 

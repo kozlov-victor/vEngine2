@@ -41,7 +41,6 @@ export const enum KEYBOARD_KEY {
     UP = 38,
     RIGHT = 39,
     DOWN = 40,
-    CENTER = 0, // this is specific key for kai os pad (central button) todo
 
     ALT = 18,
     BACKSPACE = 8,
@@ -95,4 +94,14 @@ export const enum KEYBOARD_KEY {
     F10 = 121,
     F11 = 122,
     F12 = 123,
+
+    BACK_QUOTE = 192, // ё
+
+    SOFT_RIGHT = -1,
+    SOFT_LEFT = -2,
+    CALL = -3,
+    END_CALL = 95,
+    STAR = 170,
+    HASH = 163,
+
 }

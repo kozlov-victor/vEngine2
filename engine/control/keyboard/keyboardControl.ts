@@ -5,6 +5,11 @@ import {Optional} from "@engine/core/declarations";
 import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 
+const ADDITIONAL_KEYS_MAP:Record<string, number> = {
+    'softRight': KEYBOARD_KEY.SOFT_RIGHT,
+    'softLeft': KEYBOARD_KEY.SOFT_LEFT,
+    'call': KEYBOARD_KEY.CALL
+};
 
 export class KeyboardControl extends AbstractKeypad<KeyBoardEvent> implements IControl {
 
@@ -70,17 +75,22 @@ keydown { target: <body>, key: "#", charCode: 0, keyCode: 163 }
                 e.preventDefault();
             }
             e.stopPropagation(); // to prevent page scroll
-            const code:number = e.keyCode;
+            const code = KeyboardControl.mapKeyCode(e);
             this.triggerKeyPress(code,e);
         };
 
         this._keyUpListener  = (e:KeyboardEvent)=>{
-            const code:number = e.keyCode;
+            const code = KeyboardControl.mapKeyCode(e);
             this.triggerKeyRelease(code,e);
         };
 
         globalThis.addEventListener('keydown',this._keyDownListener);
         globalThis.addEventListener('keyup',this._keyUpListener);
+    }
+
+    private static mapKeyCode(e:KeyboardEvent):number {
+        if (e.keyCode===0) return ADDITIONAL_KEYS_MAP[e.key] ?? e.keyCode;
+        else return e.keyCode;
     }
 
     public triggerKeyPress(code:number,nativeEvent:Event):void {
