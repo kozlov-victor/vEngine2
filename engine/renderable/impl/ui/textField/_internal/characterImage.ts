@@ -34,14 +34,14 @@ export class CharacterImage extends Image implements ICloneable<CharacterImage>{
                 throw new DebugError(`font context error: wrong character rect for symbol "${characterInfo.rawChar}"`);
             }
         }
-        this.getSrcRect().setXYWH(
+        this.srcRect.setXYWH(
             charRect.x+padLeft,
             charRect.y+padUp,
             charRect.width - padLeft - padRight,
             charRect.height - padUp - padDown
         );
-        if (this.getSrcRect().width<=0) this.getSrcRect().width = 0.001;
-        if (this.getSrcRect().height<=0) this.getSrcRect().height = 0.001;
+        if (this.srcRect.width<=0) this.srcRect.width = 0.001;
+        if (this.srcRect.height<=0) this.srcRect.height = 0.001;
         this.setScaleFromCurrFontSize(this.characterInfo.scaleFromCurrFontSize);
         this.pos.setXY(
             charRect.destOffsetX*this.characterInfo.scaleFromCurrFontSize,
@@ -110,8 +110,8 @@ export class CharacterImage extends Image implements ICloneable<CharacterImage>{
     public setScaleFromCurrFontSize(scaleFromCurrFontSize:number):void{
         this.characterInfo.scaleFromCurrFontSize = scaleFromCurrFontSize;
         this.size.setWH(
-            this.getSrcRect().width*scaleFromCurrFontSize,
-            this.getSrcRect().height*scaleFromCurrFontSize
+            this.srcRect.width*scaleFromCurrFontSize,
+            this.srcRect.height*scaleFromCurrFontSize
         );
     }
 

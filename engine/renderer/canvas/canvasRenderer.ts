@@ -60,8 +60,8 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
 
     public drawImage(img:Image):void{
 
-        const srcRect:Rect = img.getSrcRect();
-        const dstRect:Rect = img.getSrcRect();
+        const srcRect:Rect = img.srcRect;
+        const dstRect:Rect = img.srcRect;
 
         const ctx = this.renderTarget.getTexture().getContext();
         if (img.offset.x || img.offset.y) {

@@ -25,10 +25,10 @@ export abstract class AbstractCurtainsTransition extends AbstractSceneTransition
         this._transitionScene.appendChild(this._leftCurtain);
         this._transitionScene.appendChild(this._rightCurtain);
 
-        this._leftCurtain.getSrcRect().setXYWH(0,0,this.game.size.width/2,this.game.size.height);
+        this._leftCurtain.srcRect.setXYWH(0,0,this.game.size.width/2,this.game.size.height);
         this._leftCurtain.size.width = this.game.size.width/2;
 
-        this._rightCurtain.getSrcRect().setXYWH(this.game.size.width/2,0,this.game.size.width/2,this.game.size.height);
+        this._rightCurtain.srcRect.setXYWH(this.game.size.width/2,0,this.game.size.width/2,this.game.size.height);
         this._rightCurtain.size.width = this.game.size.width/2;
 
     }

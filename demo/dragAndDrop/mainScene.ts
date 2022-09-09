@@ -24,7 +24,7 @@ export class MainScene extends Scene {
         spr.addBehaviour(new DraggableBehaviour(this.game));
 
         const spr1:Image = new Image(this.game,this.logoTexture);
-        spr1.pos.fromJSON({x:100,y:100});
+        spr1.pos.setFrom({x:100,y:100});
         spr1.scale.setXY(1.2);
         spr1.addBehaviour(new DraggableBehaviour(this.game));
 

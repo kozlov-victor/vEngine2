@@ -16,13 +16,13 @@ export class MainScene extends Scene {
 
     public override onReady():void {
         const spr:Image = new Image(this.game,this.logoLink);
-        spr.pos.fromJSON({x:10,y:10});
+        spr.pos.setFrom({x:10,y:10});
         this.appendChild(spr);
 
         spr.addBehaviour(new DraggableBehaviour(this.game));
 
         const spr1:Image = new Image(this.game,this.logoLink);
-        spr1.pos.fromJSON({x:100,y:100});
+        spr1.pos.setFrom({x:100,y:100});
         spr1.addBehaviour(new DraggableBehaviour(this.game));
 
         spr.appendChild(spr1);

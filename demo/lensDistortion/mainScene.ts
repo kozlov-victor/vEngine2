@@ -38,7 +38,7 @@ export class MainScene extends Scene {
     public override onReady():void {
 
         const spr:Image = new Image(this.game,this.logoLink);
-        spr.pos.fromJSON({x:10,y:10});
+        spr.pos.setFrom({x:10,y:10});
         this.appendChild(spr);
 
         const circle:Circle = new Circle(this.game);

@@ -24,22 +24,22 @@ export abstract class AbstractTurnThePageVerticalAppearanceTransition extends Ab
         this._transformationTarget = imageOnTop;
 
         this._transformationTarget.size.height = this.game.height/2;
-        this._transformationTarget.getSrcRect().setXYWH(0,0,this.game.width,this.game.height/2);
+        this._transformationTarget.srcRect.setXYWH(0,0,this.game.width,this.game.height/2);
 
         //image on top is under right page
         imageOnTop.size.setWH(this.game.width,this.game.height/2);
         imageOnTop.pos.setXY(0,this.game.height/2);
-        imageOnTop.getSrcRect().setXYWH(0,this.game.height/2,this.game.width,this.game.height/2);
+        imageOnTop.srcRect.setXYWH(0,this.game.height/2,this.game.width,this.game.height/2);
 
         this._bottomPageForward = imageOnBottom.clone();
         this._bottomPageForward.size.setWH(this.game.width,this.game.height/2);
         this._bottomPageForward.pos.setXY(0,this.game.height/2);
-        this._bottomPageForward.getSrcRect().setXYWH(0,this.game.height/2,this.game.width,this.game.height/2);
+        this._bottomPageForward.srcRect.setXYWH(0,this.game.height/2,this.game.width,this.game.height/2);
         this._transitionScene.appendChild(this._bottomPageForward);
 
         this._bottomPageBackward = imageOnTop.clone();
         this._bottomPageBackward.size.setWH(this.game.width,this.game.height/2);
-        this._bottomPageBackward.getSrcRect().setXYWH(0,0,this.game.width,this.game.height/2);
+        this._bottomPageBackward.srcRect.setXYWH(0,0,this.game.width,this.game.height/2);
         this._bottomPageBackward.pos.setXY(0,0);
         this._bottomPageBackward.scale.y = -1;
         this._bottomPageBackward.transformPoint.setXY(0,this.game.height/2);

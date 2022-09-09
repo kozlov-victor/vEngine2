@@ -28,7 +28,7 @@ export abstract class AbstractSizeHeightAppearanceTransition extends AbstractSce
 
     protected onTransitionProgress(val: number): void {
         this._transformationTarget.pos.setY(this.game.height/2 - val);
-        this._transformationTarget.getSrcRect().setXYWH(
+        this._transformationTarget.srcRect.setXYWH(
              0,this.game.size.height/2 - val,
             this.game.width,val*2
         );

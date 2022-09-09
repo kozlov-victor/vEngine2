@@ -20,8 +20,8 @@ export class AtlasFrameAnimation extends AbstractFrameAnimation<IRectJSON> imple
 
     protected onNextFrame(i: number): void {
         const currRect:IRectJSON = this._frames[i];
-        this._target.getSrcRect().fromJSON(currRect);
-        const rect:Rect = this._target.getSrcRect();
+        this._target.srcRect.setFrom(currRect);
+        const rect:Rect = this._target.srcRect;
         this._target.size.setWH(rect.width,rect.height);
     }
 

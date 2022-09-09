@@ -17,7 +17,7 @@ export class MainScene extends Scene {
         console.log(LogoResources.getInstance().logoTexture);
 
         const spr:Image = new Image(this.game,this.logoRes.logoTexture);
-        spr.pos.fromJSON({x:10,y:10});
+        spr.pos.setFrom({x:10,y:10});
         spr.addBehaviour(new DraggableBehaviour(this.game));
         this.appendChild(spr);
         this.keyboardEventHandler.on(KEYBOARD_EVENTS.keyHold, (e:IKeyBoardEvent)=>{

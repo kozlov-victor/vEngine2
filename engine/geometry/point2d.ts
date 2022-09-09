@@ -80,7 +80,6 @@ export class Point2d extends ObservableEntity implements ICloneable<Point2d>, IP
         return this;
     }
 
-
     public add(another:IPoint2d):this{
         this.addXY(another.x,another.y);
         return this;
@@ -127,10 +126,6 @@ export class Point2d extends ObservableEntity implements ICloneable<Point2d>, IP
 
     public clone():Point2d {
         return new Point2d(this._x,this._y);
-    }
-
-    public fromJSON(json:IPoint2d):void{
-        this.setXY(json.x,json.y);
     }
 
     public toJSON():IPoint2d{

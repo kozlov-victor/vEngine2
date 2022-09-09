@@ -38,7 +38,7 @@ export class MainScene extends Scene {
     public override onReady():void {
         console.log('ready');
         const spr:Image = new Image(this.game,this.logoTexture);
-        spr.pos.fromJSON({x:10,y:10});
+        spr.pos.setFrom({x:10,y:10});
         this.appendChild(spr);
         spr.addBehaviour(new DraggableBehaviour(this.game));
 

@@ -19,9 +19,9 @@ export class Image extends RenderableModelWithTexture implements ICloneable<Imag
     public stretchMode:STRETCH_MODE = STRETCH_MODE.STRETCH;
     public color:Color = Color.NONE.clone();
     public lineWidth:number = 0;
+    public readonly srcRect:Rect = new Rect();
 
     private _pixelPerfect:boolean = false;
-    private _srcRect:Rect = new Rect();
 
     constructor(game: Game,texture:ITexture) {
         super(game);
@@ -35,7 +35,7 @@ export class Image extends RenderableModelWithTexture implements ICloneable<Imag
     public override setTexture(texture:ITexture):void {
         super.setTexture(texture);
         if (this.size.isZero()) this.size.setFrom(texture.size);
-        if (this._srcRect.width===0 || this._srcRect.height===0) this._srcRect.setSize(this.size);
+        if (this.srcRect.width===0 || this.srcRect.height===0) this.srcRect.setSize(this.size);
     }
 
     public clone():Image {
@@ -51,9 +51,6 @@ export class Image extends RenderableModelWithTexture implements ICloneable<Imag
         if (props.lineWidth!==undefined) this.lineWidth = props.lineWidth;
     }
 
-    public getSrcRect():Rect{
-        return this._srcRect;
-    }
 
     public setPixelPerfect(val:boolean):void{
         this._pixelPerfect = val;
@@ -64,7 +61,7 @@ export class Image extends RenderableModelWithTexture implements ICloneable<Imag
     }
 
     protected override setClonedProperties(cloned:Image):void {
-        cloned._srcRect.setFrom(this._srcRect);
+        cloned.srcRect.setFrom(this.srcRect);
         cloned.size.setFrom(this.size);
         cloned.borderRadius = this.borderRadius;
         cloned.offset.setFrom(this.offset);

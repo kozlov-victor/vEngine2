@@ -27,7 +27,7 @@ export class MainScene extends Scene {
         spr.size.setWH(250,300);
         spr.stretchMode = STRETCH_MODE.REPEAT;
         spr.offset.setXY(1,1);
-        spr.pos.fromJSON({x:10,y:10});
+        spr.pos.setFrom({x:10,y:10});
         this.appendChild(spr);
 
         const bg:Image = new Image(this.game,this.bgTexture);

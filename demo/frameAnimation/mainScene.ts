@@ -29,7 +29,7 @@ export class MainScene extends Scene {
         });
         animatedImage.addFrameAnimation(anim);
         animatedImage.playFrameAnimation('animation');
-        animatedImage.pos.fromJSON({x:10,y:10});
+        animatedImage.pos.setFrom({x:10,y:10});
         this.appendChild(animatedImage);
 
         let playing:boolean = true;

@@ -28,7 +28,7 @@ export class MainScene extends Scene {
 
     public override onReady():void {
         const spr:Image = new Image(this.game,this.logoLink);
-        spr.pos.fromJSON({x:10,y:10});
+        spr.pos.setFrom({x:10,y:10});
         this.appendChild(spr);
         spr.transformPoint.setToCenter();
         spr.velocity.x = -20;

@@ -26,7 +26,7 @@ export class MainScene extends Scene {
         this.img = new Image(this.game,this.repeatLink);
 
         const spr:Image = new Image(this.game,this.logoLink);
-        spr.pos.fromJSON({x:10,y:10});
+        spr.pos.setFrom({x:10,y:10});
         const nf = new NoiseFilter(this.game);
         nf.setIntensivity(0.5);
         spr.filters = [nf];

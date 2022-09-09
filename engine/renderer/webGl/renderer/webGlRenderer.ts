@@ -606,8 +606,8 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         sp.setUniformVector(sp.u_color,img.color.asGL());
 
         size.setWH(
-            img.size.width/img.getSrcRect().width,
-            img.size.height/img.getSrcRect().height
+            img.size.width/img.srcRect.width,
+            img.size.height/img.srcRect.height
         );
         sp.setUniformVector(sp.u_repeatFactor,size.toArray());
 
@@ -615,8 +615,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         sp.setUniformScalar(sp.u_shapeType,SHAPE_TYPE.RECT);
         sp.setUniformScalar(sp.u_fillType,FILL_TYPE.TEXTURE);
         const {width: textureWidth,height: textureHeight} = texture.size;
-        const {x:srcRectX,y:srcRectY} = img.getSrcRect();
-        const {width:destRectWidth,height:destRectHeight} = img.getSrcRect();
+        const {x:srcRectX,y:srcRectY,width:destRectWidth,height:destRectHeight} = img.srcRect;
 
         const destArr:Float32Array = rect.setXYWH(
             srcRectX/textureWidth,
@@ -660,7 +659,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         sip.setUniformScalar(sip.u_alpha,img.getChildrenCount()===0?img.alpha:1);
         sip.setUniformVector(sip.u_color,img.color.asGL());
         const {width: srcRectWidth,height: srcRectHeight} =texture.size;
-        const {x:srcRectX,y:srcRectY,width:destRectWidth,height:destRectHeight} = img.getSrcRect();
+        const {x:srcRectX,y:srcRectY,width:destRectWidth,height:destRectHeight} = img.srcRect;
 
         const destArr:Float32Array = rect.setXYWH(
             srcRectX/srcRectWidth,

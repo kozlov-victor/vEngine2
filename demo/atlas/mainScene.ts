@@ -67,7 +67,7 @@ export class MainScene extends Scene {
             animatedImage.playFrameAnimation("jump");
         });
 
-        animatedImage.pos.fromJSON({x: 10, y: 10});
+        animatedImage.pos.setFrom({x: 10, y: 10});
         this.appendChild(animatedImage);
 
 

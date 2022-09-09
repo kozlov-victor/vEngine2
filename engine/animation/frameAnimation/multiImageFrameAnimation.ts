@@ -30,7 +30,7 @@ export class MultiImageFrameAnimation extends AbstractFrameAnimation<ITexture> i
         this._target.setTexture(this._frames[i]);
         const texture:ITexture = this._target.getTexture();
         this._target.size.setFrom(texture.size);
-        this._target.getSrcRect().setSize(texture.size);
+        this._target.srcRect.setSize(texture.size);
     }
 
 

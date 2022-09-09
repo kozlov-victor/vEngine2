@@ -37,7 +37,7 @@ export class Video extends Image {
         video.width = video.videoWidth;
         video.height = video.videoHeight;
         this.size.setWH(video.videoWidth,video.videoHeight);
-        this.getSrcRect().setFrom({x:0,y:0,width:this.size.width,height: this.size.height});
+        this.srcRect.setFrom({x:0,y:0,width:this.size.width,height: this.size.height});
 
         this.setTexture(this.texture);
         this.isPlaying = true;

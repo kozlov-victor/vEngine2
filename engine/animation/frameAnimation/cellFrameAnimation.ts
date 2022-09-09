@@ -40,7 +40,7 @@ export class CellFrameAnimation extends AbstractFrameAnimation<number> implement
         const {width,height} = this._target.getTexture().size;
         const frameWidth:number = ~~(width / this._numOfFramesH);
         const frameHeight:number = ~~(height / this._numOfFramesV);
-        this._target.getSrcRect().setWH(frameWidth,frameHeight);
+        this._target.srcRect.setWH(frameWidth,frameHeight);
         this._target.size.setWH(frameWidth,frameHeight);
         super.revalidate();
     }
@@ -67,15 +67,15 @@ export class CellFrameAnimation extends AbstractFrameAnimation<number> implement
     }
 
     private getFramePosX(frameIndex:number):number {
-        return (frameIndex % this._numOfFramesH) * this._target.getSrcRect().width;
+        return (frameIndex % this._numOfFramesH) * this._target.srcRect.width;
     }
 
     private getFramePosY(frameIndex:number):number {
-        return ~~(frameIndex / this._numOfFramesH) * this._target.getSrcRect().height;
+        return ~~(frameIndex / this._numOfFramesH) * this._target.srcRect.height;
     }
 
     private setFrameIndex(frameIndex:number):void {
-        this._target.getSrcRect().setXY(
+        this._target.srcRect.setXY(
             this.getFramePosX(frameIndex),
             this.getFramePosY(frameIndex)
         );

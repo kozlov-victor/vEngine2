@@ -191,10 +191,6 @@ export class Rect extends ObservableEntity implements ICloneable<Rect>, IRect{
         return this._arr as Float32Array & [number,number,number,number];
     }
 
-    public fromJSON(jsonObj:IRectJSON):void{
-        this.setXYWH(jsonObj.x,jsonObj.y,jsonObj.width,jsonObj.height);
-    }
-
 
 
 }

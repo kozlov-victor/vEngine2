@@ -26,7 +26,7 @@ export abstract class AbstractCellsAppearingTransition extends AbstractSceneTran
                 const image:Image = imageOnTop.clone();
                 this._transitionScene.appendChild(image);
                 this._cells.push(image);
-                image.getSrcRect().setXYWH(x*cellWidth,y*cellHeight,cellWidth,cellHeight);
+                image.srcRect.setXYWH(x*cellWidth,y*cellHeight,cellWidth,cellHeight);
                 image.size.setWH(cellWidth,cellHeight);
                 image.pos.setXY(x*cellWidth,y*cellHeight);
             }

@@ -231,7 +231,7 @@ export class TileMap extends RenderableModelWithTexture {
 
         this._cellImage = new Image(this.game,this.getTexture());
         this._cellImage.size.setWH(this._tileWidth,this._tileHeight);
-        this._cellImage.getSrcRect().setWH(this._tileWidth,this._tileHeight);
+        this._cellImage.srcRect.setWH(this._tileWidth,this._tileHeight);
         this._cellImage.revalidate();
         if (!this._drawingSurface) {
             const size:Size = new Size();
@@ -270,7 +270,7 @@ export class TileMap extends RenderableModelWithTexture {
                 let tileVal:number =this._data[currTileByY][currTileByX];
                 if (tileVal===0) continue;
                 tileVal-=1;
-                this._cellImage.getSrcRect().setXY(this.getFramePosX(tileVal),this.getFramePosY(tileVal));
+                this._cellImage.srcRect.setXY(this.getFramePosX(tileVal),this.getFramePosY(tileVal));
                 this._cellImage.pos.setXY(x * this._tileWidth, y * this._tileHeight);
                 this._drawingSurface.drawModel(this._cellImage);
             }

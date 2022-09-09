@@ -16,7 +16,7 @@ export class MainScene extends Scene {
     public override onReady():void {
         const spr: Image = new Image(this.game, this.logoTexture);
         spr.filters = [new DissolveCompositionFilter(this.game)];
-        spr.pos.fromJSON({x: 10, y: 10});
+        spr.pos.setFrom({x: 10, y: 10});
         spr.transformPoint.setToCenter();
         spr.addBehaviour(new DraggableBehaviour(this.game));
         this.appendChild(spr);

@@ -19,7 +19,7 @@ export class MainScene extends Scene {
         this.appendChild(container);
 
         const spr = new Image(this.game,this.logoTexture);
-        spr.pos.fromJSON({x:10,y:10});
+        spr.pos.setFrom({x:10,y:10});
         spr.transformPoint.setToCenter();
         spr.addBehaviour(new DraggableBehaviour(this.game));
         container.appendChild(spr);

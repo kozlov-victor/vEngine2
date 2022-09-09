@@ -91,7 +91,7 @@ export class InfoPanel {
         this.heroIcons = [];
         for (let i:number = 0; i < val; i++) {
             const heroIcon:Image = new Image(this.game,this.heroSprite);
-            heroIcon.getSrcRect().setWH(64,64);
+            heroIcon.srcRect.setWH(64,64);
             heroIcon.size.setWH(64,64);
             heroIcon.scale.setXY(0.5);
             heroIcon.pos.setXY(25*i,10);
