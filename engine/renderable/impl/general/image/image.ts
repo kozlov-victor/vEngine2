@@ -64,7 +64,7 @@ export class Image extends RenderableModelWithTexture implements ICloneable<Imag
     }
 
     protected override setClonedProperties(cloned:Image):void {
-        cloned._srcRect.set(this._srcRect);
+        cloned._srcRect.setFrom(this._srcRect);
         cloned.size.setFrom(this.size);
         cloned.borderRadius = this.borderRadius;
         cloned.offset.setFrom(this.offset);

@@ -1,11 +1,14 @@
 
-const path = require('path');
-const webpack = require('webpack');
-const fs = require('fs');
-const TerserPlugin = require('terser-webpack-plugin');
-const cliUI = require('./node_tools/cliUI');
-const ESLintPlugin = require('eslint-webpack-plugin');
-const storage = require('./node_tools/common/storage');
+import * as path from 'path';
+import * as webpack from 'webpack';
+import * as fs from 'fs';
+import * as child_process from 'child_process';
+import * as TerserPlugin from 'terser-webpack-plugin';
+import * as cliUI from './node_tools/cliUI.js';
+import * as ESLintPlugin from 'eslint-webpack-plugin';
+import * as storage from './node_tools/common/storage.mjs';
+import {TextTable} from "./node_tools/build/textTable.js";
+import { fileURLToPath } from 'url';
 
 let project;
 let allProjectsGrouped;
@@ -61,7 +64,7 @@ const getTime = ()=>{
 
 const getCommitHash = ()=>{
     try {
-        return require('child_process')
+        return child_process
             .execSync('git rev-parse HEAD')
             .toString().trim().substr(0,6);
     } catch (e) {
@@ -71,7 +74,7 @@ const getCommitHash = ()=>{
 
 const getBranchName = ()=>{
     try {
-        return require('child_process')
+        return child_process
             .execSync('git branch --show-current')
             .toString().trim();
     } catch (e) {
@@ -174,8 +177,7 @@ const getAllProjects = ()=>{
 };
 
 
-module.exports = async (env={})=>{
-
+export default async (env = {})=>{
     await cliUI.showInfoWindow(
         [
             `--===started===--`,
@@ -186,10 +188,10 @@ module.exports = async (env={})=>{
     allProjectsFlat = allProjectsGrouped.map(it=>it.names).flatMap(it=>it);
     fs.writeFileSync('./demo/index.json',JSON.stringify(allProjectsGrouped.filter(it=>it.letter!=='_'),undefined, 4));
     const mode = await cliUI.choose('Choose option',[
-        'Compile all projects',
-        'Choose project from list',
-        'Last compiled project',
-        'Enter project name to compile'
+            'Compile all projects',
+            'Choose project from list',
+            'Last compiled project',
+            'Enter project name to compile'
         ]
     );
     if (mode===1) {
@@ -216,16 +218,17 @@ module.exports = async (env={})=>{
     if (project==='build_tools') {
         console.log({entry,output});
     } else {
-        const TextTable = require('./node_tools/build/textTable').TextTable;
         const {mm,hh,ss} = getTime();
         console.clear();
-        cliUI.showPlainWindow(TextTable.fromArrays([
+        cliUI.showInfoWindow(TextTable.fromArrays([
             ['webpack started at',`${hh}:${mm}:${ss}`],
             ['Selected',project ?? 'all'],
             ['Branch',getBranchName()],
             ['Commit',getCommitHash()],
         ],{border:true,pad:true}).toString());
     }
+
+    const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
     const config = {
         entry,
@@ -320,7 +323,7 @@ module.exports = async (env={})=>{
 
     if (!debug) {
 
-        config.optimization.minimizer = [new TerserPlugin({
+        config.optimization.minimizer = [new TerserPlugin.default({
             terserOptions: {
                 ecma: false,
                 parse: {},
@@ -341,12 +344,12 @@ module.exports = async (env={})=>{
     }
 
     config.plugins = [
-        new webpack.DefinePlugin({
-            BUILD_AT: webpack.DefinePlugin.runtimeValue(() => new Date().getTime()),
-            COMMIT_HASH: webpack.DefinePlugin.runtimeValue(() => `'${getBranchName()} (${getCommitHash()})'`),
+        new webpack.default.DefinePlugin({
+            BUILD_AT: webpack.default.DefinePlugin.runtimeValue(() => new Date().getTime()),
+            COMMIT_HASH: webpack.default.DefinePlugin.runtimeValue(() => `'${getBranchName()} (${getCommitHash()})'`),
             DEBUG: debug,
         }),
-        new ESLintPlugin({
+        new ESLintPlugin.default({
             context: '../',
             emitError: true,
             emitWarning: true,
@@ -357,6 +360,7 @@ module.exports = async (env={})=>{
     ];
 
     return config;
-};
+}
+
 
 

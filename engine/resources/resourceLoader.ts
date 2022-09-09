@@ -1,7 +1,7 @@
 import {Game} from "../core/game";
 import {addUrlParameter, IURLRequest, UrlLoader} from "@engine/resources/urlLoader";
 import {ICubeMapTexture, ITexture} from "@engine/renderer/common/texture";
-import {Base64, Optional, URI} from "@engine/core/declarations";
+import {Base64, URI} from "@engine/core/declarations";
 import type {IXmlNode, XmlDocument, XmlNode} from "@engine/misc/parsers/xml/xmlELements";
 import type {Font} from "@engine/renderable/impl/general/font/font";
 import {Sound} from "@engine/media/sound";

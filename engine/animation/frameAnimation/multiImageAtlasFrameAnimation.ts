@@ -24,7 +24,7 @@ export class MultiImageAtlasFrameAnimation extends AbstractFrameAnimation<{resou
     protected onNextFrame(i: number): void {
         this._target.setTexture(this._frames[i].resource);
         const currRect:IRectJSON = this._frames[i].rect;
-        this._target.getSrcRect().set(currRect);
+        this._target.getSrcRect().setFrom(currRect);
 
     }
 

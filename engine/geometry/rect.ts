@@ -132,7 +132,7 @@ export class Rect extends ObservableEntity implements ICloneable<Rect>, IRect{
         return this;
     }
 
-    public set(another:IRectJSON):Rect {
+    public setFrom(another:IRectJSON):Rect {
         this.setXYWH(another.x,another.y,another.width,another.height);
         return this;
     }
