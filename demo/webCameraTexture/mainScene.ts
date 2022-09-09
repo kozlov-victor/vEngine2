@@ -15,26 +15,22 @@ import {MotionBlurFilter} from "@engine/renderer/webGl/filters/texture/motionBlu
 import {PosterizeFilter} from "@engine/renderer/webGl/filters/texture/posterizeFilter";
 import {InvertBgColorCompositionFilter} from "@engine/renderer/webGl/filters/composition/invertBgColorCompositionFilter";
 import {InvertColorFilter} from "@engine/renderer/webGl/filters/texture/invertColorFilter";
+import {Video} from "@engine/renderable/impl/general/image/video";
+import {DraggableBehaviour} from "@engine/behaviour/impl/draggable/draggable";
 
 export class MainScene extends Scene {
 
     public override async onReady():Promise<void> {
-        const video = document.createElement('video');
-        video.width = this.game.width;
-        video.height = this.game.height;
-        video.srcObject = await navigator.mediaDevices.getUserMedia({video: true, audio: false});
-        await video.play();
 
-        const texture:Texture = new Texture(this.getGame().getRenderer<WebGlRenderer>().getNativeContext());
-        texture.setImage(video);
-        this.setInterval(()=>{
-            texture.setImage(video);
-        },1);
+        const mediaStream = await navigator.mediaDevices.getUserMedia({video: true, audio: false});
 
-        const image = new Image(this.game,texture);
-        image.transformPoint.setToCenter();
-        image.scale.x = -1;
-        this.appendChild(image);
+        const video = new Video(this.game);
+        await video.init(mediaStream);
+
+        video.transformPoint.setToCenter();
+        video.scale.x = -1;
+        video.addBehaviour(new DraggableBehaviour(this.game));
+        this.appendChild(video);
 
 
         const filters = [
