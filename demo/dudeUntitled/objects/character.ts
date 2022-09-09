@@ -63,7 +63,7 @@ export class Character {
                 ],
                 isRepeating: false,
                 name: 'fire',
-                durationOfOneFrame: 200,
+                durationOfOneFrame: 100,
             })
         });
         characterImage.addBehaviour(bh);
