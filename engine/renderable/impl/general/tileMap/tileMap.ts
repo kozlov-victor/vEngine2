@@ -14,53 +14,75 @@ import {Rect} from "@engine/geometry/rect";
 import {IRigidBody} from "@engine/physics/common/interfaces";
 import {Point2d} from "@engine/geometry/point2d";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
+import {TileAnimator} from "@engine/renderable/impl/general/tileMap/tileAnimator";
 
 export interface ITiledJSON {
     width: number,
     height: number,
     tilesets: {
-        "tileheight":number,
-        "tilewidth":number,
+        columns:number;
+        firstgid:number;
+        image:string;
+        imageheight:number;
+        imagewidth:number;
+        margin:number;
+        name:string;
+        spacing:number;
+        tilecount:number;
+        tileheight:number;
+        tilewidth:number;
+        tiles?: {
+            id: number;
+            animation?: ({
+                duration: number;
+                tileid: number;
+            })[];
+        }[];
     }[],
     layers: {
-        name: string,
-        type: 'objectgroup'|'tilelayer',
-        data?: number[],
-        id:number,
-        opacity:number,
-        visible:boolean,
-        width:number,
-        height:number,
-        x:number,
-        y:number,
+        name: string;
+        type: 'objectgroup'|'tilelayer';
+        data?: number[];
+        id:number;
+        opacity:number;
+        visible:boolean;
+        width:number;
+        height:number;
+        x:number;
+        y:number;
         objects:({
-            gid:number,
-            id:number,
-            name:string,
+            gid:number;
+            id:number;
+            name:string;
             properties:({
-                name:string,
-                type:string,
-                value:string,
+                name:string;
+                type:string;
+                value:string;
             })[],
-            rotation:number,
-            type:number,
-            visible:boolean,
-            width:number,
-            height:number,
-            x:number,
-            y:number,
+            rotation:number;
+            type:number;
+            visible:boolean;
+            width:number;
+            height:number;
+            x:number;
+            y:number;
         })[],
     }[]
 }
 
 export interface ICollisionInfo {
-    useCollision:boolean,
-    collideWithTiles:number[]|'all',
-    exceptCollisionTiles?:number[],
-    groupNames?: string[],
-    restitution?:number,
-    ignoreCollisionsWithGroupNames?:string[],
-    debug?:boolean,
+    useCollision:boolean;
+    collideWithTiles:number[]|'all';
+    exceptCollisionTiles?:number[];
+    groupNames?: string[];
+    restitution?:number;
+    ignoreCollisionsWithGroupNames?:string[];
+    debug?:boolean;
+}
+
+export interface ITileAnimation {
+    tileId: number;
+    frames:({duration:number,tileId:number})[];
 }
 
 export class TileMap extends RenderableModelWithTexture {
@@ -72,11 +94,12 @@ export class TileMap extends RenderableModelWithTexture {
     private _data:number[][] = [];
     private _tileWidth:number;
     private _tileHeight:number;
+    private _dataOffsetIndex:number = 1; // to work properly with "firstgid" tiled property
 
     private readonly _drawInfo = {
         firstTileToDrawByX: NaN,
         firstTileToDrawByY: NaN,
-        changed: false,
+        dirty: false,
     };
 
 
@@ -93,6 +116,10 @@ export class TileMap extends RenderableModelWithTexture {
     private _drawingSurface:DrawingSurface;
 
     private _rigidBodyDelegate: TileMapRigidBodyDelegate;
+
+    private _tileAnimator:TileAnimator;
+    private _forceUpdateNextFrame = false;
+
 
     private static _isTileCollideable(tileId:number,collisionInfo:ICollisionInfo) {
         let result:boolean;
@@ -136,7 +163,9 @@ export class TileMap extends RenderableModelWithTexture {
         for (let j:number=0;j<mapHeight;j++){
             this._data[j] =  new Array<number>(mapWidth);
             for (let i:number=0;i<mapWidth;i++) {
-                this._data[j][i] = source[cnt++];
+                let val = source[cnt++];
+                if (val!==0) val= val - this._dataOffsetIndex + 1;
+                this._data[j][i] = val;
             }
         }
 
@@ -176,12 +205,32 @@ export class TileMap extends RenderableModelWithTexture {
             if (DEBUG) throw new DebugError(`no data provided im tiled map`);
         }
 
+        const tileSet = map.tilesets.find(it=>it.name==='tiles')!;
+
         const mapWidth = map.width;
         const mapHeight = map.height;
-        const tileWidth = map.tilesets[0].tilewidth;
-        const tileHeight = map.tilesets[0].tileheight;
+        const tileWidth = tileSet.tilewidth;
+        const tileHeight = tileSet.tileheight;
+
+        this._dataOffsetIndex = tileSet.firstgid;
 
         this.fromData(source,mapWidth,mapHeight,tileWidth,tileHeight,collisionInfo);
+        if (tileSet.tiles) {
+            const animations:ITileAnimation[] = [];
+            tileSet.tiles.forEach(tile=>{
+                if (!tile.animation) return;
+                const animation:ITileAnimation = {
+                    tileId: tile.id,
+                    frames: tile.animation.map(it=>({tileId:it.tileid,duration:it.duration}))
+                };
+                animations.push(animation);
+            });
+            this.setTileAnimations(animations);
+        }
+    }
+
+    public setTileAnimations(animations:ITileAnimation[]) {
+        this._tileAnimator = new TileAnimator(animations);
     }
 
     private initCollisions(collisionInfo:ICollisionInfo):void {
@@ -189,8 +238,10 @@ export class TileMap extends RenderableModelWithTexture {
         const rigidBodies:IRigidBody[] = [];
         for (let y:number=0;y<this._numOfTilesInMapByY;y++) {
             for (let x:number=0;x<this._numOfTilesInMapByX;x++) {
-                const tileId:number =this._data[y][x] - 1;
-                if (tileId>-1 && TileMap._isTileCollideable(tileId,collisionInfo)) {
+                let tileId:number =this._data[y][x];
+                if (tileId===0) continue;
+                tileId--;
+                if (TileMap._isTileCollideable(tileId,collisionInfo)) {
                     const rigidBody = this.game.getPhysicsSystem<ArcadePhysicsSystem>().createRigidBody({
                         type: ARCADE_RIGID_BODY_TYPE.KINEMATIC,
                         rect: new Rect(0,0,this._tileWidth,this._tileHeight),
@@ -247,17 +298,23 @@ export class TileMap extends RenderableModelWithTexture {
     public override update(): void {
         if (this._rigidBodyDelegate!==undefined) this._rigidBodyDelegate.nextTick();
         super.update();
+        if (this._tileAnimator.needUpdate(this.game.getElapsedTime())) {
+            this._forceUpdateNextFrame = true;
+        }
     }
 
     public draw(): void {
 
         this.prepareDrawableInfo();
-        if (!this._drawInfo.changed) {
+        if (!this._drawInfo.dirty && !this._forceUpdateNextFrame) {
             this.updateDrawingSurfacePos();
             return;
         }
+        this._forceUpdateNextFrame =false;
 
         this._drawingSurface.clear();
+        this._tileAnimator.clear();
+        const time = this.game.getElapsedTime();
         for (let y:number=0;y<this._numOfTilesInScreenByY;y++) {
             const currTileByY:number = this._drawInfo.firstTileToDrawByY + y;
             if (currTileByY<0) continue;
@@ -267,10 +324,15 @@ export class TileMap extends RenderableModelWithTexture {
                 if (currTileByX<0) continue;
                 if (currTileByX>this._numOfTilesInMapByX-1) continue;
 
-                let tileVal:number =this._data[currTileByY][currTileByX];
-                if (tileVal===0) continue;
-                tileVal-=1;
-                this._cellImage.srcRect.setXY(this.getFramePosX(tileVal),this.getFramePosY(tileVal));
+                let tileId:number = this._data[currTileByY][currTileByX];
+                if (tileId===0) continue;
+                tileId--;
+                if (this._tileAnimator.isTileAnimated(tileId)) {
+                    const baseTileId = tileId;
+                    tileId = this._tileAnimator.getCurrentAnimatedTileId(tileId,time);
+                    this._tileAnimator.updateAnimationTileId(baseTileId,tileId);
+                }
+                this._cellImage.srcRect.setXY(this.getFramePosX(tileId),this.getFramePosY(tileId));
                 this._cellImage.pos.setXY(x * this._tileWidth, y * this._tileHeight);
                 this._drawingSurface.drawModel(this._cellImage);
             }
@@ -342,7 +404,7 @@ export class TileMap extends RenderableModelWithTexture {
         const firstTileToDrawByX:number = ~~((camera.pos.x) / this._tileWidth) - 1;
         const firstTileToDrawByY:number = ~~((camera.pos.y) / this._tileHeight) - 1;
 
-        this._drawInfo.changed =
+        this._drawInfo.dirty =
             this._drawInfo.firstTileToDrawByX !== firstTileToDrawByX ||
             this._drawInfo.firstTileToDrawByY !== firstTileToDrawByY;
 

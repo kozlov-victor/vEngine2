@@ -25,7 +25,7 @@ export class MainScene extends Scene {
         const mediaStream = await navigator.mediaDevices.getUserMedia({video: true, audio: false});
 
         const video = new Video(this.game);
-        await video.init(mediaStream);
+        await video.setSource(mediaStream);
 
         video.transformPoint.setToCenter();
         video.scale.x = -1;

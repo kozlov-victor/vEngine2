@@ -84,7 +84,7 @@ export class Rect extends ObservableEntity implements ICloneable<Rect>, IRect{
     private _arr = new Float32Array([0,0,0,0]);
 
     public static fromPool():Rect {
-        return Rect.rectPool.getFreeObject()!;
+        return this.rectPool.getFreeObject()!;
     }
 
     public static toPool(obj:Rect):void {

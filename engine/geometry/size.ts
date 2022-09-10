@@ -57,7 +57,7 @@ export class Size extends ObservableEntity implements ICloneable<ISize>{
     private _arr = new Float32Array([0,0]);
 
     public static fromPool():Size {
-        return Size.rectPool.getFreeObject()!;
+        return this.rectPool.getFreeObject()!;
     }
 
 

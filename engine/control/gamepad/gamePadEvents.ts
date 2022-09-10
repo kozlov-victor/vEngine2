@@ -15,7 +15,7 @@ export class GamePadEvent extends KeyPadEvent implements IGamePadEvent {
     public value:number;
 
     public static fromPool():Optional<GamePadEvent> {
-        return GamePadEvent.pool.getFreeObject(true);
+        return this.pool.getFreeObject(true);
     }
 
 }

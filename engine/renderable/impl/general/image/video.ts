@@ -18,7 +18,7 @@ export class Video extends Image {
         this.texture = texture;
     }
 
-    public async init(source:string|MediaStream):Promise<void> {
+    public async setSource(source:string|MediaStream):Promise<void> {
         const video = document.createElement('video');
         video.playsInline = true;
         video.muted = true;
@@ -42,7 +42,16 @@ export class Video extends Image {
         this.setTexture(this.texture);
         this.isPlaying = true;
 
+    }
 
+    public play():void {
+        this.htmlVideoElement.play().then(e=>console.error(e));
+        this.isPlaying = true;
+    }
+
+    public pause():void {
+        this.htmlVideoElement.pause();
+        this.isPlaying = false;
     }
 
     public override update():void {

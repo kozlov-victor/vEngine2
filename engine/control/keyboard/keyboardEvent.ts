@@ -13,7 +13,7 @@ export class KeyBoardEvent extends KeyPadEvent implements IKeyBoardEvent {
     public nativeEvent:Event;
 
     public static fromPool():Optional<KeyBoardEvent> {
-        return KeyBoardEvent._pool.getFreeObject();
+        return this._pool.getFreeObject();
     }
 
 }
