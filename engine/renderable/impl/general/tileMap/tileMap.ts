@@ -87,7 +87,7 @@ export interface ITileAnimation {
 
 export class TileMap extends RenderableModelWithTexture {
 
-    public override readonly type:string = "TileMap";
+    public override readonly type = "TileMap" as const;
 
     public override getRigidBody:never = undefined!;
 
@@ -96,7 +96,7 @@ export class TileMap extends RenderableModelWithTexture {
     private _tileHeight:number;
     private _dataOffsetIndex:number = 1; // to work properly with "firstgid" tiled property
 
-    private readonly _drawInfo = {
+    protected readonly _drawInfo = {
         firstTileToDrawByX: NaN,
         firstTileToDrawByY: NaN,
         dirty: false,
@@ -116,9 +116,6 @@ export class TileMap extends RenderableModelWithTexture {
     private _drawingSurface:DrawingSurface;
 
     private _rigidBodyDelegate: TileMapRigidBodyDelegate;
-
-    private _tileAnimator:TileAnimator;
-    private _forceUpdateNextFrame = false;
 
 
     private static _isTileCollideable(tileId:number,collisionInfo:ICollisionInfo) {
@@ -188,7 +185,19 @@ export class TileMap extends RenderableModelWithTexture {
         this.initCollisions(collisionInfo);
     }
 
-    public fromTiledJSON(map:ITiledJSON,collisionInfo?:ICollisionInfo):void {
+    protected findMainTileSetOfTiledJson(map:ITiledJSON, mainTileSetName:string):ITiledJSON['tilesets'][0] {
+        const tileSet =
+            map.tilesets.length===1?
+                map.tilesets[0]:
+                map.tilesets.find(it=>it.name===mainTileSetName)!;
+
+        if (DEBUG && !tileSet) {
+            throw new DebugError(`cannot find main tileset with name "${mainTileSetName}"`);
+        }
+        return tileSet;
+    }
+
+    public fromTiledJSON(map:ITiledJSON,collisionInfo?:ICollisionInfo,mainTileSetName:string = 'tiles'):void {
         const tileMapLayer = map.layers.find(it=>it.type==='tilelayer')!;
 
         if (DEBUG) {
@@ -205,7 +214,7 @@ export class TileMap extends RenderableModelWithTexture {
             if (DEBUG) throw new DebugError(`no data provided im tiled map`);
         }
 
-        const tileSet = map.tilesets.find(it=>it.name==='tiles')!;
+        const tileSet = this.findMainTileSetOfTiledJson(map, mainTileSetName);
 
         const mapWidth = map.width;
         const mapHeight = map.height;
@@ -215,22 +224,6 @@ export class TileMap extends RenderableModelWithTexture {
         this._dataOffsetIndex = tileSet.firstgid;
 
         this.fromData(source,mapWidth,mapHeight,tileWidth,tileHeight,collisionInfo);
-        if (tileSet.tiles) {
-            const animations:ITileAnimation[] = [];
-            tileSet.tiles.forEach(tile=>{
-                if (!tile.animation) return;
-                const animation:ITileAnimation = {
-                    tileId: tile.id,
-                    frames: tile.animation.map(it=>({tileId:it.tileid,duration:it.duration}))
-                };
-                animations.push(animation);
-            });
-            this.setTileAnimations(animations);
-        }
-    }
-
-    public setTileAnimations(animations:ITileAnimation[]) {
-        this._tileAnimator = new TileAnimator(animations);
     }
 
     private initCollisions(collisionInfo:ICollisionInfo):void {
@@ -298,23 +291,25 @@ export class TileMap extends RenderableModelWithTexture {
     public override update(): void {
         if (this._rigidBodyDelegate!==undefined) this._rigidBodyDelegate.nextTick();
         super.update();
-        if (this._tileAnimator.needUpdate(this.game.getElapsedTime())) {
-            this._forceUpdateNextFrame = true;
-        }
+    }
+
+    protected beforeDraw():void {
+        this._drawingSurface.clear();
+    }
+
+    protected resolveTileId(tileId:number):number {
+        return tileId;
     }
 
     public draw(): void {
 
         this.prepareDrawableInfo();
-        if (!this._drawInfo.dirty && !this._forceUpdateNextFrame) {
+        if (!this._drawInfo.dirty) {
             this.updateDrawingSurfacePos();
             return;
         }
-        this._forceUpdateNextFrame =false;
 
-        this._drawingSurface.clear();
-        this._tileAnimator.clear();
-        const time = this.game.getElapsedTime();
+        this.beforeDraw();
         for (let y:number=0;y<this._numOfTilesInScreenByY;y++) {
             const currTileByY:number = this._drawInfo.firstTileToDrawByY + y;
             if (currTileByY<0) continue;
@@ -327,11 +322,7 @@ export class TileMap extends RenderableModelWithTexture {
                 let tileId:number = this._data[currTileByY][currTileByX];
                 if (tileId===0) continue;
                 tileId--;
-                if (this._tileAnimator.isTileAnimated(tileId)) {
-                    const baseTileId = tileId;
-                    tileId = this._tileAnimator.getCurrentAnimatedTileId(tileId,time);
-                    this._tileAnimator.updateAnimationTileId(baseTileId,tileId);
-                }
+                tileId = this.resolveTileId(tileId);
                 this._cellImage.srcRect.setXY(this.getFramePosX(tileId),this.getFramePosY(tileId));
                 this._cellImage.pos.setXY(x * this._tileWidth, y * this._tileHeight);
                 this._drawingSurface.drawModel(this._cellImage);
@@ -399,7 +390,7 @@ export class TileMap extends RenderableModelWithTexture {
         );
     }
 
-    private prepareDrawableInfo():void{
+    protected prepareDrawableInfo():void{
         const camera:Camera = this.game.getCurrentScene().camera;
         const firstTileToDrawByX:number = ~~((camera.pos.x) / this._tileWidth) - 1;
         const firstTileToDrawByY:number = ~~((camera.pos.y) / this._tileHeight) - 1;

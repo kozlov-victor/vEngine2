@@ -2,8 +2,8 @@ import {Scene} from "@engine/scene/scene";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {Assets} from "./assets/assets";
 import {ColorFactory} from "@engine/renderer/common/colorFactory";
-import {TileMap} from "@engine/renderable/impl/general/tileMap/tileMap";
 import {Character} from "./objects/character";
+import {AnimatedTileMap} from "@engine/renderable/impl/general/tileMap/animatedTileMap";
 
 export class MainScene extends Scene {
 
@@ -14,7 +14,7 @@ export class MainScene extends Scene {
 
         this.backgroundColor = ColorFactory.fromCSS(`#130000`);
 
-        const tileMap = new TileMap(this.game,this.assets.tilesTexture);
+        const tileMap = new AnimatedTileMap(this.game,this.assets.tilesTexture);
         tileMap.fromTiledJSON(this.assets.levelData,{
             useCollision:true,
             collideWithTiles:'all',

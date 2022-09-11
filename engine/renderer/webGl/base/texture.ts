@@ -35,7 +35,7 @@ export class Texture extends AbstractTexture{
             if (img!==undefined) {
                 if (!img.width || !img.height) {
                     console.error(img);
-                    throw new DebugError(`width and height of texture source must be defined`);
+                    throw new DebugError(`width and height of texture source must be defined, but ${img.width}*${img.height} is provided`);
                 }
             }
 
