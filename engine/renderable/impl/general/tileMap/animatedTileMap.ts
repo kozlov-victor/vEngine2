@@ -47,5 +47,9 @@ export class AnimatedTileMap extends TileMap {
 
     protected override prepareDrawableInfo() {
         super.prepareDrawableInfo();
+        if (this._tileAnimator===undefined) return;
+        if (this._tileAnimator.needUpdate(this.game.getElapsedTime())) {
+            this._drawInfo.dirty = true;
+        }
     }
 }
