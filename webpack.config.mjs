@@ -4,7 +4,7 @@ import * as webpack from 'webpack';
 import * as fs from 'fs';
 import * as child_process from 'child_process';
 import * as TerserPlugin from 'terser-webpack-plugin';
-import * as cliUI from './node_tools/cliUI.js';
+import * as cliUI from './node_tools/cliUI.mjs';
 import * as ESLintPlugin from 'eslint-webpack-plugin';
 import * as storage from './node_tools/common/storage.mjs';
 import {TextTable} from "./node_tools/build/textTable.js";
@@ -191,7 +191,8 @@ export default async (env = {})=>{
             'Compile all projects',
             'Choose project from list',
             'Last compiled project',
-            'Enter project name to compile'
+            'Enter project name to compile',
+            'exit'
         ]
     );
     if (mode===1) {
@@ -208,6 +209,11 @@ export default async (env = {})=>{
     else if (mode===3) {
         project = await cliUI.prompt("Enter project name to compile")
     }
+    else if (mode===4) {
+        console.clear();
+        process.exit(1);
+    }
+
     storage.set('project',project);
 
 

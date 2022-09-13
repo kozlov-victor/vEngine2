@@ -1,8 +1,6 @@
-const colors = require('./colors');
-const readline = require('readline').createInterface({
-    input: process.stdin,
-    output: process.stdout
-});
+
+import colors from './colors.mjs';
+import * as readline from 'readline';
 
 const leftPad = (str,toLength)=>{
     let pad = "";
@@ -27,8 +25,6 @@ const getLine = (symbol,length)=>{
 
 const getCh = ()=>{
     return new Promise((resolve,reject)=>{
-
-        const readline = require('readline');
 
         readline.emitKeypressEvents(process.stdin);
         process.stdin.setRawMode(true);
@@ -63,7 +59,7 @@ const getLeftPadStringToCenterWindow = (length)=>{
     return  new Array(leftPadLength).fill(' ').join('');
 }
 
-const showWindow = (text,colorBg,colorFg)=>{
+export const showWindow = (text,colorBg,colorFg)=>{
     const strings = text.substr?text.split('\n'):text;
     let maxLength = Math.max(...strings.map(it=>it.length));
     if (maxLength<3) maxLength = 3;
@@ -79,15 +75,15 @@ const showWindow = (text,colorBg,colorFg)=>{
     console.log(leftPadString+' ',colors.bg.Cyan,` ${getLine(' ',maxLength)} `,colors.bg.Cyan,'',colors.Reset);
 };
 
-const showInfoWindow = (text)=>{
+export const showInfoWindow = (text)=>{
    showWindow(text,colors.bg.Blue,colors.fg.Cyan);
 };
 
-const showErrorWindow = (text)=>{
+export const showErrorWindow = (text)=>{
     showWindow(text,colors.bg.Magenta,colors.fg.White);
 };
 
-const showPlainWindow = (text)=>{
+export const showPlainWindow = (text)=>{
     const strings = text.substr?text.split('\n'):text;
     let maxLength = Math.max(...strings.map(it=>it.length));
     if (maxLength<3) maxLength = 3;
@@ -97,7 +93,7 @@ const showPlainWindow = (text)=>{
     });
 }
 
-const prompt = (text)=>{
+export const prompt = (text)=>{
     return new Promise((resolve)=>{
         showInfoWindow(text);
         console.log(colors.fg.Green);
@@ -109,7 +105,7 @@ const prompt = (text)=>{
     });
 };
 
-const choose = async (message,chooseArray)=>{
+export const choose = async (message,chooseArray)=>{
     let chosenPosition = 0;
     const createPrompt = ()=>{
         const maxLengthOfMessage = Math.max(...chooseArray.map(it=>it.length));
@@ -177,12 +173,5 @@ const choose = async (message,chooseArray)=>{
     return chosenPosition;
 
 };
-
-module.exports.showWindow = showWindow;
-module.exports.showInfoWindow = showInfoWindow;
-module.exports.showErrorWindow = showErrorWindow;
-module.exports.showPlainWindow = showPlainWindow;
-module.exports.prompt = prompt;
-module.exports.choose = choose;
 
 
