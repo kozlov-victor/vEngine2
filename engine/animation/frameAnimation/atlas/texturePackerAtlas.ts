@@ -28,9 +28,13 @@ export class TexturePackerAtlas {
             }
         }
         if (DEBUG && target===undefined) throw new DebugError(`no such rect: ${key}`);
-        if (target.frame===undefined) throw new DebugError(`wrong rect structure: {rect:{x,y,w,h}} expected`);
+        if (target.frame===undefined) {
+            console.error(target);
+            throw new DebugError(`wrong frame structure: {frame:{x,y,w,h}} expected`);
+        }
         const frame = target.frame;
         if (frame.x===undefined || frame.y===undefined || frame.w===undefined || frame.h===undefined) {
+            console.error(frame);
             throw new DebugError(`wrong rect structure: {x,y,w,h} expected`);
         }
         return {

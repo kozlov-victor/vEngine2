@@ -1,175 +1,77 @@
 {
-	"frames": {
-		"character_fire1.png": {
-			"frame": {
-				"x": 1,
-				"y": 1,
-				"w": 38,
-				"h": 41
-			},
-			"rotated": false,
-			"trimmed": false,
-			"spriteSourceSize": {
-				"x": 0,
-				"y": 0,
-				"w": 38,
-				"h": 41
-			},
-			"sourceSize": {
-				"w": 38,
-				"h": 41
-			}
-		},
-		"character_fire2.png": {
-			"frame": {
-				"x": 41,
-				"y": 1,
-				"w": 38,
-				"h": 41
-			},
-			"rotated": false,
-			"trimmed": false,
-			"spriteSourceSize": {
-				"x": 0,
-				"y": 0,
-				"w": 38,
-				"h": 41
-			},
-			"sourceSize": {
-				"w": 38,
-				"h": 41
-			}
-		},
-		"character_jump1.png": {
-			"frame": {
-				"x": 1,
-				"y": 44,
-				"w": 37,
-				"h": 42
-			},
-			"rotated": false,
-			"trimmed": false,
-			"spriteSourceSize": {
-				"x": 0,
-				"y": 0,
-				"w": 37,
-				"h": 42
-			},
-			"sourceSize": {
-				"w": 37,
-				"h": 42
-			}
-		},
-		"character_jump2.png": {
-			"frame": {
-				"x": 40,
-				"y": 44,
-				"w": 38,
-				"h": 41
-			},
-			"rotated": false,
-			"trimmed": false,
-			"spriteSourceSize": {
-				"x": 0,
-				"y": 0,
-				"w": 38,
-				"h": 41
-			},
-			"sourceSize": {
-				"w": 38,
-				"h": 41
-			}
-		},
-		"character_stand1.png": {
-			"frame": {
-				"x": 81,
-				"y": 1,
-				"w": 38,
-				"h": 42
-			},
-			"rotated": false,
-			"trimmed": false,
-			"spriteSourceSize": {
-				"x": 0,
-				"y": 0,
-				"w": 38,
-				"h": 42
-			},
-			"sourceSize": {
-				"w": 38,
-				"h": 42
-			}
-		},
-		"character_stand2.png": {
-			"frame": {
-				"x": 80,
-				"y": 45,
-				"w": 38,
-				"h": 42
-			},
-			"rotated": false,
-			"trimmed": false,
-			"spriteSourceSize": {
-				"x": 0,
-				"y": 0,
-				"w": 38,
-				"h": 42
-			},
-			"sourceSize": {
-				"w": 38,
-				"h": 42
-			}
-		},
-		"character_step1.png": {
-			"frame": {
-				"x": 1,
-				"y": 89,
-				"w": 38,
-				"h": 42
-			},
-			"rotated": false,
-			"trimmed": false,
-			"spriteSourceSize": {
-				"x": 0,
-				"y": 0,
-				"w": 38,
-				"h": 42
-			},
-			"sourceSize": {
-				"w": 38,
-				"h": 42
-			}
-		},
-		"character_step2.png": {
-			"frame": {
-				"x": 41,
-				"y": 89,
-				"w": 38,
-				"h": 40
-			},
-			"rotated": false,
-			"trimmed": false,
-			"spriteSourceSize": {
-				"x": 0,
-				"y": 0,
-				"w": 38,
-				"h": 40
-			},
-			"sourceSize": {
-				"w": 38,
-				"h": 40
-			}
-		}
-	},
-	"meta": {
-		"app": "http://www.codeandweb.com/texturepacker",
-		"version": "1.0",
-		"image": "spritesheet.png",
-		"format": "RGBA8888",
-		"size": {
-			"w": 120,
-			"h": 132
-		},
-		"scale": "1"
-	}
+    "frames": {
+        "character_fire2": {
+            "frame": {
+                "x": 0,
+                "y": 0,
+                "w": 38,
+                "h": 42
+            }
+        },
+        "character_fire1": {
+            "frame": {
+                "x": 43,
+                "y": 0,
+                "w": 38,
+                "h": 42
+            }
+        },
+        "character_jump2": {
+            "frame": {
+                "x": 86,
+                "y": 0,
+                "w": 38,
+                "h": 42
+            }
+        },
+        "character_jump1": {
+            "frame": {
+                "x": 129,
+                "y": 0,
+                "w": 38,
+                "h": 42
+            }
+        },
+        "character_step2": {
+            "frame": {
+                "x": 172,
+                "y": 0,
+                "w": 38,
+                "h": 42
+            }
+        },
+        "character_step1": {
+            "frame": {
+                "x": 0,
+                "y": 47,
+                "w": 38,
+                "h": 42
+            }
+        },
+        "character_stand2": {
+            "frame": {
+                "x": 43,
+                "y": 47,
+                "w": 38,
+                "h": 42
+            }
+        },
+        "character_stand1": {
+            "frame": {
+                "x": 86,
+                "y": 47,
+                "w": 38,
+                "h": 42
+            }
+        },
+        "character_bg": {
+            "frame": {
+                "x": 129,
+                "y": 47,
+                "w": 38,
+                "h": 42
+            }
+        }
+    },
+    "padding": 5
 }

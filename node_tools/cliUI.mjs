@@ -96,9 +96,13 @@ export const showPlainWindow = (text)=>{
 export const prompt = (text)=>{
     return new Promise((resolve)=>{
         showInfoWindow(text);
+        const rl = readline.createInterface({
+            input: process.stdin,
+            output: process.stdout
+        });
         console.log(colors.fg.Green);
-        readline.question('>', val => {
-            readline.close();
+        rl.question('>', val => {
+            rl.close();
             resolve(val);
             console.log(colors.Reset);
         });
