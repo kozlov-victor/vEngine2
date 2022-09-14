@@ -11,13 +11,13 @@ interface ITileAnimationEx {
     baseTileId: number;
     currAnimationTileId:number;
     frames:ITiledAnimationFrameWithRange[];
+    duration: number;
 }
 
 
 export class TileAnimator {
 
     private byId:Record<number, ITileAnimationEx> = {};
-    private duration:number = 0;
     private readonly animatedTileIdsAdded:number[] = [];
 
     constructor(animations: ITileAnimation[]) {
@@ -25,8 +25,9 @@ export class TileAnimator {
             let timeOffset = 0;
             if (!a.frames.length) return;
             const frames:ITiledAnimationFrameWithRange[] = [];
+            let duration = 0;
             a.frames.forEach(f=>{
-                this.duration+=f.duration;
+                duration+=f.duration;
                 const frame:ITiledAnimationFrameWithRange = {
                     tileId:f.tileId,
                     timeFrom:timeOffset,
@@ -35,16 +36,17 @@ export class TileAnimator {
                 frames.push(frame);
                 timeOffset+=f.duration;
             });
+            if (!duration) {
+                console.error(animations);
+                throw new DebugError(`wrong duration for frames`);
+            }
             this.byId[a.tileId] = {
                 baseTileId: a.tileId,
                 currAnimationTileId: a.tileId,
                 frames,
+                duration,
             };
         });
-        if (!this.duration) {
-            console.error(animations);
-            throw new DebugError(`wrong duration for frames`);
-        }
     }
 
     public clear():void {
@@ -55,17 +57,20 @@ export class TileAnimator {
         return this.byId[tileId]!==undefined;
     }
 
-    private getFrameByAnimationTime(baseTileId:number,animationTime:number):ITiledAnimationFrameWithRange {
-        const frames = this.byId[baseTileId].frames;
+    private getFrameByAnimationTime(baseTileId:number,time:number):ITiledAnimationFrameWithRange {
+        const anim = this.byId[baseTileId];
+        const frames = anim.frames;
+        const animationTime = time % anim.duration;
         for (const f of frames) {
             if (animationTime>=f.timeFrom && animationTime<=f.timeTo) return f;
         }
-        throw new Error('impossible to reach');
+        console.error(animationTime,frames);
+        if (DEBUG) throw new Error('impossible to reach');
+        return undefined!;
     }
 
     public getCurrentAnimatedTileId(baseTileId:number,time:number):number {
-        const animationTime = time % this.duration;
-        return this.getFrameByAnimationTime(baseTileId,animationTime).tileId;
+        return this.getFrameByAnimationTime(baseTileId,time).tileId;
     }
 
     public updateAnimationTileId(baseTileId:number,currAnimationTileId:number):void {

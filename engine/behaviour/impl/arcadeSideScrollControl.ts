@@ -26,6 +26,7 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
     protected declare parameters: IParams;
     private gameObject:AnimatedImage;
     private onGround = false;
+    private onLadder = false;
     private isFire = false;
 
     constructor(game: Game, parameters: IParams) {
@@ -58,6 +59,7 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
         }
 
         body.collisionEventHandler.on(ARCADE_COLLISION_EVENT.COLLIDED, _=>{
+            body.gravityImpact = 1;
             this.doGroundAnimation();
         });
 
@@ -68,6 +70,12 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
                     break;
                 case KEYBOARD_KEY.RIGHT:
                     this.goRight();
+                    break;
+                case KEYBOARD_KEY.UP:
+                    this.climbLadderUp();
+                    break;
+                case KEYBOARD_KEY.DOWN:
+                    this.climbLadderDown();
                     break;
 
             }
@@ -85,6 +93,10 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
                 case KEYBOARD_KEY.LEFT:
                 case KEYBOARD_KEY.RIGHT:
                     this.stop();
+                    break;
+                case KEYBOARD_KEY.UP:
+                case KEYBOARD_KEY.DOWN:
+                    this.stopClimbing();
                     break;
                 default:
                     break;
@@ -107,6 +119,31 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
         body.velocity.x = this.parameters.velocity;
         gameObject.scale.x = Math.abs(gameObject.scale.x);
         this.doGroundAnimation();
+    }
+
+    public climbLadderUp():void {
+        const gameObject = this.gameObject;
+        const body = gameObject.getRigidBody<ArcadeRigidBody>()!;
+        if (this.onLadder) {
+            body.velocity.y = -this.parameters.velocity;
+            body.gravityImpact = 0;
+        }
+    }
+
+    public climbLadderDown():void {
+        const gameObject = this.gameObject;
+        const body = gameObject.getRigidBody<ArcadeRigidBody>()!;
+        if (this.onGround) return;
+        if (this.onLadder) {
+            body.velocity.y = this.parameters.velocity;
+            body.gravityImpact = 0;
+        }
+    }
+
+    public stopClimbing(): void {
+        const gameObject = this.gameObject;
+        const body = gameObject.getRigidBody<ArcadeRigidBody>()!;
+        body.velocity.y = 0;
     }
 
     public stop():void {
@@ -147,7 +184,10 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
 
     public override update() {
         super.update();
-        this.onGround = this.gameObject.getRigidBody<ArcadeRigidBody>().collisionFlags.bottom;
+        const body = this.gameObject.getRigidBody<ArcadeRigidBody>()
+        this.onGround = body.collisionFlags.bottom;
+        this.onLadder = body.overlappedWith?.addInfo?.tileId===3;
+        if (!this.onLadder) body.gravityImpact = 1;
         if (!this.onGround && this.gameObject.getCurrentFrameAnimationName()!==this.parameters.jumpAnimation) {
             if (this.parameters.jumpAnimation!==undefined && !this.isFire) {
                 this.gameObject.playFrameAnimation(this.parameters.jumpAnimation);

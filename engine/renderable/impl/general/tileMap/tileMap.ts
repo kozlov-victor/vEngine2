@@ -231,32 +231,31 @@ export class TileMap extends RenderableModelWithTexture {
         const rigidBodies:IRigidBody[] = [];
         for (let y:number=0;y<this._numOfTilesInMapByY;y++) {
             for (let x:number=0;x<this._numOfTilesInMapByX;x++) {
-                let tileId:number =this._data[y][x];
-                if (tileId===0) continue;
-                tileId--;
-                if (TileMap._isTileCollideable(tileId,collisionInfo)) {
-                    const rigidBody = this.game.getPhysicsSystem<ArcadePhysicsSystem>().createRigidBody({
-                        type: ARCADE_RIGID_BODY_TYPE.KINEMATIC,
-                        rect: new Rect(0,0,this._tileWidth,this._tileHeight),
-                        groupNames: collisionInfo.groupNames,
-                        ignoreCollisionWithGroupNames: collisionInfo.ignoreCollisionsWithGroupNames,
-                        restitution: collisionInfo.restitution,
-                    });
-                    rigidBody.addInfo = {tileId};
-                    rigidBody.setModel(this);
-                    rigidBody.setBounds(
-                        new Point2d(x * this._tileWidth, y * this._tileHeight),
-                        new Size(this._tileWidth,this._tileHeight)
-                    );
-                    rigidBodies.push(rigidBody);
-                    if (collisionInfo.debug) {
-                        const debugRect = new Rectangle(this.game);
-                        debugRect.lineWidth = 0;
-                        debugRect.fillColor.setRGB(0,100,0);
-                        debugRect.alpha = 0.4;
-                        debugRect.setPosAndSize(x * this._tileWidth, y * this._tileHeight,this._tileWidth,this._tileHeight);
-                        this.appendChild(debugRect);
-                    }
+                if (this._data[y][x]===0) continue;
+                const tileId:number = this._data[y][x] - 1;
+
+                const rigidBody = this.game.getPhysicsSystem<ArcadePhysicsSystem>().createRigidBody({
+                    type: ARCADE_RIGID_BODY_TYPE.KINEMATIC,
+                    rect: new Rect(0,0,this._tileWidth,this._tileHeight),
+                    groupNames: collisionInfo.groupNames,
+                    ignoreCollisionWithGroupNames: collisionInfo.ignoreCollisionsWithGroupNames,
+                    restitution: collisionInfo.restitution,
+                    acceptCollisions: TileMap._isTileCollideable(tileId,collisionInfo),
+                });
+                rigidBody.addInfo = {tileId};
+                rigidBody.setModel(this);
+                rigidBody.setBounds(
+                    new Point2d(x * this._tileWidth, y * this._tileHeight),
+                    new Size(this._tileWidth,this._tileHeight)
+                );
+                rigidBodies.push(rigidBody);
+                if (collisionInfo.debug) {
+                    const debugRect = new Rectangle(this.game);
+                    debugRect.lineWidth = 0;
+                    debugRect.fillColor.setRGB(0,100,0);
+                    debugRect.alpha = 0.4;
+                    debugRect.setPosAndSize(x * this._tileWidth, y * this._tileHeight,this._tileWidth,this._tileHeight);
+                    this.appendChild(debugRect);
                 }
             }
         }

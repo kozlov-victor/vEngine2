@@ -75,6 +75,7 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
     public readonly id:number = cnt++;
 
     public gravityImpact:number = 1;
+    public acceptCollisions:boolean = true;
 
     public addInfo:Record<any, any> = {};
     public _modelType: ARCADE_RIGID_BODY_TYPE = ARCADE_RIGID_BODY_TYPE.DYNAMIC;
@@ -82,6 +83,7 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
     public _restitution:number = 0.5;
     public readonly _halfSize:Size = new Size();
     public readonly collisionFlags:ICollisionWith = new CollisionFlags();
+    public overlappedWith:Optional<IRigidBody>;
     public readonly _collisionFlagsOld:ICollisionWith = new CollisionFlags();
     public _pos:Point2d;
     public _oldPos:Point2d;
@@ -104,6 +106,7 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
             const delta:number = this.game.getDeltaTime() / 1000;
             (this._collisionFlagsOld as CollisionFlags).copyFrom(this.collisionFlags as CollisionFlags);
             (this.collisionFlags as CollisionFlags).reset();
+            this.overlappedWith = undefined;
 
             this.velocity.x += this.acceleration.x * delta;
             if (!this._collisionFlagsOld.bottom) this.velocity.y += this.acceleration.y * delta;

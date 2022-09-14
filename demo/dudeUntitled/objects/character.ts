@@ -73,7 +73,7 @@ export class Character {
             const bullet = new CharacterBullet(game);
             bullet.getContainer().getRigidBody().velocity.x = 300*characterImage.scale.x;
             bullet.getContainer().pos.setXY(
-                characterImage.pos.x+characterImage.size.width/2+(characterImage.size.width/2)*characterImage.scale.x,
+                characterImage.pos.x + characterImage.size.width  / 2 + (characterImage.size.width/2)*characterImage.scale.x,
                 characterImage.pos.y + characterImage.size.height / 2
             );
             bullet.getContainer().appendTo(scene);

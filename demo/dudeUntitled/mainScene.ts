@@ -19,7 +19,7 @@ export class MainScene extends Scene {
             useCollision:true,
             collideWithTiles:'all',
             groupNames:['tileMap'],
-            exceptCollisionTiles: [],
+            exceptCollisionTiles: [3],
             debug: false,
             restitution: 0.1,
         });

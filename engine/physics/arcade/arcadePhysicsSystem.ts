@@ -18,6 +18,7 @@ export interface ICreateRigidBodyParams {
     groupNames?:string[];
     ignoreCollisionWithGroupNames?:string[];
     gravityImpact?:number; // 0..1
+    acceptCollisions?:boolean;
 }
 
 const intersect = (a:Int,b:Int):boolean=> {
@@ -47,6 +48,7 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
         body._modelType = params?.type??body._modelType;
         body._restitution = params?.restitution??body._restitution;
         body.gravityImpact = params?.gravityImpact??body.gravityImpact;
+        if (params?.acceptCollisions!==undefined) body.acceptCollisions = params.acceptCollisions;
         if (params?.rect!==undefined) body._rect = params.rect.clone();
         if (params?.debug!==undefined) body.debug = params.debug;
         if (params?.groupNames) {
@@ -101,10 +103,12 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
                     const entityBodyRect = entityBody.calcAndGetBoundRect();
                     if (!MathEx.overlapTest(playerBodyRect,entityBodyRect)) continue;
                     if (
-                        intersect(playerBody.groupNames,entityBody.ignoreCollisionWithGroupNames) ||
+                        !playerBody.acceptCollisions                                               ||
+                        !entityBody.acceptCollisions                                               ||
+                        intersect(playerBody.groupNames, entityBody.ignoreCollisionWithGroupNames) ||
                         intersect(entityBody.groupNames,playerBody.ignoreCollisionWithGroupNames)
                     ) {
-                        this.emitOverlapEvents(playerBody, entityBody);
+                        this.resolveOverlap(playerBody, entityBody);
                     } else {
                         this.interpolateAndResolveCollision(playerBody, playerBodyRect, entityBody);
                         this.interpolateAndResolveCollision(entityBody, entityBodyRect, playerBody);
@@ -209,8 +213,10 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
         entity.collisionEventHandler.trigger(ARCADE_COLLISION_EVENT.COLLIDED, player);
     }
 
-    private emitOverlapEvents(player:ArcadeRigidBody,entity:ArcadeRigidBody):void {
+    private resolveOverlap(player:ArcadeRigidBody,entity:ArcadeRigidBody):void {
         if (player.getHostModel().isDetached() || entity.getHostModel().isDetached()) return;
+        player.overlappedWith = entity;
+        entity.overlappedWith = player;
         player.collisionEventHandler.trigger(ARCADE_COLLISION_EVENT.OVERLAPPED, entity);
         entity.collisionEventHandler.trigger(ARCADE_COLLISION_EVENT.OVERLAPPED, player);
     }
