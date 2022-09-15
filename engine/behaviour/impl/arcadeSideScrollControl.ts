@@ -15,6 +15,7 @@ import {IRectJSON} from "@engine/geometry/rect";
 interface IParams extends IKeyVal<any>{
     velocity: number;
     jumpVelocity: number;
+    ladderTileIds?:number[];
     runAnimation: AbstractFrameAnimation<IRectJSON>;
     idleAnimation: AbstractFrameAnimation<IRectJSON>;
     jumpAnimation?: AbstractFrameAnimation<IRectJSON>;
@@ -126,7 +127,7 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
         super.update();
         const body = this.gameObject.getRigidBody<ArcadeRigidBody>()
         this.onGround = body.collisionFlags.bottom;
-        this.onLadder = body.overlappedWith?.addInfo?.tileId===3;
+        this.onLadder = this.parameters.ladderTileIds?.includes(body.overlappedWith?.addInfo?.tileId) ?? false;
         if (!this.onLadder) {
             body.gravityImpact = 1;
             this.isClimbing = false;
@@ -158,10 +159,11 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
     private listenToCollisions():void {
         this.body.collisionEventHandler.on(ARCADE_COLLISION_EVENT.COLLIDED, _=>{
             this.body.gravityImpact = 1;
-            this.body.velocity.y = 0;
+            if (this.body.collisionFlags.bottom) this.body.velocity.y = 0; // to avoid bumping with ground while climbing down
             this.doGroundAnimation();
         });
-        this.body.collisionEventHandler.on(ARCADE_COLLISION_EVENT.OVERLAPPED, _=>{
+        this.body.collisionEventHandler.on(ARCADE_COLLISION_EVENT.OVERLAPPED, e=>{
+            if (!this.parameters.ladderTileIds?.includes(e.addInfo.tileId)) return;
             this.body.gravityImpact = 0;
             if (!this.isClimbing) {
                 this.body.velocity.y = 0;

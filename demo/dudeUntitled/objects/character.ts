@@ -29,6 +29,7 @@ export class Character {
         const bh = new ArcadeSideScrollControl(game,{
             velocity: 100,
             jumpVelocity: 300,
+            ladderTileIds: [3],
             runAnimation: new AtlasFrameAnimation(game,{
                 frames: [
                     texturePackerAtlas.getFrameByKey('character_step1'),
