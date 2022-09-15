@@ -19,6 +19,7 @@ interface IParams extends IKeyVal<any>{
     idleAnimation: AbstractFrameAnimation<IRectJSON>;
     jumpAnimation?: AbstractFrameAnimation<IRectJSON>;
     fireAnimation?:AbstractFrameAnimation<IRectJSON>;
+    climbAnimation?:AbstractFrameAnimation<IRectJSON>;
 }
 
 export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
@@ -69,6 +70,7 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
             this.isClimbing = true;
             this.body.velocity.y = -this.parameters.velocity;
             this.body.gravityImpact = 0;
+            if (this.parameters.climbAnimation) this.parameters.climbAnimation.play();
         }
     }
 
@@ -78,11 +80,15 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
             this.isClimbing = true;
             this.body.velocity.y = this.parameters.velocity;
             this.body.gravityImpact = 0;
+            if (this.parameters.climbAnimation) this.parameters.climbAnimation.play();
         }
     }
 
     public stopClimbing(): void {
         this.body.velocity.y = 0;
+        if (this.gameObject.getCurrentFrameAnimation()===this.parameters.climbAnimation) {
+            this.parameters.climbAnimation?.stop();
+        }
     }
 
     public stop():void {
@@ -125,7 +131,7 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
             body.gravityImpact = 1;
             this.isClimbing = false;
         }
-        if (!this.onGround && this.gameObject.getCurrentFrameAnimationName()!==this.parameters.jumpAnimation) {
+        if (!this.onGround && !this.onLadder) {
             if (this.parameters.jumpAnimation!==undefined && !this.isFiring) {
                 this.gameObject.playFrameAnimation(this.parameters.jumpAnimation);
             }
@@ -137,6 +143,7 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
         this.gameObject.addFrameAnimation(this.parameters.idleAnimation);
         if (this.parameters.jumpAnimation) this.gameObject.addFrameAnimation(this.parameters.jumpAnimation);
         if (this.parameters.fireAnimation) this.gameObject.addFrameAnimation(this.parameters.fireAnimation);
+        if (this.parameters.climbAnimation) this.gameObject.addFrameAnimation(this.parameters.climbAnimation);
 
         this.gameObject.transformPoint.setToCenter();
         this.gameObject.playFrameAnimation(this.parameters.idleAnimation);
@@ -156,7 +163,10 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
         });
         this.body.collisionEventHandler.on(ARCADE_COLLISION_EVENT.OVERLAPPED, _=>{
             this.body.gravityImpact = 0;
-            if (!this.isClimbing) this.body.velocity.y = 0;
+            if (!this.isClimbing) {
+                this.body.velocity.y = 0;
+                this.doGroundAnimation();
+            }
         });
     }
 
@@ -206,7 +216,7 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
         const gameObject = this.gameObject;
         const body = gameObject.getRigidBody<ArcadeRigidBody>()!;
         const params = this.parameters;
-        if (this.onGround && !this.isFiring) {
+        if ((this.onGround || this.onLadder) && !this.isFiring) {
             if (body.velocity.x) {
                 gameObject.playFrameAnimation(params.runAnimation);
             }

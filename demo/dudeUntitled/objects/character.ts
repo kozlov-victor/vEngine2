@@ -64,7 +64,16 @@ export class Character {
                 isRepeating: false,
                 name: 'fire',
                 durationOfOneFrame: 100,
-            })
+            }),
+            climbAnimation: new AtlasFrameAnimation(game,{
+                frames: [
+                    texturePackerAtlas.getFrameByKey('character_climb1'),
+                    texturePackerAtlas.getFrameByKey('character_climb2'),
+                ],
+                isRepeating: true,
+                name: 'climb',
+                durationOfOneFrame: 200,
+            }),
         });
         characterImage.addBehaviour(bh);
 

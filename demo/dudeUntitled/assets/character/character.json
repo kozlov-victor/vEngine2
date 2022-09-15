@@ -64,10 +64,26 @@
                 "h": 42
             }
         },
-        "character_bg": {
+        "character_climb2": {
             "frame": {
                 "x": 129,
                 "y": 47,
+                "w": 38,
+                "h": 42
+            }
+        },
+        "character_climb1": {
+            "frame": {
+                "x": 172,
+                "y": 47,
+                "w": 38,
+                "h": 42
+            }
+        },
+        "character_bg": {
+            "frame": {
+                "x": 0,
+                "y": 94,
                 "w": 38,
                 "h": 42
             }

@@ -12,7 +12,7 @@ export class MainScene extends Scene {
     public override onReady():void {
         document.body.style.backgroundColor = 'black';
 
-        this.backgroundColor = ColorFactory.fromCSS(`#130000`);
+        this.backgroundColor = ColorFactory.fromCSS(`#041f03`);
 
         const tileMap = new AnimatedTileMap(this.game,this.assets.tilesTexture);
         tileMap.fromTiledJSON(this.assets.levelData,{

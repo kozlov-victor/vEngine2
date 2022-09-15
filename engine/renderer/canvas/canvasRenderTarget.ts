@@ -25,7 +25,7 @@ export class CanvasRenderTarget implements IRenderTarget{
     public clear(color: Color, withDepth?: boolean, alphaBlendValue?: number): void {
         const ctx = this.texture.getContext();
         ctx.clearRect(0,0,this.size.width,this.size.height);
-        ctx.fillStyle = color.asCssRgba();
+        ctx.fillStyle = color.asCssHex();
         ctx.fillRect(0,0,this.size.width,this.size.height);
     }
 
