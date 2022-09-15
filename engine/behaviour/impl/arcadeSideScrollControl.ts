@@ -25,9 +25,11 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
 
     protected declare parameters: IParams;
     private gameObject:AnimatedImage;
+    private body:ArcadeRigidBody;
     private onGround = false;
     private onLadder = false;
-    private isFire = false;
+    private isFiring = false;
+    private isClimbing = false;
 
     constructor(game: Game, parameters: IParams) {
         super(game, parameters);
@@ -42,27 +44,123 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
         if (DEBUG && this.gameObject) {
             throw new DebugError(`this behaviour instance is already applied`);
         }
-
-        const parameters = this.parameters;
-        gameObject.addFrameAnimation(parameters.runAnimation);
-        gameObject.addFrameAnimation(parameters.idleAnimation);
-        if (parameters.jumpAnimation) gameObject.addFrameAnimation(parameters.jumpAnimation);
-        if (parameters.fireAnimation) gameObject.addFrameAnimation(parameters.fireAnimation);
-
         this.gameObject = gameObject;
-        gameObject.transformPoint.setToCenter();
-        gameObject.playFrameAnimation(parameters.idleAnimation);
 
-        const body = gameObject.getRigidBody<ArcadeRigidBody>()!;
+        this.init();
+        this.listenToCollisions();
+        this.listenToKeys();
+
+    }
+
+    public goLeft():void {
+        this.body.velocity.x = -this.parameters.velocity;
+        this.gameObject.scale.x = -Math.abs(this.gameObject.scale.x);
+        this.doGroundAnimation();
+    }
+
+    public goRight():void {
+        this.body.velocity.x = this.parameters.velocity;
+        this.gameObject.scale.x = Math.abs(this.gameObject.scale.x);
+        this.doGroundAnimation();
+    }
+
+    public climbLadderUp():void {
+        if (this.onLadder) {
+            this.isClimbing = true;
+            this.body.velocity.y = -this.parameters.velocity;
+            this.body.gravityImpact = 0;
+        }
+    }
+
+    public climbLadderDown():void {
+        if (this.onGround) return;
+        if (this.onLadder) {
+            this.isClimbing = true;
+            this.body.velocity.y = this.parameters.velocity;
+            this.body.gravityImpact = 0;
+        }
+    }
+
+    public stopClimbing(): void {
+        this.body.velocity.y = 0;
+    }
+
+    public stop():void {
+        this.body.velocity.x = this.parameters.velocity;
+        this.body.velocity.x = 0;
+        if (this.onGround) this.gameObject.playFrameAnimation(this.parameters.idleAnimation);
+    }
+
+    public fire():void {
+        if (this.parameters.fireAnimation) {
+            this.isFiring = true;
+            const an = this.gameObject.playFrameAnimation(this.parameters.fireAnimation);
+            an.animationEventHandler.once(FRAME_ANIMATION_EVENTS.completed, ()=>{
+                this.isFiring = false;
+                this.doGroundAnimation();
+            });
+            an.animationEventHandler.once(FRAME_ANIMATION_EVENTS.canceled, ()=>{
+                this.isFiring = false;
+                this.doGroundAnimation();
+            });
+
+        }
+    }
+
+    public jump():void {
+        if (this.gameObject.getRigidBody<ArcadeRigidBody>().collisionFlags.bottom) {
+            this.body.velocity.y -= this.parameters.jumpVelocity;
+            if (this.parameters.jumpAnimation) {
+                this.gameObject.playFrameAnimation(this.parameters.jumpAnimation);
+            }
+        }
+    }
+
+    public override update() {
+        super.update();
+        const body = this.gameObject.getRigidBody<ArcadeRigidBody>()
+        this.onGround = body.collisionFlags.bottom;
+        this.onLadder = body.overlappedWith?.addInfo?.tileId===3;
+        if (!this.onLadder) {
+            body.gravityImpact = 1;
+            this.isClimbing = false;
+        }
+        if (!this.onGround && this.gameObject.getCurrentFrameAnimationName()!==this.parameters.jumpAnimation) {
+            if (this.parameters.jumpAnimation!==undefined && !this.isFiring) {
+                this.gameObject.playFrameAnimation(this.parameters.jumpAnimation);
+            }
+        }
+    }
+
+    private init():void {
+        this.gameObject.addFrameAnimation(this.parameters.runAnimation);
+        this.gameObject.addFrameAnimation(this.parameters.idleAnimation);
+        if (this.parameters.jumpAnimation) this.gameObject.addFrameAnimation(this.parameters.jumpAnimation);
+        if (this.parameters.fireAnimation) this.gameObject.addFrameAnimation(this.parameters.fireAnimation);
+
+        this.gameObject.transformPoint.setToCenter();
+        this.gameObject.playFrameAnimation(this.parameters.idleAnimation);
+
+        const body = this.gameObject.getRigidBody<ArcadeRigidBody>()!;
         if (DEBUG && body===undefined) {
             throw new DebugError(`cannot apply behaviour: ${this.constructor.name}, rigid body is not set`);
         }
+        this.body = body;
+    }
 
-        body.collisionEventHandler.on(ARCADE_COLLISION_EVENT.COLLIDED, _=>{
-            body.gravityImpact = 1;
+    private listenToCollisions():void {
+        this.body.collisionEventHandler.on(ARCADE_COLLISION_EVENT.COLLIDED, _=>{
+            this.body.gravityImpact = 1;
+            this.body.velocity.y = 0;
             this.doGroundAnimation();
         });
+        this.body.collisionEventHandler.on(ARCADE_COLLISION_EVENT.OVERLAPPED, _=>{
+            this.body.gravityImpact = 0;
+            if (!this.isClimbing) this.body.velocity.y = 0;
+        });
+    }
 
+    private listenToKeys():void {
         this.game.getCurrentScene().keyboardEventHandler.on(KEYBOARD_EVENTS.keyPressed, e=>{
             switch (e.button) {
                 case KEYBOARD_KEY.LEFT:
@@ -102,104 +200,13 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
                     break;
             }
         });
-
-    }
-
-    public goLeft():void {
-        const gameObject = this.gameObject;
-        const body = gameObject.getRigidBody<ArcadeRigidBody>()!;
-        body.velocity.x = -this.parameters.velocity;
-        gameObject.scale.x = -Math.abs(gameObject.scale.x);
-        this.doGroundAnimation();
-    }
-
-    public goRight():void {
-        const gameObject = this.gameObject;
-        const body = gameObject.getRigidBody<ArcadeRigidBody>()!;
-        body.velocity.x = this.parameters.velocity;
-        gameObject.scale.x = Math.abs(gameObject.scale.x);
-        this.doGroundAnimation();
-    }
-
-    public climbLadderUp():void {
-        const gameObject = this.gameObject;
-        const body = gameObject.getRigidBody<ArcadeRigidBody>()!;
-        if (this.onLadder) {
-            body.velocity.y = -this.parameters.velocity;
-            body.gravityImpact = 0;
-        }
-    }
-
-    public climbLadderDown():void {
-        const gameObject = this.gameObject;
-        const body = gameObject.getRigidBody<ArcadeRigidBody>()!;
-        if (this.onGround) return;
-        if (this.onLadder) {
-            body.velocity.y = this.parameters.velocity;
-            body.gravityImpact = 0;
-        }
-    }
-
-    public stopClimbing(): void {
-        const gameObject = this.gameObject;
-        const body = gameObject.getRigidBody<ArcadeRigidBody>()!;
-        body.velocity.y = 0;
-    }
-
-    public stop():void {
-        const gameObject = this.gameObject;
-        const body = gameObject.getRigidBody<ArcadeRigidBody>()!;
-        body.velocity.x = this.parameters.velocity;
-        body.velocity.x = 0;
-        if (this.onGround) gameObject.playFrameAnimation(this.parameters.idleAnimation);
-    }
-
-    public fire():void {
-        if (this.parameters.fireAnimation) {
-            this.isFire = true;
-            const an = this.gameObject.playFrameAnimation(this.parameters.fireAnimation);
-            an.animationEventHandler.once(FRAME_ANIMATION_EVENTS.completed, ()=>{
-                this.isFire = false;
-                this.doGroundAnimation();
-            });
-            an.animationEventHandler.once(FRAME_ANIMATION_EVENTS.canceled, ()=>{
-                this.isFire = false;
-                this.doGroundAnimation();
-            });
-
-        }
-    }
-
-    public jump():void {
-        const gameObject = this.gameObject;
-        const body = gameObject.getRigidBody<ArcadeRigidBody>()!;
-        const parameters = this.parameters;
-        if (this.gameObject.getRigidBody<ArcadeRigidBody>().collisionFlags.bottom) {
-            body.velocity.y -=parameters.jumpVelocity;
-            if (parameters.jumpAnimation) {
-                gameObject.playFrameAnimation(parameters.jumpAnimation);
-            }
-        }
-    }
-
-    public override update() {
-        super.update();
-        const body = this.gameObject.getRigidBody<ArcadeRigidBody>()
-        this.onGround = body.collisionFlags.bottom;
-        this.onLadder = body.overlappedWith?.addInfo?.tileId===3;
-        if (!this.onLadder) body.gravityImpact = 1;
-        if (!this.onGround && this.gameObject.getCurrentFrameAnimationName()!==this.parameters.jumpAnimation) {
-            if (this.parameters.jumpAnimation!==undefined && !this.isFire) {
-                this.gameObject.playFrameAnimation(this.parameters.jumpAnimation);
-            }
-        }
     }
 
     private doGroundAnimation():void {
         const gameObject = this.gameObject;
         const body = gameObject.getRigidBody<ArcadeRigidBody>()!;
         const params = this.parameters;
-        if (this.onGround && !this.isFire) {
+        if (this.onGround && !this.isFiring) {
             if (body.velocity.x) {
                 gameObject.playFrameAnimation(params.runAnimation);
             }
