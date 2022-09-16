@@ -84,14 +84,14 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
 
             const playerBodyRect = playerBody.calcAndGetBoundRect();
 
-            for (const c of playerBody.spatialCellsOccupied) {
+            for (const cell of playerBody.spatialCellsOccupied) {
 
                 //if we can ignore the whole spatial cell
-                if (include(c.groupNames,playerBody.ignoreCollisionWithGroupNames)) {
+                if (include(cell.groupNames,playerBody.ignoreCollisionWithGroupNames)) {
                     continue;
                 }
 
-                for (const obj of c.objects) {
+                for (const obj of cell.objects) {
                     const entityBody = obj as ArcadeRigidBody;
                     if (entityBody===playerBody) continue;
                     const abKey = `${playerBody.id}_${entityBody.id}`;

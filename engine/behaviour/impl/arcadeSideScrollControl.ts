@@ -86,16 +86,18 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
     }
 
     public stopClimbing(): void {
-        this.body.velocity.y = 0;
-        if (this.gameObject.getCurrentFrameAnimation()===this.parameters.climbAnimation) {
-            this.parameters.climbAnimation?.stop();
+        if (this.onLadder) {
+            this.body.velocity.y = 0;
+            this.isClimbing = false;
+            if (this.gameObject.getCurrentFrameAnimation()===this.parameters.climbAnimation) {
+                this.parameters.climbAnimation?.stop();
+            }
         }
     }
 
     public stop():void {
-        this.body.velocity.x = this.parameters.velocity;
         this.body.velocity.x = 0;
-        if (this.onGround) this.gameObject.playFrameAnimation(this.parameters.idleAnimation);
+        if ((this.onGround || this.onLadder) && !this.isClimbing) this.gameObject.playFrameAnimation(this.parameters.idleAnimation);
     }
 
     public fire():void {
@@ -159,7 +161,9 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
     private listenToCollisions():void {
         this.body.collisionEventHandler.on(ARCADE_COLLISION_EVENT.COLLIDED, _=>{
             this.body.gravityImpact = 1;
-            if (this.body.collisionFlags.bottom) this.body.velocity.y = 0; // to avoid bumping with ground while climbing down
+            if (this.isClimbing && this.body.collisionFlags.bottom) {
+                this.body.velocity.y = 0;
+            } // to avoid bumping with ground while climbing down
             this.doGroundAnimation();
         });
         this.body.collisionEventHandler.on(ARCADE_COLLISION_EVENT.OVERLAPPED, e=>{
