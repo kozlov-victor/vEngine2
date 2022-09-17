@@ -46,32 +46,27 @@ export class Game {
         Game._instance = this;
         if (DEBUG) (window as unknown as {game:Game}).game = this;
         (this.size as Size).setWH(width,height);
-        this._scaleStrategy = scaleStrategy;
+        this.scaleStrategy = scaleStrategy;
         this._startedTime = Date.now();
         this.rootContainerElement = containerElement;
     }
 
-    get scaleStrategy(): SCALE_STRATEGY {
-        return this._scaleStrategy;
-    }
-
-    get width():number {
+    public get width():number {
         return this.size.width;
     }
 
-    get height():number {
+    public get height():number {
         return this.size.height;
     }
 
-    private static readonly _UPDATE_TIME_RATE:number = ~~(1000 / 60);
+    private static readonly _UPDATE_TIME_RATE:number = Math.ceil(1000 / 60);
     private static _instance:Game;
 
     public readonly size:ISize = new Size();
     public readonly scale:Point2d = new Point2d(1,1);
     public readonly pos:Point2d = new Point2d(0,0);
     public readonly rootContainerElement:Optional<HTMLElement>;
-
-    private readonly _scaleStrategy:SCALE_STRATEGY = SCALE_STRATEGY.FIT_CANVAS_TO_SCREEN;
+    public readonly scaleStrategy:SCALE_STRATEGY = SCALE_STRATEGY.FIT_CANVAS_TO_SCREEN;
 
     private readonly _startedTime:number = 0;
     private _lastTime:number = 0;
@@ -242,10 +237,10 @@ export class Game {
         if (this._destroyed) return;
         this._lastTime = this._currTime;
         this._currTime = Date.now();
-        const currTimeOrig:number = this._currTime;
+        const currTimeOrig = this._currTime;
         if (!this._lastTime) this._lastTime = this._currTime;
         this._deltaTime = this._currTime - this._lastTime;
-        const dt = this._deltaTime;
+        const deltaTimeOrig = this._deltaTime;
 
         if (DEBUG) {
             const renderError:Optional<{code:number,desc:string}> = this._renderer.getError();
@@ -254,13 +249,15 @@ export class Game {
             }
         }
 
-        const numOfLoops:number = (~~(this._deltaTime / Game._UPDATE_TIME_RATE))||1;
-        this._currTime = currTimeOrig - numOfLoops * Game._UPDATE_TIME_RATE;
+        const numOfLoops:number = Math.ceil(this._deltaTime / Game._UPDATE_TIME_RATE);
+        this._currTime =
+            numOfLoops===1?
+                currTimeOrig:
+                this._lastTime;
 
         const currentScene:Scene = this._currScene;
         let loopCnt:number = 0;
         do {
-            this._lastTime = this._currTime;
             if (loopCnt===numOfLoops-1) { // last loop
                 this._currTime = currTimeOrig;
             } else {
@@ -274,6 +271,8 @@ export class Game {
             for (const c of this._controls) {
                 c.update();
             }
+
+            this._lastTime = this._currTime;
             loopCnt++;
             if (loopCnt>10) { // to avoid too many iterations
                 this._lastTime = this._currTime = currTimeOrig;
@@ -281,12 +280,10 @@ export class Game {
             }
         } while (loopCnt<numOfLoops);
 
-        this._deltaTime = dt;
-
         if (this._currSceneTransition!==undefined) this._currSceneTransition.render();
         else currentScene.render();
         if (DEBUG) {
-            this._fpsCounter.enterFrame(this._deltaTime);
+            this._fpsCounter.enterFrame(deltaTimeOrig);
         }
     }
 
