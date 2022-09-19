@@ -8,15 +8,15 @@ import {TexturePackerAtlas} from "@engine/animation/frameAnimation/atlas/texture
 import {AtlasFrameAnimation} from "@engine/animation/frameAnimation/atlas/atlasFrameAnimation";
 import {ArcadeSideScrollControl} from "@engine/behaviour/impl/arcadeSideScrollControl";
 import {Game} from "@engine/core/game";
-import {ITiledJSON} from "@engine/renderable/impl/general/tileMap/tileMap";
+import {ITiledJSON, TileMap} from "@engine/renderable/impl/general/tileMap/tileMap";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {CharacterBullet} from "./characterBullet";
 
 export class Character {
 
-    constructor(game: Game, scene:Scene, assets:Assets,tiledObject:ITiledJSON['layers'][0]['objects'][0]) {
+    constructor(game: Game, scene:Scene, tileMap:TileMap, assets:Assets,tiledObject:ITiledJSON['layers'][0]['objects'][0]) {
         const characterImage = new AnimatedImage(game,assets.characterTexture);
-        characterImage.pos.setXY(tiledObject.x,tiledObject.y);
+        characterImage.pos.setXY(tiledObject.x,tiledObject.y - tiledObject.height);
         characterImage.setRigidBody(game.getPhysicsSystem<ArcadePhysicsSystem>().createRigidBody({
             type:ARCADE_RIGID_BODY_TYPE.DYNAMIC,
             debug: false,
@@ -30,13 +30,13 @@ export class Character {
             velocity: 100,
             jumpVelocity: 300,
             ladderTileIds: [3],
+            tileMap,
             runAnimation: new AtlasFrameAnimation(game,{
                 frames: [
                     texturePackerAtlas.getFrameByKey('character_step1'),
                     texturePackerAtlas.getFrameByKey('character_step2'),
                 ],
                 isRepeating: true,
-                name: 'walk',
                 durationOfOneFrame: 200,
             }),
             idleAnimation: new AtlasFrameAnimation(game,{
@@ -45,7 +45,6 @@ export class Character {
                     texturePackerAtlas.getFrameByKey('character_stand2'),
                 ],
                 isRepeating: true,
-                name: 'idle',
                 durationOfOneFrame: 2000,
             }),
             jumpAnimation: new AtlasFrameAnimation(game,{
@@ -54,7 +53,6 @@ export class Character {
                     texturePackerAtlas.getFrameByKey('character_jump2'),
                 ],
                 isRepeating: true,
-                name: 'jump',
                 durationOfOneFrame: 200,
             }),
             fireAnimation: new AtlasFrameAnimation(game,{
@@ -63,7 +61,6 @@ export class Character {
                     texturePackerAtlas.getFrameByKey('character_fire2'),
                 ],
                 isRepeating: false,
-                name: 'fire',
                 durationOfOneFrame: 100,
             }),
             climbAnimation: new AtlasFrameAnimation(game,{
@@ -72,7 +69,6 @@ export class Character {
                     texturePackerAtlas.getFrameByKey('character_climb2'),
                 ],
                 isRepeating: true,
-                name: 'climb',
                 durationOfOneFrame: 200,
             }),
         });

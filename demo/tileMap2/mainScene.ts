@@ -74,13 +74,11 @@ export class MainScene extends Scene {
             velocity: 300,
             jumpVelocity: 500,
             idleAnimation: new AtlasFrameAnimation(this.game,{
-                name: 'idle',
                 frames:[frames[4]],
                 isRepeating: true,
                 duration: 600,
             }),
             runAnimation: new AtlasFrameAnimation(this.game,{
-                name: 'run',
                 frames,
                 isRepeating: true,
                 duration: 600,

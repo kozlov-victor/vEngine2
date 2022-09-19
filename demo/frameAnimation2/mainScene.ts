@@ -22,14 +22,13 @@ export class MainScene extends Scene {
         const animatedImage:AnimatedImage = new AnimatedImage(this.game,this.links[this.cnt]);
         const anim:CellFrameAnimation = new CellFrameAnimation(this.game,{
             frames: new Array(28).fill(0).map((it,index)=>index),
-            name: 'animation',
             isRepeating: true,
             duration: 1300,
             numOfFramesHorizontally: 28,
             numOfFramesVertically: 1,
         });
         animatedImage.addFrameAnimation(anim);
-        animatedImage.playFrameAnimation('animation');
+        anim.play();
         animatedImage.pos.setXY(10,10);
 
         animatedImage.scale.setXY(3);

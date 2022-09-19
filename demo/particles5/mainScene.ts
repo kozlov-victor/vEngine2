@@ -27,7 +27,7 @@ export class MainScene extends Scene {
         rect.angleVelocity = 1;
         rect.transformPoint.setToCenter();
         rect.fillColor.setFrom(ColorFactory.fromCSS('#66200c'));
-        rect.blendMode = BLEND_MODE.SUBSTRACTIVE;
+        rect.blendMode = BLEND_MODE.SUBTRACTIVE;
 
         const ps: ParticleSystem = new ParticleSystem(this.game);
         ps.addParticlePrefab(circle);

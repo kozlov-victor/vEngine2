@@ -50,7 +50,6 @@ export class CellFrameAnimation extends AbstractFrameAnimation<number> implement
             frames: [...this._frames],
             duration: this._duration,
             isRepeating: this._isRepeating,
-            name: this._name,
             numOfFramesHorizontally: this._numOfFramesH,
             numOfFramesVertically: this._numOfFramesV,
         });

@@ -12,19 +12,12 @@ import {ITexture} from "@engine/renderer/common/texture";
 export class AnimatedImage extends Image implements ICloneable<AnimatedImage>{
 
     public override readonly type:string = 'AnimatedImage';
+    public _currFrameAnimation:Optional<AbstractFrameAnimation<any>>;
 
-    private _currFrameAnimation:Optional<AbstractFrameAnimation<any>>;
-    private _frameAnimations:{[name:string]:AbstractFrameAnimation<any>} = {};
+    private _frameAnimations:AbstractFrameAnimation<any>[] = [];
 
     constructor(game:Game,texture:ITexture){
         super(game,texture);
-    }
-
-    public override revalidate():void {
-        Object.keys(this._frameAnimations).forEach((key:string)=>{
-           this._frameAnimations[key].revalidate();
-        });
-        super.revalidate();
     }
 
     public override clone():AnimatedImage {
@@ -33,80 +26,33 @@ export class AnimatedImage extends Image implements ICloneable<AnimatedImage>{
         return cloned;
     }
 
-
     public addFrameAnimation(fa:AbstractFrameAnimation<any>):void {
         if (DEBUG && fa._target!==undefined) {
             throw new DebugError(`can not add FrameAnimation: this animation is already attached to another AnimatedImage object`);
         }
-        if (DEBUG && this._frameAnimations[fa.getName()]!==undefined) {
-            throw new DebugError(`can not add FrameAnimation: another animation with name "${name}" is already attached`);
+        if (DEBUG && fa._target!==undefined) {
+            throw new DebugError(`can not add FrameAnimation: it is already added to another AnimatedImage`);
         }
-        this._frameAnimations[fa.getName()] = fa;
+        this._frameAnimations.push(fa);
         fa._target = this;
-    }
-
-    private findFrameAnimation(fr:string|AbstractFrameAnimation<any>):AbstractFrameAnimation<any> {
-        let frameAnimation:AbstractFrameAnimation<any>;
-        if (typeof fr==='string') {
-            frameAnimation = this._frameAnimations[fr];
-        } else frameAnimation = fr;
-        if (DEBUG && !frameAnimation) throw new DebugError(`no such frame animation: '${fr}'`);
-        return frameAnimation;
-    }
-
-    public playFrameAnimation(fr:string|AbstractFrameAnimation<any>):AbstractFrameAnimation<any>{
-        const frameAnimation = this.findFrameAnimation(fr);
-        if (frameAnimation===this._currFrameAnimation) return this._currFrameAnimation;
-        if (this._currFrameAnimation) {
-            if (this._currFrameAnimation.isPlaying()) {
-                this._currFrameAnimation.stop();
-                this._currFrameAnimation.animationEventHandler.trigger(FRAME_ANIMATION_EVENTS.canceled);
-            }
-        }
-        this._currFrameAnimation = frameAnimation;
-        frameAnimation.play();
-        return frameAnimation;
-    }
-
-    public gotoAndPlay(fr:string|AbstractFrameAnimation<any>,frame:number):void{
-        const frameAnimation = this.findFrameAnimation(fr);
-        frameAnimation.gotoAndPlay(frame);
-    }
-
-    public gotoAndStop(fr:string|AbstractFrameAnimation<any>,frame:number):void{
-        const frameAnimation = this.findFrameAnimation(fr);
-        frameAnimation.gotoAndStop(frame);
-        this._currFrameAnimation = undefined;
-    }
-
-    public stopFrameAnimation():void {
-        if (this._currFrameAnimation!==undefined) this._currFrameAnimation.stop();
-        this._currFrameAnimation = undefined;
+        fa.revalidate();
     }
 
     public getCurrentFrameAnimation():Optional<AbstractFrameAnimation<any>>{
         return this._currFrameAnimation;
     }
 
-    public getCurrentFrameAnimationName():Optional<string>{
-        return this._currFrameAnimation?.getName();
-    }
-
-
     public override update():void {
         super.update();
-        if (this._currFrameAnimation) this._currFrameAnimation.update();
+        this._currFrameAnimation?.update();
     }
-
 
     protected override setClonedProperties(cloned:AnimatedImage):void {
         super.setClonedProperties(cloned);
-        Object.keys(this._frameAnimations).forEach((key:string)=>{
-            const fr:AbstractFrameAnimation<any> = this._frameAnimations[key].clone();
+        for (const a of this._frameAnimations) {
+            const fr: AbstractFrameAnimation<any> = a.clone();
             cloned.addFrameAnimation(fr);
-        });
-        if (this._currFrameAnimation) {
-            cloned.playFrameAnimation(this._currFrameAnimation.getName());
+            if (a.isPlaying()) fr.play();
         }
     }
 }

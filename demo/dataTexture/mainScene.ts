@@ -34,13 +34,12 @@ export class MainScene extends Scene {
 
         const animatedImage:AnimatedImage = new AnimatedImage(this.game,this.textures[0]);
         const anim:MultiImageFrameAnimation = new MultiImageFrameAnimation(this.game,{
-            name: 'animation',
             frames: this.textures,
             isRepeating: true,
             duration: 600,
         });
         animatedImage.addFrameAnimation(anim);
-        animatedImage.playFrameAnimation('animation');
+        anim.play();
         this.appendChild(animatedImage);
     }
 

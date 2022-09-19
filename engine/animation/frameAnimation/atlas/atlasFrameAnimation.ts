@@ -12,7 +12,6 @@ export class AtlasFrameAnimation extends AbstractFrameAnimation<IRectJSON> imple
             frames: [...this._frames],
             duration: this._duration,
             isRepeating: this._isRepeating,
-            name: this._name
         });
         this.setClonedProperties(cloned);
         return cloned as this;

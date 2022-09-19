@@ -21,14 +21,13 @@ export class MainScene extends Scene {
 
     public override onReady():void {
         const anim:MultiImageFrameAnimation = new MultiImageFrameAnimation(this.game,{
-            name: 'animation',
             frames: this.resourceLinks,
             isRepeating: true,
             duration: 1000,
         });
         const animatedImage:AnimatedImage = new AnimatedImage(this.game,this.resourceLinks[0]);
         animatedImage.addFrameAnimation(anim);
-        animatedImage.playFrameAnimation('animation');
+        anim.play();
         animatedImage.pos.setFrom({x:10,y:10});
         this.appendChild(animatedImage);
 
@@ -36,8 +35,12 @@ export class MainScene extends Scene {
 
         this.mouseEventHandler.on(MOUSE_EVENTS.click,_=>{
            playing = !playing;
-           if (playing) { animatedImage.playFrameAnimation('animation'); }
-           else { animatedImage.stopFrameAnimation(); }
+           if (playing) {
+               anim.play();
+           }
+           else {
+               anim.stop();
+           }
         });
 
     }

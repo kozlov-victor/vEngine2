@@ -43,7 +43,6 @@ export class Bullet extends AbstractEntity {
     protected override onCreatedRenderableModel(spriteSheet: ITexture): RenderableModel {
         const img:AnimatedImage = new AnimatedImage(this.game,spriteSheet);
         const animation:CellFrameAnimation = new CellFrameAnimation(this.game,{
-            name: 'bulletAni',
             frames: [0,1,2,3,4,3,2,1],
             duration: 300,
             numOfFramesHorizontally: 3,

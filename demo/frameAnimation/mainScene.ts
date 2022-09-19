@@ -20,7 +20,6 @@ export class MainScene extends Scene {
     public override onReady():void {
         const animatedImage:AnimatedImage = new AnimatedImage(this.game,this.resourceLink);
         const anim:CellFrameAnimation = new CellFrameAnimation(this.game,{
-            name: 'animation',
             frames: [0,1,2,3,4,5,6,7,8,9,10,11,12,13],
             isRepeating: true,
             numOfFramesHorizontally: 5,
@@ -28,7 +27,7 @@ export class MainScene extends Scene {
             duration: 1000,
         });
         animatedImage.addFrameAnimation(anim);
-        animatedImage.playFrameAnimation('animation');
+        anim.play();
         animatedImage.pos.setFrom({x:10,y:10});
         this.appendChild(animatedImage);
 
@@ -36,11 +35,13 @@ export class MainScene extends Scene {
 
         this.mouseEventHandler.on(MOUSE_EVENTS.click,_=>{
            playing = !playing;
-           if (playing) { animatedImage.playFrameAnimation('animation'); }
-           else { animatedImage.stopFrameAnimation(); }
+           if (playing) {
+               anim.play();
+           }
+           else {
+               anim.stop();
+           }
         });
-        // this.obj.sprite.size.width = 100;
-
 
     }
 

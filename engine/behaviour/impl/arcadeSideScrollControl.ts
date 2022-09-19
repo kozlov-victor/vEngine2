@@ -11,11 +11,13 @@ import {
     FRAME_ANIMATION_EVENTS
 } from "@engine/animation/frameAnimation/abstract/abstractFrameAnimation";
 import {IRectJSON} from "@engine/geometry/rect";
+import {TileMap} from "@engine/renderable/impl/general/tileMap/tileMap";
 
 interface IParams extends IKeyVal<any>{
     velocity: number;
     jumpVelocity: number;
     ladderTileIds?:number[];
+    tileMap?:TileMap;
     runAnimation: AbstractFrameAnimation<IRectJSON>;
     idleAnimation: AbstractFrameAnimation<IRectJSON>;
     jumpAnimation?: AbstractFrameAnimation<IRectJSON>;
@@ -71,7 +73,7 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
             this.isClimbing = true;
             this.body.velocity.y = -this.parameters.velocity;
             this.body.gravityImpact = 0;
-            if (this.parameters.climbAnimation) this.parameters.climbAnimation.play();
+            if (this.parameters.climbAnimation) this.parameters.climbAnimation.gotoAndPlay(0);
         }
     }
 
@@ -81,7 +83,7 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
             this.isClimbing = true;
             this.body.velocity.y = this.parameters.velocity;
             this.body.gravityImpact = 0;
-            if (this.parameters.climbAnimation) this.parameters.climbAnimation.play();
+            if (this.parameters.climbAnimation) this.parameters.climbAnimation.gotoAndPlay(0);
         }
     }
 
@@ -90,20 +92,21 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
             this.body.velocity.y = 0;
             this.isClimbing = false;
             if (this.gameObject.getCurrentFrameAnimation()===this.parameters.climbAnimation) {
-                this.parameters.climbAnimation?.stop();
+                this.parameters.climbAnimation?.gotoAndStop(1);
             }
         }
     }
 
     public stop():void {
         this.body.velocity.x = 0;
-        if ((this.onGround || this.onLadder) && !this.isClimbing) this.gameObject.playFrameAnimation(this.parameters.idleAnimation);
+        if ((this.onGround || this.onLadder) && !this.isClimbing) this.parameters.idleAnimation.play();
     }
 
     public fire():void {
         if (this.parameters.fireAnimation) {
             this.isFiring = true;
-            const an = this.gameObject.playFrameAnimation(this.parameters.fireAnimation);
+            const an = this.parameters.fireAnimation;
+            an.play();
             an.animationEventHandler.once(FRAME_ANIMATION_EVENTS.completed, ()=>{
                 this.isFiring = false;
                 this.doGroundAnimation();
@@ -119,9 +122,7 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
     public jump():void {
         if (this.gameObject.getRigidBody<ArcadeRigidBody>().collisionFlags.bottom) {
             this.body.velocity.y -= this.parameters.jumpVelocity;
-            if (this.parameters.jumpAnimation) {
-                this.gameObject.playFrameAnimation(this.parameters.jumpAnimation);
-            }
+            this.parameters.jumpAnimation?.play();
         }
     }
 
@@ -129,14 +130,14 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
         super.update();
         const body = this.gameObject.getRigidBody<ArcadeRigidBody>()
         this.onGround = body.collisionFlags.bottom;
-        this.onLadder = this.parameters.ladderTileIds?.includes(body.overlappedWith?.addInfo?.tileId) ?? false;
+        this.onLadder = this.isLadderTileId(body.overlappedWith?.addInfo?.tileId);
         if (!this.onLadder) {
             body.gravityImpact = 1;
             this.isClimbing = false;
         }
         if (!this.onGround && !this.onLadder) {
-            if (this.parameters.jumpAnimation!==undefined && !this.isFiring) {
-                this.gameObject.playFrameAnimation(this.parameters.jumpAnimation);
+            if (!this.isFiring) {
+                this.parameters.jumpAnimation?.play();
             }
         }
     }
@@ -149,7 +150,7 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
         if (this.parameters.climbAnimation) this.gameObject.addFrameAnimation(this.parameters.climbAnimation);
 
         this.gameObject.transformPoint.setToCenter();
-        this.gameObject.playFrameAnimation(this.parameters.idleAnimation);
+        this.parameters.idleAnimation.play();
 
         const body = this.gameObject.getRigidBody<ArcadeRigidBody>()!;
         if (DEBUG && body===undefined) {
@@ -222,14 +223,40 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
         const gameObject = this.gameObject;
         const body = gameObject.getRigidBody<ArcadeRigidBody>()!;
         const params = this.parameters;
-        if ((this.onGround || this.onLadder) && !this.isFiring) {
+        if (this.isFiring) return;
+
+        const onTopOfLadder =
+            this.onLadder &&
+            !this.isLadderTileIdAtXY(body.getLeft(),body.getBottom() - 5) &&
+            !this.isLadderTileIdAtXY(body.getRight(),body.getBottom() - 5)
+
+        if ((this.onGround || onTopOfLadder)) {
             if (body.velocity.x) {
-                gameObject.playFrameAnimation(params.runAnimation);
+                params.runAnimation.play();
             }
             else {
-                gameObject.playFrameAnimation(params.idleAnimation);
+                params.idleAnimation.play();
+            }
+        } else if (this.onLadder) {
+            if (body.velocity.x) {
+                params.climbAnimation?.gotoAndPlay(0);
+            }
+            else {
+                params.climbAnimation?.gotoAndStop(1);
             }
         }
+    }
+
+    private isLadderTileId(tileId:number|undefined):boolean {
+        if (tileId===undefined) return false;
+        if (this.parameters.ladderTileIds===undefined) return false;
+        return this.parameters.ladderTileIds.includes(tileId);
+    }
+
+    private isLadderTileIdAtXY(x:number,y:number):boolean {
+        if (!this.parameters.tileMap) return false;
+        const tileId = this.parameters.tileMap.getDataValueAtPointXY(x,y);
+        return this.isLadderTileId(tileId);
     }
 
 }

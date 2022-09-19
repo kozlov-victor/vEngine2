@@ -106,13 +106,12 @@ export default async (game:Game)=>{
             })
         }
         const anim: AtlasFrameAnimation = new AtlasFrameAnimation(game,{
-            name: 'default',
             frames,
             isRepeating: true,
             duration: 1000,
         });
         animatedImage.addFrameAnimation(anim);
-        animatedImage.playFrameAnimation(anim);
+        anim.play();
         workLayer.appendChild(animatedImage);
 
         model = animatedImage;

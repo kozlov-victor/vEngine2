@@ -22,7 +22,6 @@ interface IDurationOfOneFrame {
 export type tFrameAnimationDuration = IDuration | IDurationOfOneFrame;
 
 export interface IFrameAnimationBaseParams {
-    name: string;
     isRepeating?:boolean;
 }
 
@@ -45,11 +44,9 @@ export abstract class AbstractFrameAnimation<T> implements ITargetAnimation, ICl
     private _isPlaying:boolean = false;
     private _loopReached:boolean = false;
 
-
     public readonly animationEventHandler:EventEmitterDelegate<FRAME_ANIMATION_EVENTS,void> = new EventEmitterDelegate(this.game);
 
     public constructor(protected game:Game,params:tFrameAnimationDuration & IFrameAnimationParams<T>) {
-        this._name = params.name;
         this._frames = params.frames;
 
         if ((params as IDuration).duration!==undefined) this._duration = (params as IDuration).duration;
@@ -68,24 +65,27 @@ export abstract class AbstractFrameAnimation<T> implements ITargetAnimation, ICl
 
     public play():this {
         if (DEBUG) {
-            if (!this._target) throw new DebugError(`can not play frame animation: it is not attached to parent`);
+            if (!this._target) throw new DebugError(`can not play frame animation: it is not attached to a parent`);
         }
-        if (this._target.getCurrentFrameAnimation()!==this) {
-            if (this._target.getCurrentFrameAnimation()?.isPlaying()) {
-                this._target.getCurrentFrameAnimation()!.animationEventHandler.trigger(FRAME_ANIMATION_EVENTS.canceled);
+        const curr = this._target.getCurrentFrameAnimation();
+        if (curr && curr!==this) {
+            if (curr.isPlaying()) {
+                curr.animationEventHandler.trigger(FRAME_ANIMATION_EVENTS.canceled);
             }
-            this._target.playFrameAnimation(this);
         }
+        this._target._currFrameAnimation = this;
         this._isPlaying = true;
         return this;
     }
 
     public gotoAndPlay(frame:number):void {
+        frame = frame % this._frames.length;
         this._currFrame = frame;
         this.play();
     }
 
     public gotoAndStop(frame:number):void {
+        frame = frame % this._frames.length;
         this._currFrame = frame;
         this.onNextFrame(frame);
         this.animationEventHandler.trigger(FRAME_ANIMATION_EVENTS.completed);
@@ -122,12 +122,10 @@ export abstract class AbstractFrameAnimation<T> implements ITargetAnimation, ICl
     public update():void {
         if (!this._isPlaying) return;
         const time:number = this.game.getCurrentTime();
-        const firstFrame = this._startTime===0;
-        if (firstFrame) this._startTime = time;
+        if (this._startTime===0) this._startTime = time;
         const delta:number = (time - this._startTime) % this._duration;
         let currFrame:number = ~~((this._frames.length) * delta / this._duration);
         currFrame = currFrame % this._frames.length;
-        if (currFrame===this._currFrame && !firstFrame) return; // "firstFrame" flag fixed bug with animation of one frame, witch mill not start otherwise
         if (this._loopReached && !this._isRepeating) {
             this.stop();
             this.animationEventHandler.trigger(FRAME_ANIMATION_EVENTS.completed);
@@ -140,7 +138,6 @@ export abstract class AbstractFrameAnimation<T> implements ITargetAnimation, ICl
             this._loopReached = true;
         }
     }
-
 
     protected abstract onNextFrame(i:number):void;
 

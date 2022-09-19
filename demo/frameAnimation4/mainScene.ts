@@ -16,9 +16,8 @@ export class MainScene extends Scene {
     @Resource.Texture('./frameAnimation4/Flying eye/Flight.png') public flight:ITexture;
     @Resource.Texture('./frameAnimation4/Flying eye/Take Hit.png') public takeHit:ITexture;
 
-    private createAnimation(name:string,frames:{resource:ITexture,rect:IRectJSON}[],isRepeating:boolean,duration:number):MultiImageAtlasFrameAnimation {
+    private createAnimation(frames:{resource:ITexture,rect:IRectJSON}[],isRepeating:boolean,duration:number):MultiImageAtlasFrameAnimation {
         return new MultiImageAtlasFrameAnimation(this.game, {
-            name,
             frames,
             isRepeating,
             duration
@@ -33,49 +32,42 @@ export class MainScene extends Scene {
         animatedImage.setPixelPerfect(true);
         animatedImage.size.setWH(150*4);
 
-        animatedImage.addFrameAnimation(
-            this.createAnimation(
-                'attack',
-                (()=>{
-                    const arr = []
-                    for (let i=0;i<8;i++) {
-                        arr.push({rect:{x:i*150,y:0,width:150,height:150},resource:this.attack})
-                    }
-                    return arr;
-                })(),
-                true, 8*100
-            )
+        const attack = this.createAnimation(
+            (()=>{
+                const arr = []
+                for (let i=0;i<8;i++) {
+                    arr.push({rect:{x:i*150,y:0,width:150,height:150},resource:this.attack})
+                }
+                return arr;
+            })(),
+            true, 8*100);
+        animatedImage.addFrameAnimation(attack);
+
+        const death = this.createAnimation(
+            (()=>{
+                const arr = []
+                for (let i=0;i<4;i++) {
+                    arr.push({rect:{x:i*150,y:0,width:150,height:150},resource:this.death})
+                }
+                return arr;
+            })(),
+            false, 4*100
         );
-        animatedImage.addFrameAnimation(
-            this.createAnimation(
-                'death',
-                (()=>{
-                    const arr = []
-                    for (let i=0;i<4;i++) {
-                        arr.push({rect:{x:i*150,y:0,width:150,height:150},resource:this.death})
-                    }
-                    return arr;
-                })(),
-                false, 4*100
-            )
+        animatedImage.addFrameAnimation(death);
+
+        const flight = this.createAnimation(
+            (()=>{
+                const arr = []
+                for (let i=0;i<8;i++) {
+                    arr.push({rect:{x:i*150,y:0,width:150,height:150},resource:this.flight})
+                }
+                return arr;
+            })(),
+            true, 8*100
         );
-        animatedImage.addFrameAnimation(
-            this.createAnimation(
-                'flight',
-                (()=>{
-                    const arr = []
-                    for (let i=0;i<8;i++) {
-                        arr.push({rect:{x:i*150,y:0,width:150,height:150},resource:this.flight})
-                    }
-                    return arr;
-                })(),
-                true, 8*100
-            )
-        );
-        let hit;
-        animatedImage.addFrameAnimation(
-            hit = this.createAnimation(
-                'takeHit',
+        animatedImage.addFrameAnimation(flight);
+
+        const hit = this.createAnimation(
                 (()=>{
                     const arr = []
                     for (let i=0;i<4;i++) {
@@ -83,22 +75,22 @@ export class MainScene extends Scene {
                     }
                     return arr;
                 })(),
-                false, 4*100
-            )
-        );
+                false, 4*100);
+
+        animatedImage.addFrameAnimation(hit);
         hit.animationEventHandler.on(FRAME_ANIMATION_EVENTS.completed, _=>{
-            animatedImage.playFrameAnimation('flight');
+            flight.play();
         })
         this.appendChild(animatedImage);
 
 
-        const animations = ['attack','death','flight','takeHit'];
+        const animations = [attack,death,flight,hit];
         let i = 0;
         this.mouseEventHandler.on(MOUSE_EVENTS.click, _=>{
             const anim = animations[i];
             i++;
             i%=animations.length;
-            animatedImage.playFrameAnimation(anim);
+            anim.play();
         });
 
 

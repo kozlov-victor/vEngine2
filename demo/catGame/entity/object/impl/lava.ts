@@ -28,7 +28,6 @@ export class Lava extends AbstractEntity {
     protected override onCreatedRenderableModel(spriteSheet: ITexture): RenderableModel {
         const img:AnimatedImage = new AnimatedImage(this.game,spriteSheet);
         const animation:CellFrameAnimation = new CellFrameAnimation(this.game,{
-            name: 'lavaAni',
             frames: {to:44},
             duration: 5000,
             numOfFramesHorizontally: 45,

@@ -93,7 +93,6 @@ export class MainScene extends Scene {
         const animatedImage:AnimatedImage = new AnimatedImage(this.game,this.r.fireTexture);
         animatedImage.blendMode = BLEND_MODE.ADDITIVE;
         const anim:CellFrameAnimation = new CellFrameAnimation(this.game,{
-            name: 'animation',
             frames: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14],
             isRepeating: true,
             duration: 1200,
@@ -101,7 +100,7 @@ export class MainScene extends Scene {
             numOfFramesVertically: 4,
         });
         animatedImage.addFrameAnimation(anim);
-        animatedImage.playFrameAnimation(anim);
+        anim.play();
         animatedImage.scale.setXY(0.5);
         animatedImage.transformPoint.setToCenter();
 

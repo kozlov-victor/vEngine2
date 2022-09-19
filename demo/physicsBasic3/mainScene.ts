@@ -5,10 +5,7 @@ import {ColorFactory} from "@engine/renderer/common/colorFactory";
 
 export class MainScene extends Scene {
 
-
-
     public override onReady():void {
-
 
         const physicsSystem:ArcadePhysicsSystem = this.game.getPhysicsSystem();
 

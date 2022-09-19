@@ -1,9 +1,10 @@
-import {AbstractRenderer, IRenderTarget} from "../../renderer/abstract/abstractRenderer";
+import {IRenderTarget} from "../../renderer/abstract/abstractRenderer";
 import {
     IAlphaBlendable,
     ICloneable,
     IDestroyable,
     IFilterable,
+    IInteractive,
     IParentChild,
     IRenderable,
     IRevalidatable,
@@ -41,7 +42,7 @@ export const enum BLEND_MODE {
     NORMAL,
     NORMAL_SEPARATE,
     ADDITIVE,
-    SUBSTRACTIVE,
+    SUBTRACTIVE,
     REVERSE_SUBTRACTIVE,
     SCREEN,
 }
@@ -55,7 +56,7 @@ export abstract class RenderableModel
         IRevalidatable, ITweenable,
         IParentChild, IWithId,
         IAlphaBlendable, IFilterable,
-        IUpdatable, IDestroyable {
+        IUpdatable, IDestroyable,IInteractive {
 
     public id: string = `object_${Incrementer.getValue()}`;
 
@@ -72,7 +73,7 @@ export abstract class RenderableModel
     public readonly dragEventHandler: EventEmitterDelegate<DRAG_EVENTS, IDragPoint> = new EventEmitterDelegate(this.game);
 
     public readonly velocity = new Point2d(0, 0);
-    public interactive: boolean = false;
+    public readonly interactive: boolean = false;
 
     public _lastProgramId:number;
 

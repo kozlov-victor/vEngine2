@@ -42,6 +42,10 @@ export interface IAlphaBlendable {
     alpha:number;
 }
 
+export interface IInteractive {
+    readonly interactive:boolean;
+}
+
 export interface IWithId {
     id:string;
 }

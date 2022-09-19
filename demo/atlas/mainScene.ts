@@ -27,7 +27,6 @@ export class MainScene extends Scene {
         const texturePackerAtlas = new TexturePackerAtlas(this.atlas);
 
         const animRun: AtlasFrameAnimation = new AtlasFrameAnimation(this.game,{
-            name: 'run',
             frames: [
                 texturePackerAtlas.getFrameByKey("run-01"),
                 texturePackerAtlas.getFrameByKey("run-02"),
@@ -48,28 +47,23 @@ export class MainScene extends Scene {
                 texturePackerAtlas.getFrameByKey("jump-down"),
                 texturePackerAtlas.getFrameByKey("jump-up"),
             ],
-            name: 'jump',
             isRepeating: false,
             duration: 800,
         });
         animJump.animationEventHandler.on(FRAME_ANIMATION_EVENTS.completed, () => {
-            animatedImage.playFrameAnimation("run");
+            animRun.play();
         });
 
         animatedImage.addFrameAnimation(animRun);
         animatedImage.addFrameAnimation(animJump);
-        animatedImage.playFrameAnimation("run");
+        animRun.play();
 
         animatedImage.mouseEventHandler.on(MOUSE_EVENTS.click, _ => {
-            // animRun.stop();
-            // animJump.play();
-            animatedImage.stopFrameAnimation();
-            animatedImage.playFrameAnimation("jump");
+            animJump.play();
         });
 
         animatedImage.pos.setFrom({x: 10, y: 10});
         this.appendChild(animatedImage);
-
 
     }
 

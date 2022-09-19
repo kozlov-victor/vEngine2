@@ -1,7 +1,14 @@
 import {Layer, LayerTransformType} from "./layer";
 import {Game} from "@engine/core/game";
 import {Color} from "@engine/renderer/common/color";
-import {IAlphaBlendable, IFilterable, IRevalidatable, ITweenable, Optional} from "@engine/core/declarations";
+import {
+    IAlphaBlendable,
+    IFilterable,
+    IInteractive,
+    IRevalidatable,
+    ITweenable,
+    Optional
+} from "@engine/core/declarations";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {TweenMovie} from "@engine/animation/tweenMovie";
 import {AbstractRenderer, IRenderTarget} from "@engine/renderer/abstract/abstractRenderer";
@@ -37,7 +44,7 @@ export const enum SCENE_EVENTS {
     INACTIVATED = 'INACTIVATED'
 }
 
-export abstract class Scene implements IRevalidatable, ITweenable,IFilterable,IAlphaBlendable {
+export abstract class Scene implements IRevalidatable, ITweenable,IFilterable,IAlphaBlendable,IInteractive {
 
     public static _currentRenderingScene:Scene;
 
@@ -58,7 +65,6 @@ export abstract class Scene implements IRevalidatable, ITweenable,IFilterable,IA
     public readonly camera:Camera = new Camera(this.game,this);
     public _spatialSpace:SpatialSpace;
 
-
     public readonly keyboardEventHandler:KeyboardEventEmitterDelegate = new KeyboardEventEmitterDelegate(this.game);
     public readonly gamepadEventHandler:GamepadEventEmitterDelegate = new GamepadEventEmitterDelegate(this.game);
     public readonly mouseEventHandler:MouseEventEmitterDelegate<ISceneMouseEvent> = new MouseEventEmitterDelegate<ISceneMouseEvent>(this.game,this);
@@ -70,10 +76,7 @@ export abstract class Scene implements IRevalidatable, ITweenable,IFilterable,IA
     private _layers: Layer[] = [];
     private _propertyAnimations:IAnimation[] = [];
 
-    // addTween
     private _tweenDelegate: TweenableDelegate = new TweenableDelegate(this.game);
-
-    // timer
     private _timerDelegate:TimerDelegate = new TimerDelegate(this.game);
 
 

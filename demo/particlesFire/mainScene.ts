@@ -21,7 +21,6 @@ export class MainScene extends Scene {
         const animatedImage:AnimatedImage = new AnimatedImage(this.game,this.resourceLink);
         animatedImage.blendMode = BLEND_MODE.ADDITIVE;
         const anim:CellFrameAnimation = new CellFrameAnimation(this.game,{
-            name: 'animation',
             frames: {to:14},
             isRepeating: true,
             duration: 1400,
@@ -29,7 +28,7 @@ export class MainScene extends Scene {
             numOfFramesVertically: 4,
         });
         animatedImage.addFrameAnimation(anim);
-        animatedImage.playFrameAnimation(anim);
+        anim.play();
 
         const ps: ParticleSystem = new ParticleSystem(this.game);
         ps.addParticlePrefab(animatedImage);

@@ -13,6 +13,7 @@ import {AbstractCanvasRenderer} from "@engine/renderer/abstract/abstractCanvasRe
 //     return setTimeout(f,1000/25);
 // };
 
+document.body.style.backgroundColor = 'black';
 ResourceLoader.BASE_URL = './dudeUntitled/assets';
 
 const game = new Game({width:240,height:320, scaleStrategy: SCALE_STRATEGY.FIT_CANVAS_TO_SCREEN});

@@ -16,7 +16,6 @@ export class MainScene extends Scene {
         sprLogo.scale.setXY(5);
         sprLogo.setPixelPerfect(true);
         const cellFrameAnimation = new CellFrameAnimation(this.game,{
-            name: 'animation',
             frames: [0,1,2],
             duration: 1200,
             numOfFramesHorizontally: 3,

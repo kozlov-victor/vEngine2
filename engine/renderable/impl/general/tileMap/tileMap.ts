@@ -10,11 +10,44 @@ import {ITexture} from "@engine/renderer/common/texture";
 import {TileMapRigidBodyDelegate} from "@engine/physics/arcade/tileMapRigidBodyDelegate";
 import {ArcadePhysicsSystem} from "@engine/physics/arcade/arcadePhysicsSystem";
 import {ARCADE_RIGID_BODY_TYPE} from "@engine/physics/arcade/arcadeRigidBody";
-import {Rect} from "@engine/geometry/rect";
+import {IRectJSON, Rect} from "@engine/geometry/rect";
 import {IRigidBody} from "@engine/physics/common/interfaces";
 import {Point2d} from "@engine/geometry/point2d";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {TileAnimator} from "@engine/renderable/impl/general/tileMap/tileAnimator";
+
+export interface ITileAnimationInfo {
+    id: number;
+    animation?: {
+        duration: number;
+        tileid: number;
+    }[]
+}
+
+export interface ITileCollisionRect {
+    id: number,
+    objectgroup: {
+        draworder: "index";
+        id: number;
+        name: string;
+        objects:
+            {
+                class: string;
+                height: number;
+                id: number;
+                name: string;
+                rotation: number;
+                visible: boolean;
+                width: number;
+                x: number;
+                y: number;
+            }[],
+        opacity: number;
+        type: "objectgroup";
+        visible: boolean;
+        x: number;
+        y: number;
+    }
+}
 
 export interface ITiledJSON {
     width: number,
@@ -31,13 +64,7 @@ export interface ITiledJSON {
         tilecount:number;
         tileheight:number;
         tilewidth:number;
-        tiles?: {
-            id: number;
-            animation?: ({
-                duration: number;
-                tileid: number;
-            })[];
-        }[];
+        tiles?: (ITileAnimationInfo|ITileCollisionRect)[];
     }[],
     layers: {
         name: string;
@@ -77,6 +104,7 @@ export interface ICollisionInfo {
     groupNames?: string[];
     restitution?:number;
     ignoreCollisionsWithGroupNames?:string[];
+    tileCollisionRects?:Record<number, IRectJSON>;
     debug?:boolean;
 }
 
@@ -198,6 +226,12 @@ export class TileMap extends RenderableModelWithTexture {
     }
 
     public fromTiledJSON(map:ITiledJSON,collisionInfo?:ICollisionInfo,mainTileSetName:string = 'tiles'):void {
+
+        if (DEBUG) {
+            if (map===undefined) throw new DebugError(`map can be defined`);
+            if (map.layers===undefined) throw new DebugError(`map does not contain layers`);
+        }
+
         const tileMapLayer = map.layers.find(it=>it.type==='tilelayer')!;
 
         if (DEBUG) {
@@ -223,6 +257,20 @@ export class TileMap extends RenderableModelWithTexture {
 
         this._dataOffsetIndex = tileSet.firstgid;
 
+        // find individual collision rects
+        let tileCollisionRects:Record<number, IRectJSON>|undefined = undefined;
+        tileSet.tiles?.forEach(t=>{
+            const tile = t as ITileCollisionRect;
+            if (tile.objectgroup===undefined) return;
+            tile.objectgroup.objects.forEach(obj=>{
+                if (obj.x!==undefined && obj.y!==undefined && obj.width!==undefined && obj.height!==undefined) {
+                    if (tileCollisionRects===undefined) tileCollisionRects = {};
+                    tileCollisionRects[tile.id] = {x:obj.x,y:obj.y,width:obj.width,height:obj.height};
+                }
+            })
+        });
+        if (collisionInfo) collisionInfo.tileCollisionRects = tileCollisionRects;
+
         this.fromData(source,mapWidth,mapHeight,tileWidth,tileHeight,collisionInfo);
     }
 
@@ -231,12 +279,20 @@ export class TileMap extends RenderableModelWithTexture {
         const rigidBodies:IRigidBody[] = [];
         for (let y:number=0;y<this._numOfTilesInMapByY;y++) {
             for (let x:number=0;x<this._numOfTilesInMapByX;x++) {
-                if (this._data[y][x]===0) continue;
-                const tileId:number = this._data[y][x] - 1;
+                const tileId = this.getDataValueAtCellXY(x,y);
+                if (tileId===undefined) continue;
+
+                let collisionRect:IRectJSON;
+                let found = false;
+                if (collisionInfo?.tileCollisionRects?.[tileId]!==undefined) {
+                    collisionRect = collisionInfo.tileCollisionRects[tileId];
+                    found = true;
+                } else {
+                    collisionRect = {x:0,y:0,width:this._tileWidth,height:this._tileHeight};
+                }
 
                 const rigidBody = this.game.getPhysicsSystem<ArcadePhysicsSystem>().createRigidBody({
                     type: ARCADE_RIGID_BODY_TYPE.KINEMATIC,
-                    rect: new Rect(0,0,this._tileWidth,this._tileHeight),
                     groupNames: collisionInfo.groupNames,
                     ignoreCollisionWithGroupNames: collisionInfo.ignoreCollisionsWithGroupNames,
                     restitution: collisionInfo.restitution,
@@ -245,16 +301,18 @@ export class TileMap extends RenderableModelWithTexture {
                 rigidBody.addInfo = {tileId};
                 rigidBody.setModel(this);
                 rigidBody.setBounds(
-                    new Point2d(x * this._tileWidth, y * this._tileHeight),
-                    new Size(this._tileWidth,this._tileHeight)
+                    new Point2d(x * this._tileWidth+collisionRect.x, y * this._tileHeight+collisionRect.y),
+                    new Size(collisionRect.width,collisionRect.height)
                 );
+
                 rigidBodies.push(rigidBody);
                 if (collisionInfo.debug) {
                     const debugRect = new Rectangle(this.game);
                     debugRect.lineWidth = 0;
                     debugRect.fillColor.setRGB(0,100,0);
                     debugRect.alpha = 0.4;
-                    debugRect.setPosAndSize(x * this._tileWidth, y * this._tileHeight,this._tileWidth,this._tileHeight);
+                    debugRect.pos.setFrom(rigidBody._pos);
+                    debugRect.size.setWH(rigidBody._rect.width,rigidBody._rect.height);
                     this.appendChild(debugRect);
                 }
             }
@@ -318,9 +376,8 @@ export class TileMap extends RenderableModelWithTexture {
                 if (currTileByX<0) continue;
                 if (currTileByX>this._numOfTilesInMapByX-1) continue;
 
-                let tileId:number = this._data[currTileByY][currTileByX];
-                if (tileId===0) continue;
-                tileId--;
+                let tileId = this.getDataValueAtCellXY(currTileByX,currTileByY);
+                if (tileId===undefined) continue;
                 tileId = this.resolveTileId(tileId);
                 this._cellImage.srcRect.setXY(this.getFramePosX(tileId),this.getFramePosY(tileId));
                 this._cellImage.pos.setXY(x * this._tileWidth, y * this._tileHeight);
@@ -331,48 +388,6 @@ export class TileMap extends RenderableModelWithTexture {
         this.updateDrawingSurfacePos();
     }
 
-    //getTileAt(x:number,y:number):{tileIndex:number,tile:number}{
-        // if (!this.spriteSheet) return;
-        // let firstTileToDrawByX:Int = ~~(x / this.spriteSheet.getFrameWidth());
-        // let firstTileToDrawByY:Int = ~~(y / this.spriteSheet.getFrameHeight());
-        // if (!this.data[firstTileToDrawByY]) return;
-        // let tile:number = this.data[firstTileToDrawByY][firstTileToDrawByX];
-        // if (!tile) return;
-        // return {
-        //     tileIndex: this.spriteSheet.numOfFramesH * firstTileToDrawByY + firstTileToDrawByX + 1,
-        //     tile
-        // }
-    //}
-
-    // getTilesAtRect(rect:Rect){
-    //     let result = [];
-    //     if (!this.spriteSheet) return result;
-    //     let alreadyCheckedTiles:{[key:string]:boolean} = {};
-    //
-    //     let x:number = rect.point.x,y:number;
-    //     let maxX:number = rect.point.x+rect.size.width,
-    //         maxY:number = rect.point.y+rect.size.height;
-    //     while (true) {
-    //         y = rect.point.y;
-    //         while (true) {
-    //             let tileInfo = this.getTileAt(x,y);
-    //             if (tileInfo) {
-    //                 if (!alreadyCheckedTiles[tileInfo.tileIndex]) {
-    //                     result.push(tileInfo.tile);
-    //                     alreadyCheckedTiles[tileInfo.tileIndex] = true;
-    //                 }
-    //             }
-    //             if (y===maxY) break;
-    //             y+=this.spriteSheet.getFrameHeight();
-    //             if (y>maxY) y = maxY;
-    //         }
-    //         if (x===maxX) break;
-    //         x+=this.spriteSheet.getFrameWidth();
-    //         if (x>maxX) x = maxX;
-    //     }
-    //     return result;
-    // }
-
     private getFramePosX(frameIndex:number):number {
         return (frameIndex % this._numOfTilesInSpriteByX) * this._tileWidth;
     }
@@ -381,12 +396,24 @@ export class TileMap extends RenderableModelWithTexture {
         return ~~(frameIndex / this._numOfTilesInSpriteByX) * this._tileHeight;
     }
 
-
     private updateDrawingSurfacePos():void{
         this._drawingSurface.pos.setXY(
             this._drawInfo.firstTileToDrawByX * this._tileWidth,
             this._drawInfo.firstTileToDrawByY * this._tileHeight
         );
+    }
+
+    // tile index of undefined if tile cell is empty
+    protected getDataValueAtCellXY(x:number,y:number):number|undefined {
+        const tileId = this._data[y][x];
+        if (tileId===0) return undefined;
+        return tileId - 1;
+    }
+
+    public getDataValueAtPointXY(x:number, y:number):number|undefined {
+        x = ~~(x / this._tileWidth);
+        y = ~~(y / this._tileHeight);
+        return this.getDataValueAtCellXY(x,y);
     }
 
     protected prepareDrawableInfo():void{

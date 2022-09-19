@@ -45,7 +45,7 @@ export class Blender {
                 gl.blendEquation(gl.FUNC_ADD);
                 gl.blendFunc(gl.ONE,gl.ONE);
                 break;
-            case BLEND_MODE.SUBSTRACTIVE:
+            case BLEND_MODE.SUBTRACTIVE:
                 gl.blendEquation(gl.FUNC_SUBTRACT);
                 gl.blendFunc(gl.ONE,gl.ONE);
                 break;

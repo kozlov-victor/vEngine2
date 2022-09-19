@@ -44,7 +44,7 @@ export class Ring extends AbstractEntity {
         rectangle.size.setWH(8,5);
         rectangle.transformPoint.setToCenter();
         rectangle.fillColor = ColorFactory.fromCSS(`#ff0000`);
-        rectangle.blendMode = BLEND_MODE.SUBSTRACTIVE;
+        rectangle.blendMode = BLEND_MODE.SUBTRACTIVE;
         rectangle.velocity.y = -100;
 
         const ps: ParticleSystem = new ParticleSystem(this.game);

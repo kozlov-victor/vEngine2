@@ -5,12 +5,12 @@ import {ColorFactory} from "@engine/renderer/common/colorFactory";
 import {Character} from "./objects/character";
 import {AnimatedTileMap} from "@engine/renderable/impl/general/tileMap/animatedTileMap";
 
+
 export class MainScene extends Scene {
 
     @Resource.ResourceHolder() public readonly assets:Assets;
 
     public override onReady():void {
-        document.body.style.backgroundColor = 'black';
 
         this.backgroundColor = ColorFactory.fromCSS(`#041f03`);
 
@@ -30,7 +30,7 @@ export class MainScene extends Scene {
             const cl = typeProp!.value;
             switch (cl) {
                 case 'character':
-                    new Character(this.game, this,this.assets,obj);
+                    new Character(this.game, this, tileMap, this.assets,obj);
                     break;
             }
         });

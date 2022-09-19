@@ -40,7 +40,6 @@ export abstract class AbstractCharacter extends AbstractEntity {
 
     protected createFrameAnimation(name:string,frames:number[], duration:number, spriteSheetSize:Size):CellFrameAnimation {
         const animation:CellFrameAnimation = new CellFrameAnimation(this.game,{
-            name,
             frames,
             duration,
             numOfFramesHorizontally: spriteSheetSize.width,

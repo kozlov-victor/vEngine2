@@ -1,4 +1,10 @@
-import {ICollisionInfo, ITileAnimation, ITiledJSON, TileMap} from "@engine/renderable/impl/general/tileMap/tileMap";
+import {
+    ICollisionInfo,
+    ITileAnimation,
+    ITileAnimationInfo,
+    ITiledJSON,
+    TileMap
+} from "@engine/renderable/impl/general/tileMap/tileMap";
 import {TileAnimator} from "@engine/renderable/impl/general/tileMap/tileAnimator";
 import {Optional} from "@engine/core/declarations";
 
@@ -11,11 +17,12 @@ export class AnimatedTileMap extends TileMap {
         const tileSet = this.findMainTileSetOfTiledJson(map, mainTileSetName);
         if (tileSet.tiles) {
             const animations:ITileAnimation[] = [];
-            tileSet.tiles.forEach(tile=>{
-                if (!tile.animation) return;
+            tileSet.tiles.forEach(t=>{
+                const tile = t as ITileAnimationInfo;
+                if (tile?.animation===undefined) return;
                 const animation:ITileAnimation = {
                     tileId: tile.id,
-                    frames: tile.animation.map(it=>({tileId:it.tileid,duration:it.duration}))
+                    frames: tile.animation!.map(it=>({tileId:it.tileid,duration:it.duration}))
                 };
                 animations.push(animation);
             });
