@@ -416,6 +416,35 @@ export class TileMap extends RenderableModelWithTexture {
         return this.getDataValueAtCellXY(x,y);
     }
 
+    // getTilesAtRect(rect:Rect) {
+    //     let result = [];
+    //     if (!this.spriteSheet) return result;
+    //     let alreadyCheckedTiles:{[key:string]:boolean} = {};
+    //
+    //     let x:number = rect.point.x,y:number;
+    //     let maxX:number = rect.point.x+rect.size.width,
+    //         maxY:number = rect.point.y+rect.size.height;
+    //     while (true) {
+    //         y = rect.point.y;
+    //         while (true) {
+    //             let tileInfo = this.getTileAt(x,y);
+    //             if (tileInfo) {
+    //                 if (!alreadyCheckedTiles[tileInfo.tileIndex]) {
+    //                     result.push(tileInfo.tile);
+    //                     alreadyCheckedTiles[tileInfo.tileIndex] = true;
+    //                 }
+    //             }
+    //             if (y===maxY) break;
+    //             y+=this.spriteSheet.getFrameHeight();
+    //             if (y>maxY) y = maxY;
+    //         }
+    //         if (x===maxX) break;
+    //         x+=this.spriteSheet.getFrameWidth();
+    //         if (x>maxX) x = maxX;
+    //     }
+    //     return result;
+    // }
+
     protected prepareDrawableInfo():void{
         const camera:Camera = this.game.getCurrentScene().camera;
         const firstTileToDrawByX:number = ~~((camera.pos.x) / this._tileWidth) - 1;

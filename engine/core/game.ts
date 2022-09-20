@@ -237,9 +237,9 @@ export class Game {
         if (this._destroyed) return;
         this._lastTime = this._currTime;
         this._currTime = Date.now();
-        const currTimeOrig = this._currTime;
         if (!this._lastTime) this._lastTime = this._currTime;
         this._deltaTime = this._currTime - this._lastTime;
+        const currTimeOrig = this._currTime;
         const deltaTimeOrig = this._deltaTime;
 
         if (DEBUG) {
@@ -275,13 +275,15 @@ export class Game {
             this._lastTime = this._currTime;
             loopCnt++;
             if (loopCnt>10) { // to avoid too many iterations
-                this._lastTime = this._currTime = currTimeOrig;
                 break;
             }
         } while (loopCnt<numOfLoops);
 
+        this._currTime = currTimeOrig;
+
         if (this._currSceneTransition!==undefined) this._currSceneTransition.render();
         else currentScene.render();
+
         if (DEBUG) {
             this._fpsCounter.enterFrame(deltaTimeOrig);
         }

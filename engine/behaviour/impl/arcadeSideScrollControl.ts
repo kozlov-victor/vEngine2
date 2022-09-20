@@ -225,12 +225,7 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
         const params = this.parameters;
         if (this.isFiring) return;
 
-        const onTopOfLadder =
-            this.onLadder &&
-            !this.isLadderTileIdAtXY(body.getLeft(),body.getBottom() - 5) &&
-            !this.isLadderTileIdAtXY(body.getRight(),body.getBottom() - 5)
-
-        if ((this.onGround || onTopOfLadder)) {
+        if ((this.onGround)) {
             if (body.velocity.x) {
                 params.runAnimation.play();
             }
