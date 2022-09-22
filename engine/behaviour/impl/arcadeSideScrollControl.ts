@@ -13,7 +13,7 @@ import {
 import {IRectJSON} from "@engine/geometry/rect";
 import {TileMap} from "@engine/renderable/impl/general/tileMap/tileMap";
 
-interface IParams extends IKeyVal<any>{
+interface IParams {
     velocity: number;
     jumpVelocity: number;
     ladderTileIds?:number[];
@@ -22,7 +22,8 @@ interface IParams extends IKeyVal<any>{
     idleAnimation: AbstractFrameAnimation<IRectJSON>;
     jumpAnimation?: AbstractFrameAnimation<IRectJSON>;
     fireAnimation?:AbstractFrameAnimation<IRectJSON>;
-    climbAnimation?:AbstractFrameAnimation<IRectJSON>;
+    climbVerticalAnimation?:AbstractFrameAnimation<IRectJSON>;
+    climbHorizontalAnimation?:AbstractFrameAnimation<IRectJSON>;
 }
 
 export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
@@ -36,7 +37,7 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
     private isClimbing = false;
 
     constructor(game: Game, parameters: IParams) {
-        super(game, parameters);
+        super(game, parameters as IKeyVal<any>);
     }
 
     public clone(): this {
@@ -73,7 +74,7 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
             this.isClimbing = true;
             this.body.velocity.y = -this.parameters.velocity;
             this.body.gravityImpact = 0;
-            if (this.parameters.climbAnimation) this.parameters.climbAnimation.gotoAndPlay(0);
+            if (this.parameters.climbVerticalAnimation) this.parameters.climbVerticalAnimation.gotoAndPlay(0);
         }
     }
 
@@ -83,7 +84,7 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
             this.isClimbing = true;
             this.body.velocity.y = this.parameters.velocity;
             this.body.gravityImpact = 0;
-            if (this.parameters.climbAnimation) this.parameters.climbAnimation.gotoAndPlay(0);
+            if (this.parameters.climbVerticalAnimation) this.parameters.climbVerticalAnimation.gotoAndPlay(0);
         }
     }
 
@@ -91,8 +92,8 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
         if (this.onLadder) {
             this.body.velocity.y = 0;
             this.isClimbing = false;
-            if (this.gameObject.getCurrentFrameAnimation()===this.parameters.climbAnimation) {
-                this.parameters.climbAnimation?.gotoAndStop(1);
+            if (this.gameObject.getCurrentFrameAnimation()===this.parameters.climbVerticalAnimation) {
+                this.parameters.climbVerticalAnimation?.gotoAndStop(1);
             }
         }
     }
@@ -147,7 +148,8 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
         this.gameObject.addFrameAnimation(this.parameters.idleAnimation);
         if (this.parameters.jumpAnimation) this.gameObject.addFrameAnimation(this.parameters.jumpAnimation);
         if (this.parameters.fireAnimation) this.gameObject.addFrameAnimation(this.parameters.fireAnimation);
-        if (this.parameters.climbAnimation) this.gameObject.addFrameAnimation(this.parameters.climbAnimation);
+        if (this.parameters.climbVerticalAnimation) this.gameObject.addFrameAnimation(this.parameters.climbVerticalAnimation);
+        if (this.parameters.climbHorizontalAnimation) this.gameObject.addFrameAnimation(this.parameters.climbHorizontalAnimation);
 
         this.gameObject.transformPoint.setToCenter();
         this.parameters.idleAnimation.play();
@@ -234,10 +236,10 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
             }
         } else if (this.onLadder) {
             if (body.velocity.x) {
-                params.climbAnimation?.gotoAndPlay(0);
+                params.climbHorizontalAnimation?.gotoAndPlay(0);
             }
             else {
-                params.climbAnimation?.gotoAndStop(1);
+                params.climbVerticalAnimation?.gotoAndStop(1);
             }
         }
     }
@@ -246,12 +248,6 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
         if (tileId===undefined) return false;
         if (this.parameters.ladderTileIds===undefined) return false;
         return this.parameters.ladderTileIds.includes(tileId);
-    }
-
-    private isLadderTileIdAtXY(x:number,y:number):boolean {
-        if (!this.parameters.tileMap) return false;
-        const tileId = this.parameters.tileMap.getDataValueAtPointXY(x,y);
-        return this.isLadderTileId(tileId);
     }
 
 }

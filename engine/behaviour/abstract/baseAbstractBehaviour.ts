@@ -7,7 +7,7 @@ import {ICloneable, IDestroyable, IUpdatable} from "@engine/core/declarations";
 export abstract class BaseAbstractBehaviour implements IUpdatable, IDestroyable, ICloneable<BaseAbstractBehaviour>{
 
     protected game:Game;
-    protected parameters:IKeyVal<unknown>;
+    protected parameters:IKeyVal<any>;
 
     private _destroyed:boolean = false;
 

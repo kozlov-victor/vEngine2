@@ -28,7 +28,7 @@ export class Character {
 
         const bh = new ArcadeSideScrollControl(game,{
             velocity: 100,
-            jumpVelocity: 300,
+            jumpVelocity: 200,
             ladderTileIds: [3,4],
             tileMap,
             runAnimation: new AtlasFrameAnimation(game,{
@@ -63,10 +63,18 @@ export class Character {
                 isRepeating: false,
                 durationOfOneFrame: 100,
             }),
-            climbAnimation: new AtlasFrameAnimation(game,{
+            climbVerticalAnimation: new AtlasFrameAnimation(game,{
                 frames: [
-                    texturePackerAtlas.getFrameByKey('character_climb1'),
-                    texturePackerAtlas.getFrameByKey('character_climb2'),
+                    texturePackerAtlas.getFrameByKey('character_climb_vertical1'),
+                    texturePackerAtlas.getFrameByKey('character_climb_vertical2'),
+                ],
+                isRepeating: true,
+                durationOfOneFrame: 200,
+            }),
+            climbHorizontalAnimation: new AtlasFrameAnimation(game,{
+                frames: [
+                    texturePackerAtlas.getFrameByKey('character_climb_horizontal1'),
+                    texturePackerAtlas.getFrameByKey('character_climb_horizontal2'),
                 ],
                 isRepeating: true,
                 durationOfOneFrame: 200,

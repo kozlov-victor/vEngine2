@@ -10,7 +10,7 @@
         },
         "character_fire1": {
             "frame": {
-                "x": 43,
+                "x": 38,
                 "y": 0,
                 "w": 38,
                 "h": 42
@@ -18,7 +18,7 @@
         },
         "character_jump2": {
             "frame": {
-                "x": 86,
+                "x": 76,
                 "y": 0,
                 "w": 38,
                 "h": 42
@@ -26,7 +26,7 @@
         },
         "character_jump1": {
             "frame": {
-                "x": 129,
+                "x": 114,
                 "y": 0,
                 "w": 38,
                 "h": 42
@@ -34,7 +34,7 @@
         },
         "character_step2": {
             "frame": {
-                "x": 172,
+                "x": 152,
                 "y": 0,
                 "w": 38,
                 "h": 42
@@ -42,40 +42,56 @@
         },
         "character_step1": {
             "frame": {
-                "x": 0,
-                "y": 47,
+                "x": 190,
+                "y": 0,
                 "w": 38,
                 "h": 42
             }
         },
         "character_stand2": {
             "frame": {
-                "x": 43,
-                "y": 47,
+                "x": 0,
+                "y": 42,
                 "w": 38,
                 "h": 42
             }
         },
         "character_stand1": {
             "frame": {
-                "x": 86,
-                "y": 47,
+                "x": 38,
+                "y": 42,
                 "w": 38,
                 "h": 42
             }
         },
-        "character_climb2": {
+        "character_climb_vertical2": {
             "frame": {
-                "x": 129,
-                "y": 47,
+                "x": 76,
+                "y": 42,
                 "w": 38,
                 "h": 42
             }
         },
-        "character_climb1": {
+        "character_climb_vertical1": {
             "frame": {
-                "x": 172,
-                "y": 47,
+                "x": 114,
+                "y": 42,
+                "w": 38,
+                "h": 42
+            }
+        },
+        "character_climb_horizontal1": {
+            "frame": {
+                "x": 152,
+                "y": 42,
+                "w": 38,
+                "h": 42
+            }
+        },
+        "character_climb_horizontal2": {
+            "frame": {
+                "x": 190,
+                "y": 42,
                 "w": 38,
                 "h": 42
             }
@@ -83,11 +99,11 @@
         "character_bg": {
             "frame": {
                 "x": 0,
-                "y": 94,
+                "y": 84,
                 "w": 38,
                 "h": 42
             }
         }
     },
-    "padding": 5
+    "padding": 0
 }

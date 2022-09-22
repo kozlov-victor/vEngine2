@@ -246,7 +246,9 @@ export default async (env = {})=>{
             modules: ['node_modules', path.resolve(__dirname, 'node_tools/loaders')]
         },
         watchOptions: {
-            poll: true
+            aggregateTimeout: 200,
+            poll: 1000,
+            ignored: ['/demo/out/', '/node_modules/'],
         },
         performance: {
             maxEntrypointSize: 1024000,
