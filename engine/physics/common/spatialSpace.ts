@@ -15,6 +15,12 @@ export class SpatialCell {
     public objects:IRigidBody[] = [];
     public groupNames:Int = 0 as Int;
 
+    public clear(): void {
+        this.objects.length = 0;
+        this.groupNames = 0 as Int;
+        this.debugView.fillColor = initialColor;
+    }
+
 }
 
 export class SpatialSpace {
@@ -22,9 +28,7 @@ export class SpatialSpace {
     private numOfCellsX:number;
     private numOfCellsY:number;
 
-    private readonly cells:SpatialCell[] = [];
-
-    public allBodies:IRigidBody[] = [];
+    public readonly cells:SpatialCell[] = [];
 
     constructor(private game:Game, private cellWidth:number, private cellHeight:number, private spaceWidth:number, private spaceHeight:number) {
         this.rebuild(cellWidth,cellHeight,spaceWidth,spaceHeight);
@@ -98,17 +102,7 @@ export class SpatialSpace {
         }
     }
 
-    public clear():void {
-        this.allBodies.length = 0;
-        for (const c of this.cells) {
-            c.objects.length = 0;
-            c.groupNames = 0 as Int;
-            c.debugView.fillColor = initialColor;
-        }
-    }
-
     public updateSpaceByObject(body:IRigidBody, rect:IRectJSON):void {
-        this.allBodies.push(body);
         body.spatialCellsOccupied.length = 0;
         this.getCellsInRect(rect,body.spatialCellsOccupied);
         for (const c of body.spatialCellsOccupied) {

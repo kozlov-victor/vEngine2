@@ -1,6 +1,6 @@
 import {Point2d} from "@engine/geometry/point2d";
 import {Game} from "@engine/core/game";
-import {IPhysicsSystem} from "@engine/physics/common/interfaces";
+import {IPhysicsSystem, IRigidBody} from "@engine/physics/common/interfaces";
 import {ARCADE_COLLISION_EVENT, ARCADE_RIGID_BODY_TYPE, ArcadeRigidBody} from "@engine/physics/arcade/arcadeRigidBody";
 import {MathEx} from "@engine/misc/math/mathEx";
 import {IRectJSON, Rect} from "@engine/geometry/rect";
@@ -78,22 +78,20 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
         }
 
         testedCollisionsCache.clear();
-        const all:ArcadeRigidBody[] = scene._spatialSpace.allBodies as ArcadeRigidBody[];
-        for (let i=0,max=all.length;i<max;i++) {
-            const playerBody = all[i];
 
-            const playerBodyRect = playerBody.calcAndGetBoundRect();
-
-            for (const cell of playerBody.spatialCellsOccupied) {
-
+        for (let i=0,max_i=scene._spatialSpace.cells.length;i<max_i;i++) {
+            const cell = scene._spatialSpace.cells[i];
+            const bodies:IRigidBody[] = cell.objects;
+            for (let j=0,max_j=bodies.length;j<max_j;j++) {
+                const playerBody = bodies[j] as ArcadeRigidBody;
                 //if we can ignore the whole spatial cell
                 if (include(cell.groupNames,playerBody.ignoreCollisionWithGroupNames)) {
                     continue;
                 }
+                const playerBodyRect = playerBody.calcAndGetBoundRect();
 
-                for (const obj of cell.objects) {
-                    const entityBody = obj as ArcadeRigidBody;
-                    if (entityBody===playerBody) continue;
+                for (let k=j+1;k<max_j;k++) {
+                    const entityBody = bodies[k] as ArcadeRigidBody;
                     const abKey = `${playerBody.id}_${entityBody.id}`;
                     const baKey = `${entityBody.id}_${playerBody.id}`;
                     if (testedCollisionsCache.has(baKey) || testedCollisionsCache.has(abKey)) {
@@ -115,10 +113,8 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
                     }
                 }
             }
-
+            cell.clear();
         }
-
-        scene._spatialSpace.clear();
     }
 
 
