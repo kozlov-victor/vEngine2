@@ -39,5 +39,6 @@ export class MainScene extends Scene {
         this.gamepadEventHandler.on(KEYBOARD_EVENTS.keyPressed, e => {
             console.log(e);
         });
+
     }
 }

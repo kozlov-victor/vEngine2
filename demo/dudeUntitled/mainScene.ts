@@ -4,15 +4,19 @@ import {Assets} from "./assets/assets";
 import {ColorFactory} from "@engine/renderer/common/colorFactory";
 import {Character} from "./objects/character";
 import {AnimatedTileMap} from "@engine/renderable/impl/general/tileMap/animatedTileMap";
+import {Game} from "@engine/core/game";
 
 
 export class MainScene extends Scene {
 
     @Resource.ResourceHolder() public readonly assets:Assets;
 
-    public override onReady():void {
-
+    constructor(game: Game) {
+        super(game);
         this.backgroundColor = ColorFactory.fromCSS(`#041f03`);
+    }
+
+    public override onReady():void {
 
         const tileMap = new AnimatedTileMap(this.game,this.assets.tilesTexture);
         tileMap.fromTiledJSON(this.assets.levelData,{
@@ -34,6 +38,5 @@ export class MainScene extends Scene {
                     break;
             }
         });
-
     }
 }
