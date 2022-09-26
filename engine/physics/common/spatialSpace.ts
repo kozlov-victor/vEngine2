@@ -11,14 +11,12 @@ const activeColor = Color.from({r:90,g:255,b:90});
 
 export class SpatialCell {
     public readonly id = cnt++;
-    public debugView:Rectangle;
+    //public debugView:Rectangle;
     public objects:IRigidBody[] = [];
-    public groupNames:Int = 0 as Int;
 
     public clear(): void {
         this.objects.length = 0;
-        this.groupNames = 0 as Int;
-        this.debugView.fillColor = initialColor;
+        //this.debugView.fillColor = initialColor;
     }
 
 }
@@ -43,26 +41,26 @@ export class SpatialSpace {
         let y = 0;
         for (let i=0;i<l;i++) {
             const cell = new SpatialCell();
-            cell.debugView = new Rectangle(this.game);
-            cell.debugView.pos.setXY(x*cellWidth,y*cellHeight);
             x++;
             if (x===this.numOfCellsX) {
                 x = 0;
                 y++;
             }
-            cell.debugView.size.setWH(cellWidth,cellHeight);
-            cell.debugView.alpha = 0.1;
-            cell.debugView.fillColor = initialColor;
-            //this.game.getCurrentScene().appendChild(cell.debugView);
+            //cell.debugView = new Rectangle(this.game);
+            //cell.debugView.pos.setXY(x*cellWidth,y*cellHeight);
+            // cell.debugView.size.setWH(cellWidth,cellHeight);
+            // cell.debugView.alpha = 0.1;
+            // cell.debugView.fillColor = initialColor;
+            // this.game.getCurrentScene().appendChild(cell.debugView);
             this.cells.push(cell);
         }
     }
 
-    private debugClear():void {
-        this.cells.forEach(c=>{
-            c.debugView.fillColor = initialColor;
-        });
-    }
+    // public debugClear():void {
+    //     this.cells.forEach(c=>{
+    //         c.debugView.fillColor = initialColor;
+    //     });
+    // }
 
     private getCellAtXY(x:number,y:number):Optional<SpatialCell> {
         const cellX:number = ~~(x / this.cellWidth);
@@ -107,8 +105,7 @@ export class SpatialSpace {
         this.getCellsInRect(rect,body.spatialCellsOccupied);
         for (const c of body.spatialCellsOccupied) {
             c.objects.push(body);
-            (c.groupNames as number)|=body.groupNames;
-            c.debugView.fillColor = activeColor;
+            //c.debugView.fillColor = activeColor;
         }
     }
 

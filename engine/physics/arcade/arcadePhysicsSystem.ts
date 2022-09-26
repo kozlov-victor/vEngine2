@@ -86,16 +86,13 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
             const bodies:IRigidBody[] = cell.objects;
             for (let j=0,max_j=bodies.length;j<max_j;j++) {
                 const playerBody = bodies[j] as ArcadeRigidBody;
-                //if we can ignore the whole spatial cell
-                if (include(cell.groupNames,playerBody.ignoreCollisionWithGroupNames)) {
-                    continue;
-                }
+                playerBody.overlappedWith = undefined;
                 const playerBodyRect = playerBody.calcAndGetBoundRect();
                 p1.setFrom(playerBody.pos);
-                playerBody.overlappedWith = undefined;
 
                 for (let k=j+1;k<max_j;k++) {
                     const entityBody = bodies[k] as ArcadeRigidBody;
+                    entityBody.overlappedWith = undefined;
                     const abKey = `${playerBody.id}_${entityBody.id}`;
                     const baKey = `${entityBody.id}_${playerBody.id}`;
                     if (testedCollisionsCache.has(baKey) || testedCollisionsCache.has(abKey)) {
@@ -103,7 +100,7 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
                     }
                     testedCollisionsCache.add(abKey);
                     const entityBodyRect = entityBody.calcAndGetBoundRect();
-                    entityBody.overlappedWith = undefined;
+                    p2.setFrom(entityBody.pos);
                     if (!MathEx.overlapTest(playerBodyRect,entityBodyRect)) continue;
                     if (
                         !playerBody.acceptCollisions                                               ||
@@ -111,14 +108,13 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
                         intersect(playerBody.groupNames, entityBody.ignoreCollisionWithGroupNames) ||
                         intersect(entityBody.groupNames,playerBody.ignoreCollisionWithGroupNames)
                     ) {
-                        p2.setFrom(entityBody.pos);
                         this.resolveOverlap(playerBody, entityBody);
                     } else {
                         this.interpolateAndResolveCollision(playerBody, p1, entityBody);
                         this.interpolateAndResolveCollision(entityBody, p2, playerBody);
-                        playerBody.pos.setFrom(p1);
-                        entityBody.pos.setFrom(p2);
                     }
+                    playerBody.pos.setFrom(p1);
+                    entityBody.pos.setFrom(p2);
                 }
             }
             cell.clear();

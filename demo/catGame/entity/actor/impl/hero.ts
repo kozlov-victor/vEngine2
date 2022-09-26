@@ -227,6 +227,7 @@ export class Hero extends AbstractCharacter {
             e.getHostModel().removeSelf();
         });
         this.body.onOverlappedWithGroup(Fan.groupName,e=>{
+            console.log('verlapped');
             this.body.velocity.y-=20;
         });
         this.body.onCollidedWithGroup(BloodDrop.groupName,e=>{
