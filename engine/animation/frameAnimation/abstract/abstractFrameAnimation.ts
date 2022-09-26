@@ -126,15 +126,19 @@ export abstract class AbstractFrameAnimation<T> implements ITargetAnimation, ICl
         const delta:number = (time - this._startTime) % this._duration;
         let currFrame:number = ~~((this._frames.length) * delta / this._duration);
         currFrame = currFrame % this._frames.length;
-        if (this._loopReached && !this._isRepeating) {
-            this.stop();
-            this.animationEventHandler.trigger(FRAME_ANIMATION_EVENTS.completed);
-            return;
+
+        if (currFrame===0 && this._loopReached) {
+            if (!this._isRepeating) {
+                this.stop();
+                this.animationEventHandler.trigger(FRAME_ANIMATION_EVENTS.completed);
+                return;
+            } else {
+                this.animationEventHandler.trigger(FRAME_ANIMATION_EVENTS.loop);
+            }
         }
         this._currFrame = currFrame;
         this.onNextFrame(currFrame);
         if (this._currFrame===this._frames.length-1) {
-            this.animationEventHandler.trigger(FRAME_ANIMATION_EVENTS.loop);
             this._loopReached = true;
         }
     }

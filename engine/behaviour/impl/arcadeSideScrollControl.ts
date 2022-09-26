@@ -16,7 +16,8 @@ import {TileMap} from "@engine/renderable/impl/general/tileMap/tileMap";
 interface IParams {
     velocity: number;
     jumpVelocity: number;
-    ladderTileIds?:number[];
+    verticalLadderTileIds?:number[];
+    horizontalLadderTileIds?:number[];
     tileMap?:TileMap;
     runAnimation: AbstractFrameAnimation<IRectJSON>;
     idleAnimation: AbstractFrameAnimation<IRectJSON>;
@@ -60,12 +61,14 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
     public goLeft():void {
         this.body.velocity.x = -this.parameters.velocity;
         this.gameObject.scale.x = -Math.abs(this.gameObject.scale.x);
+        this.correctHorizontalLadderPos();
         this.doGroundAnimation();
     }
 
     public goRight():void {
         this.body.velocity.x = this.parameters.velocity;
         this.gameObject.scale.x = Math.abs(this.gameObject.scale.x);
+        this.correctHorizontalLadderPos();
         this.doGroundAnimation();
     }
 
@@ -74,7 +77,8 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
             this.isClimbing = true;
             this.body.velocity.y = -this.parameters.velocity;
             this.body.gravityImpact = 0;
-            if (this.parameters.climbVerticalAnimation) this.parameters.climbVerticalAnimation.gotoAndPlay(0);
+            this.correctVerticalLadderPos();
+            this.parameters.climbVerticalAnimation?.gotoAndPlay(0);
         }
     }
 
@@ -84,7 +88,22 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
             this.isClimbing = true;
             this.body.velocity.y = this.parameters.velocity;
             this.body.gravityImpact = 0;
-            if (this.parameters.climbVerticalAnimation) this.parameters.climbVerticalAnimation.gotoAndPlay(0);
+            this.correctVerticalLadderPos();
+            this.parameters.climbVerticalAnimation?.gotoAndPlay(0);
+        }
+    }
+
+    private correctVerticalLadderPos():void {
+        if (this.isVerticalLadderTileId(this.body.overlappedWith?.addInfo?.tileId)) {
+            const overlapped = this.body.overlappedWith as ArcadeRigidBody
+            this.body.pos.x = overlapped.getMidX() - this.body._rect.width/2 - this.body._rect.x;
+        }
+    }
+
+    private correctHorizontalLadderPos():void {
+        if (this.isHorizontalLadderTileId(this.body.overlappedWith?.addInfo?.tileId)) {
+            const overlapped = this.body.overlappedWith as ArcadeRigidBody
+            this.body.pos.y = overlapped.getMidY() - this.body._rect.height/2 - this.body._rect.y;
         }
     }
 
@@ -116,7 +135,6 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
                 this.isFiring = false;
                 this.doGroundAnimation();
             });
-
         }
     }
 
@@ -170,7 +188,7 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
             this.doGroundAnimation();
         });
         this.body.collisionEventHandler.on(ARCADE_COLLISION_EVENT.OVERLAPPED, e=>{
-            if (!this.parameters.ladderTileIds?.includes(e.addInfo.tileId)) return;
+            if (!this.isLadderTileId(e.addInfo.tileId)) return;
             this.body.gravityImpact = 0;
             if (!this.isClimbing) {
                 this.body.velocity.y = 0;
@@ -244,10 +262,20 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
         }
     }
 
-    private isLadderTileId(tileId:number|undefined):boolean {
+    private isVerticalLadderTileId(tileId:number|undefined):boolean {
         if (tileId===undefined) return false;
-        if (this.parameters.ladderTileIds===undefined) return false;
-        return this.parameters.ladderTileIds.includes(tileId);
+        if (this.parameters.verticalLadderTileIds===undefined) return false;
+        return this.parameters.verticalLadderTileIds.includes(tileId);
+    }
+
+    private isHorizontalLadderTileId(tileId:number|undefined):boolean {
+        if (tileId===undefined) return false;
+        if (this.parameters.horizontalLadderTileIds===undefined) return false;
+        return this.parameters.horizontalLadderTileIds.includes(tileId);
+    }
+
+    private isLadderTileId(tileId:number|undefined):boolean {
+        return this.isHorizontalLadderTileId(tileId) || this.isVerticalLadderTileId(tileId);
     }
 
 }

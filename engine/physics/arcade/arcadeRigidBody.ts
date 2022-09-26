@@ -85,7 +85,7 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
     public readonly collisionFlags:ICollisionWith = new CollisionFlags();
     public overlappedWith:Optional<IRigidBody>;
     public readonly _collisionFlagsOld:ICollisionWith = new CollisionFlags();
-    public _pos:Point2d;
+    public readonly pos:Point2d;
     public _oldPos:Point2d;
     public _rect:Rect;
 
@@ -102,7 +102,7 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
     public nextTick():void {
 
         if (this._modelType===ARCADE_RIGID_BODY_TYPE.DYNAMIC) {
-            this._oldPos.setFrom(this._pos);
+            this._oldPos.setFrom(this.pos);
             const delta:number = this.game.getDeltaTime() / 1000;
             (this._collisionFlagsOld as CollisionFlags).copyFrom(this.collisionFlags as CollisionFlags);
             (this.collisionFlags as CollisionFlags).reset();
@@ -112,8 +112,8 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
             if (!this._collisionFlagsOld.bottom) this.velocity.y += this.acceleration.y * delta;
             this.velocity.x += ArcadePhysicsSystem.gravity.x;
             this.velocity.y += ArcadePhysicsSystem.gravity.y*this.gravityImpact;
-            this._pos.x  += this.velocity.x * delta;
-            this._pos.y  += this.velocity.y * delta;
+            this.pos.x  += this.velocity.x * delta;
+            this.pos.y  += this.velocity.y * delta;
         }
 
         const spatialSpace = this.game.getCurrentScene()._spatialSpace;
@@ -130,10 +130,10 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
         model.pos.observe(()=>this._dirtyBoundRect = true);
         if (this._modelType===ARCADE_RIGID_BODY_TYPE.KINEMATIC) {
             let oldX:Optional<number>;
-            this._pos.observe(()=>{
-                if (oldX===undefined) oldX = this._pos.x;
-                this._offsetX = this._pos.x - oldX;
-                oldX = this._pos.x;
+            this.pos.observe(()=>{
+                if (oldX===undefined) oldX = this.pos.x;
+                this._offsetX = this.pos.x - oldX;
+                oldX = this.pos.x;
             });
         }
     }
@@ -143,8 +143,8 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
     }
 
     public setBounds(pos:Point2d, size:Size):void {
-        this._pos = pos;
-        this._oldPos = this._pos.clone();
+        (this as {pos:Point2d}).pos = pos;
+        this._oldPos = this.pos.clone();
         if (!this._rect) this._rect = new Rect(0,0,size.width,size.height);
         this._halfSize.width = this._rect.width/2;
         this._halfSize.height = this._rect.height/2;
@@ -152,36 +152,36 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
 
     // Getters for the mid point of the rect
     public getMidX():number {
-        return this._halfSize.width + this._pos.x + this._rect.x;
+        return this._halfSize.width + this.pos.x + this._rect.x;
     }
 
     public getMidY():number {
-        return this._halfSize.height + this._pos.y + this._rect.y;
+        return this._halfSize.height + this.pos.y + this._rect.y;
     }
 
     // Getters for the top, left, right, and bottom
     // of the rectangle
     public getTop():number {
-        return this._pos.y + this._rect.y;
+        return this.pos.y + this._rect.y;
     }
 
     public getLeft():number {
-        return this._pos.x + this._rect.x;
+        return this.pos.x + this._rect.x;
     }
 
     public getRight():number {
-        return this._pos.x + this._rect.x + this._rect.width;
+        return this.pos.x + this._rect.x + this._rect.width;
     }
 
     public getBottom():number {
-        return this._pos.y + this._rect.y + this._rect.height;
+        return this.pos.y + this._rect.y + this._rect.height;
     }
 
     public calcAndGetBoundRect():IRectJSON {
         if (!this._dirtyBoundRect) return this._boundRect;
         this._boundRect.setXYWH(
-            this._pos.x + this._rect.x,
-            this._pos.y + this._rect.y,
+            this.pos.x + this._rect.x,
+            this.pos.y + this._rect.y,
             this._rect.width,
             this._rect.height
         );
@@ -197,7 +197,7 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
             this._debugRectangle.size.setWH(this._rect.width,this._rect.height);
             this._debugRectangle.fillColor = Color.RGBA(0,233,0,50);
         }
-        this._debugRectangle.pos.setXY(this._pos.x + this._rect.x,this._pos.y + this._rect.y);
+        this._debugRectangle.pos.setXY(this.pos.x + this._rect.x,this.pos.y + this._rect.y);
         this._debugRectangle.render();
     }
 

@@ -311,7 +311,7 @@ export class TileMap extends RenderableModelWithTexture {
                     debugRect.lineWidth = 0;
                     debugRect.fillColor.setRGB(0,100,0);
                     debugRect.alpha = 0.4;
-                    debugRect.pos.setFrom(rigidBody._pos);
+                    debugRect.pos.setFrom(rigidBody.pos);
                     debugRect.size.setWH(rigidBody._rect.width,rigidBody._rect.height);
                     this.appendChild(debugRect);
                 }
