@@ -86,13 +86,11 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
             const bodies:IRigidBody[] = cell.objects;
             for (let j=0,max_j=bodies.length;j<max_j;j++) {
                 const playerBody = bodies[j] as ArcadeRigidBody;
-                playerBody.overlappedWith = undefined;
                 const playerBodyRect = playerBody.calcAndGetBoundRect();
                 p1.setFrom(playerBody.pos);
 
                 for (let k=j+1;k<max_j;k++) {
                     const entityBody = bodies[k] as ArcadeRigidBody;
-                    entityBody.overlappedWith = undefined;
                     const abKey = `${playerBody.id}_${entityBody.id}`;
                     const baKey = `${entityBody.id}_${playerBody.id}`;
                     if (testedCollisionsCache.has(baKey) || testedCollisionsCache.has(abKey)) {
