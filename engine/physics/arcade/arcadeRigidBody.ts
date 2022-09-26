@@ -112,8 +112,8 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
             if (!this._collisionFlagsOld.bottom) this.velocity.y += this.acceleration.y * delta;
             this.velocity.x += ArcadePhysicsSystem.gravity.x;
             this.velocity.y += ArcadePhysicsSystem.gravity.y*this.gravityImpact;
-            this.pos.x  += this.velocity.x * delta;
-            this.pos.y  += this.velocity.y * delta;
+            this.pos.x += this.velocity.x * delta;
+            this.pos.y += this.velocity.y * delta;
         }
 
         const spatialSpace = this.game.getCurrentScene()._spatialSpace;
