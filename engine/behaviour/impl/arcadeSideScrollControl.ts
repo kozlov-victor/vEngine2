@@ -16,6 +16,8 @@ import {TileMap} from "@engine/renderable/impl/general/tileMap/tileMap";
 interface IParams {
     velocity: number;
     jumpVelocity: number;
+    onJumped?:()=>void;
+    onLanded?:()=>void;
     verticalLadderTileIds?:number[];
     horizontalLadderTileIds?:number[];
     tileMap?:TileMap;
@@ -142,14 +144,18 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
         if (this.gameObject.getRigidBody<ArcadeRigidBody>().collisionFlags.bottom) {
             this.body.velocity.y -= this.parameters.jumpVelocity;
             this.parameters.jumpAnimation?.play();
+            this.parameters.onJumped?.();
         }
     }
 
     public override update() {
         super.update();
-        const body = this.gameObject.getRigidBody<ArcadeRigidBody>()
+        const body = this.gameObject.getRigidBody<ArcadeRigidBody>();
+        const oldOnGround = this.onGround;
         this.onGround = body.collisionFlags.bottom;
         this.onLadder = this.isLadderTileId(body.overlappedWith?.addInfo?.tileId);
+
+        if (this.onGround && !oldOnGround) this.parameters.onLanded?.();
 
         // to avoid bumping from walls while walking
         if (this.onGround || this.onLadder) {

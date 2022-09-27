@@ -75,7 +75,7 @@ export class ParticleSystem extends SimpleGameObjectContainer {
     }
 
     public override revalidate():void {
-        if (DEBUG && !this._prototypes.length) throw new DebugError(`particle system error: add at least one object to emit`);
+        if (DEBUG && !this._prototypes.length) throw new DebugError(`particle system error: add at least one object to emit before appending particle system to scene`);
         if (this.particleAngle.to<this.particleAngle.from) this.particleAngle.to += 2*Math.PI;
     }
 
