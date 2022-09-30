@@ -217,6 +217,7 @@ export class MouseControl implements IControl {
         let i:number = objectStackItems.length; // reversed loop
         if (mouseEvent===MOUSE_EVENTS.mouseMove) this._capturedObjectsByTouchIdHolder.clear(mousePoint.id);
 
+        let propagationCancelled = false;
 
         if (i===0) {
             this._helper.resolveSceneCoordinates(mousePoint,LayerTransformType.TRANSFORM);
@@ -232,7 +233,10 @@ export class MouseControl implements IControl {
                 this._helper.resolveSceneCoordinates(mousePoint,layer.transformType);
                 const capturedEvent:Optional<IObjectMouseEvent> = this._helper.captureObject(e, mouseEvent, mousePoint, obj, obj, constrainObjects);
                 if (capturedEvent!==undefined) {
-                    mousePoint.target = obj;
+                    if (!capturedEvent.isPropagated) {
+                        propagationCancelled = true;
+                        break;
+                    }
                     if (mouseEvent===MOUSE_EVENTS.mouseMove) this._capturedObjectsByTouchIdHolder.add(mousePoint.id,obj);
                     // propagate event to parents
                     let parent:Optional<RenderableModel> = obj.parent;
@@ -240,7 +244,10 @@ export class MouseControl implements IControl {
                         const propagationEvent:Optional<IObjectMouseEvent> =
                             this._helper.captureObject(e,mouseEvent,mousePoint,parent, obj, constrainObjects);
                         if (propagationEvent!==undefined) {
-                            if (!propagationEvent.isPropagated) break;
+                            if (!propagationEvent.isPropagated) {
+                                propagationCancelled = true;
+                                break;
+                            }
                             if (mouseEvent===MOUSE_EVENTS.mouseMove) this._capturedObjectsByTouchIdHolder.add(mousePoint.id,parent);
                         }
                         parent = parent.parent;
@@ -249,7 +256,7 @@ export class MouseControl implements IControl {
                 }
             }
         }
-        if (scene.interactive) {
+        if (scene.interactive && !propagationCancelled) {
             if (mousePoint.target===undefined) mousePoint.target = scene;
             scene.mouseEventHandler.trigger(mouseEvent,{
                 screenX:mousePoint.screenCoordinate.x,
