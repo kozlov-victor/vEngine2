@@ -1,9 +1,9 @@
-import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Game} from "@engine/core/game";
 import {IRectJSON} from "@engine/geometry/rect";
-import {Int, Optional} from "@engine/core/declarations";
+import {Optional} from "@engine/core/declarations";
 import {Color} from "@engine/renderer/common/color";
 import {IRigidBody} from "@engine/physics/common/interfaces";
+import {RectWithUpdateId} from "@engine/physics/arcade/arcadeRigidBody";
 
 let cnt = 0;
 const initialColor = Color.GREY.clone();
@@ -100,9 +100,12 @@ export class SpatialSpace {
         }
     }
 
-    public updateSpaceByObject(body:IRigidBody, rect:IRectJSON):void {
-        body.spatialCellsOccupied.length = 0;
-        this.getCellsInRect(rect,body.spatialCellsOccupied);
+    public updateSpaceByObject(body:IRigidBody, rect:RectWithUpdateId):void {
+        if (body.lastBoundRectId!==rect.id) {
+            body.spatialCellsOccupied.length = 0;
+            this.getCellsInRect(rect,body.spatialCellsOccupied);
+            body.lastBoundRectId = rect.id;
+        }
         for (const c of body.spatialCellsOccupied) {
             c.objects.push(body);
             //c.debugView.fillColor = activeColor;

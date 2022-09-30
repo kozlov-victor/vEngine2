@@ -27,7 +27,8 @@ import {Image} from "@engine/renderable/impl/general/image/image";
 import {GenericSprite} from "../entity/sprite/genericSprite";
 import {Virus} from "../entity/object/impl/virus";
 import {Fan} from "../entity/object/impl/fan";
-import {SimpleTouchPad} from "@engine/control/screenTouchPad/simpleTouchPad";
+import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
+import {ScreenSensorButton} from "@engine/control/screenSensor/screenSensorButton";
 
 type LEVEL_SCHEMA = typeof import("../level/l1.json");
 
@@ -107,8 +108,6 @@ export class MainScene extends Scene {
 
     private level: LEVEL_SCHEMA;
 
-    private touchPad:SimpleTouchPad;
-
     constructor(game: Game, level: LEVEL_SCHEMA, private numOfLives:number){
         super(game);
         this.level = level;
@@ -126,7 +125,6 @@ export class MainScene extends Scene {
 
     public override onInactivated(): void {
         super.onInactivated();
-        if (this.touchPad!==undefined) this.touchPad.releaseAllButtons();
     }
 
     private extractExtraProperties(properties?: ({ name: string, value: any })[]): IExtraProperties {
@@ -270,8 +268,27 @@ export class MainScene extends Scene {
         const touchPadLayer:Layer = new Layer(this.game);
         touchPadLayer.transformType = LayerTransformType.STICK_TO_CAMERA;
         this.appendChild(touchPadLayer);
-        this.touchPad  = new SimpleTouchPad(this.game);
-        this.touchPad.appendTo(touchPadLayer);
+
+        const btnLeft = new ScreenSensorButton(this.game,30);
+        btnLeft.reflectToKeyboardControl(this.game.getControl('KeyboardControl')!,KEYBOARD_KEY.LEFT);
+        btnLeft.pos.setXY(30,this.game.size.height - 130);
+        btnLeft.appendTo(touchPadLayer);
+
+        const btnRight = new ScreenSensorButton(this.game,30);
+        btnRight.reflectToKeyboardControl(this.game.getControl('KeyboardControl')!,KEYBOARD_KEY.RIGHT);
+        btnRight.pos.setXY(110,this.game.size.height - 130);
+        btnRight.appendTo(touchPadLayer);
+
+        const btnFire = new ScreenSensorButton(this.game,30);
+        btnFire.reflectToKeyboardControl(this.game.getControl('KeyboardControl')!,KEYBOARD_KEY.Z);
+        btnFire.pos.setXY(this.game.size.width - 110 - 40,this.game.size.height - 130);
+        btnFire.appendTo(touchPadLayer);
+
+        const btnJump = new ScreenSensorButton(this.game,30);
+        btnJump.reflectToKeyboardControl(this.game.getControl('KeyboardControl')!,KEYBOARD_KEY.SPACE);
+        btnJump.pos.setXY(this.game.size.width - 30 - 40,this.game.size.height - 130);
+        btnJump.appendTo(touchPadLayer);
+
     }
 
 }

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.1" orientation="orthogonal" renderorder="right-down" width="50" height="12" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="6">
+<map version="1.9" tiledversion="1.9.1" orientation="orthogonal" renderorder="right-down" width="50" height="12" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="13">
  <editorsettings>
   <export target="level1.json" format="json"/>
  </editorsettings>
- <tileset firstgid="1" name="character" tilewidth="37" tileheight="42" tilecount="18" columns="6">
-  <image source="../character/character.png" width="228" height="126"/>
+ <tileset firstgid="1" name="character" tilewidth="37" tileheight="42" tilecount="15" columns="5">
+  <image source="../character/character.png" width="215" height="141"/>
  </tileset>
- <tileset firstgid="19" name="tiles" tilewidth="32" tileheight="32" tilecount="15" columns="3">
+ <tileset firstgid="16" name="tiles" tilewidth="32" tileheight="32" tilecount="15" columns="3">
   <image source="tiles.png" width="96" height="160"/>
   <tile id="1">
    <animation>
@@ -31,27 +31,70 @@
    </objectgroup>
   </tile>
  </tileset>
+ <tileset firstgid="31" name="inventory" tilewidth="32" tileheight="32" tilecount="12" columns="3">
+  <image source="../inventory/inventory.png" width="96" height="128"/>
+  <tile id="0">
+   <objectgroup draworder="index" id="5">
+    <object id="11" x="7.0816" y="4.93849" width="13.9303" height="23.9936"/>
+   </objectgroup>
+  </tile>
+ </tileset>
+ <layer id="1" name="Tile Layer 1" width="50" height="12">
+  <data encoding="csv">
+22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,22,0,0,22,22,22,22,22,22,22,22,22,22,22,22,22,22,
+22,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,22,22,22,22,0,0,22,0,22,22,22,22,0,0,0,22,0,0,0,0,0,0,0,0,22,
+22,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,22,0,0,0,0,0,0,0,0,19,0,0,0,0,0,0,0,0,22,
+22,0,0,0,16,16,0,0,0,0,0,0,0,0,0,0,0,0,0,0,19,0,0,0,0,0,0,0,0,0,0,19,0,0,0,0,0,0,0,0,19,0,0,0,0,0,0,0,0,22,
+22,19,16,21,22,22,0,0,0,0,0,0,16,16,16,16,16,16,0,0,19,0,0,0,0,0,0,0,23,20,20,23,20,20,20,20,20,20,20,20,23,20,0,0,0,0,0,0,0,22,
+22,19,0,0,0,22,0,0,0,0,0,0,0,0,0,0,0,0,0,0,19,0,0,0,0,0,0,0,19,0,0,19,0,0,0,0,0,0,0,0,19,0,0,0,0,0,0,0,16,22,
+22,19,0,0,0,22,0,0,0,0,0,0,0,0,0,0,0,0,0,0,16,16,21,16,16,0,0,0,19,0,0,19,0,0,0,0,0,0,0,0,19,0,0,0,0,0,0,0,0,22,
+22,19,0,0,0,22,0,0,0,0,0,0,0,0,0,0,0,0,0,16,22,22,22,22,22,0,0,0,19,0,0,19,0,0,0,0,0,0,0,0,19,0,0,0,0,0,0,0,0,22,
+22,19,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,16,22,22,22,22,22,22,16,16,21,16,0,0,19,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,16,16,22,
+22,19,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,21,22,22,22,22,22,22,22,22,22,22,22,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,22,
+22,19,0,0,21,16,21,16,16,21,16,0,0,0,0,0,16,22,22,22,22,22,22,22,22,22,22,22,22,0,0,0,0,0,0,16,0,0,0,0,0,0,0,16,0,0,0,0,0,22,
+22,16,16,16,22,17,18,17,18,17,22,21,16,21,16,16,22,22,22,22,22,22,22,22,22,22,22,22,22,16,21,16,16,16,16,22,17,18,17,18,17,18,17,22,16,16,21,16,21,22
+</data>
+ </layer>
  <objectgroup id="2" name="Object Layer 1">
   <object id="2" gid="1" x="233" y="308" width="37" height="42">
    <properties>
-    <property name="class" value="character"/>
+    <property name="class" value="Character"/>
+   </properties>
+  </object>
+  <object id="6" gid="31" x="39.3333" y="96" width="32" height="32">
+   <properties>
+    <property name="class" value="Sausage"/>
+   </properties>
+  </object>
+  <object id="7" gid="31" x="162" y="89.3333" width="32" height="32">
+   <properties>
+    <property name="class" value="Sausage"/>
+   </properties>
+  </object>
+  <object id="8" gid="31" x="474.667" y="120.667" width="32" height="32">
+   <properties>
+    <property name="class" value="Sausage"/>
+   </properties>
+  </object>
+  <object id="9" gid="31" x="1532" y="344.667" width="32" height="32">
+   <properties>
+    <property name="class" value="Sausage"/>
+   </properties>
+  </object>
+  <object id="10" gid="31" x="1532" y="344.667" width="32" height="32">
+   <properties>
+    <property name="class" value="Sausage"/>
+   </properties>
+  </object>
+  <object id="11" gid="31" x="1452" y="157.333" width="32" height="32">
+   <properties>
+    <property name="class" value="Sausage"/>
+   </properties>
+  </object>
+  <object id="12" gid="31" x="1120.33" y="301.333" width="32" height="32">
+   <properties>
+    <property name="class" value="Sausage"/>
    </properties>
   </object>
  </objectgroup>
- <layer id="1" name="Tile Layer 1" width="50" height="12">
-  <data encoding="csv">
-25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,25,0,0,25,25,25,25,25,25,25,25,25,25,25,25,25,25,
-25,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,25,25,25,25,0,0,25,0,25,25,25,25,0,0,0,25,0,0,0,0,0,0,0,0,25,
-25,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,25,0,0,0,0,0,0,0,0,22,0,0,0,0,0,0,0,0,25,
-25,0,0,0,19,19,0,0,0,0,0,0,0,0,0,0,0,0,0,0,22,0,0,0,0,0,0,0,0,0,0,22,0,0,0,0,0,0,0,0,22,0,0,0,0,0,0,0,0,25,
-25,22,19,24,25,25,0,0,0,0,0,0,19,19,19,19,19,19,0,0,22,0,0,0,0,0,0,0,22,23,23,22,23,23,23,23,23,23,23,23,22,0,0,0,0,0,0,0,0,25,
-25,22,0,0,0,25,0,0,0,0,0,0,0,0,0,0,0,0,0,0,22,0,0,0,0,0,0,0,22,0,0,22,0,0,0,0,0,0,0,0,22,0,0,0,0,0,0,0,19,25,
-25,22,0,0,0,25,0,0,0,0,0,0,0,0,0,0,0,0,0,0,19,19,24,19,19,0,0,0,22,0,0,22,0,0,0,0,0,0,0,0,22,0,0,0,0,0,0,0,0,25,
-25,22,0,0,0,25,0,0,0,0,0,0,0,0,0,0,0,0,0,19,25,25,25,25,25,0,0,0,22,0,0,22,0,0,0,0,0,0,0,0,22,0,0,0,0,0,0,0,0,25,
-25,22,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,19,25,25,25,25,25,25,19,19,24,19,0,0,22,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,19,19,25,
-25,22,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,24,25,25,25,25,25,25,25,25,25,25,25,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,25,
-25,22,0,0,24,19,24,19,19,24,19,0,0,0,0,0,19,25,25,25,25,25,25,25,25,25,25,25,25,0,0,0,0,0,0,19,0,0,0,0,0,0,0,19,0,0,0,0,0,25,
-25,19,19,19,25,20,21,20,21,20,25,24,19,24,19,19,25,25,25,25,25,25,25,25,25,25,25,25,25,19,24,19,19,19,19,25,20,21,20,21,20,21,20,25,19,19,24,19,24,25
-</data>
- </layer>
 </map>

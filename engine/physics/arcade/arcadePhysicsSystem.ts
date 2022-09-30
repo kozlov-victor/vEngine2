@@ -12,7 +12,7 @@ import {Size} from "@engine/geometry/size";
 
 export interface ICreateRigidBodyParams {
     type?: ARCADE_RIGID_BODY_TYPE;
-    rect?:Rect;
+    rect?:IRectJSON;
     restitution?:number;
     debug?:boolean;
     groupNames?:string[];
@@ -51,7 +51,11 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
         body._restitution = params?.restitution??body._restitution;
         body.gravityImpact = params?.gravityImpact??body.gravityImpact;
         if (params?.acceptCollisions!==undefined) body.acceptCollisions = params.acceptCollisions;
-        if (params?.rect!==undefined) body._rect = params.rect.clone();
+        if (params?.rect!==undefined) {
+            const rect = new Rect();
+            rect.setFrom(params.rect);
+            body._rect = rect;
+        }
         if (params?.debug!==undefined) body.debug = params.debug;
         if (params?.groupNames) {
             params.groupNames.forEach(g=>{

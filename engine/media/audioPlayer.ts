@@ -13,7 +13,7 @@ export  class AudioPlayer implements IAudioPlayer {
     public static cache:{[key:string]:AudioBuffer|string} = {};
     public static DEFAULT_AUDIO_NODES_COUNT:number = 6;
 
-    public freeNodeSearchStrategy:FREE_AUDIO_NODE_SEARCH_STRATEGY = FREE_AUDIO_NODE_SEARCH_STRATEGY.GET_OLDEST;
+    public freeNodeSearchStrategy:FREE_AUDIO_NODE_SEARCH_STRATEGY = FREE_AUDIO_NODE_SEARCH_STRATEGY.GET_OLDEST_NOT_LOOP;
 
     private readonly _audioContext:BasicAudioContext;
     private _audioNodeSet:AudioNodeSet;

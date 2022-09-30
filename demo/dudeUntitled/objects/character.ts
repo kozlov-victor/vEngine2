@@ -16,7 +16,9 @@ import {GroundDust} from "../particles/groundDust";
 export class Character {
 
     private readonly characterImage:AnimatedImage;
+    private body:ArcadeRigidBody;
     private readonly groundDust = new GroundDust(this.game, this.scene);
+
 
     constructor(private game: Game, private scene:Scene, private tileMap:TileMap, private assets:Assets,tiledObject:ITiledJSON['layers'][0]['objects'][0]) {
         const characterImage = new AnimatedImage(game,assets.characterTexture);
@@ -34,16 +36,18 @@ export class Character {
         scene.camera.followTo(characterImage);
 
         this.initBh();
+        this.initCollisions();
 
     }
 
     private initBh():void {
         const texturePackerAtlas = new TexturePackerAtlas(this.assets.characterAtlas);
         const body = this.characterImage.getRigidBody<ArcadeRigidBody>();
+        this.body = body;
         const bh = new ArcadeSideScrollControl(this.game,{
             velocity: 100,
             jumpVelocity: 200,
-            verticalLadderTileIds: [3],
+            verticalLadderTileIds: [3,7],
             horizontalLadderTileIds: [4],
             tileMap: this.tileMap,
             runAnimation: new AtlasFrameAnimation(this.game,{
@@ -98,6 +102,9 @@ export class Character {
                 if(body.velocity.y<-30) {
                     this.groundDust.emit(body.getMidX(),body.getBottom());
                 }
+            },
+            onJumped:()=>{
+                this.groundDust.emit(body.getMidX(),body.getBottom());
             }
         });
         const characterImage = this.characterImage;
@@ -111,7 +118,13 @@ export class Character {
                 characterImage.pos.x + characterImage.size.width  / 2 + (characterImage.size.width/2)*characterImage.scale.x,
                 characterImage.pos.y + characterImage.size.height / 2
             );
-            bullet.getContainer().appendTo(this.scene);
+            bullet.getContainer().appendTo(this.scene.getLayerAtIndex(0));
+        });
+    }
+
+    private initCollisions():void {
+        this.body.onOverlappedWithGroup('collectable',e =>{
+            e.getHostModel().removeSelf();
         });
     }
 

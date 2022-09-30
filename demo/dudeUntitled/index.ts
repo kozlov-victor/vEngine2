@@ -8,6 +8,7 @@ import {ArcadePhysicsSystem} from "@engine/physics/arcade/arcadePhysicsSystem";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {CanvasRenderer} from "@engine/renderer/canvas/canvasRenderer";
 import {AbstractCanvasRenderer} from "@engine/renderer/abstract/abstractCanvasRenderer";
+import {MouseControl} from "@engine/control/mouse/mouseControl";
 
 // window.requestAnimationFrame =  (f:FrameRequestCallback):number=>{
 //     return setTimeout(f,1000/25);
@@ -22,11 +23,16 @@ game.setPhysicsSystem(ArcadePhysicsSystem);
 game.setRenderer(CanvasRenderer);
 game.getRenderer<AbstractCanvasRenderer>().setPixelPerfect(true);
 game.addControl(KeyboardControl);
+game.addControl(MouseControl);
 
 game.getControl<GamePadControl>('KeyboardControl')!.reflectToSelf(
     {
         [KEYBOARD_KEY.ENTER]: KEYBOARD_KEY.SPACE,
         [KEYBOARD_KEY.DIGIT_5]: KEYBOARD_KEY.CONTROL,
+        [KEYBOARD_KEY.W]: KEYBOARD_KEY.UP,
+        [KEYBOARD_KEY.A]: KEYBOARD_KEY.LEFT,
+        [KEYBOARD_KEY.S]: KEYBOARD_KEY.DOWN,
+        [KEYBOARD_KEY.D]: KEYBOARD_KEY.RIGHT,
     }
 );
 

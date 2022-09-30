@@ -5,7 +5,7 @@ import {Size} from "@engine/geometry/size";
 import {Point2d} from "@engine/geometry/point2d";
 import {Game} from "@engine/core/game";
 import {ArcadePhysicsSystem} from "@engine/physics/arcade/arcadePhysicsSystem";
-import {IRectJSON, Rect} from "@engine/geometry/rect";
+import {Rect} from "@engine/geometry/rect";
 import {IRigidBody} from "@engine/physics/common/interfaces";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {ICloneable, Int, Optional} from "@engine/core/declarations";
@@ -56,7 +56,12 @@ class CollisionFlags implements ICollisionWith {
     }
 }
 
-let cnt = 0;
+let bodyCnt = 0;
+let rectCnt = 0;
+
+export class RectWithUpdateId extends Rect {
+    public readonly id = ++rectCnt;
+}
 
 export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> {
 
@@ -72,14 +77,14 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
     public readonly collisionEventHandler:EventEmitterDelegate<ARCADE_COLLISION_EVENT, ArcadeRigidBody> = new EventEmitterDelegate(this.game);
 
     public debug:boolean = false;
-    public readonly id:number = cnt++;
+    public readonly id:number = bodyCnt++;
 
     public gravityImpact:number = 1;
     public acceptCollisions:boolean = true;
 
     public addInfo:Record<any, any> = {};
     public _modelType: ARCADE_RIGID_BODY_TYPE = ARCADE_RIGID_BODY_TYPE.DYNAMIC;
-    public readonly _boundRect:Rect = new Rect();
+    public readonly _boundRect = new RectWithUpdateId();
     public _restitution:number = 0.5;
     public readonly _halfSize:Size = new Size();
     public readonly collisionFlags:ICollisionWith = new CollisionFlags();
@@ -88,6 +93,8 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
     public readonly pos:Point2d;
     public _oldPos:Point2d;
     public _rect:Rect;
+    public lastBoundRectId: number;
+
 
     public _offsetX:number = 0; // to calculate character offset if it stands on KINEMATIC platform
 
@@ -177,7 +184,7 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
         return this.pos.y + this._rect.y + this._rect.height;
     }
 
-    public calcAndGetBoundRect():IRectJSON {
+    public calcAndGetBoundRect():RectWithUpdateId {
         if (!this._dirtyBoundRect) return this._boundRect;
         this._boundRect.setXYWH(
             this.pos.x + this._rect.x,
@@ -185,6 +192,7 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
             this._rect.width,
             this._rect.height
         );
+        (this._boundRect as {id:number}).id = ++rectCnt;
         this._dirtyBoundRect = false;
         return this._boundRect;
     }

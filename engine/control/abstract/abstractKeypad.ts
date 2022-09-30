@@ -19,7 +19,6 @@ export abstract class KeyPadEvent extends ObservableEntity {
 export abstract class AbstractKeypad<T extends KeyPadEvent> {
     protected game: Game;
 
-
     public type:string;
 
     protected buffer: T[] = [];
@@ -54,6 +53,7 @@ export abstract class AbstractKeypad<T extends KeyPadEvent> {
         event.keyState = KEY_STATE.KEY_JUST_RELEASED;
         this.notify(KEYBOARD_EVENTS.keyReleased, event);
     }
+
 
     public update(): void {
         for (const event of this.buffer) {

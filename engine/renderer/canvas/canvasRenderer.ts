@@ -64,6 +64,8 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
         const dstRect:Rect = img.srcRect;
 
         const ctx = this.renderTarget.getTexture().getContext();
+        ctx.globalAlpha = img.alpha;
+
         if (img.offset.x || img.offset.y) {
             const pattern:CanvasPattern = ctx.createPattern(
                 (img.getTexture() as CanvasTexture).getCanvas(),
@@ -95,29 +97,36 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
 
     public drawBatchedImage(img: BatchedImage): void {
         const ctx = this.renderTarget.getTexture().getContext();
+        ctx.globalAlpha = img.alpha;
         ctx.fillStyle = img.fillColor.asCssRgba();
         ctx.fillRect(img.pos.x,img.pos.y,img.size.width,img.size.height);
     }
 
     public drawRectangle(rectangle:Rectangle):void{
         const ctx = this.renderTarget.getTexture().getContext();
+        ctx.globalAlpha = rectangle.alpha;
         ctx.fillStyle = rectangle.fillColor.asCssRgba();
-        ctx.strokeStyle = rectangle.color.asCssRgba();
         ctx.fillRect(0,0,rectangle.size.width,rectangle.size.height);
         if (rectangle.lineWidth) {
             ctx.lineWidth = rectangle.lineWidth;
+            ctx.strokeStyle = rectangle.color.asCssRgba();
             ctx.strokeRect(0,0,rectangle.size.width,rectangle.size.height);
         }
     }
 
-    public drawEllipse(e:Ellipse):void{
+    public drawEllipse(ellipse:Ellipse):void{
         const ctx = this.renderTarget.getTexture().getContext();
-        ctx.fillStyle = e.fillColor.asCssRgba();
-        ctx.strokeStyle = e.color.asCssRgba();
+        ctx.globalAlpha = ellipse.alpha;
+        ctx.fillStyle = ellipse.fillColor.asCssRgba();
         ctx.beginPath();
-        ctx.ellipse(0,0, e.radiusX, e.radiusY, 0, 0, 2 * Math.PI);
-        //ctx.arc(e.center.x, e.center.y, e.radiusX,  0, 2 * Math.PI);
+        ctx.ellipse(ellipse.radiusX, ellipse.radiusY, ellipse.radiusX, ellipse.radiusY, 0, 0, 2 * Math.PI);
+        //ctx.arc(0, 0, ellipse.radiusX,  0, 2 * Math.PI);
         ctx.fill();
+        if (ellipse.lineWidth) {
+            ctx.strokeStyle = ellipse.color.asCssRgba();
+            ctx.lineWidth = ellipse.lineWidth;
+            ctx.stroke();
+        }
     }
 
 

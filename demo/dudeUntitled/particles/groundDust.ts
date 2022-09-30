@@ -1,8 +1,9 @@
 import {Scene} from "@engine/scene/scene";
 import {ParticleSystem} from "@engine/renderable/impl/general/partycleSystem/particleSystem";
 import {Game} from "@engine/core/game";
-import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {ColorFactory} from "@engine/renderer/common/colorFactory";
+import {Circle} from "@engine/renderable/impl/geometry/circle";
+import {ArcadePhysicsSystem} from "@engine/physics/arcade/arcadePhysicsSystem";
 
 export class GroundDust {
 
@@ -11,13 +12,14 @@ export class GroundDust {
     constructor(game:Game, private scene:Scene) {
         const ps = new ParticleSystem(game);
         ps.emissionRadius = 5;
-        ps.particleVelocity = {from:10, to: 30};
+        ps.particleVelocity = {from:40, to: 60};
         ps.numOfParticlesToEmit = {from: 1, to: 2};
         ps.emitAuto = false;
-        const particle = new Rectangle(game);
+        ps.particleGravity = ArcadePhysicsSystem.gravity;
+        const particle = new Circle(game);
         particle.lineWidth = 0;
-        particle.fillColor = ColorFactory.fromCSS(`#363a36`);
-        particle.size.setWH(2);
+        particle.fillColor = ColorFactory.fromCSS(`#c5c7c5`);
+        particle.radius = 1;
         ps.addParticlePrefab(particle);
 
         ps.appendTo(scene);
