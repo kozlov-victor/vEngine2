@@ -14,7 +14,7 @@ import {RenderingObjectStackItem} from "@engine/scene/internal/renderingObjectSt
 
 const LEFT_MOUSE_BTN  = 0 as const;
 
-class MouseEventTrottler {
+class MouseEventThrottler {
     private event:MOUSE_EVENTS;
     private lastX:number;
     private lastY:number;
@@ -49,7 +49,7 @@ export class MouseControl implements IControl {
     private _capturedObjectsByTouchIdHolder:CapturedObjectsByTouchIdHolder = new CapturedObjectsByTouchIdHolder();
     private _capturedObjectsByTouchIdPrevHolder:CapturedObjectsByTouchIdHolder = new CapturedObjectsByTouchIdHolder();
     private _container:HTMLElement;
-    private _mouseEventTrottler = new MouseEventTrottler();
+    private mouseEventThrottler = new MouseEventThrottler();
 
     constructor(private game:Game){
     }
@@ -65,7 +65,7 @@ export class MouseControl implements IControl {
         container.ontouchstart = (e:TouchEvent):void=>{
             // to prevent "mouse" events on touch devices - https://www.html5rocks.com/en/mobile/touchandmouse/
             e.preventDefault();
-            if (this._mouseEventTrottler.checkSameEventAndSet(MOUSE_EVENTS.mouseDown, e.touches[0].clientX,e.touches[0].clientY)) {
+            if (this.mouseEventThrottler.checkSameEventAndSet(MOUSE_EVENTS.mouseDown, e.touches[0].clientX,e.touches[0].clientY)) {
                 return;
             }
 
@@ -76,7 +76,7 @@ export class MouseControl implements IControl {
             }
         };
         container.onmousedown = (e:MouseEvent):void=>{
-            if (this._mouseEventTrottler.checkSameEventAndSet(MOUSE_EVENTS.mouseDown, e.clientX,e.clientY)) {
+            if (this.mouseEventThrottler.checkSameEventAndSet(MOUSE_EVENTS.mouseDown, e.clientX,e.clientY)) {
                 return;
             }
 
@@ -87,14 +87,14 @@ export class MouseControl implements IControl {
             }
         };
         container.onpointerdown = (e:MouseEvent):void=>{
-            if (this._mouseEventTrottler.checkSameEventAndSet(MOUSE_EVENTS.mouseDown, e.clientX,e.clientY)) {
+            if (this.mouseEventThrottler.checkSameEventAndSet(MOUSE_EVENTS.mouseDown, e.clientX,e.clientY)) {
                 return;
             }
             this.resolveClick(e);
         };
         // mouseUp
         container.ontouchend = container.ontouchcancel = (e:TouchEvent):void=>{
-            if (this._mouseEventTrottler.checkSameEventAndSet(MOUSE_EVENTS.mouseUp, e.changedTouches[0].clientX,e.changedTouches[0].clientY)) {
+            if (this.mouseEventThrottler.checkSameEventAndSet(MOUSE_EVENTS.mouseUp, e.changedTouches[0].clientX,e.changedTouches[0].clientY)) {
                 return;
             }
 
@@ -106,7 +106,7 @@ export class MouseControl implements IControl {
             }
         };
         document.body.ontouchend = document.body.ontouchcancel = (e:TouchEvent):void=>{
-            if (this._mouseEventTrottler.checkSameEvent(MOUSE_EVENTS.mouseUp)) {
+            if (this.mouseEventThrottler.checkSameEvent(MOUSE_EVENTS.mouseUp)) {
                 return;
             }
             let l:number = e.changedTouches.length;
@@ -123,7 +123,7 @@ export class MouseControl implements IControl {
             container.onpointerleave =
             container.onpointerup =
                 (e: MouseEvent):void=>{
-                    if (this._mouseEventTrottler.checkSameEventAndSet(MOUSE_EVENTS.mouseUp, e.clientX,e.clientY)) {
+                    if (this.mouseEventThrottler.checkSameEventAndSet(MOUSE_EVENTS.mouseUp, e.clientX,e.clientY)) {
                         return;
                     }
 
@@ -131,7 +131,7 @@ export class MouseControl implements IControl {
                     this.resolveMouseUp(e);
                 };
         container.onmouseup = (e:MouseEvent):void=>{
-            if (this._mouseEventTrottler.checkSameEventAndSet(MOUSE_EVENTS.mouseUp, e.clientX,e.clientY)) {
+            if (this.mouseEventThrottler.checkSameEventAndSet(MOUSE_EVENTS.mouseUp, e.clientX,e.clientY)) {
                 return;
             }
 
@@ -139,20 +139,20 @@ export class MouseControl implements IControl {
             this.resolveMouseUp(e);
         };
         document.body.onpointerup = (e: MouseEvent):void=>{
-            if (this._mouseEventTrottler.checkSameEventAndSet(MOUSE_EVENTS.mouseUp, e.clientX,e.clientY)) {
+            if (this.mouseEventThrottler.checkSameEventAndSet(MOUSE_EVENTS.mouseUp, e.clientX,e.clientY)) {
                 return;
             }
             this.resolveMouseUp(e);
         };
         document.body.onmouseup = (e: MouseEvent):void=>{
-            if (this._mouseEventTrottler.checkSameEventAndSet(MOUSE_EVENTS.mouseUp, e.clientX,e.clientY)) {
+            if (this.mouseEventThrottler.checkSameEventAndSet(MOUSE_EVENTS.mouseUp, e.clientX,e.clientY)) {
                 return;
             }
             this.resolveMouseUp(e);
         };
         // mouseMove
         container.ontouchmove = (e:TouchEvent):void=>{
-            if (this._mouseEventTrottler.checkSameEventAndSet(MOUSE_EVENTS.mouseMove, e.touches[0].clientX,e.touches[0].clientY)) {
+            if (this.mouseEventThrottler.checkSameEventAndSet(MOUSE_EVENTS.mouseMove, e.touches[0].clientX,e.touches[0].clientY)) {
                 return;
             }
             //console.log('ontouchmove');
@@ -164,13 +164,13 @@ export class MouseControl implements IControl {
         };
         container.onpointermove = (e:PointerEvent):void=>{
             if (e.pointerType!=='pen') return; // only for pen support
-            if (this._mouseEventTrottler.checkSameEventAndSet(MOUSE_EVENTS.mouseMove, e.clientX,e.clientY)) {
+            if (this.mouseEventThrottler.checkSameEventAndSet(MOUSE_EVENTS.mouseMove, e.clientX,e.clientY)) {
                 return;
             }
             this.resolveMouseMove(e,e.pressure>0);
         };
         container.onmousemove = (e:MouseEvent):void=>{
-            if (this._mouseEventTrottler.checkSameEventAndSet(MOUSE_EVENTS.mouseMove, e.clientX,e.clientY)) {
+            if (this.mouseEventThrottler.checkSameEventAndSet(MOUSE_EVENTS.mouseMove, e.clientX,e.clientY)) {
                 return;
             }
 

@@ -60,23 +60,23 @@ export class MainScene extends Scene {
 
         if (Device.isAndroid || Device.isIPhone) {
             const sensorCursor = new ScreenSensorCursor(this.game,this,30);
-            sensorCursor.reflectToKeyboardControl(this.game.getControl('KeyboardControl')!,{
+            sensorCursor.reflectToKeyboardControl(this.game.getControl('KeyboardControl'),{
                 [ScreenSensorCursor.DIRECTION.UP]: KEYBOARD_KEY.UP,
                 [ScreenSensorCursor.DIRECTION.DOWN]: KEYBOARD_KEY.DOWN,
                 [ScreenSensorCursor.DIRECTION.LEFT]: KEYBOARD_KEY.LEFT,
                 [ScreenSensorCursor.DIRECTION.RIGHT]: KEYBOARD_KEY.RIGHT,
-            })
+            });
             sensorCursor.appendTo(uiLayer);
             sensorCursor.getExternalRing().pos.setXY(20,230);
 
             const jumpButton = new ScreenSensorButton(this.game,15);
             jumpButton.pos.setXY(200,260);
-            jumpButton.reflectToKeyboardControl(this.game.getControl('KeyboardControl')!,KEYBOARD_KEY.SPACE);
+            jumpButton.reflectToKeyboardControl(this.game.getControl('KeyboardControl'),KEYBOARD_KEY.SPACE);
             jumpButton.appendTo(uiLayer);
 
             const fireButton = new ScreenSensorButton(this.game,15);
             fireButton.pos.setXY(190,220);
-            fireButton.reflectToKeyboardControl(this.game.getControl('KeyboardControl')!,KEYBOARD_KEY.CONTROL);
+            fireButton.reflectToKeyboardControl(this.game.getControl('KeyboardControl'),KEYBOARD_KEY.CONTROL);
             fireButton.appendTo(uiLayer);
         }
 

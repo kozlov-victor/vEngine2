@@ -18,7 +18,7 @@ document.body.style.backgroundColor = 'black';
 ResourceLoader.BASE_URL = './dudeUntitled/assets';
 
 const game = new Game({width:240,height:320, scaleStrategy: SCALE_STRATEGY.FIT_CANVAS_TO_SCREEN});
-ArcadePhysicsSystem.SPATIAL_CELL_SIZE.setWH(128);
+ArcadePhysicsSystem.SPATIAL_CELL_SIZE.setWH(64);
 game.setPhysicsSystem(ArcadePhysicsSystem);
 game.setRenderer(CanvasRenderer);
 game.getRenderer<AbstractCanvasRenderer>().setPixelPerfect(true);

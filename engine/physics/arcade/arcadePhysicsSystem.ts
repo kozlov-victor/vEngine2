@@ -84,9 +84,9 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
         }
 
         testedCollisionsCache.clear();
-
-        for (let i=0,max_i=scene._spatialSpace.cells.length;i<max_i;i++) {
-            const cell = scene._spatialSpace.cells[i];
+        const cells = scene._spatialSpace.getCellsToCheck();
+        for (let i=0,max_i=cells.length;i<max_i;i++) {
+            const cell = cells[i];
             const bodies:IRigidBody[] = cell.objects;
             for (let j=0,max_j=bodies.length;j<max_j;j++) {
                 const playerBody = bodies[j] as ArcadeRigidBody;
@@ -121,6 +121,7 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
             }
             cell.clear();
         }
+        scene._spatialSpace.clear();
     }
 
 

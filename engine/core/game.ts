@@ -106,13 +106,14 @@ export class Game {
         return this.getControl(type)!==undefined;
     }
 
-    public getControl<T extends IControl>(type:'KeyboardControl'|'MouseControl'|'GamePadControl'|string):Optional<T> {
+    public getControl<T extends IControl>(type:'KeyboardControl'|'MouseControl'|'GamePadControl'|string):T {
         for (const c of this._controls) {
             if (c.type===type) {
                 return c as T;
             }
         }
-        return undefined;
+        if (DEBUG) throw new DebugError(`control with type "${type}" is not added`);
+        else throw new Error();
     }
 
     public setPhysicsSystem(clz:ClazzEx<IPhysicsSystem,Game>):void{

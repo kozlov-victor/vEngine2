@@ -26,7 +26,8 @@ export class SpatialSpace {
     private numOfCellsX:number;
     private numOfCellsY:number;
 
-    public readonly cells:SpatialCell[] = [];
+    private cells:SpatialCell[] = [];
+    private notEmptyCells:SpatialCell[] = [];
 
     constructor(private game:Game, private cellWidth:number, private cellHeight:number, private spaceWidth:number, private spaceHeight:number) {
         this.rebuild(cellWidth,cellHeight,spaceWidth,spaceHeight);
@@ -36,6 +37,7 @@ export class SpatialSpace {
         this.numOfCellsX = ~~(spaceWidth / cellWidth) + ((cellWidth % spaceWidth)===0?0:1);
         this.numOfCellsY = ~~(spaceHeight / cellHeight) + ((cellHeight % spaceHeight)===0?0:1);
         const l = this.numOfCellsX*this.numOfCellsY;
+        this.cells.length = 0;
 
         let x = 0;
         let y = 0;
@@ -54,6 +56,7 @@ export class SpatialSpace {
             // this.game.getCurrentScene().appendChild(cell.debugView);
             this.cells.push(cell);
         }
+        this.clear();
     }
 
     // public debugClear():void {
@@ -108,8 +111,17 @@ export class SpatialSpace {
         }
         for (const c of body.spatialCellsOccupied) {
             c.objects.push(body);
+            if (!this.notEmptyCells.includes(c)) this.notEmptyCells.push(c);
             //c.debugView.fillColor = activeColor;
         }
+    }
+
+    public clear():void {
+        this.notEmptyCells.length = 0;
+    }
+
+    public getCellsToCheck():readonly SpatialCell[] {
+        return this.notEmptyCells;
     }
 
 }

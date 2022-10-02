@@ -6,12 +6,17 @@ import {TexturePackerAtlas} from "@engine/animation/frameAnimation/atlas/texture
 import {Scene} from "@engine/scene/scene";
 import {ARCADE_RIGID_BODY_TYPE} from "@engine/physics/arcade/arcadeRigidBody";
 import {ArcadePhysicsSystem} from "@engine/physics/arcade/arcadePhysicsSystem";
+import {Rect} from "@engine/geometry/rect";
+
+const gameRect = new Rect();
 
 export class Sausage {
 
     private image:Image;
 
     constructor(private game:Game,scene:Scene,private assets:Assets,tiledObject:ITiledJSON['layers'][0]['objects'][0]) {
+
+        gameRect.setXYWH(0,0,game.width,game.height);
 
         const objGroup =
             assets.levelData.tilesets.find(it=>it.name==='inventory')!.
@@ -33,5 +38,6 @@ export class Sausage {
         image.appendTo(scene);
         this.image = image;
     }
+
 
 }

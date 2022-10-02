@@ -270,22 +270,22 @@ export class MainScene extends Scene {
         this.appendChild(touchPadLayer);
 
         const btnLeft = new ScreenSensorButton(this.game,30);
-        btnLeft.reflectToKeyboardControl(this.game.getControl('KeyboardControl')!,KEYBOARD_KEY.LEFT);
+        btnLeft.reflectToKeyboardControl(this.game.getControl('KeyboardControl'),KEYBOARD_KEY.LEFT);
         btnLeft.pos.setXY(30,this.game.size.height - 130);
         btnLeft.appendTo(touchPadLayer);
 
         const btnRight = new ScreenSensorButton(this.game,30);
-        btnRight.reflectToKeyboardControl(this.game.getControl('KeyboardControl')!,KEYBOARD_KEY.RIGHT);
+        btnRight.reflectToKeyboardControl(this.game.getControl('KeyboardControl'),KEYBOARD_KEY.RIGHT);
         btnRight.pos.setXY(110,this.game.size.height - 130);
         btnRight.appendTo(touchPadLayer);
 
         const btnFire = new ScreenSensorButton(this.game,30);
-        btnFire.reflectToKeyboardControl(this.game.getControl('KeyboardControl')!,KEYBOARD_KEY.Z);
+        btnFire.reflectToKeyboardControl(this.game.getControl('KeyboardControl'),KEYBOARD_KEY.Z);
         btnFire.pos.setXY(this.game.size.width - 110 - 40,this.game.size.height - 130);
         btnFire.appendTo(touchPadLayer);
 
         const btnJump = new ScreenSensorButton(this.game,30);
-        btnJump.reflectToKeyboardControl(this.game.getControl('KeyboardControl')!,KEYBOARD_KEY.SPACE);
+        btnJump.reflectToKeyboardControl(this.game.getControl('KeyboardControl'),KEYBOARD_KEY.SPACE);
         btnJump.pos.setXY(this.game.size.width - 30 - 40,this.game.size.height - 130);
         btnJump.appendTo(touchPadLayer);
 
