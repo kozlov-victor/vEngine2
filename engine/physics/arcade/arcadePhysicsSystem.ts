@@ -25,12 +25,12 @@ const intersect = (a:Int,b:Int):boolean=> {
     return ((a as number) & (b as number))>0;
 };
 
-const include = (a:Int,b:Int):boolean=> { // true if "a" contains all elements of "b"
-    if (a===0 || b===0) return false;
-    return (((a as Int) | (b as Int)) as Int)===a;
-}
+// const include = (a:Int,b:Int):boolean=> { // true if "a" contains all elements of "b"
+//     if (a===0 || b===0) return false;
+//     return (((a as Int) | (b as Int)) as Int)===a;
+// }
 
-const testedCollisionsCache = new Set();
+const testedCollisionsCache = new Map<number,number>();
 const p1 = new Point2d();
 const p2 = new Point2d();
 
@@ -95,15 +95,13 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
 
                 for (let k=j+1;k<max_j;k++) {
                     const entityBody = bodies[k] as ArcadeRigidBody;
-                    const abKey = `${playerBody.id}_${entityBody.id}`;
-                    const baKey = `${entityBody.id}_${playerBody.id}`;
-                    if (testedCollisionsCache.has(baKey) || testedCollisionsCache.has(abKey)) {
+                    if (testedCollisionsCache.get(playerBody.id)===entityBody.id || testedCollisionsCache.get(entityBody.id)===playerBody.id) {
                         continue;
                     }
-                    testedCollisionsCache.add(abKey);
+                    testedCollisionsCache.set(playerBody.id,entityBody.id);
                     const entityBodyRect = entityBody.calcAndGetBoundRect();
-                    p2.setFrom(entityBody.pos);
                     if (!MathEx.overlapTest(playerBodyRect,entityBodyRect)) continue;
+                    p2.setFrom(entityBody.pos);
                     if (
                         !playerBody.acceptCollisions                                               ||
                         !entityBody.acceptCollisions                                               ||
@@ -231,8 +229,8 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
         }
         player.collisionFlags.top =
             entity.collisionFlags.bottom = true;
-        this.reflectVelocityY(player, entity);
         this.emitCollisionEvents(player, entity);
+        this.reflectVelocityY(player, entity);
     }
 
     private collidePlayerWithBottom(player:ArcadeRigidBody, pos:Point2d, entity:ArcadeRigidBody):void{
@@ -241,24 +239,24 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
         entity._offsetX = 0;
         player.collisionFlags.bottom =
             entity.collisionFlags.top = true;
-        this.reflectVelocityY(player, entity);
         this.emitCollisionEvents(player, entity);
+        this.reflectVelocityY(player, entity);
     }
 
     private collidePlayerWithLeft(player:ArcadeRigidBody, pos:Point2d, entity:ArcadeRigidBody):void{
         pos.x = entity.getRight() - player._rect.x;
         player.collisionFlags.left =
             entity.collisionFlags.right = true;
-        this.reflectVelocityX(player, entity);
         this.emitCollisionEvents(player, entity);
+        this.reflectVelocityX(player, entity);
     }
 
     private collidePlayerWithRight(player:ArcadeRigidBody, pos:Point2d, entity:ArcadeRigidBody):void{
         pos.x = entity.getLeft() - player._rect.width - player._rect.x;
         player.collisionFlags.right =
             entity.collisionFlags.left = true;
-        this.reflectVelocityX(player, entity);
         this.emitCollisionEvents(player, entity);
+        this.reflectVelocityX(player, entity);
     }
 
 
