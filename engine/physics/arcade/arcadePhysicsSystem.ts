@@ -174,15 +174,19 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
         const entityLengthMax:number = Math.max(Math.abs(entityLengthX),Math.abs(entityLengthY));
         const entityDeltaX:number = entityLengthX/entityLengthMax;
         const entityDeltaY:number = entityLengthY/entityLengthMax;
-        let steps:number = 0;
-        while (steps<=entityLengthMax) {
-            entityBody.pos.setXY(oldEntityPosX,oldEntityPosY);
-            if (MathEx.overlapTest(playerBody.calcAndGetBoundRect(),entityBody.calcAndGetBoundRect())) {
+        let step:number = entityLengthMax;
+        const playerBodyRect = playerBody.calcAndGetBoundRect();
+        while (step-->0) {
+            if (step===0) {
+                entityBody.pos.setXY(newEntityPosX,newEntityPosY);
+            } else {
+                entityBody.pos.setXY(oldEntityPosX,oldEntityPosY);
+            }
+            if (MathEx.overlapTest(playerBodyRect,entityBody.calcAndGetBoundRect())) {
                 break;
             }
             oldEntityPosX+=entityDeltaX;
             oldEntityPosY+=entityDeltaY;
-            steps++;
         }
         this.resolveCollision(playerBody, pos, entityBody);
     }

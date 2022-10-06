@@ -11,6 +11,7 @@ import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {ScreenSensorCursor} from "@engine/control/screenSensor/screenSensorCursor";
 import {ScreenSensorButton} from "@engine/control/screenSensor/screenSensorButton";
 import {Device} from "@engine/misc/device";
+import {Key} from "./objects/key";
 
 
 export class MainScene extends Scene {
@@ -48,6 +49,9 @@ export class MainScene extends Scene {
                     break;
                 case 'Sausage':
                     new Sausage(this.game, this, this.assets,obj);
+                    break;
+                case 'Key':
+                    new Key(this.game, this, this.assets,obj);
                     break;
             }
         });

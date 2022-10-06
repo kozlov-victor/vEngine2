@@ -9,7 +9,8 @@ import {ArcadePhysicsSystem} from "@engine/physics/arcade/arcadePhysicsSystem";
 import {Rect} from "@engine/geometry/rect";
 
 
-export class Sausage {
+
+export class Key {
 
     private image:Image;
 
@@ -22,7 +23,7 @@ export class Sausage {
 
         const image = new Image(game,assets.inventoryTexture);
         const atlas = new TexturePackerAtlas(assets.inventoryAtlas);
-        const frame = atlas.getFrameByKey('inventory_sausage');
+        const frame = atlas.getFrameByKey('inventory_key');
         image.size.setWH(frame.width,frame.height);
         image.srcRect.setFrom(frame);
         image.pos.setXY(tiledObject.x,tiledObject.y - tiledObject.height);

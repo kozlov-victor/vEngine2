@@ -35,6 +35,7 @@ export class MainScene extends Scene {
         });
         obj.size.setWH(200,200);
         obj.scale.setXYZ(100);
+        obj.alpha = 0.2;
         this.appendChild(obj);
         const timer = this.setInterval(()=>{
             obj.angle3d.y+=0.01;
