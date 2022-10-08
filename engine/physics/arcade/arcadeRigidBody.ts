@@ -124,7 +124,7 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
         }
 
         const spatialSpace = this.game.getCurrentScene()._spatialSpace;
-        if (spatialSpace) {
+        if (spatialSpace!==undefined) {
             spatialSpace.updateSpaceByObject(this,this.calcAndGetBoundRect());
         }
     }

@@ -165,8 +165,15 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
 
     private interpolateAndResolveCollision(playerBody:ArcadeRigidBody, pos:Point2d, entityBody:ArcadeRigidBody):void {
         if (playerBody._modelType===ARCADE_RIGID_BODY_TYPE.KINEMATIC) return;
-        let oldEntityPosX:number = entityBody._modelType===ARCADE_RIGID_BODY_TYPE.KINEMATIC?entityBody.pos.x:entityBody._oldPos.x;
-        let oldEntityPosY:number = entityBody._modelType===ARCADE_RIGID_BODY_TYPE.KINEMATIC?entityBody.pos.y:entityBody._oldPos.y;
+        let oldEntityPosX:number;
+        let oldEntityPosY:number;
+        if (entityBody._modelType===ARCADE_RIGID_BODY_TYPE.KINEMATIC) {
+            oldEntityPosX = entityBody.pos.x;
+            oldEntityPosY = entityBody.pos.y;
+        } else {
+            oldEntityPosX = entityBody._oldPos.x;
+            oldEntityPosY = entityBody._oldPos.y;
+        }
         const newEntityPosX:number = entityBody.pos.x;
         const newEntityPosY:number = entityBody.pos.y;
         const entityLengthX:number = newEntityPosX - oldEntityPosX;
