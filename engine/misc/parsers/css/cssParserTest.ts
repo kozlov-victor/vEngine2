@@ -1,4 +1,5 @@
 import {CssParser} from "@engine/misc/parsers/css/cssParser";
+import {CssSelectorParser} from "@engine/misc/parsers/css/cssSelectorParser";
 
 const parser = new CssParser();
 
@@ -38,7 +39,7 @@ const rules = parser.parseCSS(`
     }
 `)
 
-console.log(parser.getRulesBySelector('body'));
-
-
+// console.log(parser.getRulesBySelector('body'));
+const selectorParser = new CssSelectorParser();
+selectorParser.compile(' a[href="a"] + div> a  p  >  b#id.class');
 export const CSS_PARSE_TEST = {};

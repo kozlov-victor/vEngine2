@@ -6,13 +6,25 @@ import {GamePadControl} from "@engine/control/gamepad/gamePadControl";
 import {ResourceLoader} from "@engine/resources/resourceLoader";
 import {ArcadePhysicsSystem} from "@engine/physics/arcade/arcadePhysicsSystem";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
-import {CanvasRenderer} from "@engine/renderer/canvas/canvasRenderer";
 import {AbstractCanvasRenderer} from "@engine/renderer/abstract/abstractCanvasRenderer";
 import {MouseControl} from "@engine/control/mouse/mouseControl";
+import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
 
 // window.requestAnimationFrame =  (f:FrameRequestCallback):number=>{
 //     return setTimeout(f,1000/25);
 // };
+
+// (WebGlRenderer as any).prototype.createTexture = (bitmap:ImageBitmap|HTMLImageElement|HTMLCanvasElement):ITexture=>{
+//     const c = document.createElement('canvas');
+//     c.width = bitmap.width;
+//     c.height = bitmap.height;
+//     const ctx = c.getContext('2d')!;
+//     ctx.drawImage(bitmap,0,0);
+//     const imgData = ctx.getImageData(0,0,bitmap.width,bitmap.height);
+//     const dataTexture = new DataTexture(Game.getInstance(),bitmap.width,bitmap.height);
+//     dataTexture.setNewData(new Uint8Array(imgData.data.buffer));
+//     return dataTexture;
+// }
 
 document.body.style.backgroundColor = 'black';
 ResourceLoader.BASE_URL = './dudeUntitled/assets';
@@ -20,7 +32,7 @@ ResourceLoader.BASE_URL = './dudeUntitled/assets';
 const game = new Game({width:240,height:320, scaleStrategy: SCALE_STRATEGY.FIT_CANVAS_TO_SCREEN});
 ArcadePhysicsSystem.SPATIAL_CELL_SIZE.setWH(64);
 game.setPhysicsSystem(ArcadePhysicsSystem);
-game.setRenderer(CanvasRenderer);
+game.setRenderer(WebGlRenderer);
 game.getRenderer<AbstractCanvasRenderer>().setPixelPerfect(true);
 game.addControl(KeyboardControl);
 game.addControl(MouseControl);

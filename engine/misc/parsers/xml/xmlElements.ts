@@ -91,6 +91,17 @@ export class XmlNode implements IXmlNode, ICloneable<XmlNode> {
         return res;
     }
 
+    public getTextContent():string {
+        const data:string[] = [];
+        for (const c of this.children) {
+            if ((c as IXmlTextNode).data) {
+                data.push(((c as IXmlTextNode).data));
+            }
+        }
+        if (!data.length) return '';
+        return data.join('\n');
+    }
+
     public fromJSON(obj:IXmlNode):void {
         this.tagName = obj.tagName;
         this.attributes = {...obj.attributes};

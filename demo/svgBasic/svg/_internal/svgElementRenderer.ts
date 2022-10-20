@@ -1,144 +1,37 @@
-import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
+import {CssParser} from "@engine/misc/parsers/css/cssParser";
 import {Game} from "@engine/core/game";
-import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
+import {XmlNode} from "@engine/misc/parsers/xml/xmlElements";
+import {ITexture} from "@engine/renderer/common/texture";
+import {Optional} from "@engine/core/declarations";
 import {Color} from "@engine/renderer/common/color";
-import {ISize} from "@engine/geometry/size";
+import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
+import {BasicStringTokenizer} from "@engine/renderable/impl/geometry/_internal/basicStringTokenizer";
+import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
+import {MathEx} from "@engine/misc/math/mathEx";
 import {Polygon} from "@engine/renderable/impl/geometry/polygon";
+import {EvenOddCompositionFilter} from "@engine/renderer/webGl/filters/composition/evenOddCompositionFilter";
+import {EndCapStyle, JointStyle} from "@engine/renderable/impl/geometry/_internal/triangulatedPathFromPolyline";
 import {PolyLine} from "@engine/renderable/impl/geometry/polyLine";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
-import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
-import {Line} from "@engine/renderable/impl/geometry/line";
-import {closePolylinePoints} from "@engine/renderable/impl/geometry/_internal/closePolylinePoints";
-import {BasicStringTokenizer} from "@engine/renderable/impl/geometry/_internal/basicStringTokenizer";
-import {MathEx} from "@engine/misc/math/mathEx";
-import {FastMap} from "@engine/misc/collection/fastMap";
-import {Optional} from "@engine/core/declarations";
 import {DebugError} from "@engine/debug/debugError";
 import {Image} from "@engine/renderable/impl/general/image/image";
+import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
+import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
+import {Line} from "@engine/renderable/impl/geometry/line";
+import {closePolylinePoints} from "@engine/renderable/impl/geometry/_internal/closePolylinePoints";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {LazyImageCacheSurface} from "@engine/renderable/impl/surface/lazyImageCacheSurface";
-import {ITexture} from "@engine/renderer/common/texture";
-import {TaskQueue} from "@engine/resources/taskQueue";
-import {XmlDocument, XmlNode} from "@engine/misc/parsers/xml/xmlELements";
-import {EndCapStyle, JointStyle} from "@engine/renderable/impl/geometry/_internal/triangulatedPathFromPolyline";
-import {EvenOddCompositionFilter} from "@engine/renderer/webGl/filters/composition/evenOddCompositionFilter";
-import {ColorFactory} from "@engine/renderer/common/colorFactory";
+import {SvgImage} from "../svgImage";
+import {ElementStylesHolder} from "./elementStylesHolder";
+import {SvgUtils} from "./svgUtils";
 
-const getColor = (literal:string)=>{
-    if (literal.indexOf('url')===0) {
-        console.log(`urls is not supported: ${literal}`);
-        return Color.NONE.clone();
-    }
-    if (!literal || literal==='none') return Color.NONE.clone();
-    return ColorFactory.fromCSS(literal);
-};
+export class SvgElementRenderer {
 
-const getString = (literal:string,defaultValue:string):string=>{
-    if (!literal) return defaultValue;
-    else return literal;
-};
-
-const getNumber = (literal:string,defaultValue:number):number=>{
-    if (!literal) return defaultValue;
-    const val:number = parseFloat(literal);
-    if (Number.isNaN(val)) return defaultValue;
-    else return val;
-};
-
-// https://oreillymedia.github.io/Using_SVG/guide/units.html
-const calcNumberWithMeasure = (val:number,measure:string,containerSize:number,):number=>{
-    if (!measure) return val;
-    switch (measure) {
-        case '%':
-            return val*containerSize/100;
-        case 'px':
-            return val;
-        case 'mm':
-            // 1cm ≅ 37.795px or user units
-            return val*0.01*37.795;
-        case 'cm':
-            return val*37.795;
-        case 'in':
-            return val*96;
-        case 'pc':
-            return val*16;
-        case 'pt':
-            // 1pt ≅ 1.3333px
-            return val*1.3333;
-        default:
-            throw new DebugError(`unknown measure: ` + measure);
-    }
-};
-
-
-const getNumberWithMeasure = (literal:string,containerSize:number,defaultValue:number):number=>{
-    if (!literal) return defaultValue;
-    const tokenizer = new BasicStringTokenizer(literal);
-    const val:number = tokenizer.getNextNumber();
-    const measure:string = !tokenizer.isEof()?tokenizer.getNextToken(tokenizer._CHAR+'%'):'';
-    return calcNumberWithMeasure(val,measure,containerSize);
-};
-
-const getNumberArray = <T>(literal:string,size:number,defaultItemValue:number):T=>{
-    let arr:number[];
-    if (!literal) {
-        arr = Array(size);
-        arr.fill(defaultItemValue);
-        return arr as unknown as T;
-    }
-    arr = literal.split(' ').map(it=>parseFloat(it));
-    for (let i:number=0;i<size;i++) {
-        if (!arr[i]) arr[i] = defaultItemValue;
-    }
-    return arr as unknown as T;
-};
-
-class ElementStylesHolder {
-
-    private map:FastMap<XmlNode, Record<string, string>> = new FastMap<XmlNode, Record<string, string>>();
-
-    public getStyle(el:XmlNode):Record<string, string> {
-        let styleMap = this.map.get(el);
-        if (styleMap===undefined) {
-            styleMap = this.styleAttrToMap(el.getAttribute('style'));
-            this.map.put(el,styleMap);
-        }
-        return styleMap;
-    }
-
-    public mergeStyle(s1:string,s2:string):string {
-        const map1 = this.styleAttrToMap(s1);
-        const map2 = this.styleAttrToMap(s2);
-        Object.keys(map2).forEach(key=>{
-            map1[key] = map2[key];
-        });
-        let result = '';
-        Object.keys(map1).forEach(key=>{
-            if (!key) return;
-            const value = map1[key] ?? '';
-            result+=`${key}:${value};`;
-        });
-        return result;
-    }
-
-    private styleAttrToMap(style:string):Record<string, string> {
-        const res:Record<string, string> = {};
-        if (!style) return res;
-        style.split(';').forEach(pair=>{
-            const pairArr:string[] = pair.split(':');
-            res[pairArr[0].trim()] = pairArr[1]?.trim();
-        });
-        return res;
-    }
-
-}
-
-class SvgElementRenderer {
-
-    private elementStylesHolder:ElementStylesHolder = new ElementStylesHolder();
+    private elementStylesHolder = new ElementStylesHolder();
+    private css = new CssParser();
 
     constructor(private game:Game, private document:XmlNode, private rootContainer:SvgImage, private preloadedResources:Record<string, ITexture>) {
+        const cssRaw = document.getElementsByTagName('style').map(it=>it.getTextContent()).join('\n');
+        this.css.parseCSS(cssRaw);
     }
 
     private getFillStrokeParams(el:XmlNode):{lineWidth:Optional<number>,fillColor:Color,drawColor:Color} {
@@ -149,14 +42,14 @@ class SvgElementRenderer {
         let lineWidth:Optional<number>;
         if (!rawStrokeValue) lineWidth = undefined;
         else {
-            lineWidth = getNumber(this.lookUpProperty(el,'stroke-width',true),1);
+            lineWidth = SvgUtils.getNumber(this.lookUpProperty(el,'stroke-width',true),1);
         }
 
-        const fillColor:Color = getColor(rawFillValue ?? '#000000');
-        const drawColor:Color = getColor(rawStrokeValue);
+        const fillColor:Color = SvgUtils.getColor(rawFillValue ?? '#000000');
+        const drawColor:Color = SvgUtils.getColor(rawStrokeValue);
 
-        const fillOpacity:number = getNumber(this.lookUpProperty(el,'fill-opacity',true),1);
-        const strokeOpacity:number = getNumber(this.lookUpProperty(el,'stroke-opacity',true),1);
+        const fillOpacity:number = SvgUtils.getNumber(this.lookUpProperty(el,'fill-opacity',true),1);
+        const strokeOpacity:number = SvgUtils.getNumber(this.lookUpProperty(el,'stroke-opacity',true),1);
 
         if (rawFillValue!=='none') fillColor.a = ~~(fillOpacity*255) as Uint8;
         if (rawStrokeValue!=='none') drawColor.a = ~~(strokeOpacity*255) as Uint8;
@@ -181,8 +74,8 @@ class SvgElementRenderer {
                 stringTokenizer.skipRequiredToken(')');
                 const transformed:RenderableModel = new SimpleGameObjectContainer(this.game);
                 transformed.pos.setXY(
-                    calcNumberWithMeasure(x,measureX,this.rootContainer.size.width),
-                    calcNumberWithMeasure(y,measureY,this.rootContainer.size.height)
+                    SvgUtils.calcNumberWithMeasure(x,measureX,this.rootContainer.size.width),
+                    SvgUtils.calcNumberWithMeasure(y,measureY,this.rootContainer.size.height)
                 );
                 lastView.appendChild(transformed);
                 lastView = transformed;
@@ -195,8 +88,8 @@ class SvgElementRenderer {
                 stringTokenizer.skipRequiredToken(')');
                 const transformed:RenderableModel = new SimpleGameObjectContainer(this.game);
                 transformed.scale.setXY(
-                    calcNumberWithMeasure(x,measureX,1),
-                    calcNumberWithMeasure(y,measureY,1)
+                    SvgUtils.calcNumberWithMeasure(x,measureX,1),
+                    SvgUtils.calcNumberWithMeasure(y,measureY,1)
                 );
                 lastView.appendChild(transformed);
                 lastView = transformed;
@@ -276,7 +169,7 @@ class SvgElementRenderer {
 
     private resolveOpacity(el:XmlNode):number{
         const opacity:string = this.lookUpProperty(el,'opacity',false);
-        return getNumber(opacity,1);
+        return SvgUtils.getNumber(opacity,1);
     }
 
     private createElementContainer(parentView:RenderableModel,el:XmlNode):RenderableModel{
@@ -291,11 +184,18 @@ class SvgElementRenderer {
         let currentNode:XmlNode = el;
         let result:string = undefined!;
         while (currentNode!==undefined) {
-           result = this.elementStylesHolder.getStyle(currentNode)[propName];
-           if (!result) result = currentNode.getAttribute(propName);
-           if (result) break;
-           if (!lookupParents) break;
-           currentNode = currentNode.parent;
+            result = this.elementStylesHolder.getStyle(currentNode)[propName];
+            if (!result) result = currentNode.getAttribute(propName);
+            if (result) break;
+            if (!lookupParents) break;
+            currentNode = currentNode.parent;
+        }
+        if (result===undefined) {
+            const className = el.getAttribute('class');
+            if (className) {
+                const cssProps = this.css.getRulesBySelector(`.${className}`);
+                result = cssProps[propName];
+            }
         }
         if (result===undefined) result = '';
         return result;
@@ -362,9 +262,9 @@ class SvgElementRenderer {
     private renderCircle(parentView:RenderableModel,el:XmlNode):void {
         const container:RenderableModel = this.createElementContainer(parentView,el);
         const {lineWidth = 0,fillColor,drawColor} = this.getFillStrokeParams(el);
-        const cx:number = getNumberWithMeasure(el.getAttribute('cx'),this.rootContainer.size.width,0);
-        const cy:number = getNumberWithMeasure(el.getAttribute('cy'),this.rootContainer.size.height,0);
-        const r:number = getNumberWithMeasure(el.getAttribute('r'),this.rootContainer.size.width,10)+lineWidth/2;
+        const cx:number = SvgUtils.getNumberWithMeasure(el.getAttribute('cx'),this.rootContainer.size.width,0);
+        const cy:number = SvgUtils.getNumberWithMeasure(el.getAttribute('cy'),this.rootContainer.size.height,0);
+        const r:number = SvgUtils.getNumberWithMeasure(el.getAttribute('r'),this.rootContainer.size.width,10)+lineWidth/2;
 
         const circle:Circle = new Circle(this.game);
         circle.center.setXY(cx,cy);
@@ -378,10 +278,10 @@ class SvgElementRenderer {
 
     private renderImage(parentView:RenderableModel,el:XmlNode):void {
         const container:RenderableModel = this.createElementContainer(parentView,el);
-        const x:number = getNumberWithMeasure(el.getAttribute('cx'),this.rootContainer.size.width,0);
-        const y:number = getNumberWithMeasure(el.getAttribute('cy'),this.rootContainer.size.height,0);
-        const width:number = getNumberWithMeasure(this.lookUpProperty(el,'width',false),this.rootContainer.size.width,0);
-        const height:number = getNumberWithMeasure(this.lookUpProperty(el,'height',false),this.rootContainer.size.height,0);
+        const x:number = SvgUtils.getNumberWithMeasure(el.getAttribute('cx'),this.rootContainer.size.width,0);
+        const y:number = SvgUtils.getNumberWithMeasure(el.getAttribute('cy'),this.rootContainer.size.height,0);
+        const width:number = SvgUtils.getNumberWithMeasure(this.lookUpProperty(el,'width',false),this.rootContainer.size.width,0);
+        const height:number = SvgUtils.getNumberWithMeasure(this.lookUpProperty(el,'height',false),this.rootContainer.size.height,0);
         const url:string = el.getAttribute('xlink:href');
         if (!url) return;
 
@@ -398,10 +298,10 @@ class SvgElementRenderer {
     private renderEllipse(parentView:RenderableModel,el:XmlNode):void {
         const container:RenderableModel = this.createElementContainer(parentView,el);
         const {lineWidth = 0,fillColor,drawColor} = this.getFillStrokeParams(el);
-        const cx:number = getNumberWithMeasure(el.getAttribute('cx'),this.rootContainer.size.width,0);
-        const cy:number = getNumberWithMeasure(el.getAttribute('cy'),this.rootContainer.size.height,0);
-        const rx:number = getNumberWithMeasure(el.getAttribute('rx'),this.rootContainer.size.width,10)+lineWidth/2;
-        const ry:number = getNumberWithMeasure(el.getAttribute('ry'),this.rootContainer.size.width,10)+lineWidth/2;
+        const cx:number = SvgUtils.getNumberWithMeasure(el.getAttribute('cx'),this.rootContainer.size.width,0);
+        const cy:number = SvgUtils.getNumberWithMeasure(el.getAttribute('cy'),this.rootContainer.size.height,0);
+        const rx:number = SvgUtils.getNumberWithMeasure(el.getAttribute('rx'),this.rootContainer.size.width,10)+lineWidth/2;
+        const ry:number = SvgUtils.getNumberWithMeasure(el.getAttribute('ry'),this.rootContainer.size.width,10)+lineWidth/2;
 
         const ellipse:Ellipse = new Ellipse(this.game);
         ellipse.center.setXY(cx,cy);
@@ -418,11 +318,11 @@ class SvgElementRenderer {
     private renderRect(parentView:RenderableModel,el:XmlNode):void {
         const container:RenderableModel = this.createElementContainer(parentView,el);
         const {lineWidth = 0,fillColor,drawColor} = this.getFillStrokeParams(el);
-        const x:number = getNumberWithMeasure(el.getAttribute('x'),this.rootContainer.size.width,0);
-        const y:number = getNumberWithMeasure(el.getAttribute('y'),this.rootContainer.size.height,0);
-        const width:number = getNumberWithMeasure(el.getAttribute('width'),this.rootContainer.size.width,1);
-        const height:number = getNumberWithMeasure(el.getAttribute('height'),this.rootContainer.size.height,1);
-        const borderRadius:number = getNumberWithMeasure(el.getAttribute('rx'),this.rootContainer.size.width,0);
+        const x:number = SvgUtils.getNumberWithMeasure(el.getAttribute('x'),this.rootContainer.size.width,0);
+        const y:number = SvgUtils.getNumberWithMeasure(el.getAttribute('y'),this.rootContainer.size.height,0);
+        const width:number = SvgUtils.getNumberWithMeasure(el.getAttribute('width'),this.rootContainer.size.width,1);
+        const height:number = SvgUtils.getNumberWithMeasure(el.getAttribute('height'),this.rootContainer.size.height,1);
+        const borderRadius:number = SvgUtils.getNumberWithMeasure(el.getAttribute('rx'),this.rootContainer.size.width,0);
 
         if (width===0 || height===0) return;
 
@@ -441,10 +341,10 @@ class SvgElementRenderer {
         const container:RenderableModel = this.createElementContainer(parentView,el);
         let {lineWidth,drawColor} = this.getFillStrokeParams(el);
         if (lineWidth===undefined) lineWidth = 1;
-        const x1:number = getNumberWithMeasure(el.getAttribute('x1'),this.rootContainer.size.width,0);
-        const y1:number = getNumberWithMeasure(el.getAttribute('y1'),this.rootContainer.size.height,0);
-        const x2:number = getNumberWithMeasure(el.getAttribute('x2'),this.rootContainer.size.width,1);
-        const y2:number = getNumberWithMeasure(el.getAttribute('y2'),this.rootContainer.size.height,1);
+        const x1:number = SvgUtils.getNumberWithMeasure(el.getAttribute('x1'),this.rootContainer.size.width,0);
+        const y1:number = SvgUtils.getNumberWithMeasure(el.getAttribute('y1'),this.rootContainer.size.height,0);
+        const x2:number = SvgUtils.getNumberWithMeasure(el.getAttribute('x2'),this.rootContainer.size.width,1);
+        const y2:number = SvgUtils.getNumberWithMeasure(el.getAttribute('y2'),this.rootContainer.size.height,1);
 
         const line:Line = new Line(this.game);
         line.setXYX1Y1(x1,y1,x2,y2);
@@ -458,7 +358,7 @@ class SvgElementRenderer {
     private renderPolyline(parentView:RenderableModel, el:XmlNode, asPolygon:boolean):void {
         const container:RenderableModel = this.createElementContainer(parentView,el);
         const {lineWidth,fillColor,drawColor} = this.getFillStrokeParams(el);
-        const points:string = getString(el.getAttribute('points'),'');
+        const points:string = SvgUtils.getString(el.getAttribute('points'),'');
         if (!points) return;
         let vertices:number[] = [];
         const tokenizer:BasicStringTokenizer = new BasicStringTokenizer(points);
@@ -490,8 +390,8 @@ class SvgElementRenderer {
 
     private renderGroup(parentView:RenderableModel,el:XmlNode):RenderableModel {
         const container:RenderableModel = this.createElementContainer(parentView,el);
-        const x:number = getNumberWithMeasure(el.getAttribute('x'),this.rootContainer.size.width,undefined!);
-        const y:number = getNumberWithMeasure(el.getAttribute('y'),this.rootContainer.size.height,undefined!);
+        const x:number = SvgUtils.getNumberWithMeasure(el.getAttribute('x'),this.rootContainer.size.width,undefined!);
+        const y:number = SvgUtils.getNumberWithMeasure(el.getAttribute('y'),this.rootContainer.size.height,undefined!);
         if (x!==undefined) container.pos.setX(x);
         if (y!==undefined) container.pos.setY(y);
 
@@ -586,6 +486,8 @@ class SvgElementRenderer {
                 return this.renderUse(view,el);
             }
             case 'defs':
+            case 'title':
+            case 'style':
             case 'symbol': {
                 // ignore
                 return undefined;
@@ -595,77 +497,6 @@ class SvgElementRenderer {
                 return undefined;
             }
         }
-    }
-
-}
-
-export class SvgImage extends SimpleGameObjectContainer {
-
-    private constructor(game:Game, private doc:XmlDocument, private preferredSize?:ISize) {
-        super(game);
-    }
-
-    private svgElementRenderer:SvgElementRenderer;
-
-    private preloadedTextures:Record<string,ITexture> = {};
-
-    public static async create(game:Game, taskQueue:TaskQueue, doc:XmlDocument, preferredSize?:ISize):Promise<SvgImage> {
-        const image:SvgImage = new SvgImage(game, doc, preferredSize);
-        await image.preload(taskQueue);
-        image.parse();
-        return image;
-    }
-
-    private parse():void {
-
-        const rootSvgTag:XmlNode = this.doc.querySelector('svg');
-        console.log(this.doc, rootSvgTag);
-
-        const viewBox:[number,number,number,number] = getNumberArray(rootSvgTag.getAttribute('viewBox'),4,0);
-        let width:number = getNumberWithMeasure(rootSvgTag.getAttribute('width'),this.game.size.width,0) || viewBox[2];
-        let height:number = getNumberWithMeasure(rootSvgTag.getAttribute('height'),this.game.size.height,0) || viewBox[3];
-        if (width===0) width = 100;
-        if (height===0) height = 100;
-        if (viewBox[2]===0) viewBox[2] = width;
-        if (viewBox[3]===0) viewBox[3] = height;
-
-        const rootView:RenderableModel = new SimpleGameObjectContainer(this.game);
-        rootView.pos.setXY(-viewBox[0],-viewBox[1]);
-        if (this.preferredSize!==undefined) {
-            this.size.setFrom(this.preferredSize);
-        } else {
-            this.size.setWH(width,height);
-        }
-        const scaleByViewPort:number = Math.min(this.size.width/viewBox[2],this.size.height/viewBox[3]);
-        rootView.scale.setXY(scaleByViewPort);
-
-        this.svgElementRenderer = new SvgElementRenderer(this.game,rootSvgTag,this,this.preloadedTextures);
-
-        this.traverseDocument(rootView,rootSvgTag);
-        const drawingSurface = new LazyImageCacheSurface(this.game,this.size);
-        drawingSurface.appendChild(rootView);
-        drawingSurface.requestRedraw();
-        this.appendChild(drawingSurface);
-
-        //this.appendChild(rootView);
-    }
-
-    private async preload(taskQueue:TaskQueue):Promise<void> {
-        if (DEBUG) {
-            if (taskQueue.getLoader().isResolved()) {
-                throw new DebugError(`current taskQueue is completed`);
-            }
-        }
-        const elements:XmlNode[] = this.doc.querySelectorAll('image');
-        for (const el of elements) {
-            const url:string = el.getAttribute('xlink:href');
-            if (!url) continue;
-            this.preloadedTextures[url] = await taskQueue.getLoader().loadTexture(url);
-        }
-    }
-
-    private traverseDocument(view:RenderableModel,el:XmlNode):void {
-        this.svgElementRenderer.renderTag(view,el);
     }
 
 }

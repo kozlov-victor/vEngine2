@@ -142,7 +142,7 @@ import * as svgEx127 from "xml/xml-loader!./examples/ex127.svg";
 
 // https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/
 import {Scene} from "@engine/scene/scene";
-import {SvgImage} from "./svgImage";
+import {SvgImage} from "./svg/svgImage";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {TaskQueue} from "@engine/resources/taskQueue";
 import {XmlDocument} from "@engine/misc/parsers/xml/xmlELements";

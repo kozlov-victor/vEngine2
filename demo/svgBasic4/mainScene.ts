@@ -3,7 +3,7 @@ import * as tbl from "xml/xml-loader!./examples/tbl-1.svg";
 
 import {Scene} from "@engine/scene/scene";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {SvgImage} from "../svgBasic/svgImage";
+import {SvgImage} from "../svgBasic/svg/svgImage";
 import {TaskQueue} from "@engine/resources/taskQueue";
 import {XmlDocument} from "@engine/misc/parsers/xml/xmlELements";
 import {CrtScreenFilter} from "@engine/renderer/webGl/filters/texture/crtScreenFilter";

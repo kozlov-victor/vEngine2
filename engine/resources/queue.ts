@@ -52,19 +52,14 @@ export class Queue {
         for (const task of this._tasks) {
             const {taskId,fn} = task;
             const onProgressCallBack = (n:number)=> this.progressTask(taskId,n);
-            try {
-                await fn(onProgressCallBack);
-            } catch (e) {
-                return Promise.reject(e);
-            }
+            await fn(onProgressCallBack);
             this.resolveTask(taskId);
             if (this.onProgress!==undefined) this.onProgress(this.calcProgress());
         }
         this._resolved = true;
-        if (this.onProgress!==undefined) this.onProgress(1);
+        if (this.onProgress!==undefined && this._tasks.length===0) this.onProgress(1);
         await Promise.resolve();
         this.onResolved.forEach(f=>f());
-        return Promise.resolve();
     }
 
     // public async start():Promise<void>{

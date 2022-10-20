@@ -1,13 +1,13 @@
 import {Scene} from "@engine/scene/scene";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {SvgImage} from "../svgBasic/svgImage";
+import {SvgImage} from "../svgBasic/svg/svgImage";
 import {TaskQueue} from "@engine/resources/taskQueue";
 import {ResourceLoader} from "@engine/resources/resourceLoader";
 import {XmlParser} from "@engine/misc/parsers/xml/xmlParser";
 
 // https://www.javatpoint.com/svg-tutorial
 const imageUrls:string[] = [
-    'illustration-1',
+    'illustration-1','happy', 'with-css',
     'curve-test','curve-test-2','curve-test-3','curve-test-4','curve-test-5',
     'test-draw',
     'cpu','dino',

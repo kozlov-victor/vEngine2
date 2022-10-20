@@ -41,7 +41,7 @@ import * as svgEx39 from "xml/xml-loader!./examples/ex39.svg";
 
 import {Scene} from "@engine/scene/scene";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {SvgImage} from "../svgBasic/svgImage";
+import {SvgImage} from "../svgBasic/svg/svgImage";
 import {TaskQueue} from "@engine/resources/taskQueue";
 import {XmlDocument} from "@engine/misc/parsers/xml/xmlELements";
 
