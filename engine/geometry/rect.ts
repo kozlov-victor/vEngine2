@@ -100,23 +100,21 @@ export class Rect extends ObservableEntity implements ICloneable<Rect>, IRect{
                 isNotNumber(width) ||
                 isNotNumber(height)
             )
-        ) throw new DebugError(`Rect: wrong numeric arguments ${x},${y},${width},${height}`);
-        const oldX:number = this._x;
-        const oldY:number = this._y;
-        const oldW:number = this._width;
-        const oldH:number = this._height;
-        const changed:boolean = oldX!==x || oldY!==y || oldW!==width || oldH!==height;
+        ) {
+            throw new DebugError(`Rect: wrong numeric arguments ${x},${y},${width},${height}`);
+        }
+        const changed:boolean = this._x!==x || this._y!==y || this._width!==width || this._height!==height;
         if (changed) {
             this._x      = x;
             this._y      = y;
             this._width  = width;
             this._height = height;
-            this._right = this._x+this._width;
-            this._bottom = this._y+this._height;
-            this._arr[0] = this._x;
-            this._arr[1] = this._y;
-            this._arr[2] = this._width;
-            this._arr[3] = this._height;
+            this._right  = x+width;
+            this._bottom = y+height;
+            this._arr[0] = x;
+            this._arr[1] = y;
+            this._arr[2] = width;
+            this._arr[3] = height;
             this.triggerObservable();
         }
         return this;

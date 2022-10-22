@@ -80,8 +80,8 @@ export class Size extends ObservableEntity implements ICloneable<ISize>{
         if (changed) {
             this._width = width;
             this._height = height;
-            this._arr[0] = this._width;
-            this._arr[1] = this._height;
+            this._arr[0] = width;
+            this._arr[1] = height;
             this.triggerObservable();
         }
         return this;

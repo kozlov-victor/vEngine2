@@ -58,8 +58,8 @@ export class Point2d extends ObservableEntity implements ICloneable<Point2d>, IP
         if (changed) {
             this._x = x;
             this._y = y;
-            this._arr[0] = this._x;
-            this._arr[1] = this._y;
+            this._arr[0] = x;
+            this._arr[1] = y;
             this.triggerObservable();
         }
         return this;

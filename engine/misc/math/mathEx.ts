@@ -1,5 +1,5 @@
 import {IPoint2d, Point2d} from "../../geometry/point2d";
-import {IRectJSON} from "../../geometry/rect";
+import {IRect, IRectJSON} from "../../geometry/rect";
 
 
 export namespace MathEx {
@@ -17,11 +17,11 @@ export namespace MathEx {
         return val;
     };
 
-    export const overlapTest = (a: IRectJSON, b: IRectJSON): boolean => {
-        return  (a.x < b.x + b.width)   &&
-                (a.x + a.width > b.x)   &&
-                (a.y < b.y + b.height)  &&
-                (a.y + a.height > b.y);
+    export const overlapTest = (a: IRect, b: IRect): boolean => {
+        return  (a.x < b.right)   &&
+                (a.right > b.x)   &&
+                (a.y < b.bottom)  &&
+                (a.bottom > b.y);
     };
 
     export const radToDeg = (rad: number): number => {

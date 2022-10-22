@@ -103,7 +103,12 @@ export class Game {
     }
 
     public hasControl(type:'KeyboardControl'|'MouseControl'|'GamePadControl'|string):boolean {
-        return this.getControl(type)!==undefined;
+        for (const c of this._controls) {
+            if (c.type===type) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public getControl<T extends IControl>(type:'KeyboardControl'|'MouseControl'|'GamePadControl'|string):T {
@@ -112,7 +117,9 @@ export class Game {
                 return c as T;
             }
         }
-        if (DEBUG) throw new DebugError(`control with type "${type}" is not added`);
+        if (DEBUG) {
+            throw new DebugError(`control with type "${type}" is not added`);
+        }
         else throw new Error();
     }
 

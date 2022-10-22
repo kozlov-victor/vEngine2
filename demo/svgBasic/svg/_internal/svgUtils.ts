@@ -26,7 +26,7 @@ export namespace SvgUtils {
         else return val;
     };
 
-// https://oreillymedia.github.io/Using_SVG/guide/units.html
+    // https://oreillymedia.github.io/Using_SVG/guide/units.html
     export const calcNumberWithMeasure = (val:number,measure:string,containerSize:number,):number=>{
         if (!measure) return val;
         switch (measure) {
@@ -50,7 +50,6 @@ export namespace SvgUtils {
                 throw new DebugError(`unknown measure: ` + measure);
         }
     };
-
 
     export const getNumberWithMeasure = (literal:string,containerSize:number,defaultValue:number):number=>{
         if (!literal) return defaultValue;

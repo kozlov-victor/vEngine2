@@ -133,8 +133,10 @@ export abstract class RenderableModel
     }
 
     public getDestRect(): Readonly<IRect> {
-        this._destRect.setPoint(this.pos);
-        this._destRect.setSize(this.size);
+        if (this.worldTransformDirty) {
+            this._destRect.setPoint(this.pos);
+            this._destRect.setSize(this.size);
+        }
         return this._destRect;
     }
 
