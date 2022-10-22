@@ -49,24 +49,24 @@ export abstract class FontContextAbstractFactory<T> {
 
     private putCharOnContext(char:string):void {
         const textWidth:number = this.getLetterWidth(char);
-        if (textWidth === 0) return;
         const textWidthPlusPadding:number = textWidth + 2 * this.SYMBOL_PADDING;
+        if (textWidthPlusPadding === 0) return;
         if (this.currX + textWidthPlusPadding > this.WIDTH) {
             this.currX = 0;
             this.currY += this.rowHeight;
-            this.currentPageRect.height += this.rowHeight;
-            if (this.currY > this.MAX_HEIGHT) {
+            this.currentPageRect.height+=this.rowHeight;
+            if (this.currY>this.MAX_HEIGHT) {
                 this.currX = 0;
                 this.currY = 0;
                 this.newPage();
             }
         }
         this.symbols[char] = {
-            x: this.currX + this.SYMBOL_PADDING,
-            y: this.currY + this.SYMBOL_PADDING,
+            x: this.currX,
+            y: this.currY,
             width: textWidthPlusPadding,
             widthAdvanced: textWidth,
-            height: this.getFontHeight(),
+            height: this.rowHeight,
             destOffsetX: 0,
             destOffsetY: 0,
             pageId: this.currentPageIndex,
@@ -94,7 +94,10 @@ export abstract class FontContextAbstractFactory<T> {
             symbols:this.symbols,
             pageRects:this.pageRects,
             padding: [
-                0,0,0,0
+                this.SYMBOL_PADDING,
+                this.SYMBOL_PADDING,
+                this.SYMBOL_PADDING,
+                this.SYMBOL_PADDING
             ],
             spacing: [0,0],
             lineHeight,
@@ -108,15 +111,15 @@ export abstract class FontContextAbstractFactory<T> {
         this.texturePages.push(texturePage);
         const symbolsForThisPage =
             Object.keys(this.symbols).
-                map(key=>({char:key,info:this.symbols[key]})).
-                filter(it=>(it.info.pageId===pageId));
+            map(key=>({char:key,info:this.symbols[key]})).
+            filter(it=>(it.info.pageId===pageId));
         symbolsForThisPage.forEach(symbol=>{
             const rect:IRectJSON = symbol.info;
             this.drawLetter(
                 texturePage,
                 symbol.char,
-                rect.x,
-                rect.y
+                rect.x + this.SYMBOL_PADDING,
+                rect.y + this.SYMBOL_PADDING
             );
         });
     }

@@ -20,7 +20,7 @@ export class MainScene extends Scene {
 
     // from https://www.mockaroo.com/
     @Resource.Text('./uiPrintTable2/test.csv')
-    public readonly textLink:string;
+    public readonly text:string;
 
     public override onReady():void {
 
@@ -35,7 +35,7 @@ export class MainScene extends Scene {
         background.borderRadius = 5;
 
 
-        tf.setText(TextTable.fromCSV(this.textLink).toString());
+        tf.setText(TextTable.fromCSV(this.text).toString());
         tf.setBackground(background);
         tf.setWordBrake(WordBrake.PREDEFINED);
         tf.setPadding(10);

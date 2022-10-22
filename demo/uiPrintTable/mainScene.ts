@@ -44,7 +44,7 @@ export class MainScene extends Scene {
             [ 'Bastard Sword', '1d10+1', '8', 'Requires 2 hands to use effectively' ],
             [ 'Great Sword', '1d12+1', '10', 'Must always be used with 2 hands']
         ];
-        tf.setText(TextTable.fromArrays(swords,{align: AlignTextContentHorizontal.CENTER,border:true}).toString());
+        tf.setText(TextTable.fromArrays(swords,{align: AlignTextContentHorizontal.CENTER,border:true,pad:true}).toString());
         tf.setBackground(background);
         tf.setWordBrake(WordBrake.PREDEFINED);
         tf.setPadding(10);
