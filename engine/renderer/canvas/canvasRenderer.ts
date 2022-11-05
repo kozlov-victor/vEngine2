@@ -40,22 +40,26 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
         this.renderTarget = new CanvasRenderTarget(this.game,this.game.size,this.container);
     }
 
-    public override setPixelPerfect(val:boolean):void{ // todo val
+    public override setPixelPerfect(val:boolean):void {
 
-        this.container.style.cssText += 'image-rendering: optimizeSpeed;' + // FireFox < 6.0
-            'image-rendering: -moz-crisp-edges;' + // FireFox
-            'image-rendering: -o-crisp-edges;' +  // Opera
-            'image-rendering: -webkit-crisp-edges;' + // Chrome
-            'image-rendering: crisp-edges;' + // Chrome
-            'image-rendering: -webkit-optimize-contrast;' + // Safari
-            'image-rendering: pixelated; ' + // Future browsers
-            '-ms-interpolation-mode: nearest-neighbor;'; // IE
+        if (val) {
+            this.container.style.cssText += 'image-rendering: optimizeSpeed;' + // FireFox < 6.0
+                'image-rendering: -moz-crisp-edges;' + // FireFox
+                'image-rendering: -o-crisp-edges;' +  // Opera
+                'image-rendering: -webkit-crisp-edges;' + // Chrome
+                'image-rendering: crisp-edges;' + // Chrome
+                'image-rendering: -webkit-optimize-contrast;' + // Safari
+                'image-rendering: pixelated; ' + // Future browsers
+                '-ms-interpolation-mode: nearest-neighbor;'; // IE
+        } else {
+            this.container.style.imageRendering = '';
+        }
 
         const context = this.container.getContext('2d') as ICanvasRenderingContext2DEx;
-        context.webkitImageSmoothingEnabled = false;
-        context.mozImageSmoothingEnabled = false;
-        context.msImageSmoothingEnabled = false;
-        context.imageSmoothingEnabled = false;
+        context.webkitImageSmoothingEnabled = !val;
+        context.mozImageSmoothingEnabled = !val;
+        context.msImageSmoothingEnabled = !val;
+        context.imageSmoothingEnabled = !val;
     }
 
     public drawImage(img:Image):void{
@@ -129,7 +133,6 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
         }
     }
 
-
     public setAlpha(a:number):void{
         const ctx = this.renderTarget.getTexture().getContext();
         ctx.globalAlpha = a;
@@ -186,7 +189,6 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
         ctx.translate(x,y);
     }
 
-
     public override transformSet(val:Readonly<Mat16Holder>): void {
         super.transformSet(val);
         const ctx = this.renderTarget.getTexture().getContext();
@@ -208,20 +210,16 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
         ctx.setTransform(a,b,c,d,e,f);
     }
 
-
     public override transformRestore():void {
         super.transformRestore();
         const ctx = this.renderTarget.getTexture().getContext();
         ctx.restore();
     }
 
-
-
     public override beforeFrameDraw(): void {
         if (!this.clearBeforeRender) return;
         this.renderTarget.clear(this.clearColor);
     }
-
 
     public createTexture(bitmap:HTMLImageElement|ImageBitmap|HTMLCanvasElement):CanvasTexture {
         const texture = new CanvasTexture(this.game,{width:bitmap.width,height:bitmap.height});
@@ -240,8 +238,6 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
         if (DEBUG) throw new DebugError(`Cube texture is not supported by this renderer`);
         return undefined!;
     }
-
-
 
     public drawLine(line: Line): void {
     }
@@ -263,10 +259,5 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
     public setRenderTarget(rt: CanvasRenderTarget): void {
         this.renderTarget = rt;
     }
-
-
-
-
-
 
 }

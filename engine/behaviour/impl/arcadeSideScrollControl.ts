@@ -20,6 +20,7 @@ interface IParams {
     onLanded?:()=>void;
     verticalLadderTileIds?:number[];
     horizontalLadderTileIds?:number[];
+    waterTileIds?:number[];
     tileMap?:TileMap;
     runAnimation: AbstractFrameAnimation<IRectJSON>;
     idleAnimation: AbstractFrameAnimation<IRectJSON>;
@@ -29,6 +30,7 @@ interface IParams {
     climbHorizontalAnimation?:AbstractFrameAnimation<IRectJSON>;
 }
 
+
 export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
 
     protected declare parameters: IParams;
@@ -36,6 +38,7 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
     private body:ArcadeRigidBody;
     private onGround = false;
     private onLadder = false;
+    private inWater = false;
     private isFiring = false;
     private isClimbing = false;
 
@@ -61,14 +64,14 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
     }
 
     public goLeft():void {
-        this.body.velocity.x = -this.parameters.velocity;
+        this.body.velocity.x = -this.parameters.velocity*this.getVelocityFactor();
         this.gameObject.scale.x = -Math.abs(this.gameObject.scale.x);
         this.correctHorizontalLadderPos();
         this.doGroundAnimation();
     }
 
     public goRight():void {
-        this.body.velocity.x = this.parameters.velocity;
+        this.body.velocity.x = this.parameters.velocity*this.getVelocityFactor();
         this.gameObject.scale.x = Math.abs(this.gameObject.scale.x);
         this.correctHorizontalLadderPos();
         this.doGroundAnimation();
@@ -107,6 +110,10 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
             const overlapped = this.body.overlappedWith as ArcadeRigidBody
             this.body.pos.y = overlapped.getMidY() - this.body._rect.height/2 - this.body._rect.y;
         }
+    }
+
+    private getVelocityFactor():number {
+        return this.inWater?0.5:1;
     }
 
     public stopClimbing(): void {
@@ -154,6 +161,7 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
         const oldOnGround = this.onGround;
         this.onGround = body.collisionFlags.bottom;
         this.onLadder = this.isLadderTileId(body.overlappedWith?.addInfo?.tileId);
+        this.inWater = this.isWaterTileId(body.overlappedWith?.addInfo?.tileId);
 
         if (this.onGround && !oldOnGround) this.parameters.onLanded?.();
 
@@ -170,6 +178,9 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
         if (!this.onLadder) {
             body.gravityImpact = 1;
             this.isClimbing = false;
+        }
+        if (this.inWater) {
+            body.gravityImpact = 0.2;
         }
         if (!this.onGround && !this.onLadder) {
             if (!this.isFiring) {
@@ -202,11 +213,12 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
             this.doGroundAnimation();
         });
         this.body.collisionEventHandler.on(ARCADE_COLLISION_EVENT.OVERLAPPED, e=>{
-            if (!this.isLadderTileId(e.addInfo.tileId)) return;
-            this.body.gravityImpact = 0;
-            if (!this.isClimbing) {
-                this.body.velocity.y = 0;
-                this.doGroundAnimation();
+            if (this.isLadderTileId(e.addInfo.tileId)) {
+                this.body.gravityImpact = 0;
+                if (!this.isClimbing) {
+                    this.body.velocity.y = 0;
+                    this.doGroundAnimation();
+                }
             }
         });
     }
@@ -276,16 +288,21 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
         }
     }
 
+    private static _isLadderTileIdOfType(tileId:number|undefined,arrToBelong?:number[]):boolean {
+        if (tileId===undefined || arrToBelong===undefined) return false;
+        return arrToBelong.includes(tileId);
+    }
+
     private isVerticalLadderTileId(tileId:number|undefined):boolean {
-        if (tileId===undefined) return false;
-        if (this.parameters.verticalLadderTileIds===undefined) return false;
-        return this.parameters.verticalLadderTileIds.includes(tileId);
+        return ArcadeSideScrollControl._isLadderTileIdOfType(tileId,this.parameters.verticalLadderTileIds);
     }
 
     private isHorizontalLadderTileId(tileId:number|undefined):boolean {
-        if (tileId===undefined) return false;
-        if (this.parameters.horizontalLadderTileIds===undefined) return false;
-        return this.parameters.horizontalLadderTileIds.includes(tileId);
+        return ArcadeSideScrollControl._isLadderTileIdOfType(tileId,this.parameters.horizontalLadderTileIds);
+    }
+
+    private isWaterTileId(tileId:number|undefined):boolean {
+        return ArcadeSideScrollControl._isLadderTileIdOfType(tileId,this.parameters.waterTileIds);
     }
 
     private isLadderTileId(tileId:number|undefined):boolean {

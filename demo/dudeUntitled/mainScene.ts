@@ -12,6 +12,9 @@ import {ScreenSensorCursor} from "@engine/control/screenSensor/screenSensorCurso
 import {ScreenSensorButton} from "@engine/control/screenSensor/screenSensorButton";
 import {Device} from "@engine/misc/device";
 import {Key} from "./objects/key";
+import {DiContainer} from "./ioc";
+import {GroundDust} from "./particles/groundDust";
+import {Script} from "./objects/script";
 
 
 export class MainScene extends Scene {
@@ -34,27 +37,35 @@ export class MainScene extends Scene {
             useCollision:true,
             collideWithTiles:'all',
             groupNames:['tileMap'],
-            exceptCollisionTiles: [3,4,7],
+            exceptCollisionTiles: [1,2,3,4,7],
             debug: false,
             restitution: 0.1,
         });
         tileMap.appendTo(this);
 
+        DiContainer.register(tileMap, 'tileMap');
+        DiContainer.register(new GroundDust(this), 'groundDust');
+        DiContainer.register(new Script(this), 'script');
+
         this.assets.levelData.layers.find(it=>it.type==='objectgroup')!.objects.forEach(obj=>{
             const typeProp = obj.properties.find(it=>it.name==='class');
-            const cl = typeProp!.value;
+            const cl = typeProp?.value;
             switch (cl) {
                 case 'Character':
-                    new Character(this.game, this, tileMap, this.assets,obj);
+                    const character = new Character(this,obj);
+                    DiContainer.register(character,'character');
                     break;
                 case 'Sausage':
-                    new Sausage(this.game, this, this.assets,obj);
+                    new Sausage(this,obj);
                     break;
                 case 'Key':
-                    new Key(this.game, this, this.assets,obj);
+                    new Key(this,obj);
                     break;
             }
         });
+
+        DiContainer.complete();
+
     }
 
     private initUI():void {

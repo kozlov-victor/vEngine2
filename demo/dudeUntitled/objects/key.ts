@@ -1,40 +1,42 @@
 import {Image} from "@engine/renderable/impl/general/image/image";
-import {Assets} from "../assets/assets";
 import {ITileCollisionRect, ITiledJSON} from "@engine/renderable/impl/general/tileMap/tileMap";
-import {Game} from "@engine/core/game";
 import {TexturePackerAtlas} from "@engine/animation/frameAnimation/atlas/texturePackerAtlas";
-import {Scene} from "@engine/scene/scene";
-import {ARCADE_RIGID_BODY_TYPE} from "@engine/physics/arcade/arcadeRigidBody";
+import {ARCADE_RIGID_BODY_TYPE, ArcadeRigidBody} from "@engine/physics/arcade/arcadeRigidBody";
 import {ArcadePhysicsSystem} from "@engine/physics/arcade/arcadePhysicsSystem";
-import {Rect} from "@engine/geometry/rect";
-
+import {MainScene} from "../mainScene";
+import {Optional} from "@engine/core/declarations";
 
 
 export class Key {
 
     private image:Image;
 
-    constructor(private game:Game,scene:Scene,private assets:Assets,tiledObject:ITiledJSON['layers'][0]['objects'][0]) {
+    public type = 'Key' as const;
+    public readonly rectId:Optional<string>;
+
+    constructor(private scene:MainScene,tiledObject:ITiledJSON['layers'][0]['objects'][0]) {
 
         const objGroup =
-            assets.levelData.tilesets.find(it=>it.name==='inventory')!.
+            scene.assets.levelData.tilesets.find(it=>it.name==='inventory')!.
             tiles?.find((it=>(it as ITileCollisionRect).objectgroup!==undefined)) as ITileCollisionRect;
         const rect = objGroup.objectgroup.objects[0];
 
-        const image = new Image(game,assets.inventoryTexture);
-        const atlas = new TexturePackerAtlas(assets.inventoryAtlas);
+        const image = new Image(scene.getGame(),scene.assets.inventoryTexture);
+        const atlas = new TexturePackerAtlas(scene.assets.inventoryAtlas);
         const frame = atlas.getFrameByKey('inventory_key');
         image.size.setWH(frame.width,frame.height);
         image.srcRect.setFrom(frame);
         image.pos.setXY(tiledObject.x,tiledObject.y - tiledObject.height);
-        image.setRigidBody(this.game.getPhysicsSystem<ArcadePhysicsSystem>().createRigidBody({
+        image.setRigidBody(scene.getGame().getPhysicsSystem<ArcadePhysicsSystem>().createRigidBody({
             type: ARCADE_RIGID_BODY_TYPE.KINEMATIC,
             rect,
             acceptCollisions: false,
             groupNames: ['collectable']
         }));
+        image.getRigidBody<ArcadeRigidBody>().addInfo.host = this;
         image.appendTo(scene);
         this.image = image;
+        this.rectId = tiledObject.properties?.find(it=>it.name==='rectId')?.value;
     }
 
 

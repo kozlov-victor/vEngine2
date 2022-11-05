@@ -7,7 +7,6 @@ import {Optional} from "@engine/core/declarations";
 import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
 import {RenderableModelWithTexture} from "@engine/renderable/abstract/renderableModelWithTexture";
 import {ITexture} from "@engine/renderer/common/texture";
-import {TileMapRigidBodyDelegate} from "@engine/physics/arcade/tileMapRigidBodyDelegate";
 import {ArcadePhysicsSystem} from "@engine/physics/arcade/arcadePhysicsSystem";
 import {ARCADE_RIGID_BODY_TYPE} from "@engine/physics/arcade/arcadeRigidBody";
 import {IRectJSON, Rect} from "@engine/geometry/rect";
@@ -143,7 +142,8 @@ export class TileMap extends RenderableModelWithTexture {
     private _cellImage:Image;
     private _drawingSurface:DrawingSurface;
 
-    private _rigidBodyDelegate: TileMapRigidBodyDelegate;
+    private _collisionInfo:ICollisionInfo;
+    private rigidBodies:IRigidBody[] = [];
 
 
     private static _isTileCollideable(tileId:number,collisionInfo:ICollisionInfo) {
@@ -275,7 +275,15 @@ export class TileMap extends RenderableModelWithTexture {
     }
 
     private initCollisions(collisionInfo:ICollisionInfo):void {
-        if (!collisionInfo.useCollision) return;
+        this._collisionInfo = collisionInfo;
+        this.redefineRigidBodies();
+
+    }
+
+    // use after setValueAtCellXY if needed
+    public redefineRigidBodies():void {
+        if (!this._collisionInfo) return;
+        const collisionInfo = this._collisionInfo;
         const rigidBodies:IRigidBody[] = [];
         for (let y:number=0;y<this._numOfTilesInMapByY;y++) {
             for (let x:number=0;x<this._numOfTilesInMapByX;x++) {
@@ -298,7 +306,7 @@ export class TileMap extends RenderableModelWithTexture {
                     restitution: collisionInfo.restitution,
                     acceptCollisions: TileMap._isTileCollideable(tileId,collisionInfo),
                 });
-                rigidBody.addInfo = {tileId};
+                rigidBody.addInfo = {tileId,tileX:x,tileY:y};
                 rigidBody.setModel(this);
                 rigidBody.setBounds(
                     new Point2d(x * this._tileWidth+collisionRect.x, y * this._tileHeight+collisionRect.y),
@@ -317,7 +325,7 @@ export class TileMap extends RenderableModelWithTexture {
                 }
             }
         }
-        this._rigidBodyDelegate = new TileMapRigidBodyDelegate(rigidBodies);
+        this.rigidBodies = rigidBodies;
     }
 
 
@@ -346,7 +354,10 @@ export class TileMap extends RenderableModelWithTexture {
 
 
     public override update(): void {
-        if (this._rigidBodyDelegate!==undefined) this._rigidBodyDelegate.nextTick();
+        for (let i = 0; i < this.rigidBodies.length; i++) {
+            const rigidBody = this.rigidBodies[i];
+            rigidBody.nextTick();
+        }
         super.update();
     }
 
@@ -416,34 +427,41 @@ export class TileMap extends RenderableModelWithTexture {
         return this.getDataValueAtCellXY(x,y);
     }
 
-    // getTilesAtRect(rect:Rect) {
-    //     let result = [];
-    //     if (!this.spriteSheet) return result;
-    //     let alreadyCheckedTiles:{[key:string]:boolean} = {};
-    //
-    //     let x:number = rect.point.x,y:number;
-    //     let maxX:number = rect.point.x+rect.size.width,
-    //         maxY:number = rect.point.y+rect.size.height;
-    //     while (true) {
-    //         y = rect.point.y;
-    //         while (true) {
-    //             let tileInfo = this.getTileAt(x,y);
-    //             if (tileInfo) {
-    //                 if (!alreadyCheckedTiles[tileInfo.tileIndex]) {
-    //                     result.push(tileInfo.tile);
-    //                     alreadyCheckedTiles[tileInfo.tileIndex] = true;
-    //                 }
-    //             }
-    //             if (y===maxY) break;
-    //             y+=this.spriteSheet.getFrameHeight();
-    //             if (y>maxY) y = maxY;
-    //         }
-    //         if (x===maxX) break;
-    //         x+=this.spriteSheet.getFrameWidth();
-    //         if (x>maxX) x = maxX;
-    //     }
-    //     return result;
-    // }
+    public getTilesAtRect(rect:IRectJSON):{xTile:number,yTile:number,value:number|undefined}[] {
+        const result:{xTile:number,yTile:number,value:number|undefined}[] = [];
+        const alreadyCheckedTiles:{[key:string]:boolean} = {};
+
+        let x:number = rect.x,y:number;
+        const maxX:number = rect.x+rect.width,
+            maxY:number = rect.y+rect.height;
+        // eslint-disable-next-line no-constant-condition
+        while (true) {
+            y = rect.y;
+            // eslint-disable-next-line no-constant-condition
+            while (true) {
+                const value = this.getDataValueAtPointXY(x,y);
+                const xTile = ~~(x / this._tileWidth);
+                const yTile = ~~(y / this._tileHeight);
+                const key = `${xTile}_${yTile}`;
+                if (!alreadyCheckedTiles[key]) {
+                    result.push({xTile,yTile,value});
+                    alreadyCheckedTiles[key] = true;
+                }
+                if (y===maxY) break;
+                y+=this._tileHeight;
+                if (y>maxY) y = maxY;
+            }
+            if (x===maxX) break;
+            x+=this._tileWidth;
+            if (x>maxX) x = maxX;
+        }
+        return result;
+    }
+
+    public setValueAtCellXY(x:number,y:number,value:number|undefined):void {
+        if (value===undefined) value = 0;
+        this._data[y][x] = value;
+    }
 
     protected prepareDrawableInfo():void{
         const camera:Camera = this.game.getCurrentScene().camera;
@@ -457,6 +475,5 @@ export class TileMap extends RenderableModelWithTexture {
         this._drawInfo.firstTileToDrawByX = firstTileToDrawByX;
         this._drawInfo.firstTileToDrawByY = firstTileToDrawByY;
     }
-
 
 }

@@ -9,6 +9,7 @@ import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {AbstractCanvasRenderer} from "@engine/renderer/abstract/abstractCanvasRenderer";
 import {MouseControl} from "@engine/control/mouse/mouseControl";
 import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
+import {CanvasRenderer} from "@engine/renderer/canvas/canvasRenderer";
 
 // window.requestAnimationFrame =  (f:FrameRequestCallback):number=>{
 //     return setTimeout(f,1000/25);
@@ -32,7 +33,7 @@ ResourceLoader.BASE_URL = './dudeUntitled/assets';
 const game = new Game({width:240,height:320, scaleStrategy: SCALE_STRATEGY.FIT_CANVAS_TO_SCREEN});
 ArcadePhysicsSystem.SPATIAL_CELL_SIZE.setWH(64);
 game.setPhysicsSystem(ArcadePhysicsSystem);
-game.setRenderer(WebGlRenderer);
+game.setRenderer(CanvasRenderer);
 game.getRenderer<AbstractCanvasRenderer>().setPixelPerfect(true);
 game.addControl(KeyboardControl);
 game.addControl(MouseControl);
