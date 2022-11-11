@@ -5,21 +5,21 @@
     ],
     "version": "0.1.0",
     "devDependencies": {
-        "@types/node": "18.11.4",
-        "@typescript-eslint/eslint-plugin": "5.41.0",
-        "@typescript-eslint/parser": "5.41.0",
-        "eslint": "8.26.0",
+        "@types/node": "18.11.9",
+        "@typescript-eslint/eslint-plugin": "5.42.1",
+        "@typescript-eslint/parser": "5.42.1",
+        "eslint": "8.27.0",
         "eslint-webpack-plugin": "3.2.0"
     },
     "dependencies": {
         "@phenomnomnominal/tsquery": "5.0.0",
         "@phenomnomnominal/tstemplate": "0.1.0",
-        "pako": "2.0.4",
+        "pako": "2.1.0",
         "terser-webpack-plugin": "5.3.6",
         "ts-loader": "9.4.1",
-        "tslib": "2.4.0",
+        "tslib": "2.4.1",
         "typescript": "4.8.4",
-        "webpack": "5.74.0",
+        "webpack": "5.75.0",
         "webpack-cli": "4.10.0"
     },
     "scripts": {

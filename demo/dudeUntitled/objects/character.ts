@@ -20,9 +20,9 @@ export class Character implements Injectable {
     private readonly characterImage:AnimatedImage;
     private body:ArcadeRigidBody;
 
-    @Inject('groundDust') private readonly groundDust:GroundDust;
-    @Inject('tileMap') private readonly tileMap:TileMap;
-    @Inject('script') private readonly script:Script;
+    @Inject(GroundDust.name) private readonly groundDust:GroundDust;
+    @Inject(TileMap.name) private readonly tileMap:TileMap;
+    @Inject(Script.name) private readonly script:Script;
 
     constructor(private scene:MainScene, tiledObject:ITiledJSON['layers'][0]['objects'][0]) {
         const characterImage = new AnimatedImage(scene.getGame(),scene.assets.characterTexture);

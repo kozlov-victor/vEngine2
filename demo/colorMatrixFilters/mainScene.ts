@@ -9,6 +9,7 @@ import {BrightnessColorMatrixFilter} from "@engine/renderer/webGl/filters/colorM
 import {SaturationColorMatrixFilter} from "@engine/renderer/webGl/filters/colorMatrix/saturationColorMatrixFilter";
 import {ContrastColorMatrixFilter} from "@engine/renderer/webGl/filters/colorMatrix/contrastColorMatrixFilter";
 import {SepiaColorMatrixFilter} from "@engine/renderer/webGl/filters/colorMatrix/sepiaColorMatrixFilter";
+import {MonochromeColorMatrixFilter} from "@engine/renderer/webGl/filters/colorMatrix/monochromeColorMatrixFilter";
 
 export class MainScene extends Scene {
 
@@ -73,6 +74,9 @@ export class MainScene extends Scene {
                     f.setContrast(c);
                 });
                 return f;
+            })(),
+            (()=>{
+                return new MonochromeColorMatrixFilter(this.game);
             })(),
             new SepiaColorMatrixFilter(this.game)
         ];

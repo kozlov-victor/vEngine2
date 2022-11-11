@@ -7,7 +7,7 @@ import {IRect, IRectJSON} from "@engine/geometry/rect";
 
 export class Script implements Injectable {
 
-    @Inject('tileMap') private readonly tileMap:TileMap;
+    @Inject(TileMap.name) private readonly tileMap:TileMap;
 
     constructor(private scene:MainScene) {
     }
