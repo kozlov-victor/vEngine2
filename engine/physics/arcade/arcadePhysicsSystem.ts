@@ -108,10 +108,10 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
                         intersect(playerBody.groupNames, entityBody.ignoreCollisionWithGroupNames) ||
                         intersect(entityBody.groupNames,playerBody.ignoreCollisionWithGroupNames)
                     ) {
-                        this.resolveOverlap(playerBody, entityBody);
+                        ArcadePhysicsSystem.resolveOverlap(playerBody, entityBody);
                     } else {
-                        this.interpolateAndResolveCollision(playerBody, p1, entityBody);
-                        this.interpolateAndResolveCollision(entityBody, p2, playerBody);
+                        ArcadePhysicsSystem.interpolateAndResolveCollision(playerBody, p1, entityBody);
+                        ArcadePhysicsSystem.interpolateAndResolveCollision(entityBody, p2, playerBody);
                     }
                     playerBody.pos.setFrom(p1);
                     entityBody.pos.setFrom(p2);
@@ -123,7 +123,7 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
     }
 
 
-    private resolveCollision(player:ArcadeRigidBody, pos:Point2d, entity:ArcadeRigidBody):void {
+    private static resolveCollision(player:ArcadeRigidBody, pos:Point2d, entity:ArcadeRigidBody):void {
 
         // Find the mid points of the entity and player
         const pMidX:number = player.getMidX();
@@ -163,7 +163,7 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
         }
     }
 
-    private interpolateAndResolveCollision(playerBody:ArcadeRigidBody, pos:Point2d, entityBody:ArcadeRigidBody):void {
+    private static interpolateAndResolveCollision(playerBody:ArcadeRigidBody, pos:Point2d, entityBody:ArcadeRigidBody):void {
         if (playerBody._modelType===ARCADE_RIGID_BODY_TYPE.KINEMATIC) return;
         let oldEntityPosX:number;
         let oldEntityPosY:number;
@@ -199,34 +199,34 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
     }
 
 
-    private calcCommonRestitution(player:ArcadeRigidBody,entity:ArcadeRigidBody):number {
+    private static calcCommonRestitution(player:ArcadeRigidBody, entity:ArcadeRigidBody):number {
         return (player._restitution + entity._restitution)/2;
     }
 
-    private getComparedToSticky(val:number):number {
-        if (Math.abs(val) < ArcadePhysicsSystem.STICKY_THRESHOLD) {
+    private static getComparedToSticky(val:number):number {
+        if (Math.abs(val) < this.STICKY_THRESHOLD) {
             return 0;
         } else return val;
     }
 
-    private reflectVelocityY(player:ArcadeRigidBody,entity:ArcadeRigidBody):void{
+    private static reflectVelocityY(player:ArcadeRigidBody, entity:ArcadeRigidBody):void{
         const restitution:number = this.calcCommonRestitution(player, entity);
         player.velocity.y = this.getComparedToSticky(-player.velocity.y * restitution);
     }
 
-    private reflectVelocityX(player:ArcadeRigidBody,entity:ArcadeRigidBody):void{
+    private static reflectVelocityX(player:ArcadeRigidBody, entity:ArcadeRigidBody):void{
         const restitution:number = this.calcCommonRestitution(player, entity);
         // v' = (m1v1 + m2v2)/(m1 + m2)
         player.velocity.x = this.getComparedToSticky(-player.velocity.x * restitution);
     }
 
-    private emitCollisionEvents(player:ArcadeRigidBody,entity:ArcadeRigidBody):void {
+    private static emitCollisionEvents(player:ArcadeRigidBody, entity:ArcadeRigidBody):void {
         if (player.getHostModel().isDetached() || entity.getHostModel().isDetached()) return;
         player.collisionEventHandler.trigger(ARCADE_COLLISION_EVENT.COLLIDED, entity);
         entity.collisionEventHandler.trigger(ARCADE_COLLISION_EVENT.COLLIDED, player);
     }
 
-    private resolveOverlap(player:ArcadeRigidBody,entity:ArcadeRigidBody):void {
+    private static resolveOverlap(player:ArcadeRigidBody, entity:ArcadeRigidBody):void {
         if (player.getHostModel().isDetached() || entity.getHostModel().isDetached()) return;
         player.overlappedWith = entity;
         entity.overlappedWith = player;
@@ -234,7 +234,7 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
         entity.collisionEventHandler.trigger(ARCADE_COLLISION_EVENT.OVERLAPPED, player);
     }
 
-    private collidePlayerWithTop(player:ArcadeRigidBody,pos:Point2d, entity:ArcadeRigidBody):void {
+    private static collidePlayerWithTop(player:ArcadeRigidBody, pos:Point2d, entity:ArcadeRigidBody):void {
         if (!player._collisionFlagsOld.bottom) { // check to prevent penetration through floor
            pos.y = entity.getBottom() - player._rect.y;
         }
@@ -244,7 +244,7 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
         this.reflectVelocityY(player, entity);
     }
 
-    private collidePlayerWithBottom(player:ArcadeRigidBody, pos:Point2d, entity:ArcadeRigidBody):void{
+    private static collidePlayerWithBottom(player:ArcadeRigidBody, pos:Point2d, entity:ArcadeRigidBody):void{
         pos.y = entity.getTop() - player._rect.height - player._rect.y;
         pos.x+=entity._offsetX;
         entity._offsetX = 0;
@@ -254,7 +254,7 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
         this.reflectVelocityY(player, entity);
     }
 
-    private collidePlayerWithLeft(player:ArcadeRigidBody, pos:Point2d, entity:ArcadeRigidBody):void{
+    private static collidePlayerWithLeft(player:ArcadeRigidBody, pos:Point2d, entity:ArcadeRigidBody):void{
         pos.x = entity.getRight() - player._rect.x;
         player.collisionFlags.left =
             entity.collisionFlags.right = true;
@@ -262,7 +262,7 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
         this.reflectVelocityX(player, entity);
     }
 
-    private collidePlayerWithRight(player:ArcadeRigidBody, pos:Point2d, entity:ArcadeRigidBody):void{
+    private static collidePlayerWithRight(player:ArcadeRigidBody, pos:Point2d, entity:ArcadeRigidBody):void{
         pos.x = entity.getLeft() - player._rect.width - player._rect.x;
         player.collisionFlags.right =
             entity.collisionFlags.left = true;
