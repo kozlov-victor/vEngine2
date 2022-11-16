@@ -111,7 +111,7 @@ export class Tween<T> {
         if (DEBUG && tweenDesc.loop===undefined && tweenDesc.yoyo!==undefined) {
             throw new DebugError(`loop property need to be set to true if yoyo is true`);
         }
-        this._loop = tweenDesc.loop||false;
+        this._loop = tweenDesc.loop || false;
         this._numOfLoops = tweenDesc.numOfLoops ?? Infinity;
         this._yoyo = tweenDesc.yoyo || false;
         this._desc = this.normalizeDesc(tweenDesc);
