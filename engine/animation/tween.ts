@@ -152,15 +152,15 @@ export class Tween<T> {
         let l:number = this._propsToChange.length;
         if (this._startedFn && !this._started) this._startedFn(this._target);
         while(l--) {
-            const prp:keyof T = this._propsToChange[l];
-            const valFrom:number = this._desc.from[prp] as number;
-            const valTo:number = this._desc.to[prp] as number;
+            const prp = this._propsToChange[l];
+            const valFrom = this._desc.from[prp] as number;
+            const valTo = this._desc.to[prp] as number;
             const fn:EaseFn = this._easeFn;
             this._target[prp] = fn(
                 curTweenTime,
                 valFrom,
                 valTo - valFrom,
-                this._tweenTime) as unknown as T[keyof T];
+                this._tweenTime) as T[keyof T];
         }
         if (this._progressFn) this._progressFn(this._target);
         this._started = true;
@@ -176,7 +176,7 @@ export class Tween<T> {
         const needReversion:boolean = this._yoyo && this._currentLoop%2!==0;
         const target:Partial<Record<keyof T,number>> = needReversion?this._desc.from:this._desc.to;
         for (const k of this._propsToChange) {
-            this._target[k] = target[k] as unknown as T[keyof T];
+            this._target[k] = target[k] as T[keyof T];
         }
         if (this._progressFn) this._progressFn(this._target);
         if (this._completeFn) this._completeFn(this._target);
