@@ -15,19 +15,19 @@ export class MouseControlHelper {
     }
 
     // https://stackoverflow.com/questions/39853481/is-point-inside-polygon
-    private isPointInPolygon4 = (polygon:Readonly<Vec4.VEC4>[],testPoint:IPoint2d):boolean=>{
+    private isPointInPolygon4 = (point:IPoint2d,polygon:Readonly<Vec4.VEC4>[]):boolean=>{
         let result:boolean = false;
         let j:number = polygon.length - 1;
         for (let i:number = 0,max:number= polygon.length; i < max; i++) {
             if (
-                polygon[i][1] < testPoint.y
-                && polygon[j][1] >= testPoint.y || polygon[j][1] < testPoint.y
-                && polygon[i][1] >= testPoint.y)
+                polygon[i][1] < point.y
+                && polygon[j][1] >= point.y || polygon[j][1] < point.y
+                && polygon[i][1] >= point.y)
             {
                 if (
-                    polygon[i][0] + (testPoint.y - polygon[i][1])
+                    polygon[i][0] + (point.y - polygon[i][1])
                     /
-                    (polygon[j][1] - polygon[i][1]) * (polygon[j][0] - polygon[i][0]) < testPoint.x
+                    (polygon[j][1] - polygon[i][1]) * (polygon[j][0] - polygon[i][0]) < point.x
                 ) {
                     result = !result;
                 }
@@ -39,7 +39,7 @@ export class MouseControlHelper {
 
     private isPointInRect(mousePoint:MousePoint, obj:RenderableModel,constrainObjects?:RenderableModel[]):boolean {
 
-        let result:boolean = this.isPointInPolygon4(getScreenCoords(obj),mousePoint.screenCoordinate);
+        let result:boolean = this.isPointInPolygon4(mousePoint.screenCoordinate,getScreenCoords(obj));
         if (result && constrainObjects!==undefined) {
             for (let i:number=0;i<constrainObjects.length;i++) {
                 if (!this.isPointInRect(mousePoint,constrainObjects[i])) {
