@@ -51,14 +51,24 @@ interface IMidiJson {
         startTime: number;
         duration: number;
         length: number;
-        controlChanges: any;
+        controlChanges?: any;
         id: number;
         name?: string;
         channelNumber?: number;
-        notes?:MIDI_COMMAND[];
+        channel?: number;
+        pitchBends?: any;
+        notes?:{
+            name: string;
+            midi: number;
+            time: number;
+            velocity: number;
+            duration: number;
+            durationTicks?: number;
+            ticks?: number;
+        }[];
         isPercussion?:boolean;
         instrumentNumber?: number;
-        instrument?: string;
+        instrument?: any;
         instrumentFamily?: string;
     })[]
 }
@@ -356,7 +366,7 @@ export class Tracker {
                 freeOscillator.adsrForm =
                     command.percussion?
                         new ASDRForm(0.01, 0.05, 0.1, 3):
-                        new ASDRForm(0.01, 0.2, 0.2, 1)
+                        new ASDRForm(0.01, 0.8, 0.6, 1)
                 ;
             }
         } else if (command.opCode === 'noteOff') {
