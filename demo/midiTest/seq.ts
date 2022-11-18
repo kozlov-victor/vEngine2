@@ -74,7 +74,7 @@ interface IMidiJson {
 }
 
 const defaultPresets:PRESETS = {
-    numOfOscillators: 8,
+    numOfOscillators: 16,
     channels: [
         {
             velocity: 0.7,
@@ -171,6 +171,9 @@ class ASDRForm {
     private release: ADSRPoint;
     private startedAt: number;
 
+    private forceReleaseStartedAt:number;
+    public forceRelease:boolean = false; // key is released, so force go to "d" ("delay") segment if ADSR curve
+
     constructor(a: number, s: number, d: number, r: number) {
         this.attack = {from: {time: 0, val: 0}, to: {time: a, val: 1}};
         this.sustain = {from: {time: a, val: 1}, to: {time: a + s, val: 1}};
@@ -182,22 +185,40 @@ class ASDRForm {
         return c * t / d + b;
     }
 
-    public calcFactorByTime(t: number): number {
+
+    public calcFactorByTime(t: number): {stopped:boolean,val:number} {
         if (this.startedAt === undefined) this.startedAt = t;
         const dTime = t - this.startedAt;
         let closestPrevPoint = this.attack;
-        [this.sustain, this.delay, this.release].forEach(point => {
-            if (dTime > point.from.time) {
-                closestPrevPoint = point;
+        if (this.forceRelease) {
+            if (this.forceReleaseStartedAt===undefined) this.forceReleaseStartedAt = t;
+            const d = t - this.forceReleaseStartedAt;
+            if (d>this.release.to.time - this.release.from.time) {
+                return {
+                    stopped: true,
+                    val: 0,
+                }
             }
-        });
-        const res = ASDRForm._linear(
+            closestPrevPoint = this.release;
+        } else {
+            [this.sustain, this.delay, this.release].forEach(point => {
+                if (dTime > point.from.time) {
+                    closestPrevPoint = point;
+                }
+            });
+        }
+        let val = ASDRForm._linear(
             dTime,
             closestPrevPoint.from.val, closestPrevPoint.to.val - closestPrevPoint.from.val,
             closestPrevPoint.to.time - closestPrevPoint.from.time
         );
-        if (res < 0) return 0;
-        return res;
+        if (val < 0) val = 0;
+        let stopped = false;
+        if (closestPrevPoint===this.release && val===0) stopped = true;
+        return {
+            stopped,
+            val
+        };
     }
 
 }
@@ -211,16 +232,14 @@ const log = (...val:any[])=>{
 
 class Oscillator {
 
-    private readonly sampleRate: number;
-
     public velocity: number;
     public waveForm: WAVE_FORM;
     public balance: number;
     public adsrForm: ASDRForm;
     public frequency: number;
+    public lastTriggeredCommandIndex:number;
 
-    constructor(sampleRate: number) {
-        this.sampleRate = sampleRate;
+    constructor(private tracker:Tracker) {
         this.frequency = 0;
         this.velocity = 1;
         this.waveForm = 'sin';
@@ -267,15 +286,19 @@ class Oscillator {
     }
 
     public generateSample(currentSampleNum: number): SAMPLE {
-        const t: number = currentSampleNum / this.sampleRate;
+        const t: number = currentSampleNum / this.tracker.sampleRate;
         if (this.frequency === 0) return {L: 0, R: 0};
         const currSample: number = this._generateWaveForm(this.velocity, this.waveForm, this.frequency, t);
         const balanceR: number = (this.balance + 1) / 2;
         const balanceL: number = 1 - balanceR;
-        const adsrFactor: number = this.adsrForm ? this.adsrForm.calcFactorByTime(t) : 1;
+        const adsr = this.adsrForm.calcFactorByTime(t);
+        if (adsr.stopped) {
+            this.frequency = 0;
+            this.velocity = 0;
+        }
         return {
-            L: currSample * balanceL * adsrFactor,
-            R: currSample * balanceR * adsrFactor
+            L: currSample * balanceL * adsr.val,
+            R: currSample * balanceR * adsr.val
         };
     }
 }
@@ -283,24 +306,24 @@ class Oscillator {
 
 export class Tracker {
 
-    private readonly midiTable: number[];
+    private readonly midiNoteToFrequencyTable: number[];
     private sampleToCommandsMap: Record<number, INTERNAL_MIDI_COMMAND[]>;
     private lastEventTime: number;
     private oscillators: Oscillator[];
 
-    constructor(private sampleRate: number = 11025, private presets: PRESETS = defaultPresets) {
-        this.midiTable = [];
+    constructor(public readonly sampleRate: number = 11025, private presets: PRESETS = defaultPresets) {
+        this.midiNoteToFrequencyTable = [];
         for (let x = 0; x < 127; ++x) {
-            this.midiTable[x] = CalcUtils.midiNumberToFr(x);
+            this.midiNoteToFrequencyTable[x] = CalcUtils.midiNumberToFr(x);
         }
     }
 
     private _init() {
         this.sampleToCommandsMap = {};
         this.lastEventTime = 0;
-        this.oscillators = new Array(this.presets.numOfOscillators || 5);
+        this.oscillators = new Array(this.presets.numOfOscillators);
         for (let i = 0; i < this.oscillators.length; i++) {
-            this.oscillators[i] = new Oscillator(this.sampleRate);
+            this.oscillators[i] = new Oscillator(this);
         }
     }
 
@@ -341,15 +364,23 @@ export class Tracker {
     }
 
     private getFreeOscillator() {
+        let iOfOlderstOscillator = 0;
+        let lastTriggeredMin = this.oscillators[iOfOlderstOscillator].lastTriggeredCommandIndex;
         for (let i = 0; i < this.oscillators.length; i++) {
-            if (this.oscillators[i].frequency === 0) {
-                return this.oscillators[i];
+            const osc = this.oscillators[i];
+            if (osc.frequency === 0) {
+                return osc;
+            } else {
+                if (lastTriggeredMin<osc.lastTriggeredCommandIndex) {
+                    lastTriggeredMin=osc.lastTriggeredCommandIndex;
+                    iOfOlderstOscillator = i;
+                }
             }
         }
-        return null;
+        return this.oscillators[iOfOlderstOscillator];
     }
 
-    private execCommand(command: INTERNAL_MIDI_COMMAND):void {
+    private execCommand(command: INTERNAL_MIDI_COMMAND,i:number):void {
         if (command.opCode === 'noteOn') {
             const freeOscillator = this.getFreeOscillator();
             if (freeOscillator) {
@@ -359,21 +390,23 @@ export class Tracker {
                         waveForm: 'triangle',
                         balance: 0.5
                     };
-                freeOscillator.frequency = this.midiTable[command.note];
+                freeOscillator.frequency = this.midiNoteToFrequencyTable[command.note];
                 freeOscillator.velocity = trackPreset.velocity * command.velocity;
                 freeOscillator.waveForm = command.percussion?'noise':trackPreset.waveForm;
                 freeOscillator.balance = trackPreset.balance;
+                freeOscillator.lastTriggeredCommandIndex = i;
                 freeOscillator.adsrForm =
                     command.percussion?
-                        new ASDRForm(0.01, 0.05, 0.1, 3):
-                        new ASDRForm(0.01, 0.8, 0.6, 1)
+                        new ASDRForm(0.01, 0.05, 0.1, 0.1):
+                        new ASDRForm(0.01, 0.8, 0.6, 0.4)
                 ;
             }
         } else if (command.opCode === 'noteOff') {
             for (let i = 0; i < this.oscillators.length; i++) {
-                if (this.oscillators[i].frequency === this.midiTable[command.note]) {
-                    this.oscillators[i].frequency = 0;
-                    this.oscillators[i].velocity = 0;
+                if (this.oscillators[i].frequency === this.midiNoteToFrequencyTable[command.note]) {
+                    this.oscillators[i].adsrForm.forceRelease = true;
+                    //this.oscillators[i].frequency = 0;
+                    //this.oscillators[i].velocity = 0;
                     break;
                 }
             }
@@ -385,7 +418,7 @@ export class Tracker {
         const possibleCommands = this.sampleToCommandsMap[currentSampleNum];
         if (possibleCommands !== undefined) {
             for (let i = 0; i < possibleCommands.length; i++) {
-                this.execCommand(possibleCommands[i]);
+                this.execCommand(possibleCommands[i],i);
             }
         }
         // mix by formula: out = (s1 + s2) - (s1 * s2);
@@ -403,6 +436,12 @@ export class Tracker {
             R: sumAll.R - multAll.R
         };
     }
+
+    private static floatToUnit16(f:number):number {
+        const base = 0xfff/2;
+        return ~~(base + f*base);
+    }
+
 }
 
 
