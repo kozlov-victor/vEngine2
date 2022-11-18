@@ -398,7 +398,7 @@ export class Tracker {
                 freeOscillator.adsrForm =
                     command.percussion?
                         new ASDRForm(0.01, 0.05, 0.1, 0.1):
-                        new ASDRForm(0.01, 0.8, 0.6, 0.4)
+                        new ASDRForm(0.02, 0.1, 0.3, 1)
                 ;
             }
         } else if (command.opCode === 'noteOff') {
