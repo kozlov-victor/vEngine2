@@ -15,13 +15,11 @@ interface SAMPLE {
 
 
 interface CHANNEL_PRESET {
-    velocity: number;
     waveForm: WAVE_FORM;
     balance: number;
 }
 
 interface PRESETS {
-    numOfOscillators: number;
     channels: CHANNEL_PRESET[];
 }
 
@@ -74,40 +72,32 @@ interface IMidiJson {
 }
 
 const defaultPresets:PRESETS = {
-    numOfOscillators: 16,
     channels: [
         {
-            velocity: 0.7,
             waveForm: 'square',
             balance: 0.1
         },
         {
-            velocity: 0.6,
             waveForm: 'square',
             balance: 0.2
         },
         {
-            velocity: 0.6,
             waveForm: 'sin',
             balance: 0.1
         },
         {
-            velocity: 0.6,
             waveForm: "square",
             balance: 0.7
         },
         {
-            velocity: 0.8,
             waveForm: "sin",
             balance: 0.5
         },
         {
-            velocity: 0.8,
             waveForm: 'sin',
             balance: 1
         },
         {
-            velocity: 0.4,
             waveForm: 'sin',
             balance: -0.9
         }
@@ -293,8 +283,7 @@ class Oscillator {
         const balanceL: number = 1 - balanceR;
         const adsr = this.adsrForm.calcFactorByTime(t);
         if (adsr.stopped) {
-            this.frequency = 0;
-            this.velocity = 0;
+            this.tracker._oscillators.splice(this.tracker._oscillators.indexOf(this),1);
         }
         return {
             L: currSample * balanceL * adsr.val,
@@ -309,7 +298,7 @@ export class Tracker {
     private readonly midiNoteToFrequencyTable: number[];
     private sampleToCommandsMap: Record<number, INTERNAL_MIDI_COMMAND[]>;
     private lastEventTime: number;
-    private oscillators: Oscillator[];
+    public readonly _oscillators: Oscillator[] = [];
 
     constructor(public readonly sampleRate: number = 11025, private presets: PRESETS = defaultPresets) {
         this.midiNoteToFrequencyTable = [];
@@ -321,10 +310,6 @@ export class Tracker {
     private _init() {
         this.sampleToCommandsMap = {};
         this.lastEventTime = 0;
-        this.oscillators = new Array(this.presets.numOfOscillators);
-        for (let i = 0; i < this.oscillators.length; i++) {
-            this.oscillators[i] = new Oscillator(this);
-        }
     }
 
 
@@ -356,57 +341,38 @@ export class Tracker {
         const res: number[] = [];
         for (let i = 0; i < this.lastEventTime; i++) {
             const sample = this.generateSample(i);
-            res.push(~~(sample.L*10000));
-            res.push(~~(sample.R*10000));
+            const half = 0xffff/4-1;
+            res.push(~~(sample.L*half));
+            res.push(~~(sample.R*half));
         }
         const blob = Wave.encodeWAV(res, this.sampleRate);
         return URL.createObjectURL(blob);
     }
 
-    private getFreeOscillator() {
-        let iOfOlderstOscillator = 0;
-        let lastTriggeredMin = this.oscillators[iOfOlderstOscillator].lastTriggeredCommandIndex;
-        for (let i = 0; i < this.oscillators.length; i++) {
-            const osc = this.oscillators[i];
-            if (osc.frequency === 0) {
-                return osc;
-            } else {
-                if (lastTriggeredMin<osc.lastTriggeredCommandIndex) {
-                    lastTriggeredMin=osc.lastTriggeredCommandIndex;
-                    iOfOlderstOscillator = i;
-                }
-            }
-        }
-        return this.oscillators[iOfOlderstOscillator];
-    }
-
     private execCommand(command: INTERNAL_MIDI_COMMAND,i:number):void {
         if (command.opCode === 'noteOn') {
-            const freeOscillator = this.getFreeOscillator();
-            if (freeOscillator) {
-                const trackPreset = this.presets.channels[command.track] ||
-                    {
-                        velocity: 1,
-                        waveForm: 'triangle',
-                        balance: 0.5
-                    };
-                freeOscillator.frequency = this.midiNoteToFrequencyTable[command.note];
-                freeOscillator.velocity = trackPreset.velocity * command.velocity;
-                freeOscillator.waveForm = command.percussion?'noise':trackPreset.waveForm;
-                freeOscillator.balance = trackPreset.balance;
-                freeOscillator.lastTriggeredCommandIndex = i;
-                freeOscillator.adsrForm =
-                    command.percussion?
-                        new ASDRForm(0.01, 0.05, 0.1, 0.1):
-                        new ASDRForm(0.02, 0.1, 0.3, 1)
-                ;
-            }
+            const oscillator = new Oscillator(this);
+            const trackPreset = this.presets.channels[command.track] ||
+                {
+                    velocity: 1,
+                    waveForm: 'triangle',
+                    balance: 0.5
+                };
+            oscillator.frequency = this.midiNoteToFrequencyTable[command.note];
+            oscillator.velocity = command.velocity;
+            oscillator.waveForm = command.percussion?'noise':trackPreset.waveForm;
+            oscillator.balance = trackPreset.balance;
+            oscillator.lastTriggeredCommandIndex = i;
+            oscillator.adsrForm =
+                command.percussion?
+                    new ASDRForm(0.01, 0.05, 0.1, 0.1):
+                    new ASDRForm(0.02, 0.1, 0.3, 1)
+            ;
+            this._oscillators.push(oscillator);
         } else if (command.opCode === 'noteOff') {
-            for (let i = 0; i < this.oscillators.length; i++) {
-                if (this.oscillators[i].frequency === this.midiNoteToFrequencyTable[command.note]) {
-                    this.oscillators[i].adsrForm.forceRelease = true;
-                    //this.oscillators[i].frequency = 0;
-                    //this.oscillators[i].velocity = 0;
+            for (let i = 0; i < this._oscillators.length; i++) {
+                if (this._oscillators[i].frequency === this.midiNoteToFrequencyTable[command.note]) {
+                    this._oscillators[i].adsrForm.forceRelease = true;
                     break;
                 }
             }
@@ -424,8 +390,8 @@ export class Tracker {
         // mix by formula: out = (s1 + s2) - (s1 * s2);
         const sumAll: SAMPLE = {L: 0, R: 0};
         const multAll: SAMPLE = {L: 1, R: 1};
-        for (let i: number = 0; i < this.oscillators.length; i++) {
-            const sample: SAMPLE = this.oscillators[i].generateSample(currentSampleNum);
+        for (let i: number = 0; i < this._oscillators.length; i++) {
+            const sample: SAMPLE = this._oscillators[i].generateSample(currentSampleNum);
             sumAll.L += sample.L;
             sumAll.R += sample.R;
             multAll.L *= sample.L;
@@ -435,11 +401,6 @@ export class Tracker {
             L: sumAll.L - multAll.L,
             R: sumAll.R - multAll.R
         };
-    }
-
-    private static floatToUnit16(f:number):number {
-        const base = 0xfff/2;
-        return ~~(base + f*base);
     }
 
 }
