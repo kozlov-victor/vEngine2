@@ -41,7 +41,7 @@ interface INTERNAL_MIDI_COMMAND {
     percussion: boolean;
 }
 
-interface IMidiJson {
+export interface IMidiJson {
     header?: any;
     startTime?: number;
     duration?: number;
@@ -74,11 +74,11 @@ interface IMidiJson {
 const defaultPresets:PRESETS = {
     channels: [
         {
-            waveForm: 'square',
+            waveForm: 'triangle',
             balance: 0.1
         },
         {
-            waveForm: 'square',
+            waveForm: 'triangle',
             balance: 0.2
         },
         {
@@ -86,7 +86,7 @@ const defaultPresets:PRESETS = {
             balance: 0.1
         },
         {
-            waveForm: "square",
+            waveForm: "triangle",
             balance: 0.7
         },
         {
@@ -222,19 +222,14 @@ const log = (...val:any[])=>{
 
 class Oscillator {
 
-    public velocity: number;
-    public waveForm: WAVE_FORM;
-    public balance: number;
+    public velocity: number = 1;
+    public waveForm: WAVE_FORM = 'sin';
+    public balance: number = 0.5;
     public adsrForm: ASDRForm;
-    public frequency: number;
+    public frequency: number = 0;
     public lastTriggeredCommandIndex:number;
 
-    constructor(private tracker:Tracker) {
-        this.frequency = 0;
-        this.velocity = 1;
-        this.waveForm = 'sin';
-        this.balance = 0.5;
-    }
+    constructor(private tracker:Tracker) {}
 
     private sin(fr: number, t: number): number {
         return Math.sin((2.0 * Math.PI * t * fr));
@@ -341,9 +336,9 @@ export class Tracker {
         const res: number[] = [];
         for (let i = 0; i < this.lastEventTime; i++) {
             const sample = this.generateSample(i);
-            const half = 0xffff/4-1;
-            res.push(~~(sample.L*half));
-            res.push(~~(sample.R*half));
+            const base = 0b0000_1111_1111_1111;
+            res.push(~~(sample.L*base));
+            res.push(~~(sample.R*base));
         }
         const blob = Wave.encodeWAV(res, this.sampleRate);
         return URL.createObjectURL(blob);

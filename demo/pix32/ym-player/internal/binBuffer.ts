@@ -97,13 +97,28 @@ export class BinBuffer {
         this.pointer+=4;
     }
 
+    public writeInt32(n:number,littleEndian?: boolean):void {
+        this.view.setInt32(this.pointer,n,littleEndian);
+        this.pointer+=4;
+    }
+
     public writeUInt16(n:number,littleEndian?: boolean):void {
         this.view.setUint16(this.pointer,n,littleEndian);
         this.pointer+=2;
     }
 
+    public writeInt16(n:number,littleEndian?: boolean):void {
+        this.view.setInt16(this.pointer,n,littleEndian);
+        this.pointer+=2;
+    }
+
     public writeUint8(n:number):void {
         this.view.setUint8(this.pointer,n);
+        this.pointer++;
+    }
+
+    public writeInt8(n:number):void {
+        this.view.setInt8(this.pointer,n);
         this.pointer++;
     }
 

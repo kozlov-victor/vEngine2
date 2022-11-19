@@ -1,0 +1,299 @@
+{
+    "header": {
+        "PPQ": 384,
+        "timeSignature": [
+            4,
+            4
+        ],
+        "bpm": 110.00011000011,
+        "name": "Percussion"
+    },
+    "startTime": 0,
+    "duration": 8.727264000000002,
+    "tracks": [
+        {
+            "startTime": 0,
+            "duration": 8.727264,
+            "length": 4,
+            "notes": [
+                {
+                    "name": "F2",
+                    "midi": 41,
+                    "time": 0,
+                    "velocity": 0.3937007874015748,
+                    "duration": 2.181816
+                },
+                {
+                    "name": "A#2",
+                    "midi": 46,
+                    "time": 2.181816,
+                    "velocity": 0.3937007874015748,
+                    "duration": 2.181816
+                },
+                {
+                    "name": "C3",
+                    "midi": 48,
+                    "time": 4.363632,
+                    "velocity": 0.3937007874015748,
+                    "duration": 2.1818160000000004
+                },
+                {
+                    "name": "F2",
+                    "midi": 41,
+                    "time": 6.545448,
+                    "velocity": 0.3937007874015748,
+                    "duration": 2.1818159999999995
+                }
+            ],
+            "controlChanges": {},
+            "id": 1,
+            "name": "Electric Piano",
+            "instrumentNumber": 0,
+            "instrument": "acoustic grand piano",
+            "instrumentFamily": "piano",
+            "channelNumber": 0,
+            "isPercussion": false
+        },
+        {
+            "startTime": 0.545454,
+            "duration": 8.727264000000002,
+            "length": 12,
+            "notes": [
+                {
+                    "name": "A3",
+                    "midi": 57,
+                    "time": 0.545454,
+                    "velocity": 0.3937007874015748,
+                    "duration": 0.545454
+                },
+                {
+                    "name": "C4",
+                    "midi": 60,
+                    "time": 1.090908,
+                    "velocity": 0.3937007874015748,
+                    "duration": 0.5454540000000001
+                },
+                {
+                    "name": "F4",
+                    "midi": 65,
+                    "time": 1.636362,
+                    "velocity": 0.3937007874015748,
+                    "duration": 0.5454539999999999
+                },
+                {
+                    "name": "A3",
+                    "midi": 57,
+                    "time": 2.72727,
+                    "velocity": 0.3937007874015748,
+                    "duration": 0.5454539999999999
+                },
+                {
+                    "name": "C4",
+                    "midi": 60,
+                    "time": 3.2727239999999997,
+                    "velocity": 0.3937007874015748,
+                    "duration": 0.5454539999999999
+                },
+                {
+                    "name": "A3",
+                    "midi": 57,
+                    "time": 3.8181779999999996,
+                    "velocity": 0.3937007874015748,
+                    "duration": 0.5454540000000003
+                },
+                {
+                    "name": "G3",
+                    "midi": 55,
+                    "time": 4.909086,
+                    "velocity": 0.3937007874015748,
+                    "duration": 0.5454540000000003
+                },
+                {
+                    "name": "C4",
+                    "midi": 60,
+                    "time": 5.454540000000001,
+                    "velocity": 0.3937007874015748,
+                    "duration": 0.5454540000000003
+                },
+                {
+                    "name": "C5",
+                    "midi": 72,
+                    "time": 5.999994000000001,
+                    "velocity": 0.3937007874015748,
+                    "duration": 0.5454540000000003
+                },
+                {
+                    "name": "A3",
+                    "midi": 57,
+                    "time": 7.090902000000002,
+                    "velocity": 0.3937007874015748,
+                    "duration": 0.5454540000000003
+                },
+                {
+                    "name": "C4",
+                    "midi": 60,
+                    "time": 7.636356000000002,
+                    "velocity": 0.3937007874015748,
+                    "duration": 0.5454540000000003
+                },
+                {
+                    "name": "F4",
+                    "midi": 65,
+                    "time": 8.181810000000002,
+                    "velocity": 0.3937007874015748,
+                    "duration": 0.5454539999999994
+                }
+            ],
+            "controlChanges": {},
+            "id": 2,
+            "name": "Acoustic Guitar",
+            "instrumentNumber": 24,
+            "instrument": "acoustic guitar (nylon)",
+            "instrumentFamily": "guitar",
+            "channelNumber": 1,
+            "isPercussion": false
+        },
+        {
+            "startTime": 0,
+            "duration": 8.727264000000002,
+            "length": 11,
+            "notes": [
+                {
+                    "name": "C5",
+                    "midi": 72,
+                    "time": 0,
+                    "velocity": 0.3937007874015748,
+                    "duration": 1.090908
+                },
+                {
+                    "name": "F5",
+                    "midi": 77,
+                    "time": 1.090908,
+                    "velocity": 0.3937007874015748,
+                    "duration": 0.5454540000000001
+                },
+                {
+                    "name": "E5",
+                    "midi": 76,
+                    "time": 1.636362,
+                    "velocity": 0.3937007874015748,
+                    "duration": 0.5454539999999999
+                },
+                {
+                    "name": "D5",
+                    "midi": 74,
+                    "time": 2.181816,
+                    "velocity": 0.3937007874015748,
+                    "duration": 1.0909080000000002
+                },
+                {
+                    "name": "C5",
+                    "midi": 72,
+                    "time": 3.272724,
+                    "velocity": 0.3937007874015748,
+                    "duration": 1.0909079999999998
+                },
+                {
+                    "name": "G5",
+                    "midi": 79,
+                    "time": 4.363632,
+                    "velocity": 0.3937007874015748,
+                    "duration": 0.5454540000000003
+                },
+                {
+                    "name": "A5",
+                    "midi": 81,
+                    "time": 4.909086,
+                    "velocity": 0.3937007874015748,
+                    "duration": 0.5454540000000003
+                },
+                {
+                    "name": "A#5",
+                    "midi": 82,
+                    "time": 5.454540000000001,
+                    "velocity": 0.3937007874015748,
+                    "duration": 0.5454540000000003
+                },
+                {
+                    "name": "A5",
+                    "midi": 81,
+                    "time": 5.999994000000001,
+                    "velocity": 0.3937007874015748,
+                    "duration": 0.5454540000000003
+                },
+                {
+                    "name": "G5",
+                    "midi": 79,
+                    "time": 6.545448000000001,
+                    "velocity": 0.3937007874015748,
+                    "duration": 1.0909079999999998
+                },
+                {
+                    "name": "F5",
+                    "midi": 77,
+                    "time": 7.636356000000001,
+                    "velocity": 0.3937007874015748,
+                    "duration": 1.0909080000000007
+                }
+            ],
+            "controlChanges": {},
+            "id": 12,
+            "name": "Violin",
+            "instrumentNumber": 40,
+            "instrument": "violin",
+            "instrumentFamily": "strings",
+            "channelNumber": 11,
+            "isPercussion": false
+        },
+        {
+            "startTime": 0,
+            "duration": 8.727264,
+            "length": 5,
+            "notes": [
+                {
+                    "name": "F4",
+                    "midi": 65,
+                    "time": 0,
+                    "velocity": 0.3937007874015748,
+                    "duration": 2.181816
+                },
+                {
+                    "name": "D4",
+                    "midi": 62,
+                    "time": 2.181816,
+                    "velocity": 0.3937007874015748,
+                    "duration": 1.0909080000000002
+                },
+                {
+                    "name": "C4",
+                    "midi": 60,
+                    "time": 3.272724,
+                    "velocity": 0.3937007874015748,
+                    "duration": 1.0909079999999998
+                },
+                {
+                    "name": "C4",
+                    "midi": 60,
+                    "time": 4.363632,
+                    "velocity": 0.3937007874015748,
+                    "duration": 2.1818160000000004
+                },
+                {
+                    "name": "F3",
+                    "midi": 53,
+                    "time": 6.545448,
+                    "velocity": 0.3937007874015748,
+                    "duration": 2.1818159999999995
+                }
+            ],
+            "controlChanges": {},
+            "id": 14,
+            "name": "8-Bit Sine",
+            "instrumentNumber": 82,
+            "instrument": "lead 3 (calliope)",
+            "instrumentFamily": "synth lead",
+            "channelNumber": 13,
+            "isPercussion": false
+        }
+    ]
+}
