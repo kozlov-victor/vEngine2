@@ -392,10 +392,12 @@ export class Tracker {
             multAll.L *= sample.L;
             multAll.R *= sample.R;
         }
-        return {
-            L: sumAll.L - multAll.L,
-            R: sumAll.R - multAll.R
-        };
+
+        const result:SAMPLE = {L:0,R:0};
+        if (sumAll.L!==0) result.L = sumAll.L - multAll.L;
+        if (sumAll.R!==0) result.R = sumAll.R - multAll.R;
+        return result;
+
     }
 
 }
