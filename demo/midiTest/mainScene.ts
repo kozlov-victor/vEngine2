@@ -16,6 +16,7 @@ export class MainScene extends Scene {
         let ready = false;
 
         const tracks = [
+            'jazz2',
             'b','c','d','e', 'f','intro','jazz1'
         ]
         let i = 0;

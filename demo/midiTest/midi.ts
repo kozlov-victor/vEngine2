@@ -1,4 +1,5 @@
 import {Wave} from "../pix32/ym-player/internal/wav";
+import {MathEx} from "@engine/misc/math/mathEx";
 
 
 interface ADSRPoint {
@@ -393,11 +394,14 @@ export class Tracker {
             multAll.R *= sample.R;
         }
 
-        const result:SAMPLE = {L:0,R:0};
-        if (sumAll.L!==0) result.L = sumAll.L - multAll.L;
-        if (sumAll.R!==0) result.R = sumAll.R - multAll.R;
-        return result;
-
+        const mixed:SAMPLE = {L:0, R:0};
+        //if (sumAll.L!==0) {
+            mixed.L = sumAll.L - Math.abs(multAll.L);
+        //}
+        //if (sumAll.R!==0) {
+            mixed.R = sumAll.R - Math.abs(multAll.R);
+        //}
+        return mixed;
     }
 
 }
