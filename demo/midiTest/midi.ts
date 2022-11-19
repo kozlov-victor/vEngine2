@@ -186,10 +186,11 @@ class WaveForms {
     public static triangle: WAVE_FORM = (fr: number, t: number): number => {
         return (
             0.66 * this.sin(fr, t) +
-            0.2  * this.sin(2 * fr, t) +
-            0.1  * this.sin(3 * fr, t) +
-            0.02 * this.sin(4 * fr, t) +
-            0.02 * this.sin(5 * fr, t)
+            0.2  * this.sin(2 * fr, t)  +
+            0.1  * this.sin(4 * fr, t)  +
+            0.02 * this.sin(8 * fr, t)  +
+            0.01 * this.sin(16 * fr, t) +
+            0.01 * this.sin(32 * fr, t)
         );
     }
 
@@ -310,7 +311,7 @@ class Instrument {
         } as InstrumentSettings,
         organ: {
             adsr: {a: 0.01, s: 0.001, d: 10, r: 1},
-            waveForm: WaveForms.sin2,
+            waveForm: WaveForms.triangle,
             name: 'organ'
         } as InstrumentSettings,
         pipe: {
