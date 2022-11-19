@@ -1,6 +1,7 @@
 import {Wave} from "../pix32/ym-player/internal/wav";
 import {createRange} from "@engine/misc/object";
 import * as ts from "typescript/lib/tsserverlibrary";
+import {MathEx} from "@engine/misc/math/mathEx";
 
 
 interface ADSRPoint {
@@ -8,17 +9,17 @@ interface ADSRPoint {
     to: { time: number, val: number }
 }
 
-type WAVE_FORM = 'sin' | 'noise' | 'square' | 'triangle' | 'tremolo' | 'tremolo2';
+type WAVE_FORM = (fr: number, t: number)=>number;
 
 interface SAMPLE {
     L: number;
     R: number;
 }
 
-interface IADSR {
+interface IASDR {
     a:number;
-    d:number;
     s:number;
+    d:number;
     r:number;
 }
 
@@ -76,7 +77,11 @@ export interface IMidiJson {
         }[];
         isPercussion?:boolean;
         instrumentNumber?: number;
-        instrument?: any;
+        instrument?: {
+            family: string,
+            number: number,
+            name: string,
+        };
         instrumentFamily?: string;
     })[]
 }
@@ -155,6 +160,57 @@ class CalcUtils {
 
 }
 
+class WaveForms {
+
+    public static sin: WAVE_FORM = (fr: number, t: number): number => {
+        return Math.sin( Math.PI * t * fr);
+    }
+
+    public static sin2: WAVE_FORM = (fr: number, t: number): number => {
+        return (
+            0.7 * this.sin(fr, t) +
+            0.2 * this.sin(2 * fr, t) +
+            0.1 * this.sin(4 * fr, t)
+        );
+    }
+
+    public static noise: WAVE_FORM = (fr: number, t: number): number => {
+        return Math.random();
+    }
+
+    public static square: WAVE_FORM = (fr: number, t: number): number => {
+        const sample = this.sin(fr, t);
+        return sample < 0 ? -1 : 1;
+    }
+
+    public static triangle: WAVE_FORM = (fr: number, t: number): number => {
+        return (
+            0.66 * this.sin(fr, t) +
+            0.2  * this.sin(2 * fr, t) +
+            0.1  * this.sin(3 * fr, t) +
+            0.02 * this.sin(4 * fr, t) +
+            0.02 * this.sin(5 * fr, t)
+        );
+    }
+
+    public static tremolo: WAVE_FORM = (fr: number, t: number): number => {
+        const semiPeriod = ~~(t * 100) % 6;
+        if (semiPeriod > 3) fr *= 2;
+        return this.sin(fr, t);
+    }
+
+    public static tremolo2: WAVE_FORM = (fr: number, t: number): number => {
+        const semiPeriod = ~~(t * 100) % 6;
+        if (semiPeriod > 4) fr *= 3;
+        else if (semiPeriod > 2) fr *= 2;
+        return this.sin(fr, t);
+    }
+
+    public static distortion: WAVE_FORM = (fr: number, t: number): number => {
+        return MathEx.clamp(2*this.triangle(fr,t),-1,1);
+    }
+
+}
 
 class ASDRForm {
 
@@ -167,8 +223,8 @@ class ASDRForm {
     private forceReleaseStartedAt:number;
     public forceRelease:boolean = false; // key is released, so force go to "d" ("delay") segment if ADSR curve
 
-    constructor(adsr:IADSR) {
-        const {a,d,s,r} = adsr;
+    constructor(asdr:IASDR) {
+        const {a,s,d,r} =  asdr;
         this.attack = {from: {time: 0, val: 0}, to: {time: a, val: 1}};
         this.sustain = {from: {time: a, val: 1}, to: {time: a + s, val: 1}};
         this.delay = {from: {time: a + s, val: 1}, to: {time: a + s + d, val: 0.5}};
@@ -225,29 +281,44 @@ const log = (...val:any[])=>{
 }
 
 interface InstrumentSettings {
-    adsr: IADSR;
-    wave: WAVE_FORM;
+    adsr: IASDR;
+    waveForm: WAVE_FORM;
+    name: string;
 }
 
 class Instrument {
-    private defaultInstrumentSettings = {
+    public readonly defaultInstrumentSettings = {
         piano: {
-            adsr: {a: 0.02, d: 0.1, s: 0.3, r: 1},
-            wave: 'triangle'
+            adsr: {a: 0.02, s: 0.1, d: 0.3, r: 1},
+            waveForm: WaveForms.triangle,
+            name: 'piano'
+        } as InstrumentSettings,
+        bass: {
+            adsr: {a: 0.02, s: 0.1, d: 0.4, r: 1},
+            waveForm: WaveForms.triangle,
+            name: 'bass'
+        } as InstrumentSettings,
+        distortion: {
+            adsr: {a: 0.02, s: 0.1, d: 0.4, r: 1},
+            waveForm: WaveForms.distortion,
+            name: 'distortion'
         } as InstrumentSettings,
         percussion: {
-            adsr: {a: 0.01, d: 0.05, s: 0.1, r: 0.1},
-            wave: 'noise',
+            adsr: {a: 0.01, s: 0.05, d: 0.1, r: 0.1},
+            waveForm: WaveForms.noise,
+            name: 'percussion',
         } as InstrumentSettings,
         organ: {
-            adsr: {a: 0.01, d: 0.001, s: 10, r: 2},
-            wave: 'triangle'
+            adsr: {a: 0.01, s: 0.001, d: 10, r: 1},
+            waveForm: WaveForms.sin2,
+            name: 'organ'
         } as InstrumentSettings,
         pipe: {
-            adsr: {a: 0.02, d: 0.01, s: 3, r: 0.2},
-            wave: 'triangle'
+            adsr: {a: 0.02, s: 0.01, d: 3, r: 0.2},
+            waveForm: WaveForms.triangle,
+            name: 'pipe'
         } as InstrumentSettings,
-    }
+    } as const;
 
     /*
     Piano:
@@ -412,26 +483,48 @@ class Instrument {
      */
     private midiInstrumentsTable = [
         {
-            range: [...createRange({from: 1, to: 16})],
+            range: [...createRange({from: 1, to: 16+1})],
             settings: this.defaultInstrumentSettings.piano,
         },
         {
-            range: [...createRange({from: 17, to: 24})],
+            range: [...createRange({from: 17, to: 24+1})],
             settings: this.defaultInstrumentSettings.organ,
         },
         {
-            range: [...createRange({from: 65, to: 80})],
+            range: [44,...createRange({from: 33, to: 40+1})],
+            settings: this.defaultInstrumentSettings.bass,
+        },
+        {
+            range: [...createRange({from: 65, to: 80+1})],
             settings: this.defaultInstrumentSettings.pipe,
+        },
+        {
+            range: [...createRange({from: 28, to: 31+1})],
+            settings: this.defaultInstrumentSettings.distortion,
+        },
+        {
+            range: [...createRange({from: 113, to: 119+1})],
+            settings: this.defaultInstrumentSettings.percussion,
         },
 
     ]
 
+    private cachedRequest:Record<number, InstrumentSettings> = {};
+
     public getOscillatorSettingsByMidiInstrumentNumber(num:number,percussion:boolean):InstrumentSettings {
+        if (this.cachedRequest[num]) return this.cachedRequest[num];
         if (percussion) return this.defaultInstrumentSettings.percussion;
-        for (const tbl of this.midiInstrumentsTable) {
-            if (tbl.range.includes(num)) return tbl.settings;
+        let result:InstrumentSettings|undefined = undefined;
+        for (const instr of this.midiInstrumentsTable) {
+            if (instr.range.includes(num)) {
+                result = instr.settings;
+                break;
+            }
         }
-        return this.defaultInstrumentSettings.piano;
+        if (result===undefined) result = this.defaultInstrumentSettings.piano;
+        this.cachedRequest[num] = result;
+        console.log(num,result.name);
+        return result;
     }
 
 }
@@ -440,7 +533,7 @@ class Instrument {
 class Oscillator {
 
     public velocity: number = 1;
-    public waveForm: WAVE_FORM = 'sin';
+    public waveForm: WAVE_FORM;
     public balance: number = 0.5;
     public adsrForm: ASDRForm;
     public frequency: number = 0;
@@ -449,43 +542,13 @@ class Oscillator {
 
     constructor(private tracker:Tracker) {}
 
-    private sin(fr: number, t: number): number {
-        return Math.sin((2.0 * Math.PI * t * fr));
-    }
-
-    private noise(fr: number, t: number): number {
-        return Math.random();
-    }
-
-    private square(fr: number, t: number): number {
-        const sample = this.sin(fr, t);
-        return sample < 0 ? -1 : 1;
-    }
-
-    private triangle(fr: number, t: number): number {
-        return this.sin(fr, t) + 1 / 9 * this.sin(3 * fr, t) + 1 / 25 * this.sin(5 * fr, t);
-    }
-
-    private tremolo(fr: number, t: number): number {
-        const semiPeriod = ~~(t * 100) % 6;
-        if (semiPeriod > 3) fr *= 2;
-        return this.sin(fr, t);
-    }
-
-    private tremolo2(fr: number, t: number): number {
-        const semiPeriod = ~~(t * 100) % 6;
-        if (semiPeriod > 4) fr *= 3;
-        else if (semiPeriod > 2) fr *= 2;
-        return this.sin(fr, t);
-    }
-
     private _generateWaveForm(
         velocity: number,
         waveForm: WAVE_FORM,
         frequency: number,
         t: number): number {
         if (velocity == 0 || frequency == 0) return 0;
-        return velocity * (this[waveForm](frequency, t));
+        return velocity * (waveForm(frequency, t));
     }
 
     public generateSample(currentSampleNum: number): SAMPLE {
@@ -551,7 +614,7 @@ export class Tracker {
         midiJson.tracks.forEach(t=>{
             if (!t.notes) return;
             this.numOfTracks++;
-            const instrumentNumber = t.instrumentNumber ?? 1;
+            const instrumentNumber = t.instrumentNumber ?? t.instrument?.number ?? 1;
             t.notes.forEach(n=>{
                 const noteId = this.nextId++;
                 this._commandToInternalCommand(noteId, instrumentNumber, n.time,'noteOn', n, t);
@@ -564,7 +627,7 @@ export class Tracker {
         const res: number[] = [];
         for (let i = 0; i < this.lastEventTime; i++) {
             const sample = this.generateSample(i);
-            const base = 0b0000_1111_1111_1111;
+            const base = 0b0011_1111_1111_1111;
             res.push(~~(sample.L*base));
             res.push(~~(sample.R*base));
         }
@@ -575,12 +638,13 @@ export class Tracker {
     private execCommand(command: INTERNAL_MIDI_COMMAND,i:number):void {
         if (command.opCode === 'noteOn') {
 
-            const instrumentSettings = this.instrument.getOscillatorSettingsByMidiInstrumentNumber(command.instrumentNumber,command.percussion);
+            const instrumentSettings =
+                this.instrument.getOscillatorSettingsByMidiInstrumentNumber(command.instrumentNumber,command.percussion);
 
             const oscillator = new Oscillator(this);
             oscillator.frequency = this.midiNoteToFrequencyTable[command.note];
             oscillator.velocity = command.velocity;
-            oscillator.waveForm = instrumentSettings.wave;
+            oscillator.waveForm = instrumentSettings.waveForm;
             oscillator.balance = this.presets.channels[command.track]?.balance ?? 0.5;
             oscillator.lastTriggeredCommandIndex = i;
             oscillator.currentNoteId = command.noteId;
@@ -619,5 +683,3 @@ export class Tracker {
     }
 
 }
-
-
