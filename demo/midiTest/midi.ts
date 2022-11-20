@@ -1,6 +1,5 @@
 import {Wave} from "../pix32/ym-player/internal/wav";
 import {createRange} from "@engine/misc/object";
-import * as ts from "typescript/lib/tsserverlibrary";
 import {MathEx} from "@engine/misc/math/mathEx";
 
 
@@ -157,7 +156,6 @@ class CalcUtils {
         return `${note.name}${note.sharp ? '#' : ''}${octave}`;
     }
 
-
 }
 
 class WaveForms {
@@ -169,13 +167,13 @@ class WaveForms {
     public static sin2: WAVE_FORM = (fr: number, t: number): number => {
         return (
             0.7 * this.sin(fr, t) +
-            0.2 * this.sin(2 * fr, t) +
-            0.1 * this.sin(4 * fr, t)
+            0.2 * this.sin(2/1 * fr, t) +
+            0.1 * this.sin(3/2 * fr, t)
         );
     }
 
     public static noise: WAVE_FORM = (fr: number, t: number): number => {
-        return Math.random();
+        return MathEx.clamp(1.5*(Math.random()*2 - 1),-1,1);
     }
 
     public static square: WAVE_FORM = (fr: number, t: number): number => {
@@ -185,15 +183,16 @@ class WaveForms {
 
     public static triangle: WAVE_FORM = (fr: number, t: number): number => {
         return (
-            0.01 * this.sin(fr/4, t) +
-            0.01 * this.sin(fr/2, t) +
-            0.64 * this.sin(fr, t) +
-            0.2  * this.sin(2 * fr, t)  +
-            0.1  * this.sin(4 * fr, t)  +
-            0.01 * this.sin(8 * fr, t)  +
-            0.01 * this.sin(16 * fr, t) +
-            0.01 * this.sin(32 * fr, t) +
-            0.01 * this.sin(64 * fr, t)
+            0.01 * this.sin(fr/4,       t)    +
+            0.01 * this.sin(fr/2,       t)    +
+            0.54 * this.sin(fr,            t)    +
+            0.1  * this.sin(fr + 10,    t)    +
+            0.2  * this.sin(2/1 * fr,   t)    +
+            0.1  * this.sin(3/2 * fr,   t)    +
+            0.01 * this.sin(4/3 * fr,   t)    +
+            0.01 * this.sin(5/4 * fr,   t)    +
+            0.01 * this.sin(6/5 * fr,   t)    +
+            0.01 * this.sin(7/6 * fr,   t)
         );
     }
 
@@ -485,6 +484,37 @@ class Instrument {
         127 Applause
         128 Gunshot
      */
+
+    /*
+    drums
+35 B0 Acoustic Bass Drum        59 B2 Ride Cymbal 2
+36 C1 Bass Drum 1               60 C3 Hi Bongo
+37 C#1 Side Stick               61 C#3 Low Bongo
+38 D1 Acoustic Snare            62 D3 Mute Hi Conga
+39 Eb1 Hand Clap                63 Eb3 Open Hi Conga
+40 E1 Electric Snare            64 E3 Low Conga
+41 F1 Low Floor Tom             65 F3 High Timbale
+42 F#1 Closed Hi Hat            66 F#3 Low Timbale
+43 G1 High Floor Tom            67 G3 High Agogo
+44 Ab1 Pedal Hi-Hat             68 Ab3 Low Agogo
+45 A1 Low Tom                   69 A3 Cabasa
+46 Bb1 Open Hi-Hat              70 Bb3 Maracas
+47 B1 Low-Mid Tom               71 B3 Short Whistle
+48 C2 Hi Mid Tom                72 C4 Long Whistle
+49 C#2 Crash Cymbal 1           73 C#4 Short Guiro
+50 D2 High Tom                  74 D4 Long Guiro
+51 Eb2 Ride Cymbal 1            75 Eb4 Claves
+52 E2 Chinese Cymbal            76 E4 Hi Wood Block
+53 F2 Ride Bell                 77 F4 Low Wood Block
+54 F#2 Tambourine               78 F#4 Mute Cuica
+55 G2 Splash Cymbal             79 G4 Open Cuica
+56 Ab2 Cowbell                  80 Ab4 Mute Triangle
+57 A2 Crash Cymbal 2            81 A4 Open Triangle
+58 Bb2 Vibraslap
+
+
+     */
+
     private midiInstrumentsTable = [
         {
             range: [...createRange({from: 1, to: 16+1})],
