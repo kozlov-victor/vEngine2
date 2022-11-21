@@ -173,7 +173,14 @@ class WaveForms {
     }
 
     public static noise: WAVE_FORM = (fr: number, t: number): number => {
-        return MathEx.clamp(1.5*(Math.random()*2 - 1),-1,1);
+        return Math.random()*2 - 1;
+    }
+
+    public static sinAndNoise: WAVE_FORM = (fr: number, t: number): number => {
+        return (
+            1/6 * this.noise(fr, t) +
+            5/6 * this.triangle(fr, t)
+        );
     }
 
     public static square: WAVE_FORM = (fr: number, t: number): number => {
@@ -218,10 +225,9 @@ class WaveForms {
 class ASDRForm {
 
     private readonly attack: ADSRPoint;
-    private sustain: ADSRPoint;
-    private delay: ADSRPoint;
-    private release: ADSRPoint;
-    private startedAt: number;
+    private readonly sustain: ADSRPoint;
+    private readonly delay: ADSRPoint;
+    private readonly release: ADSRPoint;
 
     private forceReleaseStartedAt:number;
     public forceRelease:boolean = false; // key is released, so force go to "d" ("delay") segment if ADSR curve
@@ -240,8 +246,6 @@ class ASDRForm {
 
 
     public calcFactorByTime(t: number): {stopped:boolean,val:number} {
-        if (this.startedAt === undefined) this.startedAt = t;
-        const dTime = t - this.startedAt;
         let closestPrevPoint = this.attack;
         if (this.forceRelease) {
             if (this.forceReleaseStartedAt===undefined) this.forceReleaseStartedAt = t;
@@ -255,13 +259,13 @@ class ASDRForm {
             closestPrevPoint = this.release;
         } else {
             [this.sustain, this.delay, this.release].forEach(point => {
-                if (dTime > point.from.time) {
+                if (t > point.from.time) {
                     closestPrevPoint = point;
                 }
             });
         }
         let val = ASDRForm._linear(
-            dTime,
+            t,
             closestPrevPoint.from.val, closestPrevPoint.to.val - closestPrevPoint.from.val,
             closestPrevPoint.to.time - closestPrevPoint.from.time
         );
@@ -279,13 +283,14 @@ class ASDRForm {
 let cnt = 0;
 const log = (...val:any[])=>{
     cnt++;
-    if (cnt>5000) throw 'stopped';
+    if (cnt>6000) throw 'stopped';
     console.log(...val);
 }
 
 interface InstrumentSettings {
     adsr: IASDR;
     waveForm: WAVE_FORM;
+    fm?:()=>FrequencyModulator;
     name: string;
 }
 
@@ -306,10 +311,21 @@ class Instrument {
             waveForm: WaveForms.distortion,
             name: 'distortion'
         } as InstrumentSettings,
-        percussion: {
-            adsr: {a: 0.01, s: 0.05, d: 0.1, r: 0.1},
+        bassDrum: {
+            adsr: {a: 0.01, s: 0.05, d: 0.2, r: 0.3},
+            waveForm: WaveForms.sinAndNoise,
+            fm: ()=>new DecayFrequencyModulator(150,10),
+            name: 'bassDrum',
+        } as InstrumentSettings,
+        snareDrum: {
+            adsr: {a: 0.01, s: 0.05, d: 0.1, r: 0.01},
             waveForm: WaveForms.noise,
-            name: 'percussion',
+            name: 'snareDrum',
+        } as InstrumentSettings,
+        hiHatDrum: {
+            adsr: {a: 0.01, s: 0.1, d: 0.1, r: 0.1},
+            waveForm: WaveForms.noise,
+            name: 'hiHatDrum',
         } as InstrumentSettings,
         organ: {
             adsr: {a: 0.01, s: 0.001, d: 10, r: 1},
@@ -324,7 +340,7 @@ class Instrument {
     } as const;
 
     /*
-    Piano:
+        Piano:
         1 Acoustic Grand Piano
         2 Bright Acoustic Piano
         3 Electric Grand Piano
@@ -483,35 +499,32 @@ class Instrument {
         126 Helicopter
         127 Applause
         128 Gunshot
-     */
 
-    /*
-    drums
-35 B0 Acoustic Bass Drum        59 B2 Ride Cymbal 2
-36 C1 Bass Drum 1               60 C3 Hi Bongo
-37 C#1 Side Stick               61 C#3 Low Bongo
-38 D1 Acoustic Snare            62 D3 Mute Hi Conga
-39 Eb1 Hand Clap                63 Eb3 Open Hi Conga
-40 E1 Electric Snare            64 E3 Low Conga
-41 F1 Low Floor Tom             65 F3 High Timbale
-42 F#1 Closed Hi Hat            66 F#3 Low Timbale
-43 G1 High Floor Tom            67 G3 High Agogo
-44 Ab1 Pedal Hi-Hat             68 Ab3 Low Agogo
-45 A1 Low Tom                   69 A3 Cabasa
-46 Bb1 Open Hi-Hat              70 Bb3 Maracas
-47 B1 Low-Mid Tom               71 B3 Short Whistle
-48 C2 Hi Mid Tom                72 C4 Long Whistle
-49 C#2 Crash Cymbal 1           73 C#4 Short Guiro
-50 D2 High Tom                  74 D4 Long Guiro
-51 Eb2 Ride Cymbal 1            75 Eb4 Claves
-52 E2 Chinese Cymbal            76 E4 Hi Wood Block
-53 F2 Ride Bell                 77 F4 Low Wood Block
-54 F#2 Tambourine               78 F#4 Mute Cuica
-55 G2 Splash Cymbal             79 G4 Open Cuica
-56 Ab2 Cowbell                  80 Ab4 Mute Triangle
-57 A2 Crash Cymbal 2            81 A4 Open Triangle
-58 Bb2 Vibraslap
-
+        drums
+        35 B0 Acoustic Bass Drum        59 B2 Ride Cymbal 2
+        36 C1 Bass Drum 1               60 C3 Hi Bongo
+        37 C#1 Side Stick               61 C#3 Low Bongo
+        38 D1 Acoustic Snare            62 D3 Mute Hi Conga
+        39 Eb1 Hand Clap                63 Eb3 Open Hi Conga
+        40 E1 Electric Snare            64 E3 Low Conga
+        41 F1 Low Floor Tom             65 F3 High Timbale
+        42 F#1 Closed Hi Hat            66 F#3 Low Timbale
+        43 G1 High Floor Tom            67 G3 High Agogo
+        44 Ab1 Pedal Hi-Hat             68 Ab3 Low Agogo
+        45 A1 Low Tom                   69 A3 Cabasa
+        46 Bb1 Open Hi-Hat              70 Bb3 Maracas
+        47 B1 Low-Mid Tom               71 B3 Short Whistle
+        48 C2 Hi Mid Tom                72 C4 Long Whistle
+        49 C#2 Crash Cymbal 1           73 C#4 Short Guiro
+        50 D2 High Tom                  74 D4 Long Guiro
+        51 Eb2 Ride Cymbal 1            75 Eb4 Claves
+        52 E2 Chinese Cymbal            76 E4 Hi Wood Block
+        53 F2 Ride Bell                 77 F4 Low Wood Block
+        54 F#2 Tambourine               78 F#4 Mute Cuica
+        55 G2 Splash Cymbal             79 G4 Open Cuica
+        56 Ab2 Cowbell                  80 Ab4 Mute Triangle
+        57 A2 Crash Cymbal 2            81 A4 Open Triangle
+        58 Bb2 Vibraslap
 
      */
 
@@ -536,33 +549,77 @@ class Instrument {
             range: [...createRange({from: 28, to: 31+1})],
             settings: this.defaultInstrumentSettings.distortion,
         },
-        {
-            range: [...createRange({from: 113, to: 119+1})],
-            settings: this.defaultInstrumentSettings.percussion,
-        },
-
     ]
 
     private cachedRequest:Record<number, InstrumentSettings> = {};
 
-    public getOscillatorSettingsByMidiInstrumentNumber(num:number,percussion:boolean):InstrumentSettings {
-        if (this.cachedRequest[num]) return this.cachedRequest[num];
-        if (percussion) return this.defaultInstrumentSettings.percussion;
+    public getOscillatorSettingsByMidiInstrumentNumber(num:number,note:number,percussion:boolean):InstrumentSettings {
+        if (!percussion && this.cachedRequest[num]) return this.cachedRequest[num];
+        if (percussion && this.cachedRequest[note]) return this.cachedRequest[note];
+
         let result:InstrumentSettings|undefined = undefined;
-        for (const instr of this.midiInstrumentsTable) {
-            if (instr.range.includes(num)) {
-                result = instr.settings;
-                break;
+
+        if (percussion) {
+            switch (note) {
+                case 35:
+                case 36:
+                    console.log('----------------bass drum',note);
+                    result = this.defaultInstrumentSettings.bassDrum;
+                    break;
+                case 42:
+                case 44:
+                case 46:
+                    console.log('----------------hi hat',note);
+                    result = this.defaultInstrumentSettings.hiHatDrum;
+                    break;
+                default:
+                    console.log('----------------default drum',note);
+                    result = this.defaultInstrumentSettings.snareDrum;
+                    break;
             }
+            this.cachedRequest[note] = result;
+        } else {
+            for (const instr of this.midiInstrumentsTable) {
+                if (instr.range.includes(num)) {
+                    result = instr.settings;
+                    break;
+                }
+            }
+            if (result===undefined) {
+                result = this.defaultInstrumentSettings.piano;
+            }
+            this.cachedRequest[num] = result;
         }
-        if (result===undefined) result = this.defaultInstrumentSettings.piano;
-        this.cachedRequest[num] = result;
+
         console.log(num,result.name);
         return result;
     }
 
 }
 
+abstract class FrequencyModulator {
+
+    protected constructor() {
+    }
+
+    public abstract getModulatedFrequency(baseFrequency:number,t: number): number;
+
+}
+
+class DecayFrequencyModulator extends FrequencyModulator {
+
+
+    public constructor(private readonly baseFrequency:number, private readonly decayHzPerSecond: number) {
+        super();
+    }
+
+    public override getModulatedFrequency(baseFrequency:number,t: number): number {
+        let fr = this.baseFrequency - t * this.decayHzPerSecond;
+        if (fr<0) fr = 0;
+        return fr;
+    }
+
+}
 
 class Oscillator {
 
@@ -570,28 +627,34 @@ class Oscillator {
     public waveForm: WAVE_FORM;
     public balance: number = 0.5;
     public adsrForm: ASDRForm;
-    public frequency: number = 0;
+    public frequency: number;
+    public frequencyModulator:FrequencyModulator|undefined;
     public lastTriggeredCommandIndex:number;
     public currentNoteId:number;
 
+    private startedAt:number;
+
     constructor(private tracker:Tracker) {}
 
-    private _generateWaveForm(
+    private static _generateWaveForm(
         velocity: number,
         waveForm: WAVE_FORM,
         frequency: number,
         t: number): number {
         if (velocity == 0 || frequency == 0) return 0;
-        return velocity * (waveForm(frequency, t));
+        return velocity * waveForm(frequency, t);
     }
 
     public generateSample(currentSampleNum: number): SAMPLE {
-        const t: number = currentSampleNum / this.tracker.sampleRate;
-        if (this.frequency === 0) return {L: 0, R: 0};
-        const currSample: number = this._generateWaveForm(this.velocity, this.waveForm, this.frequency, t);
-        const balanceR: number = (this.balance + 1) / 2;
-        const balanceL: number = 1 - balanceR;
-        const adsr = this.adsrForm.calcFactorByTime(t);
+        const t = currentSampleNum / this.tracker.sampleRate;
+        if (this.startedAt === undefined) this.startedAt = t;
+        const dTime = t - this.startedAt;
+        let frequency = this.frequency;
+        if (this.frequencyModulator!==undefined) frequency = this.frequencyModulator.getModulatedFrequency(this.frequency,dTime);
+        const currSample = Oscillator._generateWaveForm(this.velocity, this.waveForm, frequency, dTime);
+        const balanceR = (this.balance + 1) / 2;
+        const balanceL = 1 - balanceR;
+        const adsr = this.adsrForm.calcFactorByTime(dTime);
         if (adsr.stopped) {
             this.tracker._oscillators.splice(this.tracker._oscillators.indexOf(this),1);
         }
@@ -646,13 +709,16 @@ export class Tracker {
     public setTrack(midiJson:IMidiJson) {
         this._init();
         midiJson.tracks.forEach(t=>{
-            if (!t.notes) return;
+            if (!t.notes?.length) return;
+            //if (!t.isPercussion) return;
             this.numOfTracks++;
             const instrumentNumber = t.instrumentNumber ?? t.instrument?.number ?? 1;
             t.notes.forEach(n=>{
                 const noteId = this.nextId++;
-                this._commandToInternalCommand(noteId, instrumentNumber, n.time,'noteOn', n, t);
-                this._commandToInternalCommand(noteId,instrumentNumber, n.time + n.duration, 'noteOff', n, t);
+                //if ([35,36].includes(n.midi)) {
+                    this._commandToInternalCommand(noteId, instrumentNumber, n.time,'noteOn', n, t);
+                    this._commandToInternalCommand(noteId,instrumentNumber, n.time + n.duration, 'noteOff', n, t);
+                //}
             });
         });
     }
@@ -673,7 +739,7 @@ export class Tracker {
         if (command.opCode === 'noteOn') {
 
             const instrumentSettings =
-                this.instrument.getOscillatorSettingsByMidiInstrumentNumber(command.instrumentNumber,command.percussion);
+                this.instrument.getOscillatorSettingsByMidiInstrumentNumber(command.instrumentNumber,command.note,command.percussion);
 
             const oscillator = new Oscillator(this);
             oscillator.frequency = this.midiNoteToFrequencyTable[command.note];
@@ -683,6 +749,7 @@ export class Tracker {
             oscillator.lastTriggeredCommandIndex = i;
             oscillator.currentNoteId = command.noteId;
             oscillator.adsrForm = new ASDRForm(instrumentSettings.adsr);
+            oscillator.frequencyModulator = instrumentSettings.fm?.();
             this._oscillators.push(oscillator);
         } else if (command.opCode === 'noteOff') {
             for (let i = 0; i < this._oscillators.length; i++) {
