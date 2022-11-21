@@ -190,16 +190,15 @@ class WaveForms {
 
     public static triangle: WAVE_FORM = (fr: number, t: number): number => {
         return (
-            0.01 * this.sin(fr/4,       t)    +
-            0.01 * this.sin(fr/2,       t)    +
-            0.54 * this.sin(fr,            t)    +
-            0.1  * this.sin(fr + 10,    t)    +
-            0.2  * this.sin(2/1 * fr,   t)    +
-            0.1  * this.sin(3/2 * fr,   t)    +
-            0.01 * this.sin(4/3 * fr,   t)    +
-            0.01 * this.sin(5/4 * fr,   t)    +
-            0.01 * this.sin(6/5 * fr,   t)    +
-            0.01 * this.sin(7/6 * fr,   t)
+            0.54 * this.sin (         fr,   t)    +
+            0.1  * this.sin2(2/1 * fr,   t)    +
+            0.1  * this.sin2(4/1 * fr,   t)    +
+            0.1  * this.sin2(8/1 * fr,   t)    +
+            0.1  * this.sin (3/2 * fr,   t)    +
+            0.01 * this.sin (4/3 * fr,   t)    +
+            0.01 * this.sin (5/4 * fr,   t)    +
+            0.01 * this.sin (6/5 * fr,   t)    +
+            0.01 * this.sin (7/6 * fr,   t)
         );
     }
 

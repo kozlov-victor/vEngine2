@@ -16,10 +16,10 @@ export class MainScene extends Scene {
         let ready = false;
 
         const tracks = [
-            'b',
-            'e',
             'jazz1',
             'jazz2',
+            'b',
+            'e',
             'c','d', 'f',
             'intro',
         ]
