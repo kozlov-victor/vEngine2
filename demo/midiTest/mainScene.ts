@@ -13,14 +13,18 @@ export class MainScene extends Scene {
         this.appendChild(debugLayer);
 
         const audio = document.createElement('audio');
+        document.body.appendChild(audio);
         let ready = false;
 
         const tracks = [
+            'metallica2',
+            'rock2',
+            'c',
+            'e',
             'jazz1',
             'jazz2',
             'b',
-            'e',
-            'c','d', 'f',
+            'd', 'f',
             'intro',
         ]
         let i = 0;
@@ -33,7 +37,7 @@ export class MainScene extends Scene {
             const json = await new ResourceLoader(this.game).loadJSON<IMidiJson>(`./midiTest/data/tone/${tracks[i]}.json`);
             const tracker = new Tracker();
             tracker.setTrack(json);
-            audio.src = tracker.toURL();
+            audio.src = await tracker.toURL(n=>debugLayer.println(`${~~(n*100)}%`));
             debugLayer.log(`Ready`);
             debugLayer.log(`Press "ENTER" to play track`);
             debugLayer.log(`Press "->" to load next track`);

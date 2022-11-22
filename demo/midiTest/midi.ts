@@ -161,7 +161,7 @@ class CalcUtils {
 class WaveForms {
 
     public static sin: WAVE_FORM = (fr: number, t: number): number => {
-        return Math.sin( Math.PI * t * fr);
+        return Math.sin( 2*Math.PI * t * fr);
     }
 
     public static sin2: WAVE_FORM = (fr: number, t: number): number => {
@@ -173,7 +173,8 @@ class WaveForms {
     }
 
     public static noise: WAVE_FORM = (fr: number, t: number): number => {
-        return Math.random()*2 - 1;
+        const r = Math.random();
+        return r * 2 - 1;
     }
 
     public static sinAndNoise: WAVE_FORM = (fr: number, t: number): number => {
@@ -190,7 +191,7 @@ class WaveForms {
 
     public static triangle: WAVE_FORM = (fr: number, t: number): number => {
         return (
-            0.54 * this.sin (         fr,   t)    +
+            0.54 * this.sin2 (        fr,   t)    +
             0.1  * this.sin2(2/1 * fr,   t)    +
             0.1  * this.sin2(4/1 * fr,   t)    +
             0.1  * this.sin2(8/1 * fr,   t)    +
@@ -215,8 +216,18 @@ class WaveForms {
         return this.sin(fr, t);
     }
 
+    private static _sinDistort = (fr: number, t: number): number => {
+        let x = 2 * this.triangle(fr, t);
+        const r1 = Math.random();
+        if (r1>0.8) x*=2;
+        return MathEx.clamp(x/(1 - Math.abs(x)),-1,1);
+    }
+
     public static distortion: WAVE_FORM = (fr: number, t: number): number => {
-        return MathEx.clamp(2*this.triangle(fr,t),-1,1);
+         return (
+             0.15 *  this._sinDistort(         fr,  t     )    +
+             0.05 *  this._sinDistort(      5/6 * fr + 5,   t)
+         )
     }
 
 }
@@ -289,7 +300,8 @@ const log = (...val:any[])=>{
 interface InstrumentSettings {
     adsr: IASDR;
     waveForm: WAVE_FORM;
-    fm?:()=>FrequencyModulator;
+    fm?:()=>BaseModulator;
+    am?:()=>BaseModulator;
     name: string;
 }
 
@@ -298,7 +310,7 @@ class Instrument {
         piano: {
             adsr: {a: 0.02, s: 0.1, d: 0.3, r: 1},
             waveForm: WaveForms.triangle,
-            name: 'piano'
+            name: 'piano',
         } as InstrumentSettings,
         bass: {
             adsr: {a: 0.02, s: 0.1, d: 0.4, r: 1},
@@ -306,7 +318,7 @@ class Instrument {
             name: 'bass'
         } as InstrumentSettings,
         distortion: {
-            adsr: {a: 0.02, s: 0.1, d: 0.4, r: 1},
+            adsr: {a: 0.01, s: 0.01, d: 1.1, r: 0.4},
             waveForm: WaveForms.distortion,
             name: 'distortion'
         } as InstrumentSettings,
@@ -330,6 +342,12 @@ class Instrument {
             adsr: {a: 0.01, s: 0.001, d: 10, r: 1},
             waveForm: WaveForms.triangle,
             name: 'organ'
+        } as InstrumentSettings,
+        rockOrgan: {
+            adsr: {a: 0.01, s: 0.001, d: 10, r: 1},
+            waveForm: WaveForms.triangle,
+            am: ()=>new WaveMultiplicativeModulator(5),
+            name: 'rockOrgan'
         } as InstrumentSettings,
         pipe: {
             adsr: {a: 0.02, s: 0.01, d: 3, r: 0.2},
@@ -533,6 +551,10 @@ class Instrument {
             settings: this.defaultInstrumentSettings.piano,
         },
         {
+            range: [17,18,19],
+            settings: this.defaultInstrumentSettings.rockOrgan,
+        },
+        {
             range: [...createRange({from: 17, to: 24+1})],
             settings: this.defaultInstrumentSettings.organ,
         },
@@ -545,7 +567,11 @@ class Instrument {
             settings: this.defaultInstrumentSettings.pipe,
         },
         {
-            range: [...createRange({from: 28, to: 31+1})],
+            range: [...createRange({from: 113, to: 119+1})],
+            settings: this.defaultInstrumentSettings.snareDrum,
+        },
+        {
+            range: [...createRange({from: 27, to: 31+1})],
             settings: this.defaultInstrumentSettings.distortion,
         },
     ]
@@ -596,26 +622,54 @@ class Instrument {
 
 }
 
-abstract class FrequencyModulator {
+abstract class BaseModulator {
 
     protected constructor() {
     }
 
-    public abstract getModulatedFrequency(baseFrequency:number,t: number): number;
+    public abstract getModulatedValue(baseValue:number, t: number): number;
 
 }
 
-class DecayFrequencyModulator extends FrequencyModulator {
+class DecayFrequencyModulator extends BaseModulator {
 
 
     public constructor(private readonly baseFrequency:number, private readonly decayHzPerSecond: number) {
         super();
     }
 
-    public override getModulatedFrequency(baseFrequency:number,t: number): number {
+    public override getModulatedValue(baseFrequency:number, t: number): number {
         let fr = this.baseFrequency - t * this.decayHzPerSecond;
         if (fr<0) fr = 0;
         return fr;
+    }
+
+}
+
+class WaveMultiplicativeModulator extends BaseModulator {
+
+    public constructor(private readonly frequency:number) {
+        super();
+    }
+
+    public override getModulatedValue(baseAmplitude:number, t: number): number {
+        return (
+            baseAmplitude * WaveForms.sin(this.frequency, t)
+        );
+    }
+
+}
+
+class WaveAdditiveModulator extends BaseModulator {
+
+    public constructor(private readonly frequency:number, private amplitude: number,) {
+        super();
+    }
+
+    public override getModulatedValue(baseAmplitude:number, t: number): number {
+        return (
+            baseAmplitude + this.amplitude * WaveForms.sin(this.frequency, t)
+        );
     }
 
 }
@@ -627,7 +681,8 @@ class Oscillator {
     public balance: number = 0.5;
     public adsrForm: ASDRForm;
     public frequency: number;
-    public frequencyModulator:FrequencyModulator|undefined;
+    public frequencyModulator:BaseModulator|undefined;
+    public amplitudeModulator:BaseModulator|undefined;
     public lastTriggeredCommandIndex:number;
     public currentNoteId:number;
 
@@ -649,8 +704,9 @@ class Oscillator {
         if (this.startedAt === undefined) this.startedAt = t;
         const dTime = t - this.startedAt;
         let frequency = this.frequency;
-        if (this.frequencyModulator!==undefined) frequency = this.frequencyModulator.getModulatedFrequency(this.frequency,dTime);
-        const currSample = Oscillator._generateWaveForm(this.velocity, this.waveForm, frequency, dTime);
+        if (this.frequencyModulator!==undefined) frequency = this.frequencyModulator.getModulatedValue(frequency,dTime);
+        let currSample = Oscillator._generateWaveForm(this.velocity, this.waveForm, frequency, dTime);
+        if (this.amplitudeModulator) currSample = this.amplitudeModulator.getModulatedValue(currSample, dTime);
         const balanceR = (this.balance + 1) / 2;
         const balanceL = 1 - balanceR;
         const adsr = this.adsrForm.calcFactorByTime(dTime);
@@ -664,6 +720,11 @@ class Oscillator {
     }
 }
 
+const wait = ()=>{
+    return new Promise<void>(resolve=>{
+        setTimeout(()=>resolve(undefined),1);
+    });
+}
 
 export class Tracker {
 
@@ -698,7 +759,7 @@ export class Tracker {
             opCode,
             track: track.id,
             velocity: cmd.velocity,
-            percussion: track.isPercussion===true,
+            percussion: track.isPercussion===true || track.instrument?.family === 'drums',
             noteId,
             instrumentNumber
         });
@@ -714,7 +775,7 @@ export class Tracker {
             const instrumentNumber = t.instrumentNumber ?? t.instrument?.number ?? 1;
             t.notes.forEach(n=>{
                 const noteId = this.nextId++;
-                //if ([35,36].includes(n.midi)) {
+                //if ([27,28,29,30,31].includes(instrumentNumber)) {
                     this._commandToInternalCommand(noteId, instrumentNumber, n.time,'noteOn', n, t);
                     this._commandToInternalCommand(noteId,instrumentNumber, n.time + n.duration, 'noteOff', n, t);
                 //}
@@ -722,16 +783,18 @@ export class Tracker {
         });
     }
 
-    public toURL():string {
+    public async toURL(progress?:(n:number)=>void):Promise<string> {
         const res: number[] = [];
         for (let i = 0; i < this.lastEventTime; i++) {
             const sample = this.generateSample(i);
             const base = 0b0011_1111_1111_1111;
             res.push(~~(sample.L*base));
             res.push(~~(sample.R*base));
+            if (i%100_000===0) await wait();
+            progress?.(i/this.lastEventTime)
         }
         const blob = Wave.encodeWAV(res, this.sampleRate);
-        return URL.createObjectURL(blob);
+        return await URL.createObjectURL(blob);
     }
 
     private execCommand(command: INTERNAL_MIDI_COMMAND,i:number):void {
@@ -749,6 +812,7 @@ export class Tracker {
             oscillator.currentNoteId = command.noteId;
             oscillator.adsrForm = new ASDRForm(instrumentSettings.adsr);
             oscillator.frequencyModulator = instrumentSettings.fm?.();
+            oscillator.amplitudeModulator = instrumentSettings.am?.();
             this._oscillators.push(oscillator);
         } else if (command.opCode === 'noteOff') {
             for (let i = 0; i < this._oscillators.length; i++) {
