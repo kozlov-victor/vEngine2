@@ -158,76 +158,70 @@ class CalcUtils {
 
 }
 
-class WaveForms {
+namespace WaveForms {
 
-    public static sin: WAVE_FORM = (fr: number, t: number): number => {
+    export const sin: WAVE_FORM = (fr: number, t: number): number => {
         return Math.sin( 2*Math.PI * t * fr);
     }
 
-    public static sin2: WAVE_FORM = (fr: number, t: number): number => {
+    export const sin2: WAVE_FORM = (fr: number, t: number): number => {
         return (
-            0.7 * this.sin(fr, t) +
-            0.2 * this.sin(2/1 * fr, t) +
-            0.1 * this.sin(3/2 * fr, t)
+            0.7 * sin(fr, t) +
+            0.2 * sin(2/1 * fr, t) +
+            0.1 * sin(3/2 * fr, t)
         );
     }
 
-    public static noise: WAVE_FORM = (fr: number, t: number): number => {
+    export const noise: WAVE_FORM = (fr: number, t: number): number => {
         const r = Math.random();
         return r * 2 - 1;
     }
 
-    public static sinAndNoise: WAVE_FORM = (fr: number, t: number): number => {
+    export const sinAndNoise: WAVE_FORM = (fr: number, t: number): number => {
         return (
-            1/6 * this.noise(fr, t) +
-            5/6 * this.triangle(fr, t)
+            2/6 * noise(fr, t) +
+            2/6 * square(fr / 2, t) +
+            4/6 * MathEx.clamp(3 * sin2(fr, t), -1,1) +
+            1/6 * MathEx.clamp(3 * sin2(fr + 5, t), -1,1)
         );
     }
 
-    public static square: WAVE_FORM = (fr: number, t: number): number => {
-        const sample = this.sin(fr, t);
+    export const square: WAVE_FORM = (fr: number, t: number): number => {
+        const sample = sin(fr, t);
         return sample < 0 ? -1 : 1;
     }
 
-    public static triangle: WAVE_FORM = (fr: number, t: number): number => {
+    export const triangle: WAVE_FORM = (fr: number, t: number): number => {
         return (
-            0.54 * this.sin2 (        fr,   t)    +
-            0.1  * this.sin2(2/1 * fr,   t)    +
-            0.1  * this.sin2(4/1 * fr,   t)    +
-            0.1  * this.sin2(8/1 * fr,   t)    +
-            0.1  * this.sin (3/2 * fr,   t)    +
-            0.01 * this.sin (4/3 * fr,   t)    +
-            0.01 * this.sin (5/4 * fr,   t)    +
-            0.01 * this.sin (6/5 * fr,   t)    +
-            0.01 * this.sin (7/6 * fr,   t)
+            0.54 * sin2 (        fr,   t)    +
+            0.1  * sin2(2/1 * fr,   t)    +
+            0.1  * sin2(4/1 * fr,   t)    +
+            0.1  * sin2(8/1 * fr,   t)    +
+            0.1  * sin2(3/2 * fr,   t)    +
+            0.01 * sin (4/3 * fr,   t)    +
+            0.01 * sin (5/4 * fr,   t)    +
+            0.01 * sin (6/5 * fr,   t)    +
+            0.01 * sin (7/6 * fr,   t)
         );
     }
 
-    public static tremolo: WAVE_FORM = (fr: number, t: number): number => {
+    export const tremolo: WAVE_FORM = (fr: number, t: number): number => {
         const semiPeriod = ~~(t * 100) % 6;
         if (semiPeriod > 3) fr *= 2;
-        return this.sin(fr, t);
+        return sin(fr, t);
     }
 
-    public static tremolo2: WAVE_FORM = (fr: number, t: number): number => {
+    export const tremolo2: WAVE_FORM = (fr: number, t: number): number => {
         const semiPeriod = ~~(t * 100) % 6;
         if (semiPeriod > 4) fr *= 3;
         else if (semiPeriod > 2) fr *= 2;
-        return this.sin(fr, t);
+        return sin(fr, t);
     }
 
-    private static _sinDistort = (fr: number, t: number): number => {
-        let x = 2 * this.triangle(fr, t);
-        const r1 = Math.random();
-        if (r1>0.8) x*=2;
-        return MathEx.clamp(x/(1 - Math.abs(x)),-1,1);
-    }
-
-    public static distortion: WAVE_FORM = (fr: number, t: number): number => {
-         return (
-             0.15 *  this._sinDistort(         fr,  t     )    +
-             0.05 *  this._sinDistort(      5/6 * fr + 5,   t)
-         )
+    export const distortion: WAVE_FORM = (fr: number, t: number): number => {
+        const x = triangle(fr, t);
+        const base = 0.5;
+        return MathEx.clamp(x/(1 - Math.abs(x)),-base,base);
     }
 
 }
@@ -325,18 +319,48 @@ class Instrument {
         bassDrum: {
             adsr: {a: 0.01, s: 0.05, d: 0.2, r: 0.3},
             waveForm: WaveForms.sinAndNoise,
-            fm: ()=>new DecayFrequencyModulator(150,10),
+            fm: ()=>new DecayFrequencyModulator(55,40),
             name: 'bassDrum',
         } as InstrumentSettings,
         snareDrum: {
             adsr: {a: 0.01, s: 0.05, d: 0.1, r: 0.01},
-            waveForm: WaveForms.noise,
+            waveForm: WaveForms.sinAndNoise,
+            fm: ()=>new DecayFrequencyModulator(80,150),
             name: 'snareDrum',
         } as InstrumentSettings,
-        hiHatDrum: {
-            adsr: {a: 0.01, s: 0.1, d: 0.1, r: 0.1},
+        lowFloorTomDrum: {
+            adsr: {a: 0.01, s: 0.05, d: 0.1, r: 0.01},
+            waveForm: WaveForms.sinAndNoise,
+            fm: ()=>new DecayFrequencyModulator(90,42),
+            name: 'lowFloorTomDrum',
+        } as InstrumentSettings,
+        highFloorTomDrum: {
+            adsr: {a: 0.01, s: 0.05, d: 0.1, r: 0.01},
+            waveForm: WaveForms.sinAndNoise,
+            fm: ()=>new DecayFrequencyModulator(95,44),
+            name: 'highFloorTomDrum',
+        } as InstrumentSettings,
+        lowMidTomDrum: {
+            adsr: {a: 0.01, s: 0.05, d: 0.1, r: 0.01},
+            waveForm: WaveForms.sinAndNoise,
+            fm: ()=>new DecayFrequencyModulator(100,152),
+            name: 'lowMidTomDrum',
+        } as InstrumentSettings,
+        highMidTomDrum: {
+            adsr: {a: 0.01, s: 0.05, d: 0.1, r: 0.01},
+            waveForm: WaveForms.sinAndNoise,
+            fm: () => new DecayFrequencyModulator(110, 155),
+            name: 'highMidTomDrum',
+        } as InstrumentSettings,
+        hiHatClosedDrum: {
+            adsr: {a: 0.01, s: 0.01, d: 0.05, r: 0.05},
             waveForm: WaveForms.noise,
-            name: 'hiHatDrum',
+            name: 'hiHatClosedDrum',
+        } as InstrumentSettings,
+        hiHatOpenedDrum: {
+            adsr: {a: 0.01, s: 0.02, d: 0.1, r: 0.2},
+            waveForm: WaveForms.noise,
+            name: 'hiHatOpenedDrum',
         } as InstrumentSettings,
         organ: {
             adsr: {a: 0.01, s: 0.001, d: 10, r: 1},
@@ -588,17 +612,34 @@ class Instrument {
             switch (note) {
                 case 35:
                 case 36:
-                    console.log('----------------bass drum',note);
                     result = this.defaultInstrumentSettings.bassDrum;
+                    break;
+                case 41:
+                    result = this.defaultInstrumentSettings.lowFloorTomDrum;
+                    break;
+                case 43:
+                    result = this.defaultInstrumentSettings.highFloorTomDrum;
+                    break;
+                case 45:
+                case 47:
+                    result = this.defaultInstrumentSettings.lowMidTomDrum;
+                    break;
+                case 48:
+                case 50:
+                    result = this.defaultInstrumentSettings.highMidTomDrum;
                     break;
                 case 42:
                 case 44:
+                    result = this.defaultInstrumentSettings.hiHatClosedDrum;
+                    break;
                 case 46:
-                    console.log('----------------hi hat',note);
-                    result = this.defaultInstrumentSettings.hiHatDrum;
+                case 49:
+                case 51:
+                case 55:
+                case 57:
+                    result = this.defaultInstrumentSettings.hiHatOpenedDrum;
                     break;
                 default:
-                    console.log('----------------default drum',note);
                     result = this.defaultInstrumentSettings.snareDrum;
                     break;
             }
@@ -616,7 +657,7 @@ class Instrument {
             this.cachedRequest[num] = result;
         }
 
-        console.log(num,result.name);
+        console.log(num,note,result.name);
         return result;
     }
 
@@ -726,9 +767,13 @@ const wait = ()=>{
     });
 }
 
+const MIDI_NOTE_TO_FREQUENCY_TABLE: number[] = [];
+for (let x = 0; x < 127; ++x) {
+    MIDI_NOTE_TO_FREQUENCY_TABLE[x] = CalcUtils.midiNumberToFr(x);
+}
+
 export class Tracker {
 
-    private readonly midiNoteToFrequencyTable: number[];
     private sampleToCommandsMap: Record<number, INTERNAL_MIDI_COMMAND[]>;
     private lastEventTime: number;
     private numOfTracks:number;
@@ -736,12 +781,7 @@ export class Tracker {
     private instrument = new Instrument();
     public readonly _oscillators: Oscillator[] = [];
 
-    constructor(public readonly sampleRate: number = 11025, private presets: PRESETS = defaultPresets) {
-        this.midiNoteToFrequencyTable = [];
-        for (let x = 0; x < 127; ++x) {
-            this.midiNoteToFrequencyTable[x] = CalcUtils.midiNumberToFr(x);
-        }
-    }
+    constructor(public readonly sampleRate: number = 11025, private presets: PRESETS = defaultPresets) {}
 
     private _init() {
         this.sampleToCommandsMap = {};
@@ -770,9 +810,10 @@ export class Tracker {
         this._init();
         midiJson.tracks.forEach(t=>{
             if (!t.notes?.length) return;
-            //if (!t.isPercussion) return;
             this.numOfTracks++;
             const instrumentNumber = t.instrumentNumber ?? t.instrument?.number ?? 1;
+            console.log(`track: ${t.name}`);
+            //if (t.name!=='Guitar Solo') return;
             t.notes.forEach(n=>{
                 const noteId = this.nextId++;
                 //if ([27,28,29,30,31].includes(instrumentNumber)) {
@@ -787,7 +828,7 @@ export class Tracker {
         const res: number[] = [];
         for (let i = 0; i < this.lastEventTime; i++) {
             const sample = this.generateSample(i);
-            const base = 0b0011_1111_1111_1111;
+            const base = 0b0111_1111_1111_1111;
             res.push(~~(sample.L*base));
             res.push(~~(sample.R*base));
             if (i%100_000===0) await wait();
@@ -804,7 +845,7 @@ export class Tracker {
                 this.instrument.getOscillatorSettingsByMidiInstrumentNumber(command.instrumentNumber,command.note,command.percussion);
 
             const oscillator = new Oscillator(this);
-            oscillator.frequency = this.midiNoteToFrequencyTable[command.note];
+            oscillator.frequency = MIDI_NOTE_TO_FREQUENCY_TABLE[command.note];
             oscillator.velocity = command.velocity;
             oscillator.waveForm = instrumentSettings.waveForm;
             oscillator.balance = this.presets.channels[command.track]?.balance ?? 0.5;

@@ -13,10 +13,13 @@ export class MainScene extends Scene {
         this.appendChild(debugLayer);
 
         const audio = document.createElement('audio');
+        audio.style.cssText = 'position: absolute;left: 0; right: 0;';
+        audio.controls = true;
         document.body.appendChild(audio);
         let ready = false;
 
         const tracks = [
+            'drum_demo',
             'metallica2',
             'rock2',
             'c',
