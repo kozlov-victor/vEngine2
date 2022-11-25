@@ -39,17 +39,34 @@ interface MIDI_COMMAND {
     duration: number;
 }
 
-type tOpCode = 'noteOn' | 'noteOff';
 
-interface INTERNAL_MIDI_COMMAND {
-    opCode: tOpCode;
-    track: number;
-    note: number;
-    velocity: number;
-    percussion: boolean;
-    instrumentNumber: number;
-    noteId:number;
+interface INTERNAL_MIDI_NOTE_COMMAND {
+    opCode: 'noteOn'|'noteOff';
+    channel: {
+        channelNumber: number;
+        percussion: boolean;
+        instrumentNumber: number;
+    },
+    payload: {
+        noteId:number;
+        note: number;
+        velocity: number;
+    }
 }
+
+interface INTERNAL_MIDI_PITCH_BEND_COMMAND {
+    opCode: 'pitchBend';
+    channel: {
+        channelNumber: number;
+        percussion: boolean;
+        instrumentNumber: number;
+    },
+    payload: {
+        pitchBend:number;
+    }
+}
+
+type INTERNAL_MIDI_COMMAND = INTERNAL_MIDI_NOTE_COMMAND | INTERNAL_MIDI_PITCH_BEND_COMMAND;
 
 export interface IMidiJson {
     header?: any;
@@ -87,27 +104,22 @@ export interface IMidiJson {
 
 const defaultPresets:PRESETS = {
     channels: [
-        {
-            balance: 0.1
-        },
-        {
-            balance: 0.2
-        },
-        {
-            balance: 0.1
-        },
-        {
-            balance: 0.7
-        },
-        {
-            balance: 0.5
-        },
-        {
-            balance: 1
-        },
-        {
-            balance: -0.9
-        }
+        {balance: 0.1},
+        {balance: 0.2},
+        {balance: 0.1},
+        {balance: 0.7},
+        {balance: 0.5},
+        {balance: 1.0},
+        {balance: 0.9},
+        {balance: 0.1},
+        {balance: 0.2},
+        {balance: 0.1},
+        {balance: 0.7},
+        {balance: 0.5},
+        {balance: 1.0},
+        {balance: 0.6},
+        {balance: 0.1},
+        {balance: 0.7},
     ]
 }
 
@@ -177,11 +189,10 @@ namespace WaveForms {
         return r * 2 - 1;
     }
 
-    export const sinAndNoise: WAVE_FORM = (fr: number, t: number): number => {
+    export const beat: WAVE_FORM = (fr: number, t: number): number => {
         return (
-            2/6 * noise(fr, t) +
             2/6 * square(fr / 2, t) +
-            4/6 * MathEx.clamp(3 * sin2(fr, t), -1,1) +
+            3/6 * MathEx.clamp(3 * sin2(fr, t), -1,1) +
             1/6 * MathEx.clamp(3 * sin2(fr + 5, t), -1,1)
         );
     }
@@ -193,7 +204,7 @@ namespace WaveForms {
 
     export const triangle: WAVE_FORM = (fr: number, t: number): number => {
         return (
-            0.54 * sin2 (        fr,   t)    +
+            0.54 * sin2(        fr,   t)    +
             0.1  * sin2(2/1 * fr,   t)    +
             0.1  * sin2(4/1 * fr,   t)    +
             0.1  * sin2(8/1 * fr,   t)    +
@@ -318,37 +329,37 @@ class Instrument {
         } as InstrumentSettings,
         bassDrum: {
             adsr: {a: 0.01, s: 0.05, d: 0.2, r: 0.3},
-            waveForm: WaveForms.sinAndNoise,
-            fm: ()=>new DecayFrequencyModulator(55,40),
+            waveForm: WaveForms.beat,
+            fm: ()=>new DecayFrequencyModulator(70,145),
             name: 'bassDrum',
         } as InstrumentSettings,
         snareDrum: {
             adsr: {a: 0.01, s: 0.05, d: 0.1, r: 0.01},
-            waveForm: WaveForms.sinAndNoise,
+            waveForm: WaveForms.beat,
             fm: ()=>new DecayFrequencyModulator(80,150),
             name: 'snareDrum',
         } as InstrumentSettings,
         lowFloorTomDrum: {
             adsr: {a: 0.01, s: 0.05, d: 0.1, r: 0.01},
-            waveForm: WaveForms.sinAndNoise,
+            waveForm: WaveForms.beat,
             fm: ()=>new DecayFrequencyModulator(90,42),
             name: 'lowFloorTomDrum',
         } as InstrumentSettings,
         highFloorTomDrum: {
             adsr: {a: 0.01, s: 0.05, d: 0.1, r: 0.01},
-            waveForm: WaveForms.sinAndNoise,
+            waveForm: WaveForms.beat,
             fm: ()=>new DecayFrequencyModulator(95,44),
             name: 'highFloorTomDrum',
         } as InstrumentSettings,
         lowMidTomDrum: {
             adsr: {a: 0.01, s: 0.05, d: 0.1, r: 0.01},
-            waveForm: WaveForms.sinAndNoise,
+            waveForm: WaveForms.beat,
             fm: ()=>new DecayFrequencyModulator(100,152),
             name: 'lowMidTomDrum',
         } as InstrumentSettings,
         highMidTomDrum: {
             adsr: {a: 0.01, s: 0.05, d: 0.1, r: 0.01},
-            waveForm: WaveForms.sinAndNoise,
+            waveForm: WaveForms.beat,
             fm: () => new DecayFrequencyModulator(110, 155),
             name: 'highMidTomDrum',
         } as InstrumentSettings,
@@ -722,6 +733,7 @@ class Oscillator {
     public balance: number = 0.5;
     public adsrForm: ASDRForm;
     public frequency: number;
+    public pitchBend: number = 0;
     public frequencyModulator:BaseModulator|undefined;
     public amplitudeModulator:BaseModulator|undefined;
     public lastTriggeredCommandIndex:number;
@@ -775,7 +787,7 @@ for (let x = 0; x < 127; ++x) {
 export class Tracker {
 
     private sampleToCommandsMap: Record<number, INTERNAL_MIDI_COMMAND[]>;
-    private lastEventTime: number;
+    private lastEventSampleNum: number;
     private numOfTracks:number;
     private nextId:number;
     private instrument = new Instrument();
@@ -785,25 +797,9 @@ export class Tracker {
 
     private _init() {
         this.sampleToCommandsMap = {};
-        this.lastEventTime = 0;
+        this.lastEventSampleNum = 0;
         this.numOfTracks = 0;
         this.nextId = 0;
-    }
-
-
-    private _commandToInternalCommand(noteId:number, instrumentNumber: number, time: number, opCode: tOpCode, cmd: MIDI_COMMAND, track:IMidiJson['tracks'][0]): void {
-        const sampleNum = ~~(time * this.sampleRate);
-        if (!this.sampleToCommandsMap[sampleNum]) this.sampleToCommandsMap[sampleNum] = [];
-        this.sampleToCommandsMap[sampleNum].push({
-            note: cmd.midi,
-            opCode,
-            track: track.id,
-            velocity: cmd.velocity,
-            percussion: track.isPercussion===true || track.instrument?.family === 'drums',
-            noteId,
-            instrumentNumber
-        });
-        if (this.lastEventTime < sampleNum) this.lastEventTime = sampleNum;
     }
 
     public setTrack(midiJson:IMidiJson) {
@@ -811,28 +807,70 @@ export class Tracker {
         midiJson.tracks.forEach(t=>{
             if (!t.notes?.length) return;
             this.numOfTracks++;
-            const instrumentNumber = t.instrumentNumber ?? t.instrument?.number ?? 1;
             console.log(`track: ${t.name}`);
             //if (t.name!=='Guitar Solo') return;
-            t.notes.forEach(n=>{
-                const noteId = this.nextId++;
-                //if ([27,28,29,30,31].includes(instrumentNumber)) {
-                    this._commandToInternalCommand(noteId, instrumentNumber, n.time,'noteOn', n, t);
-                    this._commandToInternalCommand(noteId,instrumentNumber, n.time + n.duration, 'noteOff', n, t);
-                //}
+            this.setTrackNotes(t);
+        });
+    }
+
+    private setTrackNotes(t:IMidiJson['tracks'][0]) {
+        if (!t.notes) return;
+        t.notes.forEach(n=>{
+
+            //if ([27,28,29,30,31].includes(instrumentNumber)) {
+
+            const instrumentNumber = t.instrumentNumber ?? t.instrument?.number ?? 1;
+            const percussion = t.isPercussion===true || t.instrument?.family === 'drums';
+            const channelNumber = t.channelNumber ?? t.channel ?? 0;
+            const noteId = this.nextId++;
+
+            const noteOnTime = n.time;
+            const noteOnSampleNum = ~~(noteOnTime * this.sampleRate);
+            if (!this.sampleToCommandsMap[noteOnSampleNum]) this.sampleToCommandsMap[noteOnSampleNum] = [];
+            this.sampleToCommandsMap[noteOnSampleNum].push({
+                opCode: 'noteOn',
+                channel: {
+                    channelNumber,
+                    percussion,
+                    instrumentNumber
+                },
+                payload: {
+                    note: n.midi,
+                    noteId,
+                    velocity: n.velocity
+                }
             });
+
+            const noteOffTime = n.time + n.duration;
+            const noteOffSampleNum = ~~(noteOffTime * this.sampleRate);
+            if (!this.sampleToCommandsMap[noteOffSampleNum]) this.sampleToCommandsMap[noteOffSampleNum] = [];
+            this.sampleToCommandsMap[noteOffSampleNum].push({
+                opCode: 'noteOff',
+                channel: {
+                    channelNumber,
+                    percussion,
+                    instrumentNumber
+                },
+                payload: {
+                    note: n.midi,
+                    noteId,
+                    velocity: n.velocity,
+                }
+            });
+            this.lastEventSampleNum = noteOffSampleNum;
+            //}
         });
     }
 
     public async toURL(progress?:(n:number)=>void):Promise<string> {
         const res: number[] = [];
-        for (let i = 0; i < this.lastEventTime; i++) {
+        for (let i = 0; i < this.lastEventSampleNum; i++) {
             const sample = this.generateSample(i);
             const base = 0b0111_1111_1111_1111;
             res.push(~~(sample.L*base));
             res.push(~~(sample.R*base));
             if (i%100_000===0) await wait();
-            progress?.(i/this.lastEventTime)
+            progress?.(i/this.lastEventSampleNum)
         }
         const blob = Wave.encodeWAV(res, this.sampleRate);
         return await URL.createObjectURL(blob);
@@ -842,22 +880,22 @@ export class Tracker {
         if (command.opCode === 'noteOn') {
 
             const instrumentSettings =
-                this.instrument.getOscillatorSettingsByMidiInstrumentNumber(command.instrumentNumber,command.note,command.percussion);
+                this.instrument.getOscillatorSettingsByMidiInstrumentNumber(command.channel.instrumentNumber,command.payload.note,command.channel.percussion);
 
             const oscillator = new Oscillator(this);
-            oscillator.frequency = MIDI_NOTE_TO_FREQUENCY_TABLE[command.note];
-            oscillator.velocity = command.velocity;
+            oscillator.frequency = MIDI_NOTE_TO_FREQUENCY_TABLE[command.payload.note];
+            oscillator.velocity = command.payload.velocity;
             oscillator.waveForm = instrumentSettings.waveForm;
-            oscillator.balance = this.presets.channels[command.track]?.balance ?? 0.5;
+            oscillator.balance = this.presets.channels[command.channel.channelNumber]?.balance ?? 0.5;
             oscillator.lastTriggeredCommandIndex = i;
-            oscillator.currentNoteId = command.noteId;
+            oscillator.currentNoteId = command.payload.noteId;
             oscillator.adsrForm = new ASDRForm(instrumentSettings.adsr);
             oscillator.frequencyModulator = instrumentSettings.fm?.();
             oscillator.amplitudeModulator = instrumentSettings.am?.();
             this._oscillators.push(oscillator);
         } else if (command.opCode === 'noteOff') {
             for (let i = 0; i < this._oscillators.length; i++) {
-                if (this._oscillators[i].currentNoteId === command.noteId) {
+                if (this._oscillators[i].currentNoteId === command.payload.noteId) {
                     this._oscillators[i].adsrForm.forceRelease = true;
                     break;
                 }
@@ -866,7 +904,7 @@ export class Tracker {
     }
 
     private generateSample(currentSampleNum: number):SAMPLE {
-        currentSampleNum %= this.lastEventTime;
+        currentSampleNum %= this.lastEventSampleNum;
         const possibleCommands = this.sampleToCommandsMap[currentSampleNum];
         if (possibleCommands !== undefined) {
             for (let i = 0; i < possibleCommands.length; i++) {
