@@ -41,7 +41,7 @@ export class MainScene extends Scene {
             const tracker = new Tracker();
             tracker.setTrack(json);
             audio.src = await tracker.toURL(n=>debugLayer.println(`${~~(n*100)}%`));
-            debugLayer.log(`Ready`);
+            debugLayer.log(`${tracks[i]}: Ready`);
             debugLayer.log(`Press "ENTER" to play track`);
             debugLayer.log(`Press "->" to load next track`);
             ready = true;

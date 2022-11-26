@@ -31,15 +31,6 @@ interface PRESETS {
     channels: CHANNEL_PRESET[];
 }
 
-interface MIDI_COMMAND {
-    name: string;
-    midi: number;
-    time: number;
-    velocity: number;
-    duration: number;
-}
-
-
 interface INTERNAL_MIDI_NOTE_COMMAND {
     opCode: 'noteOn'|'noteOff';
     channel: {
@@ -58,15 +49,27 @@ interface INTERNAL_MIDI_PITCH_BEND_COMMAND {
     opCode: 'pitchBend';
     channel: {
         channelNumber: number;
-        percussion: boolean;
-        instrumentNumber: number;
     },
     payload: {
         pitchBend:number;
     }
 }
 
-type INTERNAL_MIDI_COMMAND = INTERNAL_MIDI_NOTE_COMMAND | INTERNAL_MIDI_PITCH_BEND_COMMAND;
+interface INTERNAL_MIDI_CONTROL_CHANGE_COMMAND {
+    opCode: 'controlChange';
+    channel: {
+        channelNumber: number;
+    },
+    payload: {
+        velocity:number;
+    }
+}
+
+type INTERNAL_MIDI_COMMAND =
+    INTERNAL_MIDI_NOTE_COMMAND |
+    INTERNAL_MIDI_PITCH_BEND_COMMAND |
+    INTERNAL_MIDI_CONTROL_CHANGE_COMMAND
+    ;
 
 export interface IMidiJson {
     header?: any;
@@ -76,12 +79,15 @@ export interface IMidiJson {
         startTime: number;
         duration: number;
         length: number;
-        controlChanges?: any;
         id: number;
         name?: string;
         channelNumber?: number;
         channel?: number;
-        pitchBends?: any;
+        pitchBends?: {
+            ticks: number;
+            time: number;
+            value: number;
+        }[];
         notes?:{
             name: string;
             midi: number;
@@ -91,6 +97,12 @@ export interface IMidiJson {
             durationTicks?: number;
             ticks?: number;
         }[];
+        controlChanges?: Record<string, {
+            number: number;
+            ticks: number;
+            time: number;
+            value: number;
+        }>,
         isPercussion?:boolean;
         instrumentNumber?: number;
         instrument?: {
@@ -191,9 +203,7 @@ namespace WaveForms {
 
     export const beat: WAVE_FORM = (fr: number, t: number): number => {
         return (
-            2/6 * square(fr / 2, t) +
-            3/6 * MathEx.clamp(3 * sin2(fr, t), -1,1) +
-            1/6 * MathEx.clamp(3 * sin2(fr + 5, t), -1,1)
+            triangle(fr, t)
         );
     }
 
@@ -258,7 +268,6 @@ class ASDRForm {
     private static _linear(t: number, b: number, c: number, d: number): number {
         return c * t / d + b;
     }
-
 
     public calcFactorByTime(t: number): {stopped:boolean,val:number} {
         let closestPrevPoint = this.attack;
@@ -733,11 +742,15 @@ class Oscillator {
     public balance: number = 0.5;
     public adsrForm: ASDRForm;
     public frequency: number;
-    public pitchBend: number = 0;
     public frequencyModulator:BaseModulator|undefined;
     public amplitudeModulator:BaseModulator|undefined;
     public lastTriggeredCommandIndex:number;
     public currentNoteId:number;
+    public channel = {
+        channelNumber: 0,
+        pitchBend:0,
+        velocity : 1,
+    }
 
     private startedAt:number;
 
@@ -756,9 +769,9 @@ class Oscillator {
         const t = currentSampleNum / this.tracker.sampleRate;
         if (this.startedAt === undefined) this.startedAt = t;
         const dTime = t - this.startedAt;
-        let frequency = this.frequency;
+        let frequency = this.frequency + this.channel.pitchBend;
         if (this.frequencyModulator!==undefined) frequency = this.frequencyModulator.getModulatedValue(frequency,dTime);
-        let currSample = Oscillator._generateWaveForm(this.velocity, this.waveForm, frequency, dTime);
+        let currSample = Oscillator._generateWaveForm(this.velocity * this.channel.velocity, this.waveForm, frequency, dTime);
         if (this.amplitudeModulator) currSample = this.amplitudeModulator.getModulatedValue(currSample, dTime);
         const balanceR = (this.balance + 1) / 2;
         const balanceL = 1 - balanceR;
@@ -810,12 +823,13 @@ export class Tracker {
             console.log(`track: ${t.name}`);
             //if (t.name!=='Guitar Solo') return;
             this.setTrackNotes(t);
+            this.setPitchBandEvents(t);
+            //this.setControlChangeEvents(t);
         });
     }
 
     private setTrackNotes(t:IMidiJson['tracks'][0]) {
-        if (!t.notes) return;
-        t.notes.forEach(n=>{
+        t.notes?.forEach(n=>{
 
             //if ([27,28,29,30,31].includes(instrumentNumber)) {
 
@@ -857,8 +871,50 @@ export class Tracker {
                     velocity: n.velocity,
                 }
             });
-            this.lastEventSampleNum = noteOffSampleNum;
+            if (noteOffSampleNum>this.lastEventSampleNum) this.lastEventSampleNum = noteOffSampleNum;
             //}
+        });
+    }
+
+    private setPitchBandEvents(t:IMidiJson['tracks'][0]):void {
+        t.pitchBends?.forEach(p=>{
+            const noteOnTime = p.time;
+            const channelNumber = t.channelNumber ?? t.channel ?? 0;
+            const sampleNum = ~~(noteOnTime * this.sampleRate);
+            if (!this.sampleToCommandsMap[sampleNum]) this.sampleToCommandsMap[sampleNum] = [];
+            this.sampleToCommandsMap[sampleNum].push({
+                opCode: 'pitchBend',
+                channel: {
+                    channelNumber,
+                },
+                payload: {
+                    // https://sites.uci.edu/camp2014/2014/04/30/managing-midi-pitchbend-messages/
+                    // 3. Multiply that by the number of semitones in the ± bend range.
+                    // 4. Divide that by 12 (the number of equal-tempered semitones in an octave)
+                    // and use the result as the exponent of 2 to get the pitchbend factor
+                    // (the value by which we will multiply the base frequency of the tone or the playback rate of the sample).
+                    pitchBend:   12 * p.value
+                }
+            });
+        })
+    }
+
+    private setControlChangeEvents(t:IMidiJson['tracks'][0]):void {
+        if (t.controlChanges===undefined) return;
+        Object.keys(t.controlChanges).forEach(k=>{
+            const ev = (t.controlChanges as IMidiJson['tracks'][0]['controlChanges'])![k];
+            const channelNumber = t.channelNumber ?? t.channel ?? 0;
+            const sampleNum = ~~(ev.time * this.sampleRate);
+            if (!this.sampleToCommandsMap[sampleNum]) this.sampleToCommandsMap[sampleNum] = [];
+            this.sampleToCommandsMap[sampleNum].push({
+                opCode:'controlChange',
+                channel: {
+                    channelNumber
+                },
+                payload: {
+                    velocity: ev.value
+                }
+            });
         });
     }
 
@@ -877,30 +933,52 @@ export class Tracker {
     }
 
     private execCommand(command: INTERNAL_MIDI_COMMAND,i:number):void {
-        if (command.opCode === 'noteOn') {
-
-            const instrumentSettings =
-                this.instrument.getOscillatorSettingsByMidiInstrumentNumber(command.channel.instrumentNumber,command.payload.note,command.channel.percussion);
-
-            const oscillator = new Oscillator(this);
-            oscillator.frequency = MIDI_NOTE_TO_FREQUENCY_TABLE[command.payload.note];
-            oscillator.velocity = command.payload.velocity;
-            oscillator.waveForm = instrumentSettings.waveForm;
-            oscillator.balance = this.presets.channels[command.channel.channelNumber]?.balance ?? 0.5;
-            oscillator.lastTriggeredCommandIndex = i;
-            oscillator.currentNoteId = command.payload.noteId;
-            oscillator.adsrForm = new ASDRForm(instrumentSettings.adsr);
-            oscillator.frequencyModulator = instrumentSettings.fm?.();
-            oscillator.amplitudeModulator = instrumentSettings.am?.();
-            this._oscillators.push(oscillator);
-        } else if (command.opCode === 'noteOff') {
-            for (let i = 0; i < this._oscillators.length; i++) {
-                if (this._oscillators[i].currentNoteId === command.payload.noteId) {
-                    this._oscillators[i].adsrForm.forceRelease = true;
-                    break;
-                }
+        switch (command.opCode) {
+            case "noteOn": {
+                const instrumentSettings =
+                    this.instrument.getOscillatorSettingsByMidiInstrumentNumber(command.channel.instrumentNumber, command.payload.note, command.channel.percussion);
+                const oscillator = new Oscillator(this);
+                oscillator.frequency = MIDI_NOTE_TO_FREQUENCY_TABLE[command.payload.note];
+                oscillator.velocity = command.payload.velocity;
+                oscillator.waveForm = instrumentSettings.waveForm;
+                oscillator.balance = this.presets.channels[command.channel.channelNumber]?.balance ?? 0.5;
+                oscillator.lastTriggeredCommandIndex = i;
+                oscillator.currentNoteId = command.payload.noteId;
+                oscillator.adsrForm = new ASDRForm(instrumentSettings.adsr);
+                oscillator.channel.channelNumber = command.channel.channelNumber;
+                oscillator.frequencyModulator = instrumentSettings.fm?.();
+                oscillator.amplitudeModulator = instrumentSettings.am?.();
+                this._oscillators.push(oscillator);
+                break;
             }
-        } else throw `unknown command ${command.opCode}`;
+            case "noteOff": {
+                for (let i = 0; i < this._oscillators.length; i++) {
+                    if (this._oscillators[i].currentNoteId === command.payload.noteId) {
+                        this._oscillators[i].adsrForm.forceRelease = true;
+                        break;
+                    }
+                }
+                break;
+            }
+            case "pitchBend": {
+                for (let i = 0; i < this._oscillators.length; i++) {
+                    if (this._oscillators[i].channel.channelNumber === command.channel.channelNumber) {
+                        this._oscillators[i].channel.pitchBend = command.payload.pitchBend;
+                    }
+                }
+                break;
+            }
+            // case "controlChange": {
+            //     for (let i = 0; i < this._oscillators.length; i++) {
+            //         if (this._oscillators[i].channel.channelNumber === command.channel.channelNumber) {
+            //             this._oscillators[i].channel.velocity = command.payload.velocity;
+            //         }
+            //     }
+            //     break;
+            // }
+            default:
+                throw `unknown command ${JSON.stringify(command)}`;
+        }
     }
 
     private generateSample(currentSampleNum: number):SAMPLE {
