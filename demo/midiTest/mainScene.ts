@@ -12,12 +12,6 @@ export class MainScene extends Scene {
         const debugLayer = new DebugLayer(this.game);
         this.appendChild(debugLayer);
 
-        const audio = document.createElement('audio');
-        audio.style.cssText = 'position: absolute;left: 0; right: 0;';
-        audio.controls = true;
-        document.body.appendChild(audio);
-        let ready = false;
-
         const tracks = [
             'drum_demo',
             'metallica2',
@@ -32,32 +26,28 @@ export class MainScene extends Scene {
         ]
         let i = 0;
 
+        const tracker = new Tracker();
+
         const loadNextTrack = async ()=>{
-            ready = false;
-            audio.pause();
             i = i % tracks.length;
             debugLayer.log(`loading track: ${tracks[i]}...`)
             const json = await new ResourceLoader(this.game).loadJSON<IMidiJson>(`./midiTest/data/tone/${tracks[i]}.json`);
-            const tracker = new Tracker();
             tracker.setTrack(json);
-            audio.src = await tracker.toURL(n=>debugLayer.println(`${~~(n*100)}%`));
+            await tracker.play1();
+            //audio.src = await tracker.toURL(n=>debugLayer.println(`${~~(n*100)}%`));
             debugLayer.log(`${tracks[i]}: Ready`);
-            debugLayer.log(`Press "ENTER" to play track`);
-            debugLayer.log(`Press "->" to load next track`);
-            ready = true;
+            debugLayer.log(`Press "->" to play next track`);
             i++;
         }
 
         this.keyboardEventHandler.on(KEYBOARD_EVENTS.keyPressed, async e=>{
-            if (e.button===KEYBOARD_KEY.ENTER) {
-                if (ready) audio.play().then();
-            } else if (e.button===KEYBOARD_KEY.RIGHT) {
+            if (e.button===KEYBOARD_KEY.RIGHT) {
                 loadNextTrack().then();
             }
         });
 
+        debugLayer.log(`Press "->" to load next track`);
 
-        loadNextTrack().then();
 
     }
 

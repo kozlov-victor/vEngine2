@@ -55,20 +55,10 @@ interface INTERNAL_MIDI_PITCH_BEND_COMMAND {
     }
 }
 
-interface INTERNAL_MIDI_CONTROL_CHANGE_COMMAND {
-    opCode: 'controlChange';
-    channel: {
-        channelNumber: number;
-    },
-    payload: {
-        velocity:number;
-    }
-}
 
 type INTERNAL_MIDI_COMMAND =
     INTERNAL_MIDI_NOTE_COMMAND |
-    INTERNAL_MIDI_PITCH_BEND_COMMAND |
-    INTERNAL_MIDI_CONTROL_CHANGE_COMMAND
+    INTERNAL_MIDI_PITCH_BEND_COMMAND
     ;
 
 export interface IMidiJson {
@@ -203,7 +193,7 @@ namespace WaveForms {
 
     export const beat: WAVE_FORM = (fr: number, t: number): number => {
         return (
-            triangle(fr, t)
+            sin2(fr, t)
         );
     }
 
@@ -797,6 +787,37 @@ for (let x = 0; x < 127; ++x) {
     MIDI_NOTE_TO_FREQUENCY_TABLE[x] = CalcUtils.midiNumberToFr(x);
 }
 
+class PlayingContext {
+
+    private readonly audioCtx:AudioContext;
+    private readonly source: AudioBufferSourceNode;
+    public readonly scriptNode: ScriptProcessorNode;
+
+    constructor(private readonly sampleRate: number) {
+        this.audioCtx = new AudioContext({sampleRate});
+        this.source = this.audioCtx.createBufferSource();
+        this.scriptNode = this.audioCtx.createScriptProcessor(4096, 1, 2);
+
+        this.source.connect(this.scriptNode);
+        this.scriptNode.connect(this.audioCtx.destination);
+        this.source.start();
+
+    }
+
+    public async stop():Promise<void> {
+        try {
+            // this.scriptNode.onaudioprocess = null;
+            // this.scriptNode.disconnect(this.audioCtx.destination);
+            // this.source.disconnect(this.scriptNode);
+            this.source.stop();
+            //await this.audioCtx.close();
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+}
+
 export class Tracker {
 
     private sampleToCommandsMap: Record<number, INTERNAL_MIDI_COMMAND[]>;
@@ -813,6 +834,7 @@ export class Tracker {
         this.lastEventSampleNum = 0;
         this.numOfTracks = 0;
         this.nextId = 0;
+        this._oscillators.length = 0;
     }
 
     public setTrack(midiJson:IMidiJson) {
@@ -888,34 +910,10 @@ export class Tracker {
                     channelNumber,
                 },
                 payload: {
-                    // https://sites.uci.edu/camp2014/2014/04/30/managing-midi-pitchbend-messages/
-                    // 3. Multiply that by the number of semitones in the ± bend range.
-                    // 4. Divide that by 12 (the number of equal-tempered semitones in an octave)
-                    // and use the result as the exponent of 2 to get the pitchbend factor
-                    // (the value by which we will multiply the base frequency of the tone or the playback rate of the sample).
                     pitchBend:   12 * p.value
                 }
             });
         })
-    }
-
-    private setControlChangeEvents(t:IMidiJson['tracks'][0]):void {
-        if (t.controlChanges===undefined) return;
-        Object.keys(t.controlChanges).forEach(k=>{
-            const ev = (t.controlChanges as IMidiJson['tracks'][0]['controlChanges'])![k];
-            const channelNumber = t.channelNumber ?? t.channel ?? 0;
-            const sampleNum = ~~(ev.time * this.sampleRate);
-            if (!this.sampleToCommandsMap[sampleNum]) this.sampleToCommandsMap[sampleNum] = [];
-            this.sampleToCommandsMap[sampleNum].push({
-                opCode:'controlChange',
-                channel: {
-                    channelNumber
-                },
-                payload: {
-                    velocity: ev.value
-                }
-            });
-        });
     }
 
     public async toURL(progress?:(n:number)=>void):Promise<string> {
@@ -929,7 +927,37 @@ export class Tracker {
             progress?.(i/this.lastEventSampleNum)
         }
         const blob = Wave.encodeWAV(res, this.sampleRate);
-        return await URL.createObjectURL(blob);
+        return URL.createObjectURL(blob);
+    }
+
+    private playingContext:PlayingContext;
+
+    public async play1():Promise<void> {
+
+        await this.playingContext?.stop();
+
+        let ptr = 0;
+
+        if (!this.playingContext) this.playingContext = new PlayingContext(this.sampleRate);
+
+        this.playingContext.scriptNode.onaudioprocess = (audioProcessingEvent)=> {
+
+            const inputBuffer = audioProcessingEvent.inputBuffer;
+            const outputBuffer = audioProcessingEvent.outputBuffer;
+
+            const outputDataLeft = outputBuffer.getChannelData(0);
+            const outputDataRight = outputBuffer.getChannelData(1);
+            for (let i = 0; i < inputBuffer.length; i++) {
+                if (ptr>=this.lastEventSampleNum) {
+                    this.playingContext.stop();
+                    break;
+                }
+                const sample = this.generateSample(ptr);
+                outputDataLeft[i] = sample.L;
+                outputDataRight[i] = sample.R;
+                ptr++;
+            }
+        };
     }
 
     private execCommand(command: INTERNAL_MIDI_COMMAND,i:number):void {
@@ -968,14 +996,6 @@ export class Tracker {
                 }
                 break;
             }
-            // case "controlChange": {
-            //     for (let i = 0; i < this._oscillators.length; i++) {
-            //         if (this._oscillators[i].channel.channelNumber === command.channel.channelNumber) {
-            //             this._oscillators[i].channel.velocity = command.payload.velocity;
-            //         }
-            //     }
-            //     break;
-            // }
             default:
                 throw `unknown command ${JSON.stringify(command)}`;
         }
