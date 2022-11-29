@@ -14,13 +14,13 @@ export class MainScene extends Scene {
         this.appendChild(debugLayer);
 
         const tracks = [
+            'jazz1',
             'bach',
             'drum_demo',
             'metallica2',
             'rock2',
             'c',
             'e',
-            'jazz1',
             'jazz2',
             'b',
             'd', 'f',

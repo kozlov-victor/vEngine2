@@ -19,7 +19,6 @@ export interface IASDR {
     r:number;
 }
 
-
 export interface CHANNEL_PRESET {
     balance: number;
 }
@@ -52,10 +51,26 @@ export interface INTERNAL_MIDI_PITCH_BEND_COMMAND {
     }
 }
 
+export interface INTERNAL_MIDI_PEDAL_ON_COMMAND {
+    opCode: 'pedalOn';
+    channel: {
+        channelNumber: number;
+    }
+}
+
+export interface INTERNAL_MIDI_PEDAL_OFF_COMMAND {
+    opCode: 'pedalOff';
+    channel: {
+        channelNumber: number;
+    }
+}
+
 
 export type INTERNAL_MIDI_COMMAND =
-    INTERNAL_MIDI_NOTE_COMMAND |
-    INTERNAL_MIDI_PITCH_BEND_COMMAND
+    INTERNAL_MIDI_NOTE_COMMAND          |
+    INTERNAL_MIDI_PITCH_BEND_COMMAND    |
+    INTERNAL_MIDI_PEDAL_ON_COMMAND      |
+    INTERNAL_MIDI_PEDAL_OFF_COMMAND
     ;
 
 export interface IMidiJson {
@@ -89,7 +104,7 @@ export interface IMidiJson {
             ticks: number;
             time: number;
             value: number;
-        }>,
+        }[]>,
         isPercussion?:boolean;
         instrumentNumber?: number;
         instrument?: {

@@ -9,6 +9,7 @@ export class ASDRForm {
 
     private forceReleaseStartedAt:number;
     public forceRelease:boolean = false; // key is released, so force go to "d" ("delay") segment if ADSR curve
+    public pedalOn:boolean = false; // if pedal is on note continue to play event after key release
 
     constructor(asdr:IASDR) {
         const {a,s,d,r} =  asdr;
@@ -24,7 +25,7 @@ export class ASDRForm {
 
     public calcFactorByTime(t: number): {stopped:boolean,val:number} {
         let closestPrevPoint = this.attack;
-        if (this.forceRelease) {
+        if (this.forceRelease && !this.pedalOn) {
             if (this.forceReleaseStartedAt===undefined) this.forceReleaseStartedAt = t;
             const d = t - this.forceReleaseStartedAt;
             if (d>this.release.to.time - this.release.from.time) {

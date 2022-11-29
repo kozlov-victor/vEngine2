@@ -30,11 +30,10 @@ export class MidiTracker {
         midiJson.tracks.forEach(t=>{
             if (!t.notes?.length) return;
             this.numOfTracks++;
-            console.log(`track: ${t.name}`);
             //if (t.name!=='Guitar Solo') return;
             this.setTrackNotes(t);
             this.setPitchBandEvents(t);
-            //this.setControlChangeEvents(t);
+            this.setPedalEvents(t);
         });
     }
 
@@ -99,6 +98,29 @@ export class MidiTracker {
                 },
                 payload: {
                     pitchBend:   12 * p.value
+                }
+            });
+        })
+    }
+
+    private setPedalEvents(t:IMidiJson['tracks'][0]):void {
+        const pedalControlNumbers = [64];
+        const pedalEvents:({time:number,value:number})[] = [];
+        pedalControlNumbers.forEach(n=>{
+            if (t.controlChanges?.[`${n}`]!==undefined) {
+                pedalEvents.push(...t.controlChanges[`${n}`]);
+            }
+        });
+        pedalEvents.forEach(p=>{
+            const eventTime = p.time;
+            const channelNumber = t.channelNumber ?? t.channel ?? 0;
+            const sampleNum = ~~(eventTime * this.sampleRate);
+            const opCode = p.value===0?'pedalOff':'pedalOn';
+            if (!this.sampleToCommandsMap[sampleNum]) this.sampleToCommandsMap[sampleNum] = [];
+            this.sampleToCommandsMap[sampleNum].push({
+                opCode,
+                channel: {
+                    channelNumber,
                 }
             });
         })
@@ -171,6 +193,24 @@ export class MidiTracker {
                 for (let i = 0; i < this._oscillators.length; i++) {
                     if (this._oscillators[i].currentNoteId === command.payload.noteId) {
                         this._oscillators[i].adsrForm.forceRelease = true;
+                        break;
+                    }
+                }
+                break;
+            }
+            case "pedalOn": {
+                for (let i = 0; i < this._oscillators.length; i++) {
+                    if (this._oscillators[i].channel.channelNumber === command.channel.channelNumber) {
+                        this._oscillators[i].adsrForm.pedalOn = true;
+                        break;
+                    }
+                }
+                break;
+            }
+            case "pedalOff": {
+                for (let i = 0; i < this._oscillators.length; i++) {
+                    if (this._oscillators[i].channel.channelNumber === command.channel.channelNumber) {
+                        this._oscillators[i].adsrForm.pedalOn = false;
                         break;
                     }
                 }
