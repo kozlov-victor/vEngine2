@@ -1,9 +1,10 @@
 import {Scene} from "@engine/scene/scene";
 import {DebugLayer} from "@engine/scene/debugLayer";
 import {ResourceLoader} from "@engine/resources/resourceLoader";
-import {IMidiJson, Tracker} from "./midi";
 import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
+import {MidiTracker} from "./midi-player/midiTracker";
+import {IMidiJson} from "./midi-player/internal/types";
 
 export class MainScene extends Scene {
 
@@ -13,6 +14,7 @@ export class MainScene extends Scene {
         this.appendChild(debugLayer);
 
         const tracks = [
+            'bach',
             'drum_demo',
             'metallica2',
             'rock2',
@@ -26,7 +28,7 @@ export class MainScene extends Scene {
         ]
         let i = 0;
 
-        const tracker = new Tracker();
+        const tracker = new MidiTracker();
 
         const loadNextTrack = async ()=>{
             i = i % tracks.length;
