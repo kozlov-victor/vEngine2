@@ -81,7 +81,7 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
             this._stack[this._stackPointer].alpha = alpha;
             this._stack[this._stackPointer].frameBuffer.bind();
             this._stack[this._stackPointer].frameBuffer.clear(Color.NONE,false);
-            this._stackPointer++;
+            ++this._stackPointer;
         } else {
             this._getLast().frameBuffer.bind();
         }

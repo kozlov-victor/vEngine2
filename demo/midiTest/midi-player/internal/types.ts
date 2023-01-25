@@ -1,4 +1,4 @@
-import {AbstractModulator} from "./modulators";
+import {AbstractModulator, SimpleWheelChannelModulator} from "./modulators";
 
 export interface ADSRPoint {
     from: { time: number, val: number },
@@ -14,30 +14,41 @@ export interface SAMPLE {
 
 export interface IASDR {
     a:number;
-    s:number;
     d:number;
+    s:number;
     r:number;
+    base: number;
 }
 
 export interface CHANNEL_PRESET {
     balance: number;
+    velocity:number;
+    am:SimpleWheelChannelModulator;
+    instrumentNumber:number;
+    pitchBend:number;
+    pedalOn:boolean;
 }
 
-export interface PRESETS {
-    channels: CHANNEL_PRESET[];
-}
-
-export interface INTERNAL_MIDI_NOTE_COMMAND {
-    opCode: 'noteOn'|'noteOff';
+export interface INTERNAL_MIDI_NOTE_ON_COMMAND {
+    opCode: 'noteOn';
     channel: {
         channelNumber: number;
-        percussion: boolean;
         instrumentNumber: number;
+        percussion: boolean;
     },
     payload: {
-        noteId:number;
         note: number;
         velocity: number;
+    }
+}
+
+export interface INTERNAL_MIDI_NOTE_OFF_COMMAND {
+    opCode: 'noteOff';
+    channel: {
+        channelNumber: number;
+    },
+    payload: {
+        note: number;
     }
 }
 
@@ -65,12 +76,56 @@ export interface INTERNAL_MIDI_PEDAL_OFF_COMMAND {
     }
 }
 
+export interface INTERNAL_MIDI_SET_CHANNEL_VELOCITY_COMMAND {
+    opCode: 'channelVelocity';
+    channel: {
+        channelNumber: number;
+    },
+    payload: {
+        velocity:number;
+    }
+}
+
+export interface INTERNAL_MIDI_SET_MODULATION_WHEEL_COMMAND {
+    opCode: 'modulationWheel';
+    channel: {
+        channelNumber: number;
+    },
+    payload: {
+        value:number;
+    }
+}
+
+export interface INTERNAL_MIDI_SET_PAN_COMMAND {
+    opCode: 'setPan';
+    channel: {
+        channelNumber: number;
+    },
+    payload: {
+        value:number;
+    }
+}
+
+export interface INTERNAL_MIDI_ALL_SOUND_OFF_COMMAND {
+    opCode: 'allSoundOff';
+}
+
+export interface INTERNAL_MIDI_ALL_NOTES_OFF_COMMAND {
+    opCode: 'allNotesOff';
+}
+
 
 export type INTERNAL_MIDI_COMMAND =
-    INTERNAL_MIDI_NOTE_COMMAND          |
-    INTERNAL_MIDI_PITCH_BEND_COMMAND    |
-    INTERNAL_MIDI_PEDAL_ON_COMMAND      |
-    INTERNAL_MIDI_PEDAL_OFF_COMMAND
+    INTERNAL_MIDI_NOTE_ON_COMMAND                   |
+    INTERNAL_MIDI_NOTE_OFF_COMMAND                  |
+    INTERNAL_MIDI_PITCH_BEND_COMMAND                |
+    INTERNAL_MIDI_PEDAL_ON_COMMAND                  |
+    INTERNAL_MIDI_PEDAL_OFF_COMMAND                 |
+    INTERNAL_MIDI_SET_CHANNEL_VELOCITY_COMMAND      |
+    INTERNAL_MIDI_SET_MODULATION_WHEEL_COMMAND      |
+    INTERNAL_MIDI_SET_PAN_COMMAND                   |
+    INTERNAL_MIDI_ALL_SOUND_OFF_COMMAND             |
+    INTERNAL_MIDI_ALL_NOTES_OFF_COMMAND
     ;
 
 export interface IMidiJson {
@@ -116,10 +171,17 @@ export interface IMidiJson {
     })[]
 }
 
-export interface InstrumentSettings {
-    adsr: IASDR;
-    waveForm: WAVE_FORM;
+export interface IWaveFormItem {
+    amplitude:number;
+    form:WAVE_FORM;
     fm?:()=>AbstractModulator;
     am?:()=>AbstractModulator;
+    fmInstance?:AbstractModulator;
+    amInstance?:AbstractModulator;
+}
+
+export interface InstrumentSettings {
+    adsr: IASDR;
+    waveForms: IWaveFormItem[];
     name: string;
 }

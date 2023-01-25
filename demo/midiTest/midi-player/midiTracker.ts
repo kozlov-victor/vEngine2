@@ -1,130 +1,58 @@
 import {Wave} from "../../pix32/ym-player/internal/wav";
-import {IMidiJson, INTERNAL_MIDI_COMMAND, PRESETS, SAMPLE} from "./internal/types";
+import {CHANNEL_PRESET, IMidiJson, INTERNAL_MIDI_COMMAND, IWaveFormItem, SAMPLE} from "./internal/types";
 import {Instrument} from "./internal/instrument";
 import {Oscillator} from "./internal/oscillator";
-import {defaultPresets, MIDI_NOTE_TO_FREQUENCY_TABLE, wait} from "./internal/consts";
+import {MIDI_NOTE_TO_FREQUENCY_TABLE, wait} from "./internal/consts";
 import {PlayingContext} from "./internal/playingContext";
-import {ASDRForm} from "./internal/asdrForm";
+import {AdsrForm} from "./internal/adsrForm";
+import {TrackFromJsonSetter} from "./internal/parser/trackFromJsonSetter";
+import {TrackFromMidiBinSetter} from "./internal/parser/trackFromMidiBinSetter";
+import {SimpleWheelChannelModulator} from "./internal/modulators";
 
 export class MidiTracker {
 
     private sampleToCommandsMap: Record<number, INTERNAL_MIDI_COMMAND[]>;
     private lastEventSampleNum: number;
     private numOfTracks:number;
-    private nextId:number;
+    private channelPresets:CHANNEL_PRESET[] = Array(16);
     private instrument = new Instrument();
     public readonly _oscillators: Oscillator[] = [];
 
-    constructor(public readonly sampleRate: number = 11025, private presets: PRESETS = defaultPresets) {}
+    constructor(public readonly sampleRate: number = 11025) {}
 
     private _init() {
         this.sampleToCommandsMap = {};
         this.lastEventSampleNum = 0;
         this.numOfTracks = 0;
-        this.nextId = 0;
         this._oscillators.length = 0;
+        this.instrument.resetCache();
+        const l = this.channelPresets.length;
+        for (let i=0;i<l;i++) {
+            this.channelPresets[i] = {
+                balance: 0.5,
+                velocity: 1,
+                am: new SimpleWheelChannelModulator(0),
+                instrumentNumber: 0,
+                pitchBend: 0,
+                pedalOn: false,
+            };
+        }
     }
 
-    public setTrack(midiJson:IMidiJson) {
+    public setTrackFromJSON(midiJson:IMidiJson) {
         this._init();
-        midiJson.tracks.forEach(t=>{
-            if (!t.notes?.length) return;
-            this.numOfTracks++;
-            //if (t.name!=='Guitar Solo') return;
-            this.setTrackNotes(t);
-            this.setPitchBandEvents(t);
-            this.setPedalEvents(t);
-        });
+        const setter = new TrackFromJsonSetter(midiJson, this.sampleRate, this.sampleToCommandsMap);
+        this.lastEventSampleNum = setter.getLastEventSampleNum();
+        this.numOfTracks = setter.getNumOfTracks();
     }
 
-    private setTrackNotes(t:IMidiJson['tracks'][0]) {
-        t.notes?.forEach(n=>{
-
-            //if ([27,28,29,30,31].includes(instrumentNumber)) {
-
-            const instrumentNumber = t.instrumentNumber ?? t.instrument?.number ?? 1;
-            const percussion = t.isPercussion===true || t.instrument?.family === 'drums';
-            const channelNumber = t.channelNumber ?? t.channel ?? 0;
-            const noteId = this.nextId++;
-
-            const noteOnTime = n.time;
-            const noteOnSampleNum = ~~(noteOnTime * this.sampleRate);
-            if (!this.sampleToCommandsMap[noteOnSampleNum]) this.sampleToCommandsMap[noteOnSampleNum] = [];
-            this.sampleToCommandsMap[noteOnSampleNum].push({
-                opCode: 'noteOn',
-                channel: {
-                    channelNumber,
-                    percussion,
-                    instrumentNumber
-                },
-                payload: {
-                    note: n.midi,
-                    noteId,
-                    velocity: n.velocity
-                }
-            });
-
-            const noteOffTime = n.time + n.duration;
-            const noteOffSampleNum = ~~(noteOffTime * this.sampleRate);
-            if (!this.sampleToCommandsMap[noteOffSampleNum]) this.sampleToCommandsMap[noteOffSampleNum] = [];
-            this.sampleToCommandsMap[noteOffSampleNum].push({
-                opCode: 'noteOff',
-                channel: {
-                    channelNumber,
-                    percussion,
-                    instrumentNumber
-                },
-                payload: {
-                    note: n.midi,
-                    noteId,
-                    velocity: n.velocity,
-                }
-            });
-            if (noteOffSampleNum>this.lastEventSampleNum) this.lastEventSampleNum = noteOffSampleNum;
-            //}
-        });
+    public setTrackFromMidiBin(data:ArrayBuffer) {
+        this._init();
+        const setter = new TrackFromMidiBinSetter(data, this.sampleRate, this.sampleToCommandsMap);
+        this.lastEventSampleNum = setter.getLastEventSampleNum();
+        this.numOfTracks = setter.getNumOfTracks();
     }
 
-    private setPitchBandEvents(t:IMidiJson['tracks'][0]):void {
-        t.pitchBends?.forEach(p=>{
-            const noteOnTime = p.time;
-            const channelNumber = t.channelNumber ?? t.channel ?? 0;
-            const sampleNum = ~~(noteOnTime * this.sampleRate);
-            if (!this.sampleToCommandsMap[sampleNum]) this.sampleToCommandsMap[sampleNum] = [];
-            this.sampleToCommandsMap[sampleNum].push({
-                opCode: 'pitchBend',
-                channel: {
-                    channelNumber,
-                },
-                payload: {
-                    pitchBend:   12 * p.value
-                }
-            });
-        })
-    }
-
-    private setPedalEvents(t:IMidiJson['tracks'][0]):void {
-        const pedalControlNumbers = [64];
-        const pedalEvents:({time:number,value:number})[] = [];
-        pedalControlNumbers.forEach(n=>{
-            if (t.controlChanges?.[`${n}`]!==undefined) {
-                pedalEvents.push(...t.controlChanges[`${n}`]);
-            }
-        });
-        pedalEvents.forEach(p=>{
-            const eventTime = p.time;
-            const channelNumber = t.channelNumber ?? t.channel ?? 0;
-            const sampleNum = ~~(eventTime * this.sampleRate);
-            const opCode = p.value===0?'pedalOff':'pedalOn';
-            if (!this.sampleToCommandsMap[sampleNum]) this.sampleToCommandsMap[sampleNum] = [];
-            this.sampleToCommandsMap[sampleNum].push({
-                opCode,
-                channel: {
-                    channelNumber,
-                }
-            });
-        })
-    }
 
     public async toURL(progress?:(n:number)=>void):Promise<string> {
         const res: number[] = [];
@@ -158,7 +86,7 @@ export class MidiTracker {
             const outputDataLeft = outputBuffer.getChannelData(0);
             const outputDataRight = outputBuffer.getChannelData(1);
             for (let i = 0; i < inputBuffer.length; i++) {
-                if (ptr>=this.lastEventSampleNum) {
+                if (ptr>=this.lastEventSampleNum && this._oscillators.length===0) {
                     this.playingContext.stop();
                     break;
                 }
@@ -170,58 +98,84 @@ export class MidiTracker {
         };
     }
 
-    private execCommand(command: INTERNAL_MIDI_COMMAND,i:number):void {
+    private execCommand(command: INTERNAL_MIDI_COMMAND):void {
         switch (command.opCode) {
-            case "noteOn": {
+            case 'noteOn': {
                 const instrumentSettings =
                     this.instrument.getOscillatorSettingsByMidiInstrumentNumber(command.channel.instrumentNumber, command.payload.note, command.channel.percussion);
                 const oscillator = new Oscillator(this);
-                oscillator.frequency = MIDI_NOTE_TO_FREQUENCY_TABLE[command.payload.note];
+                oscillator.note = command.payload.note;
                 oscillator.velocity = command.payload.velocity;
-                oscillator.waveForm = instrumentSettings.waveForm;
-                oscillator.balance = this.presets.channels[command.channel.channelNumber]?.balance ?? 0.5;
-                oscillator.lastTriggeredCommandIndex = i;
-                oscillator.currentNoteId = command.payload.noteId;
-                oscillator.adsrForm = new ASDRForm(instrumentSettings.adsr);
-                oscillator.channel.channelNumber = command.channel.channelNumber;
-                oscillator.frequencyModulator = instrumentSettings.fm?.();
-                oscillator.amplitudeModulator = instrumentSettings.am?.();
+                const waveForms:IWaveFormItem[] = [];
+                instrumentSettings.waveForms.forEach(wf=>{
+                    const wfCopy:IWaveFormItem = {
+                        ...wf,
+                        amInstance:wf.am?.(),
+                        fmInstance:wf.fm?.(),
+                    };
+                    waveForms.push(wfCopy);
+                });
+                oscillator.waveForms = waveForms;
+                oscillator.currentNoteNumber = command.payload.note;
+                oscillator.adsrForm = new AdsrForm(instrumentSettings.adsr);
+                oscillator.channel = this.channelPresets[command.channel.channelNumber];
                 this._oscillators.push(oscillator);
                 break;
             }
-            case "noteOff": {
+            case 'noteOff': {
                 for (let i = 0; i < this._oscillators.length; i++) {
-                    if (this._oscillators[i].currentNoteId === command.payload.noteId) {
+                    if (
+                        this._oscillators[i].channel === this.channelPresets[command.channel.channelNumber] &&
+                        this._oscillators[i].currentNoteNumber === command.payload.note
+                    ) {
                         this._oscillators[i].adsrForm.forceRelease = true;
-                        break;
                     }
                 }
                 break;
             }
-            case "pedalOn": {
-                for (let i = 0; i < this._oscillators.length; i++) {
-                    if (this._oscillators[i].channel.channelNumber === command.channel.channelNumber) {
-                        this._oscillators[i].adsrForm.pedalOn = true;
-                        break;
-                    }
-                }
+            case 'pedalOn': {
+                const currentChannel:CHANNEL_PRESET = this.channelPresets[command.channel.channelNumber];
+                currentChannel.pedalOn = true;
                 break;
             }
-            case "pedalOff": {
-                for (let i = 0; i < this._oscillators.length; i++) {
-                    if (this._oscillators[i].channel.channelNumber === command.channel.channelNumber) {
-                        this._oscillators[i].adsrForm.pedalOn = false;
-                        break;
-                    }
-                }
+            case 'pedalOff': {
+                const currentChannel:CHANNEL_PRESET = this.channelPresets[command.channel.channelNumber];
+                currentChannel.pedalOn = false;
                 break;
             }
-            case "pitchBend": {
-                for (let i = 0; i < this._oscillators.length; i++) {
-                    if (this._oscillators[i].channel.channelNumber === command.channel.channelNumber) {
-                        this._oscillators[i].channel.pitchBend = command.payload.pitchBend;
-                    }
-                }
+            case 'channelVelocity': {
+                const currentChannel:CHANNEL_PRESET = this.channelPresets[command.channel.channelNumber];
+                currentChannel.velocity = command.payload.velocity;
+                break;
+            }
+            case 'pitchBend': {
+                const currentChannel:CHANNEL_PRESET = this.channelPresets[command.channel.channelNumber];
+                currentChannel.pitchBend = command.payload.pitchBend;
+                break;
+            }
+            case 'modulationWheel': {
+                console.log(`wheel: ${command.payload.value}`);
+                const currentChannel:CHANNEL_PRESET = this.channelPresets[command.channel.channelNumber];
+                currentChannel.am.frequency = 2*command.payload.value;
+                break;
+            }
+            case 'setPan': {
+                console.log(`pan: ${command.payload.value} for channel ${command.channel.channelNumber}`);
+                const currentChannel:CHANNEL_PRESET = this.channelPresets[command.channel.channelNumber];
+                currentChannel.balance = command.payload.value;
+                break;
+            }
+            case 'allSoundOff': {
+                this._oscillators.length = 0;
+                break;
+            }
+            case 'allNotesOff': {
+                this._oscillators.forEach(o=>{
+                    o.adsrForm.forceRelease = true;
+                });
+                this.channelPresets.forEach(p=>{
+                   p.pedalOn = false;
+                });
                 break;
             }
             default:
@@ -230,11 +184,11 @@ export class MidiTracker {
     }
 
     private generateSample(currentSampleNum: number):SAMPLE {
-        currentSampleNum %= this.lastEventSampleNum;
+
         const possibleCommands = this.sampleToCommandsMap[currentSampleNum];
         if (possibleCommands !== undefined) {
             for (let i = 0; i < possibleCommands.length; i++) {
-                this.execCommand(possibleCommands[i],i);
+                this.execCommand(possibleCommands[i]);
             }
         }
 
@@ -244,11 +198,27 @@ export class MidiTracker {
             sumAll.L += sample.L;
             sumAll.R += sample.R;
         }
-
         const mixed:SAMPLE = {L:0, R:0};
         mixed.L = sumAll.L/this.numOfTracks;
         mixed.R = sumAll.R/this.numOfTracks;
         return mixed;
+
+        // mix by formula: out = (s1 + s2) - (s1 * s2);
+        // const A = 100;
+        // if (!this._oscillators.length) return {L:0,R:0};
+        // const res:SAMPLE = this._oscillators[0].generateSample(currentSampleNum);
+        // res.L*=A;
+        // res.R*=A;
+        // for (let i: number = 1; i < this._oscillators.length; i++) {
+        //     const sample = this._oscillators[i].generateSample(currentSampleNum);
+        //     sample.L*=A;
+        //     sample.R*=A;
+        //     res.L = (res.L+sample.L) - (res.L*sample.L);
+        //     res.R = (res.R+sample.R) - (res.R*sample.R);
+        // }
+        // res.L/=A;
+        // res.R/=A;
+        // return res;
     }
 
 }

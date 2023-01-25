@@ -29,7 +29,7 @@ export class ObjectPool<T extends IReleasealable> {
                 return possible;
             }
         }
-        for (let i:number=0;i<this._ptr;i++) {
+        for (let i:number=0;i<this._ptr;++i) {
             const possible = this._getFreeObjectAt(i);
             if (possible!==undefined) {
                 this._ptr = (++i)%this.numberOfInstances;

@@ -12,8 +12,6 @@ const batch:boolean = true;
 
 export class MainScene extends Scene {
 
-    private models:RenderableModel[] = [];
-
     public override onReady():void {
 
         const drawLayer = new Layer(this.game);
@@ -41,11 +39,9 @@ export class MainScene extends Scene {
                 model.pos.setXY(Math.random()*this.game.width,Math.random()*this.game.height);
                 model.transformPoint.setToCenter();
                 model.angleVelocity = 0.4;
-                //model.addBehaviour(new DraggableBehaviour(this.game));
                 model.appendTo(this.getLayerAtIndex(0));
-                this.models.push(model);
             }
-            debugLayer.println(`objects: ${this.models.length}`);
+            debugLayer.println(`objects: ${this.getLayerAtIndex(0).getChildrenCount()}`);
         });
 
 

@@ -19,7 +19,7 @@ export namespace EasingCubic {
     // cubic easing out - decelerating to zero velocity
     export const Out:EaseFn = (t: number, b: number, c: number, d: number): number =>{
         t /= d;
-        t--;
+        --t;
         return c * (t * t * t + 1) + b;
     };
 

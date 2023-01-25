@@ -1,5 +1,6 @@
 import {MathEx} from "@engine/misc/math/mathEx";
 import {WAVE_FORM} from "./types";
+import {NoiseGenerator} from "./noiseGenerator";
 
 export namespace WaveForms {
 
@@ -9,21 +10,71 @@ export namespace WaveForms {
 
     export const sin2: WAVE_FORM = (fr: number, t: number): number => {
         return (
-            0.7 * sin(fr, t) +
+            0.6 * sin(fr, t) +
             0.2 * sin(2/1 * fr, t) +
-            0.1 * sin(3/2 * fr, t)
+            0.2 * sin(3/2 * fr, t)
         );
     }
 
-    export const noise: WAVE_FORM = (fr: number, t: number): number => {
-        const r = Math.random();
-        return r * 2 - 1;
+    export const chorus: WAVE_FORM = (fr: number, t: number): number => {
+        const numOfVoices = 4;
+        const harmonics = [1,2,3/2,3];
+        let offset = 0;
+        const offsetDelta = 1/(fr*2*Math.PI)*0.21; //  of period
+        let result = 0;
+        for (let i=0;i<numOfVoices;i++) {
+            const mod = i%3;
+            let fn:WAVE_FORM;
+            if (mod===0) fn = sinHarmonics;
+            else if (mod===1) fn = triangle;
+            else fn = square;
+
+            result+=fn(fr*harmonics[(i%harmonics.length)],t+offset);
+            offset+=offsetDelta;
+        }
+        return result / numOfVoices;
     }
 
-    export const beat: WAVE_FORM = (fr: number, t: number): number => {
+    export const sinHarmonics: WAVE_FORM = (fr: number, t: number): number => {
         return (
-            sin2(fr, t)
+            1/3 * sin(fr, t) +
+            1/3 * sin(2 * fr, t) +
+            1/3 * sin(4 * fr, t)
         );
+    }
+
+    export const triangle: WAVE_FORM = (fr: number, t: number): number => {
+        return Math.asin(sin(fr, t));
+    }
+
+    export const triangleNoise: WAVE_FORM = (fr: number, t: number): number => {
+        return (
+            1/2 * triangle(fr, t) +
+            1/2 * whiteNoise(fr, t)
+        );
+    }
+
+    export const sawTooth: WAVE_FORM = (fr: number, t: number): number => {
+        return (
+            sin(       fr,   t)   -
+            1/2  * sin(2 * fr,   t)   +
+            1/3  * sin(3 * fr,   t)   -
+            1/4  * sin(4 * fr,   t)   +
+            1/5  * sin(5 * fr,   t)   -
+            1/6  * sin(6 * fr,   t)
+        );
+    }
+
+    export const whiteNoise: WAVE_FORM = (fr: number, t: number): number => {
+        return NoiseGenerator.getNextWhiteNoiseSample();
+    }
+
+    export const pinkNoise: WAVE_FORM = (fr: number, t: number): number => {
+        return NoiseGenerator.getNextPinkNoiseSample();
+    }
+
+    export const brownNoise: WAVE_FORM = (fr: number, t: number): number => {
+        return NoiseGenerator.getNextBrownNoiseSample();
     }
 
     export const square: WAVE_FORM = (fr: number, t: number): number => {
@@ -31,7 +82,11 @@ export namespace WaveForms {
         return sample < 0 ? -1 : 1;
     }
 
-    export const triangle: WAVE_FORM = (fr: number, t: number): number => {
+    export const trapezia: WAVE_FORM = (fr: number, t: number): number => {
+        return MathEx.clamp(2*triangle(fr, t),-1,1);
+    }
+
+    export const harmonic: WAVE_FORM = (fr: number, t: number): number => {
         return (
             0.54 * sin2(        fr,   t)    +
             0.1  * sin2(2/1 * fr,   t)    +
@@ -47,7 +102,7 @@ export namespace WaveForms {
 
     export const tremolo: WAVE_FORM = (fr: number, t: number): number => {
         const semiPeriod = ~~(t * 100) % 6;
-        if (semiPeriod > 3) fr *= 2;
+        if (semiPeriod > 3) fr *= 3/2;
         return sin(fr, t);
     }
 
@@ -58,10 +113,32 @@ export namespace WaveForms {
         return sin(fr, t);
     }
 
-    export const distortion: WAVE_FORM = (fr: number, t: number): number => {
-        const x = triangle(fr, t);
-        const base = 0.5;
-        return MathEx.clamp(x/(1 - Math.abs(x)),-base,base);
+
+    export const dirtyWave = (deviation:number, step:number, wave:WAVE_FORM):WAVE_FORM=>{
+        return (fr:number,t:number):number=>{
+            let out = 0;
+            let from = fr - deviation;
+            if (from<0) from = 0;
+            const to = fr + deviation;
+            let cnt = 0;
+            for (let i=from;i<to;i+=step) {
+                out+=wave(i,t);
+                cnt++;
+            }
+            out*=5; // compensation
+            out/=cnt;
+            return out;
+        }
+    }
+
+    export const dirtyWaveNoise = (deviation:number, step:number, wave:WAVE_FORM, noise:WAVE_FORM, noiseAmplitude: number):WAVE_FORM=>{
+        const waveFn = dirtyWave(deviation, step, wave);
+        return (fr:number,t:number):number=>{
+            return (
+                (1 - noiseAmplitude) * MathEx.clamp(waveFn(fr,t),-1,1) +
+                (noiseAmplitude) * noise(fr, t)
+            );
+        }
     }
 
 }

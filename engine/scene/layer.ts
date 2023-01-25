@@ -125,8 +125,9 @@ export class Layer implements IParentChild, IFilterable,IAlphaBlendable, IWithId
     public render():void {
         const renderer = this.game.getRenderer();
         const layerStatePointer:IStateStackPointer = renderer.beforeItemStackDraw(this.filters,this.alpha,false);
-        for (const c of this._children) {
-            c.render();
+        for (let i=0,l=this._children.length;i<l;++i) {
+            const c = this._children[i];
+            if (c!==undefined) c.render();
         }
         renderer.afterItemStackDraw(layerStatePointer);
     }

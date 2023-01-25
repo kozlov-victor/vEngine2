@@ -23,7 +23,7 @@ export abstract class FontContextAbstractFactory<T> {
     protected abstract drawLetter(context:T,letter:string,x:number,y:number):void;
 
     private fontFamily:string;
-    private fontSize:number;
+    protected fontSize:number;
 
     private partialContext:IPartialFontContext;
     private readonly pageRects:ISize[] = [];
@@ -104,6 +104,10 @@ export abstract class FontContextAbstractFactory<T> {
         };
         this.partialContext.pageRects.forEach((size:ISize,i:number)=>this.generateTexturePage(i,size));
         return this._createFont();
+    }
+
+    public getFontSize():number {
+        return this.fontSize;
     }
 
     private generateTexturePage(pageId:number,size:ISize):void {

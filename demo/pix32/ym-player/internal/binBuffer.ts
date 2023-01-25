@@ -33,6 +33,10 @@ export class BinBuffer {
         }
     }
 
+    public isEOF():boolean {
+        return this.pointer === this.view.byteLength;
+    }
+
     public getPointer():number{
         return this.pointer;
     }

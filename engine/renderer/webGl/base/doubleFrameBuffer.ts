@@ -30,7 +30,7 @@ export class DoubleFrameBuffer {
 
         filter.getPainter().attachTexture('texture',texture);
         filter.doFilter(this.getDestBuffer(),nextFrameBuffer);
-        for (let i:number=1;i<len;i++){
+        for (let i:number=1;i<len;++i){
             if (!filters[i].enabled) continue;
             this.flip();
             filters[i].getPainter().attachTexture('texture',this.getSourceBuffer().getTexture());

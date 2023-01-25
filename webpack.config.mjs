@@ -84,7 +84,6 @@ const getBranchName = ()=>{
 
 class WebpackDonePlugin{
     apply(compiler){
-
         compiler.hooks.done.tap('compilation',  (stats)=> {
             const {mm,hh,ss} = getTime();
             setTimeout(()=>{
@@ -246,9 +245,8 @@ export default async (env = {})=>{
             modules: ['node_modules', path.resolve(__dirname, 'node_tools/loaders')]
         },
         watchOptions: {
-            aggregateTimeout: 200,
-            poll: 1000,
-            ignored: ['/demo/out/', '/node_modules/'],
+            aggregateTimeout: 2000,
+            ignored: ['**/demo/out/', '/node_modules/'],
         },
         performance: {
             maxEntrypointSize: 1024000,
@@ -333,9 +331,9 @@ export default async (env = {})=>{
 
         config.optimization.minimizer = [new TerserPlugin.default({
             terserOptions: {
-                ecma: false,
+                ecma: 5,
                 parse: {},
-                compress: {},
+                compress: !debug,
                 mangle: {
                     properties: {
                         regex: "/^_/",
@@ -344,7 +342,7 @@ export default async (env = {})=>{
                 module: false,
                 toplevel: true,
                 ie8: true,
-                keep_classnames: undefined,
+                keep_classnames: false,
                 keep_fnames: false,
                 safari10: true,
             }

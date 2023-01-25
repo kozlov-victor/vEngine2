@@ -30,6 +30,7 @@ import {CubeMapTexture} from "@engine/renderer/webGl/base/cubeMapTexture";
 import {SimpleColoredRectPainter} from "@engine/renderer/webGl/programs/impl/base/simpleRect/simpleColoredRectPainter";
 import {Mat4Special} from "@engine/misc/math/mat4Special";
 import type {Mesh3d} from "@engine/renderable/impl/3d/mesh3d";
+import {CullFace} from "@engine/renderable/impl/3d/mesh3d";
 import {BufferInfo} from "@engine/renderer/webGl/base/bufferInfo";
 import {GlCachedAccessor} from "@engine/renderer/webGl/blender/glCachedAccessor";
 import {LruMap} from "@engine/misc/collection/lruMap";
@@ -41,12 +42,11 @@ import {SkyBox} from "@engine/renderable/impl/skyBox";
 import {SkyBoxPainter} from "@engine/renderer/webGl/programs/impl/base/skyBox/skyBoxPainter";
 import {MathEx} from "@engine/misc/math/mathEx";
 import {Point3d} from "@engine/geometry/point3d";
+import {IRenderTarget} from "@engine/renderer/abstract/abstractRenderer";
 import Mat16Holder = Mat4.Mat16Holder;
 import glEnumToString = DebugUtil.glEnumToString;
 import IDENTITY = Mat4.IDENTITY;
 import MAT16 = Mat4.MAT16;
-import {CullFace} from "@engine/renderable/impl/3d/mesh3d";
-import {IRenderTarget} from "@engine/renderer/abstract/abstractRenderer";
 
 
 const getCtx = (el:HTMLCanvasElement):Optional<WebGLRenderingContext>=>{
@@ -421,9 +421,12 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     }
 
     public flush() {
+        if (!this._batchPainterHolder.isInvoked()) return;
+        const bp = this._batchPainterHolder.getInstance(this._gl);
+        if (!bp.isDirty()) return;
         this._glCachedAccessor.setDepthTest(false);
         this._glCachedAccessor.setCullFace(CullFace.none);
-        this._batchPainterHolder.getInstance(this._gl).flush(this);
+        bp.flush(this);
     }
 
     public setLockRect(rect:IRectJSON):void {

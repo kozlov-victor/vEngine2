@@ -1,86 +1,772 @@
-import {createRange} from "@engine/misc/object";
 import {WaveForms} from "./waveForms";
 import {InstrumentSettings} from "./types";
-import {DecayFrequencyModulator, WaveMultiplicativeModulator} from "./modulators";
+import {
+    ConstantDecayFrequencyModulator, DynamicDecayFrequencyModulator,
+    WaveAdditiveModulator, WaveAdditiveModulator2, WaveMultiplicativeModulator
+} from "./modulators";
 
 export class Instrument {
+    // https://virtualpiano.eu/
     public readonly defaultInstrumentSettings = {
-        piano: {
-            adsr: {a: 0.02, s: 0.1, d: 0.3, r: 1},
-            waveForm: WaveForms.triangle,
-            name: 'piano',
+        grandPiano: {
+            adsr: {a: 0.001, d: 0.07, s: 0.6, r: 1, base: 0.6},
+            waveForms: [{amplitude: 0.9, form: WaveForms.harmonic},{amplitude:0.1, form: WaveForms.triangle}] ,
+            name: 'grandPiano',
+        } as InstrumentSettings,
+        brightPiano: {
+            adsr: {a: 0.003, d: 0.08, s: 0.4, r: 0.9, base: 0.5},
+            waveForms: [{amplitude: 0.9, form: WaveForms.harmonic},{amplitude:0.1, form: WaveForms.triangle}],
+            name: 'brightPiano',
+        } as InstrumentSettings,
+        syntPiano: {
+            adsr: {a: 0.001, d: 0.07, s: 0.5, r: 0.9, base: 0.6},
+            waveForms: [{amplitude: 0.9, form: WaveForms.triangle},{amplitude:0.1, form: WaveForms.sawTooth}],
+            name: 'syntPiano',
+        } as InstrumentSettings,
+        clavier: {
+            adsr: {a: 0.001, d: 0.1, s: 0.4, r: 0.8, base: 0.5},
+            waveForms: [{amplitude: 0.9, form: WaveForms.triangle},{amplitude:0.1, form: WaveForms.sawTooth}],
+            name: 'clavier',
+        } as InstrumentSettings,
+        xylophone: {
+            adsr: {a: 0.001, d: 0.1, s: 0.8, r: 2, base: 0.5},
+            waveForms: [
+                {
+                    amplitude: 0.9, form: WaveForms.triangle,
+                    am: ()=>new WaveAdditiveModulator2(8, 0.15),
+                },
+                {amplitude:0.1, form: WaveForms.sin}
+            ],
+            name: 'xylophone',
+        } as InstrumentSettings,
+        musicBox: {
+            adsr: {a: 0.02, d: 0.1, s: 0.8, r: 2, base: 0.5},
+            waveForms: [
+                {
+                    amplitude: 0.9, form: WaveForms.triangle,
+                    am: ()=>new WaveAdditiveModulator2(8, 0.15),
+                },
+                {amplitude:0.1, form: WaveForms.sin}
+            ],
+            name: 'musicBox',
+        } as InstrumentSettings,
+        marimba: {
+            adsr: {a: 0.001, d: 0.1, s: 0.8, r: 1, base: 0.5},
+            waveForms: [
+                {
+                    amplitude:1,form: WaveForms.dirtyWave(5,1, WaveForms.triangle),
+                    am: ()=>new WaveAdditiveModulator2(8, 0.15),
+                }
+            ],
+            name: 'marimba',
+        } as InstrumentSettings,
+        tubularBells: {
+            adsr: {a: 0.001, d: 0.1, s: 0.9, r: 2, base: 0.5},
+            waveForms: [
+                {
+                    amplitude:1, form: WaveForms.dirtyWave(7,1, WaveForms.triangle),
+                    am: ()=>new WaveAdditiveModulator2(8, 0.3),
+                }
+            ],
+            name: 'tubularBells',
+        } as InstrumentSettings,
+        violin: {
+            adsr: {a: 0.04, d: 0.1, s: 5, r: 0.8, base: 0.8},
+            waveForms: [
+                {
+                    amplitude: 0.9, form: WaveForms.sinHarmonics,
+                    fm: ()=>new WaveAdditiveModulator(2,0.01),
+                },
+                {amplitude:0.1, form: WaveForms.triangle}
+            ],
+            name: 'violin',
+        } as InstrumentSettings,
+        violinTremolo: {
+            adsr: {a: 0.04, d: 0.1, s: 5, r: 0.8, base: 0.8},
+            waveForms: [
+                {
+                    amplitude: 0.9, form: WaveForms.sinHarmonics,
+                    am: ()=>new WaveAdditiveModulator2(3, 0.5),
+                    fm: ()=>new WaveAdditiveModulator(2,0.01),
+                },
+                {amplitude:0.1, form: WaveForms.triangle}
+            ],
+            name: 'violinTremolo',
         } as InstrumentSettings,
         bass: {
-            adsr: {a: 0.02, s: 0.1, d: 0.4, r: 1},
-            waveForm: WaveForms.triangle,
+            adsr: {a: 0.02, d: 0.01, s: 0.8, r: 0.7, base: 0.6},
+            waveForms: [{amplitude: 0.9, form: WaveForms.sawTooth},{amplitude:0.1, form: WaveForms.sinHarmonics}],
             name: 'bass'
         } as InstrumentSettings,
-        distortion: {
-            adsr: {a: 0.01, s: 0.01, d: 1.1, r: 0.4},
-            waveForm: WaveForms.distortion,
-            name: 'distortion'
+        pizzicatto: {
+            adsr: {a: 0.01, d: 0.07, s: 0.3, r: 0.4, base: 0.5},
+            waveForms: [{amplitude: 0.9, form: WaveForms.sawTooth},{amplitude:0.1, form: WaveForms.sinHarmonics}],
+            name: 'pizzicatto'
+        } as InstrumentSettings,
+        electroGuitarClean: {
+            adsr: {a: 0.01, d: 0.01, s: 1.1, r: 0.4, base: 0.5},
+            waveForms: [
+                {amplitude:0.4, form: WaveForms.triangle},
+                {amplitude:0.4, form: WaveForms.sawTooth},
+                {amplitude:0.2, form: WaveForms.square}
+            ],
+            name: 'electroGuitarClean',
+        } as InstrumentSettings,
+        electroGuitarOverdriven: {
+            adsr: {a: 0.01, d: 0.01, s: 1.1, r: 0.4, base: 0.5},
+            waveForms: [{amplitude: 0.8, form: WaveForms.square},{amplitude:0.2, form: WaveForms.sawTooth}],
+            name: 'electroGuitarOverdriven',
+        } as InstrumentSettings,
+        electroGuitarDistortion: {
+            adsr: {a: 0.01, d: 0.01, s: 1.1, r: 0.4, base: 0.5},
+            waveForms: [
+                {
+                    amplitude: 0.7, form: WaveForms.trapezia
+                },
+                {
+                    amplitude: 0.2, form: WaveForms.sawTooth,
+                    am: ()=>new WaveAdditiveModulator2(5, 0.5),
+                },
+                {
+                    amplitude: 0.1, form: WaveForms.square,
+                    am: ()=>new WaveAdditiveModulator2(3, 0.5),
+                }
+            ],
+            name: 'distortion',
+        } as InstrumentSettings,
+        acousticBassDrum: {
+            adsr: {a: 0.01, d: 0.05, s: 0.1, r: 0.2, base: 0.5},
+            waveForms: [
+                {
+                    amplitude: 1, form: WaveForms.dirtyWave(5,2, WaveForms.sin),
+                    fm: ()=>new ConstantDecayFrequencyModulator(110,160),
+                }
+            ],
+            name: 'acousticBassDrum',
         } as InstrumentSettings,
         bassDrum: {
-            adsr: {a: 0.01, s: 0.05, d: 0.2, r: 0.3},
-            waveForm: WaveForms.beat,
-            fm: ()=>new DecayFrequencyModulator(70,145),
+            adsr: {a: 0.01, d: 0.05, s: 0.1, r: 0.2, base: 0.5},
+            waveForms: [
+                {
+                    amplitude: 1, form: WaveForms.dirtyWave(10,2, WaveForms.sin),
+                    fm: ()=>new ConstantDecayFrequencyModulator(110,165),
+                }
+            ],
             name: 'bassDrum',
         } as InstrumentSettings,
         snareDrum: {
-            adsr: {a: 0.01, s: 0.05, d: 0.1, r: 0.01},
-            waveForm: WaveForms.beat,
-            fm: ()=>new DecayFrequencyModulator(80,150),
+            adsr: {a: 0.001, d: 0.01, s: 0.06, r: 0.1, base: 0.5},
+            waveForms: [
+                {
+                    amplitude: 1, form: WaveForms.dirtyWave(10,2, WaveForms.triangle),
+                    fm: ()=>new ConstantDecayFrequencyModulator(190,320),
+                }
+            ],
             name: 'snareDrum',
         } as InstrumentSettings,
+        electricSnareDrum: {
+            adsr: {a: 0.001, d: 0.01, s: 0.09, r: 0.15, base: 0.5},
+            waveForms: [
+                {
+                    amplitude: 1, form: WaveForms.dirtyWave(8,2, WaveForms.triangle),
+                    fm: ()=>new ConstantDecayFrequencyModulator(195,325),
+                }
+            ],
+            name: 'electricSnareDrum',
+        } as InstrumentSettings,
+        electricDynamicDrum: {
+            adsr: {a: 0.001, d: 0.01, s: 0.09, r: 0.15, base: 0.5},
+            waveForms: [
+                {
+                    amplitude: 1, form: WaveForms.dirtyWave(5,2, WaveForms.triangle),
+                    fm: ()=>new DynamicDecayFrequencyModulator(325),
+                }
+            ],
+            name: 'electricDynamicDrum',
+        } as InstrumentSettings,
+        snareDrumClosed: {
+            adsr: {a: 0.001, d: 0.01, s: 0.06, r: 0.01, base: 0.5},
+            waveForms: [
+                {
+                    amplitude: 1, form: WaveForms.dirtyWave(10,2, WaveForms.triangle),
+                    fm: ()=>new ConstantDecayFrequencyModulator(185,340),
+                }
+            ],
+            name: 'snareDrumClosed',
+        } as InstrumentSettings,
         lowFloorTomDrum: {
-            adsr: {a: 0.01, s: 0.05, d: 0.1, r: 0.01},
-            waveForm: WaveForms.beat,
-            fm: ()=>new DecayFrequencyModulator(90,42),
+            adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.1, base: 0.5},
+            waveForms: [
+                {
+                    amplitude: 1, form: WaveForms.dirtyWave(10,2, WaveForms.triangle),
+                    fm: ()=>new ConstantDecayFrequencyModulator(160,320),
+                }
+            ],
             name: 'lowFloorTomDrum',
         } as InstrumentSettings,
+        timpani: {
+            adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.1, base: 0.5},
+            waveForms: [
+                {
+                    amplitude: 1, form: WaveForms.dirtyWave(10,2, WaveForms.triangle),
+                    fm: ()=>new DynamicDecayFrequencyModulator(330),
+                }
+            ],
+            name: 'timpani',
+        } as InstrumentSettings,
+        steelDrums: {
+            adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.1, base: 0.5},
+            waveForms: [
+                {
+                    amplitude: 1, form: WaveForms.dirtyWave(5,1, WaveForms.triangle),
+                    fm: ()=>new DynamicDecayFrequencyModulator(190),
+                }
+            ],
+            name: 'steelDrums',
+        } as InstrumentSettings,
+        woodDrums: {
+            adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.1, base: 0.5},
+            waveForms: [
+                {
+                    amplitude: 1, form: WaveForms.dirtyWaveNoise(10,2, WaveForms.triangle, WaveForms.whiteNoise, 0.4),
+                    fm: ()=>new DynamicDecayFrequencyModulator(210),
+                }
+            ],
+            name: 'woodDrums',
+        } as InstrumentSettings,
         highFloorTomDrum: {
-            adsr: {a: 0.01, s: 0.05, d: 0.1, r: 0.01},
-            waveForm: WaveForms.beat,
-            fm: ()=>new DecayFrequencyModulator(95,44),
+            adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.12, base: 0.5},
+            waveForms: [
+                {
+                    amplitude: 1, form: WaveForms.dirtyWave(10,2, WaveForms.triangle),
+                    fm: ()=>new ConstantDecayFrequencyModulator(170,320),
+                }
+            ],
             name: 'highFloorTomDrum',
         } as InstrumentSettings,
+        lowTomDrum: {
+            adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.15, base: 0.5},
+            waveForms: [
+                {
+                    amplitude: 1, form: WaveForms.dirtyWave(10,2, WaveForms.triangle),
+                    fm: () => new ConstantDecayFrequencyModulator(165, 310),
+                }
+            ],
+            name: 'lowTomDrum',
+        } as InstrumentSettings,
         lowMidTomDrum: {
-            adsr: {a: 0.01, s: 0.05, d: 0.1, r: 0.01},
-            waveForm: WaveForms.beat,
-            fm: ()=>new DecayFrequencyModulator(100,152),
+            adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.15, base: 0.5},
+            waveForms: [
+                {
+                    amplitude: 1, form: WaveForms.dirtyWave(10,2, WaveForms.triangle),
+                    fm: ()=>new ConstantDecayFrequencyModulator(175,320),
+                }
+            ],
             name: 'lowMidTomDrum',
         } as InstrumentSettings,
         highMidTomDrum: {
-            adsr: {a: 0.01, s: 0.05, d: 0.1, r: 0.01},
-            waveForm: WaveForms.beat,
-            fm: () => new DecayFrequencyModulator(110, 155),
+            adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.2, base: 0.5},
+            waveForms: [
+                {
+                    amplitude: 1, form: WaveForms.dirtyWave(10,2, WaveForms.triangle),
+                    fm: () => new ConstantDecayFrequencyModulator(180, 320),
+                }
+            ],
             name: 'highMidTomDrum',
         } as InstrumentSettings,
-        hiHatClosedDrum: {
-            adsr: {a: 0.01, s: 0.01, d: 0.05, r: 0.05},
-            waveForm: WaveForms.noise,
-            name: 'hiHatClosedDrum',
+        highWoodBlock: {
+            adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.2, base: 0.5},
+            waveForms: [
+                {
+                    amplitude: 1, form: WaveForms.dirtyWave(10,2, WaveForms.triangle),
+                    fm: ()=>new ConstantDecayFrequencyModulator(190,1),
+                }
+            ],
+            name: 'highWoodBlock',
+        } as InstrumentSettings,
+        lowWoodBlock: {
+            adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.2, base: 0.5},
+            waveForms: [
+                {
+                    amplitude: 1, form: WaveForms.dirtyWave(10,2, WaveForms.triangle),
+                    fm: ()=>new ConstantDecayFrequencyModulator(150,1),
+                }
+            ],
+            name: 'lowWoodBlock',
+        } as InstrumentSettings,
+        highBongo: {
+            adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.2, base: 0.5},
+            waveForms: [
+                {
+                    amplitude: 1, form: WaveForms.dirtyWave(5,1, WaveForms.triangle),
+                    fm: ()=>new ConstantDecayFrequencyModulator(200,1),
+                }
+            ],
+            name: 'highBongo',
+        } as InstrumentSettings,
+        lowBongo: {
+            adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.2, base: 0.5},
+            waveForms: [
+                {
+                    amplitude: 1, form: WaveForms.dirtyWave(5,2, WaveForms.triangle),
+                    fm: ()=>new ConstantDecayFrequencyModulator(150,1),
+                }
+            ],
+            name: 'lowBongo',
+        } as InstrumentSettings,
+        muteHighConga: {
+            adsr: {a: 0.001, d: 0.01, s: 0.05, r: 0.1, base: 0.5},
+            waveForms: [
+                {
+                    amplitude: 1, form: WaveForms.dirtyWave(5,2, WaveForms.sinHarmonics),
+                    fm: ()=>new ConstantDecayFrequencyModulator(300,1),
+                }
+            ],
+            name: 'muteHighConga',
+        } as InstrumentSettings,
+        openHighConga: {
+            adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.2, base: 0.5},
+            waveForms: [
+                {
+                    amplitude: 1, form: WaveForms.dirtyWave(5,2, WaveForms.sinHarmonics),
+                    fm: ()=>new ConstantDecayFrequencyModulator(300,1),
+                }
+            ],
+            name: 'muteHighConga',
+        } as InstrumentSettings,
+        lowConga: {
+            adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.2, base: 0.5},
+            waveForms: [
+                {
+                    amplitude: 1, form: WaveForms.dirtyWave(5,2, WaveForms.sinHarmonics),
+                    fm: ()=>new ConstantDecayFrequencyModulator(250,1),
+                }
+            ],
+            name: 'lowConga',
+        } as InstrumentSettings,
+        highTimbale: {
+            adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.2, base: 0.5},
+            waveForms: [
+                {
+                    amplitude: 1, form: WaveForms.dirtyWave(3,2, WaveForms.square),
+                    fm: ()=>new ConstantDecayFrequencyModulator(300,1),
+                }
+            ],
+            name: 'highTimbale',
+        } as InstrumentSettings,
+        lowTimbale: {
+            adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.2, base: 0.5},
+            waveForms: [
+                {
+                    amplitude: 1, form: WaveForms.dirtyWave(3,2, WaveForms.square),
+                    fm: ()=>new ConstantDecayFrequencyModulator(260,1),
+                }
+            ],
+            name: 'lowTimbale',
+        } as InstrumentSettings,
+        highAgogo: {
+            adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.2, base: 0.5},
+            waveForms: [
+                {
+                    amplitude: 1, form: WaveForms.dirtyWave(3,2, WaveForms.triangle),
+                    fm: ()=>new ConstantDecayFrequencyModulator(850,1),
+                }
+            ],
+            name: 'highAgogo',
+        } as InstrumentSettings,
+        lowAgogo: {
+            adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.2, base: 0.5},
+            waveForms: [
+                {
+                    amplitude: 1, form: WaveForms.dirtyWave(3,2, WaveForms.triangle),
+                    fm: ()=>new ConstantDecayFrequencyModulator(790,1),
+                }
+            ],
+            name: 'lowAgogo',
+        } as InstrumentSettings,
+        highTomDrum: {
+            adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.15, base: 0.5},
+            waveForms: [
+                {
+                    amplitude: 1, form: WaveForms.dirtyWave(10,2, WaveForms.triangle),
+                    fm: ()=>new ConstantDecayFrequencyModulator(185,325),
+                }
+            ],
+            name: 'highTomDrum',
         } as InstrumentSettings,
         hiHatOpenedDrum: {
-            adsr: {a: 0.01, s: 0.02, d: 0.1, r: 0.2},
-            waveForm: WaveForms.noise,
+            adsr: {a: 0.001, d: 0.02, s: 0.1, r: 0.2, base: 0.5},
+            waveForms: [
+                {
+                    amplitude: 1, form: WaveForms.dirtyWaveNoise(90,2, WaveForms.triangle, WaveForms.pinkNoise, 0.65),
+                    fm: ()=>new ConstantDecayFrequencyModulator(705,50),
+                }
+            ],
             name: 'hiHatOpenedDrum',
         } as InstrumentSettings,
+        hiHatClosedDrum: {
+            adsr: {a: 0.001, d: 0.01, s: 0.05, r: 0.05, base: 0.5},
+            waveForms: [
+                {
+                    amplitude: 1, form: WaveForms.dirtyWaveNoise(90,2, WaveForms.triangle, WaveForms.pinkNoise, 0.6),
+                    fm: ()=>new ConstantDecayFrequencyModulator(700,50),
+                }
+            ],
+            name: 'hiHatClosedDrum',
+        } as InstrumentSettings,
+        pedalHiHat: {
+            adsr: {a: 0.001, d: 0.015, s: 0.01, r: 0.05, base: 0.5},
+            waveForms: [
+                {
+                    amplitude: 1, form: WaveForms.dirtyWaveNoise(90,2, WaveForms.triangle, WaveForms.pinkNoise, 0.6),
+                    fm: ()=>new ConstantDecayFrequencyModulator(710,50),
+                }
+            ],
+            name: 'hiHatClosedDrum',
+        } as InstrumentSettings,
+        clap: {
+            adsr: {a: 0.001, d: 0.025, s: 0.02, r: 0.02, base: 0.5},
+            waveForms: [
+                {
+                    amplitude: 1, form: WaveForms.dirtyWaveNoise(80,2, WaveForms.triangle, WaveForms.whiteNoise, 0.5),
+                    fm: ()=>new ConstantDecayFrequencyModulator(610,50),
+                }
+            ],
+            name: 'clap',
+        } as InstrumentSettings,
+        fxHelicopter: {
+            adsr: {a: 0.001, d: 0.025, s: 5, r: 0.1, base: 0.5},
+            waveForms: [
+                {
+                    amplitude: 1, form: WaveForms.brownNoise,
+                    am: ()=>new WaveMultiplicativeModulator(10),
+                }
+            ],
+            name: 'fxHelicopter',
+        } as InstrumentSettings,
+        fxTremolo: {
+            adsr: {a: 0.001, d: 0.025, s: 5, r: 0.1, base: 0.5},
+            waveForms: [{amplitude: 1, form: WaveForms.tremolo}],
+            name: 'fxTremolo',
+        } as InstrumentSettings,
+        fxTremolo2: {
+            adsr: {a: 0.001, d: 0.025, s: 5, r: 0.1, base: 0.5},
+            waveForms: [{amplitude: 1, form: WaveForms.tremolo2}],
+            name: 'fxTremolo2',
+        } as InstrumentSettings,
+        fxApplause: {
+            adsr: {a: 0.001, d: 0.025, s: 5, r: 0.1, base: 0.5},
+            waveForms: [
+                {
+                    amplitude: 1, form: WaveForms.whiteNoise,
+                    am: ()=>new WaveMultiplicativeModulator(4),
+                }
+            ],
+            name: 'fxApplause',
+        } as InstrumentSettings,
+        sideStick: {
+            adsr: {a: 0.001, d: 0.025, s: 0.02, r: 0.02, base: 0.5},
+            waveForms: [
+                {
+                    amplitude: 1, form: WaveForms.dirtyWave(400,10, WaveForms.triangle),
+                    fm: ()=>new ConstantDecayFrequencyModulator(1000,1),
+                }
+            ],
+            name: 'sideStick',
+        } as InstrumentSettings,
+        cymbalDrum: {
+            adsr: {a: 0.001, d: 0.025, s: 0.8, r: 0.02, base: 0.5},
+            waveForms: [
+                {
+                    amplitude: 1, form: WaveForms.dirtyWaveNoise(80,2, WaveForms.triangle, WaveForms.pinkNoise, 0.6),
+                    fm: ()=>new ConstantDecayFrequencyModulator(600,50),
+                }
+            ],
+            name: 'cymbalDrum',
+        } as InstrumentSettings,
+        crashCymbal1: {
+            adsr: {a: 0.001, d: 0.03, s: 1, r: 0.2, base: 0.5},
+            waveForms: [
+                {
+                    amplitude: 0.4, form: WaveForms.dirtyWave(22,1, WaveForms.triangle),
+                    fm: ()=>new ConstantDecayFrequencyModulator(600,-15),
+                },
+                {
+                    amplitude: 0.5, form: WaveForms.dirtyWave(22,1, WaveForms.triangle),
+                    fm: ()=>new ConstantDecayFrequencyModulator(440,-15),
+                },
+                {
+                    amplitude: 0.1, form: WaveForms.brownNoise,
+                }
+            ],
+            name: 'crashCymbal1',
+        } as InstrumentSettings,
+        crashCymbal2: {
+            adsr: {a: 0.001, d: 0.03, s: 1, r: 0.2, base: 0.5},
+            waveForms: [
+                {
+                    amplitude: 0.4, form: WaveForms.dirtyWave(20,1, WaveForms.triangle),
+                    fm: ()=>new ConstantDecayFrequencyModulator(570,-15),
+                },
+                {
+                    amplitude: 0.5, form: WaveForms.dirtyWave(22,1, WaveForms.triangle),
+                    fm: ()=>new ConstantDecayFrequencyModulator(440,-15),
+                },
+                {
+                    amplitude: 0.1, form: WaveForms.brownNoise,
+                }
+            ],
+            name: 'crashCymbal2',
+        } as InstrumentSettings,
+        rideCymbal1: {
+            adsr: {a: 0.001, d: 0.03, s: 1, r: 0.2, base: 0.5},
+            waveForms: [
+                {
+                    amplitude: 0.4, form: WaveForms.dirtyWave(20,1, WaveForms.triangle),
+                    fm: ()=>new ConstantDecayFrequencyModulator(500,-15),
+                },
+                {
+                    amplitude: 0.5, form: WaveForms.dirtyWave(20,1, WaveForms.triangle),
+                    fm: ()=>new ConstantDecayFrequencyModulator(440,-15),
+                },
+                {
+                    amplitude: 0.1, form: WaveForms.brownNoise,
+                }
+            ],
+            name: 'rideCymbal1',
+        } as InstrumentSettings,
+        rideCymbal2: {
+            adsr: {a: 0.001, d: 0.03, s: 1, r: 0.2, base: 0.5},
+            waveForms: [
+                {
+                    amplitude: 0.4, form: WaveForms.dirtyWave(20,1, WaveForms.triangle),
+                    fm: ()=>new ConstantDecayFrequencyModulator(400,-15),
+                },
+                {
+                    amplitude: 0.5, form: WaveForms.dirtyWave(20,1, WaveForms.triangle),
+                    fm: ()=>new ConstantDecayFrequencyModulator(440,-15),
+                },
+                {
+                    amplitude: 0.1, form: WaveForms.brownNoise,
+                }
+            ],
+            name: 'rideCymbal2',
+        } as InstrumentSettings,
+        splashCymbal: {
+            adsr: {a: 0.001, d: 0.03, s: 0.5, r: 0.4, base: 0.5},
+            waveForms: [
+                {
+                    amplitude: 0.4, form: WaveForms.dirtyWave(25,1, WaveForms.triangle),
+                    fm: ()=>new ConstantDecayFrequencyModulator(500,-22),
+                },
+                {
+                    amplitude: 0.5, form: WaveForms.dirtyWave(25,1, WaveForms.triangle),
+                    fm: ()=>new ConstantDecayFrequencyModulator(400,-22),
+                },
+                {
+                    amplitude: 0.05, form: WaveForms.brownNoise,
+                }
+            ],
+            name: 'splashCymbal',
+        } as InstrumentSettings,
+        vibraslap: {
+            adsr: {a: 0.001, d: 0.02, s: 0.22, r: 0.6, base: 0.5},
+            waveForms: [
+                {
+                    amplitude: 1, form: WaveForms.dirtyWaveNoise(80,2, WaveForms.triangle, WaveForms.pinkNoise, 0.4),
+                    fm: ()=>new ConstantDecayFrequencyModulator(700,50),
+                    am: ()=>new WaveMultiplicativeModulator(8),
+                }
+            ],
+            name: 'vibraslap',
+        } as InstrumentSettings,
+        rideBellDrum: {
+            adsr: {a: 0.01, d: 0.07, s: 0.3, r: 0.4, base: 0.5},
+            waveForms: [
+                {
+                    amplitude: 1, form: WaveForms.sinHarmonics,
+                    fm: ()=>new ConstantDecayFrequencyModulator(155,0),
+                }
+            ],
+            name: 'rideBellDrum',
+        } as InstrumentSettings,
+        cowBellDrum: {
+            adsr: {a: 0.01, d: 0.07, s: 0.1, r: 0.2, base: 0.5},
+            waveForms: [
+                {
+                    amplitude: 1, form: WaveForms.sinHarmonics,
+                    fm: ()=>new ConstantDecayFrequencyModulator(800,0),
+                }
+            ],
+            name: 'rideBellDrum',
+        } as InstrumentSettings,
         organ: {
-            adsr: {a: 0.01, s: 0.001, d: 10, r: 1},
-            waveForm: WaveForms.triangle,
+            adsr: {a: 0.01, d: 0.001, s: 10, r: 1, base: 0.5},
+            waveForms: [
+                {amplitude: 0.9, form: WaveForms.harmonic},
+                {amplitude:0.1, form: WaveForms.triangle}
+            ],
             name: 'organ'
         } as InstrumentSettings,
+        syntesatorTriangle: {
+            adsr: {a: 0.01, d: 0.01, s: 10, r: 0.6, base: 0.5},
+            waveForms: [
+                {
+                    amplitude: 1, form: WaveForms.triangle,
+                    am: ()=>new WaveAdditiveModulator2(12, 0.3),
+                }
+            ],
+            name: 'syntesatorTriangle'
+        } as InstrumentSettings,
+        syntesatorSquare: {
+            adsr: {a: 0.01, d: 0.01, s: 10, r: 0.6, base: 0.5},
+            waveForms: [
+                {
+                    amplitude: 1, form: WaveForms.square,
+                    am: ()=>new WaveAdditiveModulator2(12, 0.3),
+                },
+            ],
+            name: 'syntesatorSquare'
+        } as InstrumentSettings,
+        syntesatorSawtooth: {
+            adsr: {a: 0.01, d: 0.01, s: 10, r: 0.6, base: 0.5},
+            waveForms: [
+                {
+                    amplitude: 1, form: WaveForms.sawTooth,
+                    am: ()=>new WaveAdditiveModulator2(12, 0.3),
+                }
+            ],
+            name: 'syntesatorSawtooth'
+        } as InstrumentSettings,
+        acoustic: {
+            adsr: {a: 0.02, d: 0.1, s: 0.9, r: 0.4, base: 0.5},
+            waveForms: [
+                {amplitude: 0.9, form: WaveForms.sinHarmonics},{amplitude:0.1, form: WaveForms.triangle}
+            ],
+            name: 'acoustic'
+        } as InstrumentSettings,
+        acousticSteel: {
+            adsr: {a: 0.02, d: 0.1, s: 0.9, r: 0.4, base: 0.5},
+            waveForms: [{amplitude: 0.8, form: WaveForms.sawTooth},{amplitude:0.2,form:WaveForms.triangle}],
+            name: 'acousticSteel'
+        } as InstrumentSettings,
+        harp: {
+            adsr: {a: 0.02, d: 0.1, s: 0.9, r: 2, base: 0.5},
+            waveForms: [{amplitude: 0.9, form: WaveForms.triangle},{amplitude:0.1,form:WaveForms.sawTooth}],
+            name: 'harp'
+        } as InstrumentSettings,
+        acousticSteelMuted: {
+            adsr: {a: 0.02, d: 0.1, s: 0.3, r: 0.3, base: 0.5},
+            waveForms: [{amplitude: 0.8, form: WaveForms.sawTooth},{amplitude:0.2,form:WaveForms.triangle}],
+            name: 'acousticSteelMuted'
+        } as InstrumentSettings,
+        chorus: {
+            adsr: {a: 0.02, d: 0.1, s: 2, r: 0.4, base: 0.5},
+            waveForms: [
+                {
+                    amplitude: 0.9, form: WaveForms.chorus,
+                    am: ()=>new WaveAdditiveModulator2(10, 0.13),
+                },
+                {
+                    amplitude:0.1,form:WaveForms.sawTooth,
+                    am: ()=>new WaveAdditiveModulator2(8, 0.2),
+                }
+            ],
+            name: 'chorus'
+        } as InstrumentSettings,
+        orchestra: {
+            adsr: {a: 0.01, d: 0.1, s: 3, r: 0.4, base: 0.5},
+            waveForms: [
+                {
+                    amplitude: 0.9, form: WaveForms.chorus},{amplitude:0.1,form:WaveForms.sawTooth,
+                    am: ()=>new WaveAdditiveModulator2(9, 0.15),
+                }
+            ],
+            name: 'orchestra'
+        } as InstrumentSettings,
+        acousticHarmonics: {
+            adsr: {a: 0.02, d: 0.1, s: 0.8, r: 0.4, base: 0.5},
+            waveForms: [{amplitude: 0.9, form: WaveForms.sinHarmonics},{amplitude:0.1,form:WaveForms.triangle}],
+            name: 'acousticHarmonics'
+        } as InstrumentSettings,
         rockOrgan: {
-            adsr: {a: 0.01, s: 0.001, d: 10, r: 1},
-            waveForm: WaveForms.triangle,
-            am: ()=>new WaveMultiplicativeModulator(5),
+            adsr: {a: 0.01, d: 0.001, s: 10, r: 0.6, base: 0.5},
+            waveForms: [
+                {
+                    amplitude: 0.9, form: WaveForms.triangle,
+                    am: ()=>new WaveAdditiveModulator2(5, 0.05),
+                },
+                {amplitude:0.1,form:WaveForms.sawTooth}
+            ],
             name: 'rockOrgan'
         } as InstrumentSettings,
+        accordion: {
+            adsr: {a: 0.02, d: 0.001, s: 10, r: 0.4, base: 0.5},
+            waveForms: [
+                {
+                    amplitude: 0.9, form: WaveForms.harmonic,
+                    am: ()=>new WaveAdditiveModulator2(4,0.4),
+                },
+                {amplitude:0.1,form:WaveForms.triangle}
+            ],
+            name: 'accordion'
+        } as InstrumentSettings,
         pipe: {
-            adsr: {a: 0.02, s: 0.01, d: 3, r: 0.2},
-            waveForm: WaveForms.triangle,
-            name: 'pipe'
+            adsr: {a: 0.06, d: 0.3, s: 4, r: 0.2, base: 0.5},
+            waveForms: [
+                {
+                    amplitude: 0.9, form: WaveForms.harmonic,
+                    am: ()=>new WaveAdditiveModulator2(1.8,0.1),
+                },
+                {
+                    amplitude:0.1,form:WaveForms.triangle,
+                    am: ()=>new WaveAdditiveModulator2(0.5,0.1),
+                }
+            ],
+            name: 'pipe',
+        } as InstrumentSettings,
+        pipeMuted: {
+            adsr: {a: 0.06, d: 0.3, s: 4, r: 0.2, base: 0.5},
+            waveForms: [
+                {
+                    amplitude: 0.9, form: WaveForms.sinHarmonics,
+                    am: ()=>new WaveAdditiveModulator2(2,0.1),
+                },
+                {amplitude:0.1,form:WaveForms.triangle}
+            ],
+            name: 'pipe',
+        } as InstrumentSettings,
+        blownBottle: {
+            adsr: {a: 0.05, d: 0.3, s: 4, r: 0.2, base: 0.5},
+            waveForms: [
+                {
+                    amplitude:1, form:WaveForms.dirtyWave(2,1, WaveForms.triangle),
+                    am: ()=>new WaveAdditiveModulator2(2,0.1),
+                }
+            ],
+            name: 'blownBottle',
+        } as InstrumentSettings,
+        flute: {
+            adsr: {a: 0.03, d: 0.2, s: 4, r: 0.2, base: 0.5},
+            waveForms: [
+                {
+                    amplitude:0.9, form:WaveForms.harmonic,
+                    am: ()=>new WaveAdditiveModulator2(2.1,0.15),
+                    fm: ()=>new WaveAdditiveModulator(1.9, 0.2),
+                },
+                {amplitude:0.1,form:WaveForms.triangle}],
+            name: 'flute',
+        } as InstrumentSettings,
+        saxophone: {
+            adsr: {a: 0.05, d: 0.1, s: 4, r: 0.1, base: 0.5},
+            waveForms: [
+                {
+                    amplitude:0.8, form:WaveForms.sinHarmonics,
+                    am: ()=>new WaveAdditiveModulator2(2.2,0.2),
+                },
+                {amplitude:0.2,form:WaveForms.square}
+            ],
+            name: 'saxophone',
         } as InstrumentSettings,
     } as const;
 
@@ -272,97 +958,467 @@ export class Instrument {
         58 Bb2 Vibraslap
 
      */
-
-    private midiInstrumentsTable = [
-        {
-            range: [...createRange({from: 1, to: 16+1})],
-            settings: this.defaultInstrumentSettings.piano,
-        },
-        {
-            range: [17,18,19],
-            settings: this.defaultInstrumentSettings.rockOrgan,
-        },
-        {
-            range: [...createRange({from: 17, to: 24+1})],
-            settings: this.defaultInstrumentSettings.organ,
-        },
-        {
-            range: [44,...createRange({from: 33, to: 40+1})],
-            settings: this.defaultInstrumentSettings.bass,
-        },
-        {
-            range: [...createRange({from: 65, to: 80+1})],
-            settings: this.defaultInstrumentSettings.pipe,
-        },
-        {
-            range: [...createRange({from: 113, to: 119+1})],
-            settings: this.defaultInstrumentSettings.snareDrum,
-        },
-        {
-            range: [...createRange({from: 27, to: 31+1})],
-            settings: this.defaultInstrumentSettings.distortion,
-        },
-    ]
-
     private cachedRequest:Record<number, InstrumentSettings> = {};
 
     public getOscillatorSettingsByMidiInstrumentNumber(num:number,note:number,percussion:boolean):InstrumentSettings {
         if (!percussion && this.cachedRequest[num]) return this.cachedRequest[num];
         if (percussion && this.cachedRequest[note]) return this.cachedRequest[note];
 
-        let result:InstrumentSettings|undefined = undefined;
+        let result:InstrumentSettings;
 
+        //percussion = true; // todo for debug
         if (percussion) {
+            //note = 57; // todo for debug
             switch (note) {
-                case 35:
-                case 36:
+                case 35:  // Acoustic Bass Drum
+                    result = this.defaultInstrumentSettings.acousticBassDrum;
+                    break;
+                case 36:  // Bass Drum 1
                     result = this.defaultInstrumentSettings.bassDrum;
                     break;
-                case 41:
+                case 37: // Side Stick
+                    result = this.defaultInstrumentSettings.sideStick;
+                    break;
+                case 38: // Acoustic Snare
+                    result = this.defaultInstrumentSettings.snareDrum;
+                    break;
+                case 39: // Hand Clap
+                    result = this.defaultInstrumentSettings.clap;
+                    break;
+                case 40: // Electric Snare
+                    result = this.defaultInstrumentSettings.electricSnareDrum;
+                    break;
+                case 41: // Low Floor Tom
                     result = this.defaultInstrumentSettings.lowFloorTomDrum;
                     break;
-                case 43:
-                    result = this.defaultInstrumentSettings.highFloorTomDrum;
-                    break;
-                case 45:
-                case 47:
-                    result = this.defaultInstrumentSettings.lowMidTomDrum;
-                    break;
-                case 48:
-                case 50:
-                    result = this.defaultInstrumentSettings.highMidTomDrum;
-                    break;
-                case 42:
-                case 44:
+                case 42: // Closed Hi Hat
                     result = this.defaultInstrumentSettings.hiHatClosedDrum;
                     break;
-                case 46:
-                case 49:
-                case 51:
-                case 55:
-                case 57:
+                case 43: // High Floor Tom
+                    result = this.defaultInstrumentSettings.highFloorTomDrum;
+                    break;
+                case 44: // Pedal Hi-Hat
+                    result = this.defaultInstrumentSettings.pedalHiHat;
+                    break;
+                case 45: // Low Tom
+                    result = this.defaultInstrumentSettings.lowTomDrum;
+                    break;
+                case 46: // Open Hi-Hat
                     result = this.defaultInstrumentSettings.hiHatOpenedDrum;
                     break;
+                case 47: // Low-Mid Tom
+                    result = this.defaultInstrumentSettings.lowMidTomDrum;
+                    break;
+                case 48: // Hi Mid Tom
+                    result = this.defaultInstrumentSettings.highMidTomDrum;
+                    break;
+                case 49: // Crash Cymbal 1
+                    result = result = this.defaultInstrumentSettings.crashCymbal1;
+                    break;
+                case 50: // High Tom
+                    result = this.defaultInstrumentSettings.highTomDrum;
+                    break;
+                case 51: // Ride Cymbal 1
+                    result = result = this.defaultInstrumentSettings.rideCymbal1;
+                    break;
+                case 52: // Chinese Cymbal
+                    result = result = this.defaultInstrumentSettings.cymbalDrum;
+                    break;
+                case 53: // Ride Bell
+                    result = result = this.defaultInstrumentSettings.rideBellDrum;
+                    break;
+                case 54: // Tambourine
+                    result = result = this.defaultInstrumentSettings.clap;
+                    break;
+                case 55: // Splash Cymbal
+                    result = result = this.defaultInstrumentSettings.splashCymbal;
+                    break;
+                case 56: // Cowbell
+                    result = result = this.defaultInstrumentSettings.cowBellDrum;
+                    break;
+                case 57: // Crash Cymbal 2
+                    result = result = this.defaultInstrumentSettings.crashCymbal2;
+                    break;
+                case 58: // Vibraslap
+                    result = result = this.defaultInstrumentSettings.vibraslap;
+                    break;
+                case 59: // Ride Cymbal 2
+                    result = result = this.defaultInstrumentSettings.rideCymbal2;
+                    break;
+                case 60: // Hi Bongo
+                    result = this.defaultInstrumentSettings.highBongo;
+                    break;
+                case 61: // Low Bongo
+                    result = this.defaultInstrumentSettings.lowBongo;
+                    break;
+                case 62: // Mute Hi Conga
+                    result = this.defaultInstrumentSettings.muteHighConga;
+                    break;
+                case 63: // Open Hi Conga
+                    result = this.defaultInstrumentSettings.openHighConga;
+                    break;
+                case 64:  // Low Conga
+                    result = this.defaultInstrumentSettings.lowConga;
+                    break;
+                case 65: // High Timbale
+                    result = this.defaultInstrumentSettings.highTimbale;
+                    break;
+                case 66: // Low Timbale
+                    result = this.defaultInstrumentSettings.lowTimbale;
+                    break;
+                case 67: // High Agogo
+                    result = this.defaultInstrumentSettings.highAgogo;
+                    break;
+                case 68: // Low Agogo
+                    result = this.defaultInstrumentSettings.lowAgogo;
+                    break;
+                case 69: // Cabasa
+                case 70: // Maracas
+                case 71: // Short Whistle
+                case 72: // Long Whistle
+                case 73: // Short Guiro
+                case 74: // Long Guiro
+                case 75: // Claves
+                    result = this.defaultInstrumentSettings.sideStick;
+                    break;
+                case 76: // Hi Wood Block
+                    result = this.defaultInstrumentSettings.highWoodBlock;
+                    break;
+                case 77: // Low Wood Block
+                    result = this.defaultInstrumentSettings.lowWoodBlock;
+                    break;
+                case 78: // Mute Cuica
+                case 79: // Open Cuica
+                case 80: // Mute Triangle
+                case 81: // Open Triangle
+                    result = this.defaultInstrumentSettings.sideStick;
+                    break;
                 default:
+                    console.log(`default drum with note: ${note}`);
                     result = this.defaultInstrumentSettings.snareDrum;
                     break;
             }
             this.cachedRequest[note] = result;
         } else {
-            for (const instr of this.midiInstrumentsTable) {
-                if (instr.range.includes(num)) {
-                    result = instr.settings;
+            switch (num) {
+                // *Piano*
+                case 1: // Acoustic Grand Piano
+                    result = this.defaultInstrumentSettings.grandPiano;
                     break;
-                }
-            }
-            if (result===undefined) {
-                result = this.defaultInstrumentSettings.piano;
+                case 2: // Bright Acoustic Piano
+                    result = this.defaultInstrumentSettings.brightPiano;
+                    break;
+                case 3: // Electric Grand Piano
+                case 4: // Honky-tonk Piano
+                    result = this.defaultInstrumentSettings.grandPiano;
+                    break;
+                case 5: // Electric Piano 1
+                case 6: // Electric Piano 2
+                    result = this.defaultInstrumentSettings.syntPiano;
+                    break;
+                case 7: // Harpsichord
+                case 8: // Clavinet
+                    result = this.defaultInstrumentSettings.clavier;
+                    break;
+                // *Chromatic Percussion*
+                case 9: // Celesta
+                case 10: // Glockenspiel
+                case 11: // Music Box
+                    result = this.defaultInstrumentSettings.musicBox;
+                    break;
+                case 12: // Vibraphone
+                    result = this.defaultInstrumentSettings.xylophone;
+                    break;
+                case 13: // Marimba
+                    result = this.defaultInstrumentSettings.marimba;
+                    break;
+                case 14: // Xylophone
+                    result = this.defaultInstrumentSettings.xylophone;
+                    break;
+                case 15: // Tubular Bells
+                    result = this.defaultInstrumentSettings.tubularBells;
+                    break;
+                case 16: // Dulcimer
+                    result = this.defaultInstrumentSettings.tubularBells;
+                    break;
+                // *Organ*
+                case 17: // Drawbar Organ
+                case 18: // Percussive Organ
+                case 19: // Rock Organ
+                    result = this.defaultInstrumentSettings.rockOrgan;
+                    break;
+                case 20: // Church Organ
+                case 21: // Reed Organ
+                    result = this.defaultInstrumentSettings.organ;
+                    break;
+                case 22: // Accordion
+                case 23: // Harmonica
+                case 24: // Tango Accordion
+                    result = this.defaultInstrumentSettings.accordion;
+                    break;
+                case 25: // *Guitar* Acoustic Guitar (nylon)
+                    result = this.defaultInstrumentSettings.acoustic;
+                    break;
+                case 26: // Acoustic Guitar (steel)
+                    result = this.defaultInstrumentSettings.acousticSteel;
+                    break;
+                case 27: // Electric Guitar (jazz)
+                    result = this.defaultInstrumentSettings.acousticSteel;
+                    break;
+                case 28: // Electric Guitar (clean)
+                    result = this.defaultInstrumentSettings.electroGuitarClean;
+                    break;
+                case 29: // Electric Guitar (muted)
+                    result = this.defaultInstrumentSettings.acousticSteelMuted;
+                    break;
+                case 30: // Overdriven Guitar
+                    result = this.defaultInstrumentSettings.electroGuitarOverdriven;
+                    break;
+                case 31: // Distortion Guitar
+                    result = this.defaultInstrumentSettings.electroGuitarDistortion;
+                    break;
+                case 32: // Guitar harmonics
+                    result = this.defaultInstrumentSettings.acousticHarmonics;
+                    break;
+                // Bass:
+                case 33: // *Bass* Acoustic Bass
+                case 34: // Electric Bass (finger)
+                case 35: // Electric Bass (pick)
+                case 36: // Fretless Bass
+                    result = this.defaultInstrumentSettings.bass;
+                    break;
+                case 37: // Slap Bass 1
+                case 38: // Slap Bass 2
+                    result = this.defaultInstrumentSettings.pizzicatto;
+                    break;
+                case 39: // Synth Bass 1
+                case 40: // Synth Bass 2
+                    result = this.defaultInstrumentSettings.syntesatorTriangle;
+                    break;
+                case 41: // *Strings* Violin
+                case 42: // Viola
+                case 43: // Cello
+                case 44: // Contrabass
+                    result = this.defaultInstrumentSettings.violin;
+                    break;
+                case 45: // Tremolo Strings
+                    result = this.defaultInstrumentSettings.violinTremolo;
+                    break;
+                case 46: // Pizzicato Strings
+                    result = this.defaultInstrumentSettings.pizzicatto;
+                    break;
+                case 47: // Orchestral Harp
+                    result = this.defaultInstrumentSettings.harp;
+                    break;
+                case 48: // Timpani
+                    result = this.defaultInstrumentSettings.timpani;
+                    break;
+                case 49: // *Strings (continued)* String Ensemble 1
+                case 50: // String Ensemble 2
+                    result = this.defaultInstrumentSettings.orchestra;
+                    break;
+                case 51: // Synth Strings 1
+                    result = this.defaultInstrumentSettings.syntesatorTriangle;
+                    break;
+                case 52: // Synth Strings 2
+                    result = this.defaultInstrumentSettings.syntesatorSawtooth;
+                    break;
+                case 53: // Choir Aahs
+                case 54: // Voice Oohs
+                    result = this.defaultInstrumentSettings.chorus;
+                    break;
+                case 55: // Synth Voice
+                    result = this.defaultInstrumentSettings.syntesatorSquare;
+                    break;
+                case 56: // Orchestra Hit
+                    result = this.defaultInstrumentSettings.orchestra;
+                    break;
+                // *Brass*
+                case 57: // Trumpet
+                case 58: // Trombone
+                case 59: // Tuba
+                    result = this.defaultInstrumentSettings.pipe;
+                    break;
+                case 60: // Muted Trumpet
+                    result = this.defaultInstrumentSettings.pipeMuted;
+                    break;
+                case 61: // French Horn
+                case 62: // Brass Section
+                case 63: // Synth Brass 1
+                case 64: // Synth Brass 2
+                    result = this.defaultInstrumentSettings.pipe;
+                    break;
+                // *Reed*
+                case 65: // Soprano Sax
+                case 66: // Alto Sax
+                case 67: // Tenor Sax
+                case 68: // Baritone Sax
+                    result = this.defaultInstrumentSettings.saxophone;
+                    break;
+                case 69: // Oboe
+                case 70: // English Horn
+                case 71: // Bassoon
+                case 72: // Clarinet
+                    result = this.defaultInstrumentSettings.pipe;
+                    break;
+                case 73: // *Pipe* Piccolo
+                case 74: // Flute
+                case 75: // Recorder
+                case 76: // Pan Flute
+                    result = this.defaultInstrumentSettings.flute;
+                    break;
+                case 77: // Blown Bottle
+                    result = this.defaultInstrumentSettings.blownBottle;
+                    break;
+                case 78: // Shakuhachi
+                case 79: // Whistle
+                case 80: // Ocarina
+                    result = this.defaultInstrumentSettings.flute;
+                    break;
+                // *Synth Lead*
+                case 81: // Lead 1 (square)
+                    result = this.defaultInstrumentSettings.syntesatorSquare;
+                    break;
+                case 82: // Lead 2 (sawtooth)
+                    result = this.defaultInstrumentSettings.syntesatorSawtooth;
+                    break;
+                case 83: // Lead 3 (calliope)
+                    result = this.defaultInstrumentSettings.syntesatorTriangle;
+                    break;
+                case 84: // Lead 4 (chiff)
+                    result = this.defaultInstrumentSettings.syntesatorSawtooth;
+                    break;
+                case 85: // Lead 5 (charang)
+                    result = this.defaultInstrumentSettings.syntesatorTriangle;
+                    break;
+                case 86: // Lead 6 (voice)
+                    result = this.defaultInstrumentSettings.syntesatorSquare;
+                    break;
+                case 87: // Lead 7 (fifths)
+                    result = this.defaultInstrumentSettings.chorus;
+                    break;
+                case 88: // Lead 8 (bass + lead)
+                    result = this.defaultInstrumentSettings.acousticHarmonics;
+                    break;
+                case 89: // *Synth Pad* Pad 1 (new age)
+                    result = this.defaultInstrumentSettings.syntesatorSawtooth;
+                    break
+                case 90: // Pad 2 (warm)
+                    result = this.defaultInstrumentSettings.syntesatorTriangle;
+                    break;
+                case 91: // Pad 3 (polysynth)
+                    result = this.defaultInstrumentSettings.syntesatorSawtooth;
+                    break;
+                case 92: // Pad 4 (choir)
+                    result = this.defaultInstrumentSettings.chorus;
+                    break;
+                case 93: // Pad 5 (bowed)
+                case 94: // Pad 6 (metallic)
+                    result = this.defaultInstrumentSettings.syntesatorSquare;
+                    break;
+                case 95: // Pad 7 (halo)
+                case 96: // Pad 8 (sweep)
+                    result = this.defaultInstrumentSettings.syntesatorSawtooth;
+                    break;
+
+                // *Synth Effects*
+                case 97: // FX 1 (rain)
+                    result = this.defaultInstrumentSettings.syntesatorTriangle;
+                    break;
+                case 98: // FX 2 (soundtrack)
+                    result = this.defaultInstrumentSettings.tubularBells;
+                    break;
+                case 99: // FX 3 (crystal)
+                    result = this.defaultInstrumentSettings.harp;
+                    break;
+                case 100: // FX 4 (atmosphere)
+                    result = this.defaultInstrumentSettings.flute;
+                    break;
+                case 101: //FX 5 (brightness)
+                    result = this.defaultInstrumentSettings.musicBox;
+                    break;
+                case 102: // FX 6 (goblins)
+                    result = this.defaultInstrumentSettings.pipe;
+                    break;
+                case 103: // FX 7 (echoes)
+                    result = this.defaultInstrumentSettings.saxophone;
+                    break;
+                case 104: // FX 8 (sci-fi)
+                    result = this.defaultInstrumentSettings.marimba;
+                    break;
+
+                // *Ethnic*
+                case 105: // Sitar
+                case 106: // Banjo
+                case 107: // Shamisen
+                case 108: // Koto
+                case 109: // Kalimba
+                    result = this.defaultInstrumentSettings.acousticSteel;
+                    break;
+                case 110: // Bag pipe
+                    result = this.defaultInstrumentSettings.pipe;
+                    break;
+                case 111: // Fiddle
+                    result = this.defaultInstrumentSettings.violin;
+                    break;
+                case 112: // Shanai
+                    result = this.defaultInstrumentSettings.flute;
+                    break;
+                // *Percussive*
+                case 113: // Tinkle Bell
+                    result = this.defaultInstrumentSettings.tubularBells;
+                    break;
+                case 114: // Agogo
+                    result = this.defaultInstrumentSettings.marimba;
+                    break;
+                case 115: // Steel Drums
+                    result = this.defaultInstrumentSettings.steelDrums;
+                    break;
+                case 116: // Woodblock
+                    result = this.defaultInstrumentSettings.woodDrums;
+                    break;
+                case 117: // Taiko Drum
+                    result = this.defaultInstrumentSettings.timpani;
+                    break;
+                case 118: // Melodic Tom
+                    result = this.defaultInstrumentSettings.marimba;
+                    break;
+                case 119: // Synth Drum
+                    result = this.defaultInstrumentSettings.electricDynamicDrum;
+                    break; // <-----
+                case 120: // *Sound effects* Reverse Cymbal
+                    result = this.defaultInstrumentSettings.clap;
+                    break;
+                case 121: // Guitar Fret Noise
+                case 122: // Breath Noise
+                case 123: // Seashore
+                case 124: // Bird Tweet
+                    result = this.defaultInstrumentSettings.fxTremolo;
+                    break;
+                case 125: // Telephone Ring
+                    result = this.defaultInstrumentSettings.fxTremolo2;
+                    break;
+                case 126: // Helicopter
+                    result = this.defaultInstrumentSettings.fxHelicopter;
+                    break;
+                case 127: // Applause
+                    result = this.defaultInstrumentSettings.fxApplause;
+                    break;
+                case 128: // Gunshot
+                    result = this.defaultInstrumentSettings.clap;
+                    break;
+                default:
+                    console.log(`default instrument with num: ${num}`);
+                    result = this.defaultInstrumentSettings.grandPiano;
             }
             this.cachedRequest[num] = result;
         }
-
-        console.log(num,note,result.name);
+        console.log({num,note,name:result.name});
         return result;
+    }
+
+    public resetCache():void {
+        this.cachedRequest = {};
     }
 
 }

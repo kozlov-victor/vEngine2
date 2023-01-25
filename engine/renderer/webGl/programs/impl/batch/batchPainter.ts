@@ -112,9 +112,9 @@ export class BatchPainter extends AbstractPainter {
         }
         const index = this.currentModelIndex;
         this.colorBatchArray.putNextChunk(model.fillColor,index);
-        if (model.angle!==0) this.angleBatchArray.putNextChunk(model.angle,index);
+        this.angleBatchArray.putNextChunk(model.angle,index);
         this.posBatchArray.putNextChunk(model,index);
-        this.currentModelIndex++;
+        ++this.currentModelIndex;
         this.dirty = true;
     }
 
@@ -123,16 +123,16 @@ export class BatchPainter extends AbstractPainter {
         const viewPortSize =
             (renderer.getRenderTarget().getTexture() as Texture).size.toArray();
         this.setUniform(this.u_viewPort,viewPortSize);
-        this.colorBatchArray.uploadToVertexBufferAndReset();
-        this.angleBatchArray.uploadToVertexBufferAndReset();
-        this.posBatchArray.uploadToVertexBufferAndReset();
+        this.colorBatchArray.uploadToVertexBuffer();
+        this.angleBatchArray.uploadToVertexBuffer();
+        this.posBatchArray.uploadToVertexBuffer();
         this.draw();
-        this.reset();
-    }
-
-    private reset():void {
         this.currentModelIndex = 0;
         this.dirty = false;
+    }
+
+    public isDirty():boolean {
+        return this.dirty;
     }
 
 }

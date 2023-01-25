@@ -36,7 +36,7 @@ export class HTMLElementWrap implements IRealNode {
 
     private _getChildren(): HTMLElementWrap[] {
         this._childrenCache.length = 0;
-        for (let i:number=0,l:number=this.htmlElement.childNodes.length;i<l;i++) {
+        for (let i:number=0,l:number=this.htmlElement.childNodes.length;i<l;++i) {
             const c = this.htmlElement.childNodes[i];
             this._childrenCache.push(wrap(c as HTMLElement));
         }

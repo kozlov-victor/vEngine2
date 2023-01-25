@@ -8,13 +8,32 @@ import {ITexture} from "@engine/renderer/common/texture";
 import {Polygon} from "@engine/renderable/impl/geometry/polygon";
 import {Color} from "@engine/renderer/common/color";
 import {Font} from "@engine/renderable/impl/general/font/font";
+import {Optional} from "@engine/core/declarations";
+
+const DEFAULT_SIZE = 10;
+const PAD = 4;
+
+// https://convertio.co/ttf-svg/
 
 export class FontContextSvgFactory extends FontContextAbstractFactory<DrawingSurface> {
 
     private evenOddCompositionFilter = new EvenOddCompositionFilter(this.game);
+    private readonly _fontHeight:number;
+    private readonly scale:number;
+    private _fontSize:number;
 
-    constructor(game:Game, private fontDocument:XmlDocument,private scale:number) {
+    constructor(game:Game, private fontDocument:XmlDocument,fontSize:number) {
         super(game);
+        this._fontSize = fontSize;
+        const polygons:Polygon[] = [];
+        'Height!'.split('').forEach(c=>{
+            const p = this.findLetterPolygons(c);
+            if (p) polygons.push(...p);
+        });
+        const maxLetterHeight = Math.max(...polygons.map(it=>it.size.height));
+        this.scale = 1/maxLetterHeight*fontSize;
+        this._fontHeight = maxLetterHeight * this.scale + PAD;
+        polygons.forEach(p => p.destroy());
     }
 
     public override createFont(standardChars: readonly string[], extraChars: readonly string[], fontFamily: string, fontSize: number): Font {
@@ -42,18 +61,13 @@ export class FontContextSvgFactory extends FontContextAbstractFactory<DrawingSur
         return page.getTexture();
     }
 
-
     protected override drawLetter(context: DrawingSurface, letter: string, x: number, y: number): void {
-        const node = this.fontDocument.getElementsByTagName('glyph').find(it=>FontContextSvgFactory.hexEntityToStr(it.getAttribute('unicode'))===letter);
-        if (!node) return;
-        const path = node.getAttribute('d');
-        if (!path) return;
-        const polygons = Polygon.fromMultiCurveSvgPath(this.game,path);
-        if (!polygons.length) return;
+        const polygons = this.findLetterPolygons(letter);
+        if (!polygons) return;
         polygons.forEach(p=>{
             p.scale.setXY(this.scale,-this.scale);
             p.pos.x = x;
-            p.pos.y = y + this.getFontHeight();
+            p.pos.y = y + this.getFontHeight() - PAD;
             p.fillColor = Color.BLACK;
             p.filters = [this.evenOddCompositionFilter];
             context.drawModel(p);
@@ -62,20 +76,31 @@ export class FontContextSvgFactory extends FontContextAbstractFactory<DrawingSur
     }
 
     protected override getFontHeight(): number {
-        return 250*this.scale + 5;
+        return this._fontHeight;
+    }
+
+    private findLetterPolygons(letter:string):Optional<Polygon[]> {
+        const node = this.fontDocument.getElementsByTagName('glyph').find(it=>FontContextSvgFactory.hexEntityToStr(it.getAttribute('unicode'))===letter);
+        if (!node) return undefined;
+        const path = node.getAttribute('d');
+        if (!path) return undefined;
+        return Polygon.fromMultiCurveSvgPath(this.game,path);
     }
 
     protected override getLetterWidth(letter: string): number {
-        const defaultWidth = 10;
         const node = this.fontDocument.getElementsByTagName('glyph').find(it => FontContextSvgFactory.hexEntityToStr(it.getAttribute('unicode')) === letter);
-        if (!node) return defaultWidth;
+        if (!node) return DEFAULT_SIZE;
         const path = node.getAttribute('d');
-        if (!path) return defaultWidth;
+        if (!path) return DEFAULT_SIZE;
         const polygons = Polygon.fromMultiCurveSvgPath(this.game, path);
-        if (!polygons.length) return defaultWidth;
-        const res = Math.max(defaultWidth,...polygons.map(it=>it.size.width*this.scale));
+        if (!polygons.length) return DEFAULT_SIZE;
+        const res = Math.max(DEFAULT_SIZE,...polygons.map(it=>it.size.width*this.scale));
         polygons.forEach(p => p.destroy());
-        return res;
+        return res + PAD;
+    }
+
+    public override getFontSize():number {
+        return this._fontSize;
     }
 
 }

@@ -137,7 +137,7 @@ export class Tween<T> {
                     this.complete();
                     return;
                 }
-                this._currentLoop++;
+                ++this._currentLoop;
                 curTweenTime = 0;
             } else {
                 this.complete();
@@ -216,9 +216,9 @@ export class Tween<T> {
 
         if (DEBUG) {
             this._propsToChange.forEach(key => {
-                if (this._target[key]===null || this._target[key]===undefined) {
+                if (this._target[key]===undefined) {
                     console.error('target',this._target);
-                    throw new DebugError(`Can not create tween animation: property "${String(key)}" does not belong to target object or is not defined`);
+                    throw new DebugError(`Can not create tween animation: property "${String(key)}" does not belong to target object or is undefined`);
                 }
             });
         }

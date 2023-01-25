@@ -4,8 +4,13 @@ export class AngleBatchArray extends AbstractBatchArray<number> {
 
     constructor() {
         super(1);
-        this.setOnPutNextChunkCallback((model,array,offset)=>{
-            array[offset] = model;
-        });
     }
+
+    protected onPutNextChunk(model: number, offset: number): void {
+        this.array[offset++] = model;
+        this.array[offset++] = model;
+        this.array[offset++] = model;
+        this.array[offset  ] = model;
+    }
+
 }
