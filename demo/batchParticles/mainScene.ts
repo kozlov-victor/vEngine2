@@ -31,8 +31,8 @@ export class MainScene extends Scene {
         ps.forceDrawChildrenOnNewSurface = true;
         ps.particleGravity.y = 5;
 
-        ps.numOfParticlesToEmit = {from:30,to:100};
-        ps.particleLiveTime = {from:2000,to:6000};
+        ps.numOfParticlesToEmit = {from:5,to:10};
+        ps.particleLiveTime = {from:1000,to:3000};
         ps.particleAngle = {from:MathEx.degToRad(270-30),to:MathEx.degToRad(270+30)};
         ps.particleVelocity = {from: 100, to: 200};
         ps.onEmitParticle(p=>{
