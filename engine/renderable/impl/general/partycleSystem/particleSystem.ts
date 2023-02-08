@@ -60,7 +60,7 @@ const getOldestParticle = (arr:tParticle[]):tParticle=>{
 }
 
 const onUpdateParticle = function(this:tParticle):void {
-    const time:number = this.ps._getGame().getCurrentTime();
+    const time:number = this.ps.game.getCurrentTime();
     const hasGravity = !this.ps.particleGravity.equals(0);
     (this.ps as any)._onUpdateParticle(this);
     if (hasGravity) {
@@ -99,6 +99,7 @@ export class ParticleSystem extends SimpleGameObjectContainer {
     public particleGravity:Point2d = new Point2d(0,0);
     public particleAlpha:Optional<IParticleTimedPropertyDesc>;
     public particleScale:Optional<IParticleTimedPropertyDesc>;
+    public declare readonly game:Game;
 
     private particles:tParticle[] = [];
     private _prototypes:tParticle[] = [];
@@ -222,10 +223,6 @@ export class ParticleSystem extends SimpleGameObjectContainer {
 
         }
 
-    }
-
-    public _getGame():Game {
-        return this.game;
     }
 
 }
