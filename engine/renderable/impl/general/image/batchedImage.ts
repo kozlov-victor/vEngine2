@@ -1,16 +1,41 @@
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Game} from "@engine/core/game";
-import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
 import {Color} from "@engine/renderer/common/color";
 import {ICloneable} from "@engine/core/declarations";
 
+export class ColorEx extends Color {
+
+
+    constructor() {
+        super();
+        this.observe(()=>{
+            this.packed[0] = (this.r<<8)|this.g;
+            this.packed[1] = (this.b<<8)|this.a;
+        });
+    }
+
+    private packed:[number,number] = [0,0];
+
+    public getPackedColor():[number,number] {
+        return this.packed;
+    }
+
+    public override clone():ColorEx {
+        const col = new ColorEx();
+        col.setRGBA(this.r,this.g,this.b,this.a);
+        return col;
+    }
+
+}
+
 export class BatchedImage extends RenderableModel implements ICloneable<BatchedImage> {
 
-    public fillColor: Color = Color.GREY.clone();
+    public readonly fillColor: ColorEx = new ColorEx();
 
     constructor(game: Game) {
         super(game);
         this.size.setWH(16);
+        this.fillColor.fromJSON(Color.GREY.toJSON());
     }
 
     public override _transform() {}
@@ -20,6 +45,7 @@ export class BatchedImage extends RenderableModel implements ICloneable<BatchedI
     public override update() {}
 
     public override render() {
+        if (!this.visible) return;
         if (this.fillColor.a===0) return;
         const delta: number = this.game.getDeltaTime();
         const dSeconds = delta / 1000;
@@ -30,7 +56,7 @@ export class BatchedImage extends RenderableModel implements ICloneable<BatchedI
     }
 
     protected override setClonedProperties(cloned: BatchedImage) {
-        cloned.fillColor = this.fillColor.clone();
+        cloned.fillColor.fromJSON(this.fillColor.toJSON());
         super.setClonedProperties(cloned);
     }
 

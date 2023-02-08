@@ -35,8 +35,11 @@ export abstract class AbstractBatchArray<T> {
     public uploadToVertexBuffer():void {
         if (!this.dirty) return;
         this.dirty = false;
-        this.array.fill(0,this.currentOffset);
         this.vertexBuffer.updateData(this.array);
+    }
+
+    public clearUnused():void {
+        this.array.fill(0,this.currentOffset);
     }
 
     public getArray():Float32Array {

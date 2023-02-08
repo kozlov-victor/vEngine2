@@ -5,7 +5,10 @@ import {ITexture} from "@engine/renderer/common/texture";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {ARCADE_RIGID_BODY_TYPE} from "@engine/physics/arcade/arcadeRigidBody";
 import {ArcadePhysicsSystem} from "@engine/physics/arcade/arcadePhysicsSystem";
-import {ParticleSystem} from "@engine/renderable/impl/general/partycleSystem/particleSystem";
+import {
+    MAX_PARTICLE_CACHE_STRATEGY,
+    ParticleSystem
+} from "@engine/renderable/impl/general/partycleSystem/particleSystem";
 import {MathEx} from "@engine/misc/math/mathEx";
 import {ColorFactory} from "@engine/renderer/common/colorFactory";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
@@ -18,7 +21,7 @@ import {LightSet} from "@engine/lighting/lightSet";
 import {DirectionalLight} from "@engine/lighting/impl/directionalLight";
 import {PointLight} from "@engine/lighting/impl/pointLight";
 import {Tween} from "@engine/animation/tween";
-import {ArcadeSideScrollControl} from "@engine/behaviour/impl/arcadeSideScrollControl";
+import {ArcadeSideScrollControl} from "@engine/behaviour/impl/arcadeSideScroll/arcadeSideScrollControl";
 
 interface IUnityMeta {
     TextureImporter: {
@@ -154,7 +157,10 @@ export class MainScene extends Scene {
 
         const ps: ParticleSystem = new ParticleSystem(this.game);
         ps.emitAuto = false;
-        ps.maxParticlesInCache = 2000;
+        ps.cacheGetPolicy = {
+            maxParticlesInCache: 2000,
+            strategy: MAX_PARTICLE_CACHE_STRATEGY.GET_OLDEST
+        }
         ps.addParticlePrefab(particle);
 
         ps.emissionRadius = 20;
@@ -183,13 +189,13 @@ export class MainScene extends Scene {
 
         this.mouseEventHandler.on(MOUSE_EVENTS.click,(e)=>{
             ps.emissionPosition.setXY(e.sceneX,e.sceneY);
-            ps.emitTo(this);
+            ps.emit();
         });
 
         this.mouseEventHandler.on(MOUSE_EVENTS.mouseMove,(e)=>{
             if (e.isMouseDown) {
                 ps.emissionPosition.setXY(e.sceneX,e.sceneY);
-                ps.emitTo(this);
+                ps.emit();
             }
         });
 

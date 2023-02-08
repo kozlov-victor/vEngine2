@@ -58,7 +58,7 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
         this.gameObject = gameObject;
 
         this.init();
-        this.listenToCollisions();
+        this.listenToCollisionsAndOverlaps();
         this.listenToKeys();
 
     }
@@ -167,8 +167,8 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
 
         // to avoid bumping from walls while walking
         if (this.onGround || this.onLadder) {
-            if (this.gameObject.scale.x===1 && this.body.velocity.x<0) this.body.velocity.x = 0;
-            if (this.gameObject.scale.x===-1 && this.body.velocity.x>0) this.body.velocity.x = 0;
+            if (this.gameObject.scale.x>0 && this.body.velocity.x<0) this.body.velocity.x = 0;
+            else if (this.gameObject.scale.x<0 && this.body.velocity.x>0) this.body.velocity.x = 0;
         }
         // to avoid bumping with ground while climbing down
         if (this.isClimbing && this.body.collisionFlags.bottom) {
@@ -207,8 +207,8 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
         this.body = body;
     }
 
-    private listenToCollisions():void {
-        this.body.collisionEventHandler.on(ARCADE_COLLISION_EVENT.COLLIDED, _=>{
+    private listenToCollisionsAndOverlaps():void {
+        this.body.collisionEventHandler.on(ARCADE_COLLISION_EVENT.COLLIDED, b=>{
             this.body.gravityImpact = 1;
             this.doGroundAnimation();
         });
@@ -271,7 +271,7 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
         const params = this.parameters;
         if (this.isFiring) return;
 
-        if ((this.onGround)) {
+        if (this.onGround) {
             if (body.velocity.x) {
                 params.runAnimation.play();
             }
@@ -288,21 +288,22 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
         }
     }
 
-    private static _isLadderTileIdOfType(tileId:number|undefined,arrToBelong?:number[]):boolean {
+
+    private static _isTileIdOfType(tileId:number|undefined,arrToBelong?:number[]):boolean {
         if (tileId===undefined || arrToBelong===undefined) return false;
         return arrToBelong.includes(tileId);
     }
 
     private isVerticalLadderTileId(tileId:number|undefined):boolean {
-        return ArcadeSideScrollControl._isLadderTileIdOfType(tileId,this.parameters.verticalLadderTileIds);
+        return ArcadeSideScrollControl._isTileIdOfType(tileId,this.parameters.verticalLadderTileIds);
     }
 
     private isHorizontalLadderTileId(tileId:number|undefined):boolean {
-        return ArcadeSideScrollControl._isLadderTileIdOfType(tileId,this.parameters.horizontalLadderTileIds);
+        return ArcadeSideScrollControl._isTileIdOfType(tileId,this.parameters.horizontalLadderTileIds);
     }
 
     private isWaterTileId(tileId:number|undefined):boolean {
-        return ArcadeSideScrollControl._isLadderTileIdOfType(tileId,this.parameters.waterTileIds);
+        return ArcadeSideScrollControl._isTileIdOfType(tileId,this.parameters.waterTileIds);
     }
 
     private isLadderTileId(tileId:number|undefined):boolean {

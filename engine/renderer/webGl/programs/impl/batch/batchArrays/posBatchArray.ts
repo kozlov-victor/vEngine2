@@ -15,8 +15,8 @@ export class PosBatchArray extends AbstractBatchArray<BatchedImage> {
         const size = model.size;
         const width = size.width;
         const height = size.height;
-        const x = pos.x + width/2;
-        const y = pos.y + height/2;
+        const x = pos.x;
+        const y = pos.y;
         const array = this.array;
         for (let i=0;i<NUM_OF_VERTICES_IN_QUAD;++i) {
             array[offset++] = x;

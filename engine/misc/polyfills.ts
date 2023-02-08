@@ -53,7 +53,7 @@ if (!Array.prototype.find) {
 
 if (!Array.prototype.fill) {
     (Array as any).prototype.fill = function(val:number) {
-        for (let i=0;i<this.length;i++) {
+        for (let i=0;i<this.length;++i) {
             this[i] = val;
         }
     }

@@ -93,9 +93,9 @@ class ModelPoint2d extends Point2d {
 
 export abstract class TransformableModel extends BaseModel implements ITransformable, ITransformableProps, IPositionableProps {
 
-    public readonly worldTransformMatrix:Mat16Holder = new Mat16Holder();
-    public readonly modelViewMatrix:Mat16Holder = new Mat16Holder();
-    public worldTransformDirty:boolean = true;
+    public readonly worldTransformMatrix = new Mat16Holder();
+    public readonly modelViewMatrix = new Mat16Holder();
+    public worldTransformDirty = true;
 
     public readonly _children:TransformableModel[] = [];
 
@@ -118,14 +118,14 @@ export abstract class TransformableModel extends BaseModel implements ITransform
         this._angleVelocity3d._setZSilently(val);
     }
 
-    public readonly scale:Point3d = new Point3d(1,1,1);
-    public readonly skew:Point2d = new Point2d(0,0);
-    public readonly anchorPoint:ModelPoint2d = new ModelPoint2d(this);
-    public readonly transformPoint:ModelPoint2d = new ModelPoint2d(this);
-    public readonly angle3d:AnglePoint3d = new AnglePoint3d(this,'angle');
+    public readonly scale = new Point3d(1,1,1);
+    public readonly skew = new Point2d(0,0);
+    public readonly anchorPoint = new ModelPoint2d(this);
+    public readonly transformPoint = new ModelPoint2d(this);
+    public readonly angle3d = new AnglePoint3d(this,'angle');
     public billBoard:boolean = false;
 
-    protected _angleVelocity3d:AnglePoint3d = new AnglePoint3d(this,'angleVelocity');
+    protected _angleVelocity3d = new AnglePoint3d(this,'angleVelocity');
 
     private _angle:number = 0;
 

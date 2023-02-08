@@ -20,11 +20,10 @@ export class FontContextSvgFactory extends FontContextAbstractFactory<DrawingSur
     private evenOddCompositionFilter = new EvenOddCompositionFilter(this.game);
     private readonly _fontHeight:number;
     private readonly scale:number;
-    private _fontSize:number;
 
     constructor(game:Game, private fontDocument:XmlDocument,fontSize:number) {
         super(game);
-        this._fontSize = fontSize;
+        this.fontSize = fontSize;
         const polygons:Polygon[] = [];
         'Height!'.split('').forEach(c=>{
             const p = this.findLetterPolygons(c);
@@ -97,10 +96,6 @@ export class FontContextSvgFactory extends FontContextAbstractFactory<DrawingSur
         const res = Math.max(DEFAULT_SIZE,...polygons.map(it=>it.size.width*this.scale));
         polygons.forEach(p => p.destroy());
         return res + PAD;
-    }
-
-    public override getFontSize():number {
-        return this._fontSize;
     }
 
 }

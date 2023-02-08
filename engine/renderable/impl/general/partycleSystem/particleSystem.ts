@@ -4,15 +4,18 @@ import {DebugError} from "@engine/debug/debugError";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {noop} from "@engine/misc/object";
 import {Point2d} from "@engine/geometry/point2d";
-import {IUpdatable, Optional} from "@engine/core/declarations";
+import {ICloneable, IRenderable, IUpdatable, Optional} from "@engine/core/declarations";
 import {SimpleGameObjectContainer} from "../simpleGameObjectContainer";
-import {Scene} from "@engine/scene/scene";
-import {Layer} from "@engine/scene/layer";
 import {IRigidBody} from "@engine/physics/common/interfaces";
 import {EasingLinear} from "@engine/misc/easing/functions/linear";
 
 const rnd:(obj:IParticlePropertyDesc)=>number
     = (obj:IParticlePropertyDesc)=>MathEx.random(obj.from,obj.to);
+
+export enum MAX_PARTICLE_CACHE_STRATEGY {
+    GET_OLDEST = 1,
+    IGNORE_EMISSION_IF_OVERFLOW,
+}
 
 interface IParticlePropertyDesc {
     from:number;
@@ -24,28 +27,60 @@ interface IParticleTimedPropertyDesc {
     end: IParticlePropertyDesc;
 }
 
-type RenderableCloneable = RenderableModel & {clone:()=>RenderableCloneable};
+type tRenderableCloneable = RenderableModel & {clone:()=>tRenderableCloneable};
 
 interface IParticleHolder {
-    particle:RenderableCloneable;
     lifeTime:number;
     createdTime:number;
     active:boolean;
-    alpha?:{start:number,end:number};
-    scale?:{start:number,end:number};
+    alphaFromTo:{start:number,end:number};
+    scaleFromTo:{start:number,end:number};
+    ps: ParticleSystem;
 }
 
-const getMin = <T>(arr:T[],predicate:(item:T)=>number):T=>{
-    let min = predicate(arr[0]);
-    let minItem:T = arr[0];
-    for (let i=1;i<arr.length;i++) {
-        const currMin = predicate(arr[i]);
+type tParticle = tRenderableCloneable & ICloneable<tParticle> & IParticleHolder;
+
+const isInactive = (p:tParticle):boolean=>{
+    return !p.active;
+}
+
+const getOldestParticle = (arr:tParticle[]):tParticle=>{
+    let min = arr[0].createdTime;
+    let minItem = arr[0];
+    for (let i=1;i<arr.length;++i) {
+        const el = arr[i];
+        if (!el.active) return el;
+        const currMin = el.createdTime;
         if (currMin<min) {
             min = currMin;
-            minItem = arr[i];
+            minItem = el;
         }
     }
     return minItem;
+}
+
+const onUpdateParticle = function(this:tParticle):void {
+    const time:number = this.ps._getGame().getCurrentTime();
+    const hasGravity = !this.ps.particleGravity.equals(0);
+    (this.ps as any)._onUpdateParticle(this);
+    if (hasGravity) {
+        this.velocity.x += this.ps.particleGravity.x;
+        this.velocity.y += this.ps.particleGravity.y;
+    }
+    const timePassed = time - this.createdTime;
+    if (this.ps.particleAlpha!==undefined) {
+        this.alpha =
+            EasingLinear(timePassed,this.alphaFromTo.start,this.alphaFromTo.end - this.alphaFromTo.start, this.lifeTime);
+    }
+    if (this.ps.particleScale!==undefined) {
+        const val =
+            EasingLinear(timePassed,this.scaleFromTo.start,this.scaleFromTo.end - this.scaleFromTo.start, this.lifeTime);
+        this.scale.setXY(val);
+    }
+    if (timePassed > this.lifeTime) {
+        this.active = false;
+        this.ps.removeChild(this);
+    }
 }
 
 export class ParticleSystem extends SimpleGameObjectContainer {
@@ -60,14 +95,14 @@ export class ParticleSystem extends SimpleGameObjectContainer {
     public particleLiveTime:IParticlePropertyDesc = {from:100,to:1000};
     public emissionRadius:number = 0;
     public emissionPosition:Point2d = new Point2d();
-    public maxParticlesInCache:Optional<number>;
+    public cacheGetPolicy: Optional<{maxParticlesInCache:number,strategy:MAX_PARTICLE_CACHE_STRATEGY}>;
     public particleGravity:Point2d = new Point2d(0,0);
     public particleAlpha:Optional<IParticleTimedPropertyDesc>;
     public particleScale:Optional<IParticleTimedPropertyDesc>;
 
-    private _particles:IParticleHolder[] = [];
-    private _prototypes:RenderableCloneable[] = [];
-    private _onUpdateParticle:(r:RenderableModel)=>void = noop;
+    private particles:tParticle[] = [];
+    private _prototypes:tParticle[] = [];
+    private _onUpdateParticle:(r:tParticle)=>void = noop;
     private _onEmitParticle:(r:RenderableModel)=>void = noop;
 
     constructor(game:Game){
@@ -79,42 +114,18 @@ export class ParticleSystem extends SimpleGameObjectContainer {
         if (this.particleAngle.to<this.particleAngle.from) this.particleAngle.to += 2*Math.PI;
     }
 
-    public addParticlePrefab(renderableCloneable:RenderableCloneable):void {
+    public addParticlePrefab(renderableCloneable:tRenderableCloneable):void {
         if (DEBUG && !renderableCloneable.clone) {
             console.error(rnd);
             throw new DebugError(`can not add particle: model does not implement cloneable interface`);
         }
         renderableCloneable.revalidate();
-        this._prototypes.push(renderableCloneable);
+        this._prototypes.push(renderableCloneable as tParticle);
     }
-
 
     public override update():void {
         if (!this.enabled) return;
         super.update();
-        const time:number = this.game.getCurrentTime();
-        const hasGravity = !this.particleGravity.equals(0);
-        for (const holder of this._particles) {
-            if (!holder.active) continue;
-            this._onUpdateParticle(holder.particle);
-            if (hasGravity) {
-                holder.particle.velocity.x += this.particleGravity.x;
-                holder.particle.velocity.y += this.particleGravity.y;
-            }
-            const timePassed = time - holder.createdTime;
-            if (holder.alpha) {
-                holder.particle.alpha =
-                    EasingLinear(timePassed,holder.alpha.start,holder.alpha.end - holder.alpha.start, holder.lifeTime);
-            }
-            if (holder.scale) {
-                const val = EasingLinear(timePassed,holder.scale.start,holder.scale.end - holder.scale.start, holder.lifeTime);
-                holder.particle.scale.setXY(val);
-            }
-            if (timePassed > holder.lifeTime) {
-                holder.active = false;
-                this.removeChild(holder.particle);
-            }
-        }
         if (this.emitAuto) this.emit();
     }
 
@@ -126,72 +137,95 @@ export class ParticleSystem extends SimpleGameObjectContainer {
         this._onEmitParticle = onEmitParticle;
     }
 
+
     public emit():void {
-        this._emit(this);
-    }
-
-    public emitTo(parent:Scene|Layer|RenderableModel):void {
-        this._emit(parent);
-    }
-
-    private _emit(parent:Scene|Layer|RenderableModel):void {
 
         if (!this.enabled) return;
 
-        const num:number = rnd(this.numOfParticlesToEmit);
-        for (let i:number = 0;i<num;i++) {
-            let append = true;
-            let particle:RenderableCloneable & IUpdatable;
-            let holder:Optional<IParticleHolder> =
-                this._particles.find(it=>!it.active);
-            if (holder===undefined) {
-                if (this.maxParticlesInCache && this._particles.length>=this.maxParticlesInCache) {
-                    holder = getMin(this._particles,item=>item.createdTime);
-                    holder.active = true;
-                    particle = holder.particle;
-                    append = false;
+        const time = this.game.getCurrentTime();
+        const num = rnd(this.numOfParticlesToEmit);
+        for (let i = 0;i<num;++i) {
+            let append:boolean;
+            let particle = this.particles.find(isInactive);
+            if (particle===undefined) {
+                if (this.cacheGetPolicy!==undefined && this._children.length>=this.cacheGetPolicy.maxParticlesInCache) {
+                    if (this.cacheGetPolicy.strategy===MAX_PARTICLE_CACHE_STRATEGY.IGNORE_EMISSION_IF_OVERFLOW) {
+                        return;
+                    } else {
+                        particle = getOldestParticle(this.particles);
+                        append = particle.isDetached();
+                    }
                 } else {
-                    const particleProto:RenderableCloneable = this._prototypes[MathEx.randomInt(0,this._prototypes.length-1)];
-                    particle  = particleProto.clone();
-                    holder = {particle,lifeTime:0,createdTime:0,active:true};
-                    this._particles.push(holder);
+                    const particleProto = this._prototypes[MathEx.randomInt(0,this._prototypes.length-1)];
+                    particle  = particleProto.clone() as tParticle;
+                    particle.lifeTime = 0;
+                    particle.createdTime = 0;
+                    particle.active = true;
+                    particle.alphaFromTo = {start:1,end:1};
+                    particle.scaleFromTo = {start:1,end:1};
+                    particle.ps = this;
+                    const onUpdate = onUpdateParticle.bind(particle);
+                    const onUpdateSelf = particle.update.bind(particle);
+                    particle.update = ():void=>{
+                        onUpdateSelf();
+                        onUpdate();
+                    };
+                    append = true;
+                    this.particles.push(particle);
                 }
             } else {
-                particle = holder.particle;
+                append = particle.isDetached();
             }
 
-            const angle:number = rnd(this.particleAngle);
-            const vel:number = rnd(this.particleVelocity);
-            const velocityX:number = vel*Math.cos(angle);
-            const velocityY:number = vel*Math.sin(angle);
+            const angle = rnd(this.particleAngle);
+            const vel = rnd(this.particleVelocity);
+            const velocityX = vel*Math.cos(angle);
+            const velocityY = vel*Math.sin(angle);
             const rigidBody:Optional<IRigidBody> = particle.getRigidBody();
-            const velocity:Point2d = rigidBody===undefined?particle.velocity:rigidBody.velocity;
+            const velocity = rigidBody===undefined?particle.velocity:rigidBody.velocity;
             velocity.setXY(velocityX,velocityY);
 
-            const emissionRadius = rnd({from:0,to:this.emissionRadius});
+            const emissionRadius = MathEx.random(0,this.emissionRadius);
             const a = MathEx.random(0,Math.PI*2);
             particle.pos.x = emissionRadius*Math.cos(a) + this.emissionPosition.x;
             particle.pos.y = emissionRadius*Math.sin(a) + this.emissionPosition.y;
 
-            if (this.particleAlpha) {
-                holder.alpha = {start:rnd(this.particleAlpha.start),end:rnd(this.particleAlpha.end)};
-                particle.alpha = holder.alpha.start;
-            }
-            if (this.particleScale) {
-                holder.scale = {start:rnd(this.particleScale.start),end:rnd(this.particleScale.end)};
-                particle.scale.setXY(holder.scale.start);
+            if (this.particleAlpha!==undefined) {
+                particle.alphaFromTo.start = rnd(this.particleAlpha.start);
+                particle.alphaFromTo.end = rnd(this.particleAlpha.end);
+                particle.alpha = particle.alphaFromTo.start;
+            } else {
+                particle.alphaFromTo.start = 1;
+                particle.alphaFromTo.end = 1;
+                particle.alpha = particle.alphaFromTo.start;
             }
 
-            holder.lifeTime = rnd(this.particleLiveTime);
-            holder.createdTime = this.game.getCurrentTime();
-            holder.active = true;
+            if (this.particleScale!==undefined) {
+                particle.scaleFromTo.start = rnd(this.particleScale.start);
+                particle.scaleFromTo.end = rnd(this.particleScale.end);
+                particle.scale.setXY(particle.scaleFromTo.start);
+            } else {
+                particle.scaleFromTo.start = 1;
+                particle.scaleFromTo.end = 1;
+                particle.scale.setXY(particle.scaleFromTo.start,particle.scaleFromTo.start);
+            }
+
+            particle.lifeTime = rnd(this.particleLiveTime);
+            particle.createdTime = time;
+            particle.active = true;
 
             this._onEmitParticle(particle);
             if (append) {
-                parent.appendChild(particle);
+                this.appendChild(particle);
+                particle.moveToBack();
             }
+
         }
 
+    }
+
+    public _getGame():Game {
+        return this.game;
     }
 
 }

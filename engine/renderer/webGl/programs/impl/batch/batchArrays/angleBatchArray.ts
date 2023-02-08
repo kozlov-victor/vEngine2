@@ -7,10 +7,11 @@ export class AngleBatchArray extends AbstractBatchArray<number> {
     }
 
     protected onPutNextChunk(model: number, offset: number): void {
-        this.array[offset++] = model;
-        this.array[offset++] = model;
-        this.array[offset++] = model;
-        this.array[offset  ] = model;
+        const array = this.array;
+        array[  offset] =
+        array[++offset] =
+        array[++offset] =
+        array[++offset] = model;
     }
 
 }

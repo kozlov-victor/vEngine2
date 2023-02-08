@@ -13,7 +13,7 @@ export namespace MathEx {
 
     export const clamp = (val:number,min:number,max:number):number=> {
         if (val<min) val = min;
-        if (val>max) val = max;
+        else if (val>max) val = max;
         return val;
     };
 

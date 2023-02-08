@@ -15,10 +15,7 @@ export class MainScene extends Scene {
         console.log('on preloading');
     }
 
-    // onProgress(val: number) {
-    //
-    // }
-    //
+
     public override onReady():void {
 
         const container = new SimpleGameObjectContainer(this.game);

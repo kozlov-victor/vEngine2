@@ -45,9 +45,9 @@ class MouseEventThrottler {
 export class MouseControl implements IControl {
 
     public readonly type:string = 'MouseControl';
-    private _helper:MouseControlHelper = new MouseControlHelper(this.game);
-    private _capturedObjectsByTouchIdHolder:CapturedObjectsByTouchIdHolder = new CapturedObjectsByTouchIdHolder();
-    private _capturedObjectsByTouchIdPrevHolder:CapturedObjectsByTouchIdHolder = new CapturedObjectsByTouchIdHolder();
+    private _helper = new MouseControlHelper(this.game);
+    private _capturedObjectsByTouchIdHolder = new CapturedObjectsByTouchIdHolder();
+    private _capturedObjectsByTouchIdPrevHolder = new CapturedObjectsByTouchIdHolder();
     private _container:HTMLElement;
     private mouseEventThrottler = new MouseEventThrottler();
 
@@ -209,12 +209,12 @@ export class MouseControl implements IControl {
     }
 
     private triggerEvent(e:MouseEvent|Touch, mouseEvent:MOUSE_EVENTS, isMouseDown:boolean = false):MousePoint{
-        const scene:Scene = this.game.getCurrentScene();
-        const mousePoint:MousePoint = this._helper.resolvePoint(e);
+        const scene = this.game.getCurrentScene();
+        const mousePoint = this._helper.resolvePoint(e);
         mousePoint.isMouseDown = isMouseDown;
 
-        const objectStackItems:RenderingObjectStackItem[] = this.game.getCurrentScene()._renderingObjectStack.get();
-        let i:number = objectStackItems.length; // reversed loop
+        const objectStackItems = this.game.getCurrentScene()._renderingObjectStack.get();
+        let i = objectStackItems.length; // reversed loop
         if (mouseEvent===MOUSE_EVENTS.mouseMove) this._capturedObjectsByTouchIdHolder.clear(mousePoint.id);
 
         let propagationCancelled = false;

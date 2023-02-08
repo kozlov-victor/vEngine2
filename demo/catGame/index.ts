@@ -17,6 +17,5 @@ game.setAudioPLayer(AudioPlayer);
 game.setPhysicsSystem(ArcadePhysicsSystem);
 GameManager.instantiate(game);
 game.runScene(new PreIntroScene(game));
-//game.getRenderer<WebGlRenderer>().setPixelPerfectMode(true);
 
 

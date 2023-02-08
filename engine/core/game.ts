@@ -251,7 +251,7 @@ export class Game {
         const deltaTimeOrig = this._deltaTime;
 
         if (DEBUG) {
-            const renderError:Optional<{code:number,desc:string}> = this._renderer.getError();
+            const renderError = this._renderer.getError();
             if (renderError!==undefined) {
                 throw new DebugError(`rendering error with code ${renderError.code} (${renderError.desc})`);
             }
@@ -288,6 +288,7 @@ export class Game {
         } while (loopCnt<numOfLoops);
 
         this._currTime = currTimeOrig;
+        this._deltaTime = deltaTimeOrig;
 
         if (this._currSceneTransition!==undefined) this._currSceneTransition.render();
         else currentScene.render();

@@ -2,26 +2,22 @@ import {
     AbstractBatchArray,
     NUM_OF_VERTICES_IN_QUAD
 } from "@engine/renderer/webGl/programs/impl/batch/batchArrays/abstract/abstractBatchArray";
-import {Color} from "@engine/renderer/common/color";
+import {ColorEx} from "@engine/renderable/impl/general/image/batchedImage";
 
-export class ColorBatchArray extends AbstractBatchArray<Color> {
+export class ColorBatchArray extends AbstractBatchArray<ColorEx> {
 
     constructor() {
-        super(4);
+        super(2);
     }
 
-    protected onPutNextChunk(model: Color, offset: number): void {
-        const colorArray = model.asGL();
-        const r = colorArray[0];
-        const g = colorArray[1];
-        const b = colorArray[2];
-        const a = colorArray[3];
+    protected onPutNextChunk(model: ColorEx, offset: number): void {
+        const colorArray = model.getPackedColor();
+        const rg = colorArray[0];
+        const ba = colorArray[1];
         const array = this.array;
         for (let i=0;i<NUM_OF_VERTICES_IN_QUAD;++i) {
-            array[offset++] = r;
-            array[offset++] = g;
-            array[offset++] = b;
-            array[offset++] = a;
+            array[offset++] = rg;
+            array[offset++] = ba;
         }
     }
 

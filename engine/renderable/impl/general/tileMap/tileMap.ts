@@ -7,7 +7,7 @@ import {Optional} from "@engine/core/declarations";
 import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
 import {RenderableModelWithTexture} from "@engine/renderable/abstract/renderableModelWithTexture";
 import {ITexture} from "@engine/renderer/common/texture";
-import {ArcadePhysicsSystem} from "@engine/physics/arcade/arcadePhysicsSystem";
+import {ArcadePhysicsSystem, SLOPE_TYPE} from "@engine/physics/arcade/arcadePhysicsSystem";
 import {ARCADE_RIGID_BODY_TYPE} from "@engine/physics/arcade/arcadeRigidBody";
 import {IRectJSON, Rect} from "@engine/geometry/rect";
 import {IRigidBody} from "@engine/physics/common/interfaces";
@@ -99,6 +99,10 @@ export interface ITiledJSON {
 export interface ICollisionInfo {
     useCollision:boolean;
     collideWithTiles:number[]|'all';
+    slopes?: {
+        floorUp?:number[],
+        floorDown?:number[],
+    }
     exceptCollisionTiles?:number[];
     groupNames?: string[];
     restitution?:number;
@@ -291,13 +295,12 @@ export class TileMap extends RenderableModelWithTexture {
                 if (tileId===undefined) continue;
 
                 let collisionRect:IRectJSON;
-                let found = false;
                 if (collisionInfo?.tileCollisionRects?.[tileId]!==undefined) {
                     collisionRect = collisionInfo.tileCollisionRects[tileId];
-                    found = true;
                 } else {
                     collisionRect = {x:0,y:0,width:this._tileWidth,height:this._tileHeight};
                 }
+
 
                 const rigidBody = this.game.getPhysicsSystem<ArcadePhysicsSystem>().createRigidBody({
                     type: ARCADE_RIGID_BODY_TYPE.KINEMATIC,
@@ -307,6 +310,14 @@ export class TileMap extends RenderableModelWithTexture {
                     acceptCollisions: TileMap._isTileCollideable(tileId,collisionInfo),
                 });
                 rigidBody.addInfo = {tileId,tileX:x,tileY:y};
+
+                if (collisionInfo.slopes?.floorUp?.includes(tileId)) {
+                    rigidBody.addInfo.slopeType = SLOPE_TYPE.UP;
+                }
+                else if (collisionInfo.slopes?.floorDown?.includes(tileId)) {
+                    rigidBody.addInfo.slopeType = SLOPE_TYPE.DOWN;
+                }
+
                 rigidBody.setModel(this);
                 rigidBody.setBounds(
                     new Point2d(x * this._tileWidth+collisionRect.x, y * this._tileHeight+collisionRect.y),

@@ -31,7 +31,7 @@ export class MainScene extends Scene {
         spr.pos.setFrom({x:10,y:10});
         this.appendChild(spr);
         spr.transformPoint.setToCenter();
-        spr.velocity.x = -20;
+        spr.velocity.x = -50;
         this.obj = spr;
 
     }

@@ -4,7 +4,6 @@ import {ARCADE_RIGID_BODY_TYPE, ArcadeRigidBody} from "@engine/physics/arcade/ar
 import {Rect} from "@engine/geometry/rect";
 import {TexturePackerAtlas} from "@engine/animation/frameAnimation/atlas/texturePackerAtlas";
 import {AtlasFrameAnimation} from "@engine/animation/frameAnimation/atlas/atlasFrameAnimation";
-import {ArcadeSideScrollControl} from "@engine/behaviour/impl/arcadeSideScrollControl";
 import {ITiledJSON, TileMap} from "@engine/renderable/impl/general/tileMap/tileMap";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {CharacterBullet} from "./characterBullet";
@@ -14,6 +13,7 @@ import {GroundDust} from "../particles/groundDust";
 import Inject = DiContainer.Inject;
 import {Script} from "./script";
 import {Key} from "./key";
+import {ArcadeSideScrollControl} from "@engine/behaviour/impl/arcadeSideScroll/arcadeSideScrollControl";
 
 export class Character implements Injectable {
 

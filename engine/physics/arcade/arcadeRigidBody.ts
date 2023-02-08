@@ -76,7 +76,7 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
 
     public readonly collisionEventHandler:EventEmitterDelegate<ARCADE_COLLISION_EVENT, ArcadeRigidBody> = new EventEmitterDelegate(this.game);
 
-    public debug:boolean = false;
+    public readonly debug:boolean = false;
     public readonly id:number = bodyCnt++;
 
     public gravityImpact:number = 1;

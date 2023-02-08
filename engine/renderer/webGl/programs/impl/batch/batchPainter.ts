@@ -17,7 +17,7 @@ import {PosBatchArray} from "@engine/renderer/webGl/programs/impl/batch/batchArr
 
 export class BatchPainter extends AbstractPainter {
 
-    public static readonly NUM_OF_QUADS_IN_BATCH = 8000; // max is 65535/4
+    public static readonly NUM_OF_QUADS_IN_BATCH = 8000;
     private currentModelIndex:number = 0;
     private readonly a_idx: string;
     private readonly a_color: string;
@@ -36,7 +36,7 @@ export class BatchPainter extends AbstractPainter {
 
         this.u_viewPort =gen.addVertexUniform(GL_TYPE.FLOAT_VEC2,'u_viewPort');
         this.a_idx = gen.addAttribute(GL_TYPE.FLOAT,'a_idx');
-        this.a_color = gen.addAttribute(GL_TYPE.FLOAT_VEC4,'a_color');
+        this.a_color = gen.addAttribute(GL_TYPE.FLOAT_VEC2,'a_color');
         this.a_angle = gen.addAttribute(GL_TYPE.FLOAT,'a_angle');
         this.a_pos = gen.addAttribute(GL_TYPE.FLOAT_VEC4,'a_pos');
         gen.addVarying(GL_TYPE.FLOAT_VEC4,'v_color');
@@ -85,7 +85,7 @@ export class BatchPainter extends AbstractPainter {
             miscBuffersInfo: [
                 {
                     array:this.colorBatchArray.getArray(), type:gl.FLOAT,
-                    size:4, attrName:this.a_color,
+                    size:2, attrName:this.a_color,
                 },
                 {
                     array:this.angleBatchArray.getArray(), type:gl.FLOAT,
@@ -124,6 +124,7 @@ export class BatchPainter extends AbstractPainter {
             (renderer.getRenderTarget().getTexture() as Texture).size.toArray();
         this.setUniform(this.u_viewPort,viewPortSize);
         this.colorBatchArray.uploadToVertexBuffer();
+        this.colorBatchArray.clearUnused();
         this.angleBatchArray.uploadToVertexBuffer();
         this.posBatchArray.uploadToVertexBuffer();
         this.draw();
