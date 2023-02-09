@@ -38,6 +38,12 @@ export class MainScene extends Scene {
             useCollision:true,
             collideWithTiles:'all',
             groupNames:['tileMap'],
+            slopes: {
+                floorUp: [8],
+                floorDown: [9],
+                ceilUp: [10],
+                ceilDown: [11],
+            },
             exceptCollisionTiles: [1,2,3,4,7],
             debug: false,
             restitution: 0.1,

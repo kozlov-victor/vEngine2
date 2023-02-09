@@ -30,8 +30,10 @@ const intersect = (a:Int,b:Int):boolean=> {
 };
 
 export const enum SLOPE_TYPE {
-    UP,
-    DOWN
+    FLOOR_UP = 200,
+    FLOOR_DOWN,
+    CEIL_UP,
+    CEIL_DOWN
 }
 
 

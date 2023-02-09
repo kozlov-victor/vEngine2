@@ -1,4 +1,3 @@
-
 import * as path from 'path';
 import * as webpack from 'webpack';
 import * as fs from 'fs';
@@ -7,17 +6,16 @@ import * as TerserPlugin from 'terser-webpack-plugin';
 import * as cliUI from './node_tools/cliUI.mjs';
 import * as ESLintPlugin from 'eslint-webpack-plugin';
 import * as storage from './node_tools/common/storage.mjs';
-import {TextTable} from "./node_tools/build/textTable.js";
-import { fileURLToPath } from 'url';
+import {fileURLToPath} from 'url';
 
 let project;
 let allProjectsGrouped;
 let allProjectsFlat;
-
+let TextTable;
 
 class InputOutputResolver {
 
-    resolve(project,allProjects){
+    async resolve(project,allProjects){
         const entry = {};
         const output = {};
 
@@ -27,6 +25,13 @@ class InputOutputResolver {
             entry['textTable'] = './engine/renderable/impl/ui/textHelpers/textTable.ts';
             output.path = path.resolve('./node_tools/build');
         } else {
+
+            if (!fs.existsSync("./node_tools/build/textTable.js")) {
+                throw new Error('invoke "build_tools" task');
+            }
+
+            TextTable = (await import("./node_tools/build/textTable.js")).TextTable;
+
             if (!project) {
                 allProjects.forEach((dir)=>{
                     entry[`${dir}`] = [`./demo/${dir}/index.ts`];
@@ -218,7 +223,8 @@ export default async (env = {})=>{
 
     const debug = env.debug==='true';
 
-    const {entry,output} = new InputOutputResolver().resolve(project,allProjectsFlat);
+    const {entry,output} = await new InputOutputResolver().resolve(project,allProjectsFlat);
+
 
     if (project==='build_tools') {
         console.log({entry,output});

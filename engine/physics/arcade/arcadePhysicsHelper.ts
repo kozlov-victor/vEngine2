@@ -4,6 +4,16 @@ import {MathEx} from "@engine/misc/math/mathEx";
 import {Optional} from "@engine/core/declarations";
 import {SLOPE_TYPE} from "@engine/physics/arcade/arcadePhysicsSystem";
 
+const enum SLOPE_KIND {
+    FLOOR,
+    CEIL
+}
+
+const enum SLOPE_DIRECTION {
+    UP,
+    DOWN
+}
+
 export namespace arcadePhysicsHelper {
 
     const abs = Math.abs;
@@ -49,7 +59,16 @@ export namespace arcadePhysicsHelper {
     export const resolveCollision_AABB_withSlope =(player:ArcadeRigidBody,pos:Point2d,entity:ArcadeRigidBody):void=> {
         const slopeType = entity.addInfo.slopeType as Optional<SLOPE_TYPE>;
         if (slopeType===undefined) return;
-        collidePlayer_AABB_withSlope(player, pos, entity, slopeType);
+        const slopeKind:SLOPE_KIND = (slopeType===SLOPE_TYPE.FLOOR_UP || slopeType===SLOPE_TYPE.FLOOR_DOWN)?
+            SLOPE_KIND.FLOOR:SLOPE_KIND.CEIL;
+        const slopeDirection:SLOPE_DIRECTION = (slopeType===SLOPE_TYPE.FLOOR_UP || slopeType===SLOPE_TYPE.CEIL_UP)?
+            SLOPE_DIRECTION.UP:
+            SLOPE_DIRECTION.DOWN;
+        if (slopeKind===SLOPE_KIND.FLOOR) {
+            collidePlayer_AABB_withFloorSlope(player, pos, entity, slopeDirection);
+        } else {
+            collidePlayer_AABB_withCeilSlope(player, pos, entity, slopeDirection);
+        }
     }
 
     export const resolveOverlap_AABB = (player:ArcadeRigidBody, entity:ArcadeRigidBody):void=> {
@@ -125,23 +144,45 @@ export namespace arcadePhysicsHelper {
         entity.collisionEventHandler.trigger(ARCADE_COLLISION_EVENT.COLLIDED, player);
     }
 
-    const collidePlayer_AABB_withSlope =(player:ArcadeRigidBody, pos: Point2d, slope:ArcadeRigidBody,slopeType:SLOPE_TYPE):void=> {
+    const collidePlayer_AABB_withFloorSlope =(player:ArcadeRigidBody, pos: Point2d, slope:ArcadeRigidBody,slopeType:SLOPE_DIRECTION):void=> {
         const dxFactor =
-            slopeType===SLOPE_TYPE.UP?
+            slopeType===SLOPE_DIRECTION.UP?
                 player.getRight() - slope.getLeft():
                 player.getLeft()  - slope.getLeft();
         const dx = MathEx.clamp(dxFactor,0,slope._rect.width);
         const slopeFactor = slope._rect.height * dx/slope._rect.width;
         const slopeCorrection =
-            slopeType===SLOPE_TYPE.UP?
+            slopeType===SLOPE_DIRECTION.UP?
                 slopeFactor:
                 slope._rect.height - slopeFactor;
         const onSlopePosY = slope.getBottom() - slopeCorrection - player._rect.height - player._rect.y - 1;
-        if (player.pos.y>=onSlopePosY) {
+        if (player.pos.y>onSlopePosY) {
             pos.y = onSlopePosY;
 
             emitCollisionEvents(player, slope);
             player.collisionFlags.bottom = slope.collisionFlags.top = true;
+            reflectVelocityY(player, slope);
+        }
+    }
+
+
+    const collidePlayer_AABB_withCeilSlope =(player:ArcadeRigidBody, pos: Point2d, slope:ArcadeRigidBody,slopeType:SLOPE_DIRECTION):void=> {
+        const dxFactor =
+            slopeType===SLOPE_DIRECTION.DOWN?
+                player.getRight() - slope.getLeft():
+                player.getLeft()  - slope.getLeft();
+        const dx = MathEx.clamp(dxFactor,0,slope._rect.width);
+        const slopeFactor = slope._rect.height * dx/slope._rect.width;
+        const slopeCorrection =
+            slopeType===SLOPE_DIRECTION.DOWN?
+                slopeFactor:
+                slope._rect.height - slopeFactor;
+        const onSlopePosY = slope.getTop() + slopeCorrection - player._rect.y + 1;
+        if (player.pos.y<onSlopePosY) {
+            pos.y = onSlopePosY;
+
+            emitCollisionEvents(player, slope);
+            player.collisionFlags.top = slope.collisionFlags.bottom = true;
             reflectVelocityY(player, slope);
         }
     }

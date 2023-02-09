@@ -148,7 +148,8 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
     }
 
     public jump():void {
-        if (this.gameObject.getRigidBody<ArcadeRigidBody>().collisionFlags.bottom) {
+        if (this.body.collisionFlags.top) return;
+        if (this.body.collisionFlags.bottom) {
             this.body.velocity.y -= this.parameters.jumpVelocity;
             this.parameters.jumpAnimation?.play();
             this.parameters.onJumped?.();
@@ -157,7 +158,7 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
 
     public override update() {
         super.update();
-        const body = this.gameObject.getRigidBody<ArcadeRigidBody>();
+        const body = this.body;
         const oldOnGround = this.onGround;
         this.onGround = body.collisionFlags.bottom;
         this.onLadder = this.isLadderTileId(body.overlappedWith?.addInfo?.tileId);

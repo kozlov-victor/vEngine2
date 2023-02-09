@@ -102,7 +102,9 @@ export interface ICollisionInfo {
     slopes?: {
         floorUp?:number[],
         floorDown?:number[],
-    }
+        ceilUp?:number[],
+        ceilDown?:number[],
+    },
     exceptCollisionTiles?:number[];
     groupNames?: string[];
     restitution?:number;
@@ -312,10 +314,16 @@ export class TileMap extends RenderableModelWithTexture {
                 rigidBody.addInfo = {tileId,tileX:x,tileY:y};
 
                 if (collisionInfo.slopes?.floorUp?.includes(tileId)) {
-                    rigidBody.addInfo.slopeType = SLOPE_TYPE.UP;
+                    rigidBody.addInfo.slopeType = SLOPE_TYPE.FLOOR_UP;
                 }
                 else if (collisionInfo.slopes?.floorDown?.includes(tileId)) {
-                    rigidBody.addInfo.slopeType = SLOPE_TYPE.DOWN;
+                    rigidBody.addInfo.slopeType = SLOPE_TYPE.FLOOR_DOWN;
+                }
+                else if (collisionInfo.slopes?.ceilUp?.includes(tileId)) {
+                    rigidBody.addInfo.slopeType = SLOPE_TYPE.CEIL_UP;
+                }
+                else if (collisionInfo.slopes?.ceilDown?.includes(tileId)) {
+                    rigidBody.addInfo.slopeType = SLOPE_TYPE.CEIL_DOWN;
                 }
 
                 rigidBody.setModel(this);
@@ -381,13 +389,20 @@ export class TileMap extends RenderableModelWithTexture {
     }
 
     public draw(): void {
-
         this.prepareDrawableInfo();
-        if (!this._drawInfo.dirty) {
-            this.updateDrawingSurfacePos();
-            return;
+        if (this._drawInfo.dirty) {
+            this._drawingSurface.drawBatch(this.drawBatch);
         }
+        this.updateDrawingSurfacePos();
+    }
 
+    public drawForced(): void {
+        this.prepareDrawableInfo();
+        this._drawingSurface.drawBatch(this.drawBatch);
+        this.updateDrawingSurfacePos();
+    }
+
+    private drawBatch = ()=>{
         this.beforeDraw();
         for (let y:number=0;y<this._numOfTilesInScreenByY;y++) {
             const currTileByY:number = this._drawInfo.firstTileToDrawByY + y;
@@ -406,8 +421,6 @@ export class TileMap extends RenderableModelWithTexture {
                 this._drawingSurface.drawModel(this._cellImage);
             }
         }
-
-        this.updateDrawingSurfacePos();
     }
 
     private getFramePosX(frameIndex:number):number {
