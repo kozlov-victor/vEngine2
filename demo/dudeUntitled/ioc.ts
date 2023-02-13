@@ -20,7 +20,7 @@ export namespace DiContainer {
         });
     }
 
-    export const get = (tkn:string):any=> {
+    const get = (tkn:string):any=> {
         return ctx[tkn];
     }
 
@@ -31,7 +31,7 @@ export namespace DiContainer {
                     if (DEBUG && !completed) {
                         throw new DebugError(`DI container is not completed`);
                     }
-                    const obj = DiContainer.get(tkn);
+                    const obj = get(tkn);
                     if (DEBUG && obj===undefined) {
                         throw new DebugError(`can not retrieve object by token "${tkn}"`);
                     }

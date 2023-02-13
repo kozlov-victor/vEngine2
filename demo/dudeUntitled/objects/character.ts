@@ -20,7 +20,7 @@ export class Character implements Injectable {
     private readonly characterImage:AnimatedImage;
     private body:ArcadeRigidBody;
 
-    @Inject(GroundDust.name) private readonly groundDust:GroundDust;
+    @Inject(GroundDust.name) public readonly groundDust:GroundDust;
     @Inject(TileMap.name) private readonly tileMap:TileMap;
     @Inject(Script.name) private readonly script:Script;
 
