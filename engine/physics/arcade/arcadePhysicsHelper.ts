@@ -32,14 +32,14 @@ export namespace arcadePhysicsHelper {
             oldEntityPosX = entityBody._oldPos.x;
             oldEntityPosY = entityBody._oldPos.y;
         }
-        const newEntityPosX:number = entityBody.pos.x;
-        const newEntityPosY:number = entityBody.pos.y;
-        const entityLengthX:number = newEntityPosX - oldEntityPosX;
-        const entityLengthY:number = newEntityPosY - oldEntityPosY;
-        const entityLengthMax:number = max(abs(entityLengthX),abs(entityLengthY));
-        const entityDeltaX:number = entityLengthX/entityLengthMax;
-        const entityDeltaY:number = entityLengthY/entityLengthMax;
-        let step:number = entityLengthMax;
+        const newEntityPosX = entityBody.pos.x;
+        const newEntityPosY = entityBody.pos.y;
+        const entityLengthX = newEntityPosX - oldEntityPosX;
+        const entityLengthY = newEntityPosY - oldEntityPosY;
+        const entityLengthMax = max(abs(entityLengthX),abs(entityLengthY));
+        const entityDeltaX = entityLengthX/entityLengthMax;
+        const entityDeltaY = entityLengthY/entityLengthMax;
+        let step = entityLengthMax;
         const playerBodyRect = playerBody.calcAndGetBoundRect();
         while (step-->0) {
             if (step===0) {
@@ -65,9 +65,17 @@ export namespace arcadePhysicsHelper {
             SLOPE_DIRECTION.UP:
             SLOPE_DIRECTION.DOWN;
         if (slopeKind===SLOPE_KIND.FLOOR) {
-            collidePlayer_AABB_withFloorSlope(player, pos, entity, slopeDirection);
+            if (player.getBottom()<=entity.getBottom()+1) {
+                collidePlayer_AABB_withFloorSlope(player, pos, entity, slopeDirection);
+            } else {
+                interpolateAndResolveCollision_AABB(player, pos, entity);
+            }
         } else {
-            collidePlayer_AABB_withCeilSlope(player, pos, entity, slopeDirection);
+            if (player.getTop()>=entity.getTop()-1) {
+                collidePlayer_AABB_withCeilSlope(player, pos, entity, slopeDirection);
+            } else {
+                interpolateAndResolveCollision_AABB(player, pos, entity);
+            }
         }
     }
 
