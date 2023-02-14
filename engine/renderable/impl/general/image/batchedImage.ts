@@ -31,6 +31,7 @@ export class ColorEx extends Color {
 export class BatchedImage extends RenderableModel implements ICloneable<BatchedImage> {
 
     public readonly fillColor: ColorEx = new ColorEx();
+    public declare blendMode:never;
 
     constructor(game: Game) {
         super(game);

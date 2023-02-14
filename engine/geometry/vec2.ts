@@ -1,5 +1,6 @@
+import {IPoint2d} from "@engine/geometry/point2d";
 
-export class Vec2 {
+export class Vec2 implements IPoint2d {
 
     public constructor(public x:number, public y:number) {
     }
@@ -8,7 +9,7 @@ export class Vec2 {
         return Math.acos(Vec2.dot(a, b) / (Vec2.magnitude(a) * Vec2.magnitude(b)));
     }
 
-    public static angleTo(a:Vec2,b:Vec2):number{
+    public static angleTo(a:IPoint2d,b:IPoint2d):number{
         return Math.atan2(b.y-a.y,b.x-a.x);
     }
 
@@ -24,11 +25,11 @@ export class Vec2 {
         return Vec2.normalized(v);
     }
 
-    public static distance(a:Vec2,b:Vec2):number {
+    public static distance(a:IPoint2d,b:IPoint2d):number {
         return Math.sqrt(Vec2.distanceSquared(a,b));
     }
 
-    public static distanceSquared(a:Vec2, b:Vec2):number {
+    public static distanceSquared(a:IPoint2d, b:IPoint2d):number {
         const axMinusBx:number = a.x - b.x;
         const ayMinusBy:number = a.y - b.y;
         return axMinusBx**2 + ayMinusBy**2;
@@ -58,7 +59,7 @@ export class Vec2 {
         return new Vec2(a.x - b.x, a.y - b.y);
     }
 
-    public static magnitude(vec:Vec2):number {
+    public static magnitude(vec:IPoint2d):number {
         return Math.sqrt(vec.x * vec.x + vec.y * vec.y);
     }
 

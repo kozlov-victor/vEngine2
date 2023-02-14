@@ -442,6 +442,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     }
 
     public override afterItemStackDraw(stackPointer:IStateStackPointer):void {
+        this.flush();
         this._glCachedAccessor.setDepthTest(false);
         this._currFrameBufferStack.reduceState(stackPointer);
     }
