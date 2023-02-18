@@ -118,6 +118,16 @@ export interface ITileAnimation {
     frames:({duration:number,tileId:number})[];
 }
 
+interface ITileAtRectInfo {
+    x:number;
+    y:number;
+    xTile:number;
+    yTile:number;
+    value?:number;
+    width:number;
+    height:number;
+}
+
 export class TileMap extends RenderableModelWithTexture {
 
     public override readonly type = "TileMap" as const;
@@ -451,8 +461,8 @@ export class TileMap extends RenderableModelWithTexture {
         return this.getDataValueAtCellXY(x,y);
     }
 
-    public getTilesAtRect(rect:IRectJSON):{xTile:number,yTile:number,value:number|undefined}[] {
-        const result:{xTile:number,yTile:number,value:number|undefined}[] = [];
+    public getTilesAtRect(rect:IRectJSON):ITileAtRectInfo[] {
+        const result:ITileAtRectInfo[] = [];
         const alreadyCheckedTiles:{[key:string]:boolean} = {};
 
         let x:number = rect.x,y:number;
@@ -466,9 +476,21 @@ export class TileMap extends RenderableModelWithTexture {
                 const value = this.getDataValueAtPointXY(x,y);
                 const xTile = ~~(x / this._tileWidth);
                 const yTile = ~~(y / this._tileHeight);
+                const xPos = xTile*this._tileWidth;
+                const yPos = yTile*this._tileHeight;
                 const key = `${xTile}_${yTile}`;
                 if (!alreadyCheckedTiles[key]) {
-                    result.push({xTile,yTile,value});
+                    result.push(
+                        {
+                            xTile,
+                            yTile,
+                            x:xPos,
+                            y:yPos,
+                            width:this._tileWidth,
+                            height:this._tileHeight,
+                            value
+                        }
+                    );
                     alreadyCheckedTiles[key] = true;
                 }
                 if (y===maxY) break;

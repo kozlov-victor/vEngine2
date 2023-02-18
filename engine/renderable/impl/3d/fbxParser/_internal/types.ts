@@ -8,7 +8,7 @@ export interface FBXNode {
     nodes: FBXNode[]
 }
 
-export type FBXProperty = boolean | number | BigInt | boolean[] | number[] | BigInt[] | string
+export type FBXProperty = boolean | number | bigint | boolean[] | number[] | bigint[] | string
 
 
 export interface ITextureDescription {

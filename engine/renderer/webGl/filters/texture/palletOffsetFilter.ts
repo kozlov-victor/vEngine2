@@ -28,6 +28,7 @@ export class PalletOffsetFilter extends AbstractGlFilter{
                 float palletPoint = mod(col.r * palletTextureWidth + palletOffset,palletTextureWidth);
                 float palletPointRelative = palletPoint/palletTextureWidth;
                 gl_FragColor = texture2D(palletTexture, vec2(palletPointRelative,0.0));
+                gl_FragColor.rgb*=col.a;
                 gl_FragColor.a = col.a;
             }
         `);

@@ -43,12 +43,14 @@ export class FbxModelWrapper extends SimpleGameObjectContainer {
 
 export class FbxMaterial extends MeshMaterial implements IFbxNode {
     public tag:string;
+    public transparencyFactor:number;
     public uuid:number;
 
     protected override setClonedProperties(cloned: FbxMaterial) {
         super.setClonedProperties(cloned);
         cloned.tag = this.tag;
         cloned.uuid = this.uuid;
+        cloned.transparencyFactor = this.transparencyFactor;
     }
 
     public override clone(): FbxMaterial {

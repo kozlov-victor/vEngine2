@@ -7,31 +7,40 @@ import {Vec2} from "@engine/geometry/vec2";
 import {BatchedImage} from "@engine/renderable/impl/general/image/batchedImage";
 import {Color} from "@engine/renderer/common/color";
 import {Game} from "@engine/core/game";
-import {KernelBurnAccumulativeFilter} from "@engine/renderer/webGl/filters/accumulative/kernelBurnAccumulativeFilter";
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
+import {Resource} from "@engine/resources/resourceDecorators";
+import {ITexture} from "@engine/renderer/common/texture";
+import {PalletOffsetFilter} from "@engine/renderer/webGl/filters/texture/palletOffsetFilter";
+import {TaskQueue} from "@engine/resources/taskQueue";
 
-const createParticle = (game:Game,color:Color)=>{
-    const p = new BatchedImage(game);
-    //p.radius = MathEx.random(2,5);
-    p.size.setWH(MathEx.random(2,5));
-    p.transformPoint.setToCenter();
-    p.fillColor.setFrom(color);
-    return p;
-}
 
 export class MainScene extends Scene {
 
-    public override onPreloading():void {
+    @Resource.Texture('./particlesFlame/fire-color-table.png')
+    public readonly palletTexture:ITexture;
+
+    @Resource.Texture('./particlesFire2/fire.png')
+    public readonly fireTexture:ITexture;
+
+    public override onPreloading(taskQueue:TaskQueue):void {
         console.log('on preloading');
         this.backgroundColor = ColorFactory.fromCSS('#280202');
     }
 
     public override onReady():void {
 
+        const createParticle = (game:Game,color:Color)=>{
+            const p = new BatchedImage(game);
+            //p.radius = MathEx.random(2,5);
+            p.size.setWH(MathEx.random(2,5));
+            p.transformPoint.setToCenter();
+            p.fillColor.setFrom(color);
+            return p;
+        }
+
         const container = new SimpleGameObjectContainer(this.game);
         container.size.setFrom(this.game.size);
-        const f = new KernelBurnAccumulativeFilter(this.game);
-        f.setNoiseIntensity(0.6);
+        const f = new PalletOffsetFilter(this.game,this.palletTexture);
         container.filters = [f];
         container.appendTo(this);
 

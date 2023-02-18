@@ -1,10 +1,12 @@
 import {Key} from "./key";
 import {DiContainer, Injectable} from "../ioc";
 import {MainScene} from "../mainScene";
-import {TileMap} from "@engine/renderable/impl/general/tileMap/tileMap";
 import {IRectJSON} from "@engine/geometry/rect";
-import Inject = DiContainer.Inject;
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
+import {WallDust} from "../particles/wallDust";
+import {AnimatedTileMap} from "@engine/renderable/impl/general/tileMap/animatedTileMap";
+import {Sausage} from "./sausage";
+import Inject = DiContainer.Inject;
 
 export const waitFor = (root:RenderableModel,time:number):Promise<void>=> {
     return new Promise(resolve=>{
@@ -14,12 +16,21 @@ export const waitFor = (root:RenderableModel,time:number):Promise<void>=> {
 
 export class Script implements Injectable {
 
-    @Inject(TileMap.name) private readonly tileMap:TileMap;
+    @Inject(AnimatedTileMap) private readonly tileMap:AnimatedTileMap;
+    @Inject(WallDust) public readonly wallDust:WallDust;
 
     constructor(private scene:MainScene) {
     }
 
     public postConstruct(): void {
+    }
+
+    public onHeroCollectedSausage(sausage:Sausage):void {
+        const host = sausage.getRenderable();
+        this.wallDust.emit(
+            host.pos.x+host.size.width/2,
+            host.pos.y+host.size.height/2
+        );
     }
 
     public async onHeroCollidedWithKey(key:Key):Promise<void> {
@@ -42,6 +53,10 @@ export class Script implements Injectable {
             this.tileMap.setValueAtCellXY(tile.xTile,tile.yTile,undefined);
             this.tileMap.redefineRigidBodies();
             this.tileMap.drawForced();
+            this.wallDust.emit(
+                tile.x+tile.width/2,
+                tile.y+tile.height/2,
+            );
         }
     }
 

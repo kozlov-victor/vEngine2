@@ -11,13 +11,13 @@ import {Image} from "@engine/renderable/impl/general/image/image";
 export class MainScene extends Scene {
 
     @Resource.Texture('./particlesFire2/fire.png')
-    public readonly resourceLink:ITexture;
+    public readonly fireTexture:ITexture;
 
     public override onReady():void {
 
         this.backgroundColor = Color.BLACK;
 
-        const image = new Image(this.game,this.resourceLink);
+        const image = new Image(this.game,this.fireTexture);
         image.blendMode = BLEND_MODE.ADDITIVE;
 
         const ps: ParticleSystem = new ParticleSystem(this.game);

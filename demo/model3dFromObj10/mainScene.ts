@@ -32,10 +32,10 @@ export class MainScene extends Scene {
         obj.pos.setXY(200,250);
         obj._children.forEach(c=>{
             (c as Model3d).material.reflectivity = 0.1;
+            (c as Model3d).alpha = 0.8;
         });
         obj.size.setWH(200,200);
         obj.scale.setXYZ(100);
-        obj.alpha = 0.2;
         this.appendChild(obj);
         const timer = this.setInterval(()=>{
             obj.angle3d.y+=0.01;

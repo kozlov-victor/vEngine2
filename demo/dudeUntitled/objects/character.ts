@@ -11,18 +11,20 @@ import {CharacterBullet} from "./characterBullet";
 import {DiContainer, Injectable} from "../ioc";
 import {MainScene} from "../mainScene";
 import {GroundDust} from "../particles/groundDust";
-import Inject = DiContainer.Inject;
 import {Script} from "./script";
 import {Key} from "./key";
+import {AnimatedTileMap} from "@engine/renderable/impl/general/tileMap/animatedTileMap";
+import Inject = DiContainer.Inject;
+import {Sausage} from "./sausage";
 
 export class Character implements Injectable {
 
     private readonly characterImage:AnimatedImage;
     private body:ArcadeRigidBody;
 
-    @Inject(GroundDust.name) public readonly groundDust:GroundDust;
-    @Inject(TileMap.name) private readonly tileMap:TileMap;
-    @Inject(Script.name) private readonly script:Script;
+    @Inject(GroundDust) public readonly groundDust:GroundDust;
+    @Inject(AnimatedTileMap) private readonly tileMap:AnimatedTileMap;
+    @Inject(Script) private readonly script:Script;
 
     constructor(private scene:MainScene, tiledObject:ITiledJSON['layers'][0]['objects'][0]) {
         const characterImage = new AnimatedImage(scene.getGame(),scene.assets.characterTexture);
@@ -133,12 +135,14 @@ export class Character implements Injectable {
     private initCollisions():void {
         this.body.onOverlappedWithGroup('collectable',e =>{
             e.getHostModel().removeSelf();
-            const host = e.addInfo.host;
-            const hostType = host?.type;
+            const host:unknown = e.addInfo.host;
+            const hostType = (host as any)?.type;
             switch (hostType) {
-                case 'Key':
+                case Key.name:
                     this.script.onHeroCollidedWithKey(host as Key).catch(console.error);
                     break;
+                case Sausage.name:
+                    this.script.onHeroCollectedSausage(host as Sausage);
             }
         });
     }

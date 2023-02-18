@@ -59,10 +59,22 @@ module.exports = function(content) {
             preloadingMethod.parameters[0] &&
             preloadingMethod.parameters[0].name;
 
+        if (!preloadingMethodFirstArg) {
+            const factory = ts.factory;
+            preloadingMethod.body.statements = [
+                factory.createThrowStatement(factory.createNewExpression(
+                    factory.createIdentifier("Error"),
+                    undefined,
+                    [factory.createStringLiteral("'onPreloading' method must have argument of type 'TaskQueue'")]
+                ))
+            ];
+        }
+
         const statements = [];
         allDecoratedFields.forEach(f=> {
             const newModifiers = [];
             f.modifiers.forEach((d) => {
+                if (!preloadingMethodFirstArg) return;
                 const decoratorName =
                     d.expression &&
                     d.expression.expression &&

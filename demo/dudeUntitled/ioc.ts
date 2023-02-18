@@ -9,14 +9,26 @@ export namespace DiContainer {
     const ctx:Record<string, any> = {};
     let completed:boolean = false;
 
-    export const register = (instance:any,tkn:string):void=>{
-        ctx[tkn!] = instance;
+    export const register = (instance:any):void=>{
+        const tkn = instance.constructor.name;
+        ctx[tkn] = instance;
     }
 
     export const complete = ():void=>{
         completed = true;
         Object.keys(ctx).forEach(key=>{
             ctx[key].postConstruct?.();
+            const injectedTokens:string[] = ctx[key]?.__injected;
+            if (!injectedTokens) return;
+            injectedTokens.forEach(tkn=>{
+                if (!ctx[tkn]) {
+                    throw new Error(
+                        `Injection error for object with name "${key}": dependency with token "${tkn}" is not provided.
+                        tokens provided: ${Object.keys(ctx).join(',')}`
+                    );
+                }
+            });
+            delete ctx[key]?.__injected;
         });
     }
 
@@ -24,8 +36,12 @@ export namespace DiContainer {
         return ctx[tkn];
     }
 
-    export const Inject = (tkn:string)=>{
+    export const Inject = (clazz:{new(...args:any):any})=>{
         return <K extends string,T extends Injectable>(target: T, fieldName: K):void => {
+            const tkn = clazz.name;
+            (target as any).__injected ??=[];
+            (target as any).__injected.push(tkn);
+
             Object.defineProperty(target, fieldName,{
                 get: ()=>{
                     if (DEBUG && !completed) {

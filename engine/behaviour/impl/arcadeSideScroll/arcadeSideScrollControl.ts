@@ -181,7 +181,7 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
             this.isClimbing = false;
         }
         if (this.inWater) {
-            body.gravityImpact = 0.2;
+            if (!body.collisionFlags.bottom) body.gravityImpact = 0.2;
         }
         if (!this.onGround && !this.onLadder) {
             if (!this.isFiring) {

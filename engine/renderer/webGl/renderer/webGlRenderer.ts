@@ -265,7 +265,19 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this._glCachedAccessor.setDepthTest(mesh.depthTest);
         this._blender.setBlendMode(mesh.blendMode);
         mesh.onUpdatingBuffers();
-        mp.draw();
+
+        if (mesh.alpha!==1) {
+            this._glCachedAccessor.setCulling(true);
+            this._glCachedAccessor.setCullFace(CullFace.back);
+            mp.draw();
+            this._glCachedAccessor.setCullFace(CullFace.front);
+            mp.draw();
+            this._glCachedAccessor.setCulling(false);
+            this._glCachedAccessor.setCullFace(CullFace.none);
+        } else {
+            this._glCachedAccessor.setCullFace(mesh.cullFace);
+            mp.draw();
+        }
         inverseTransposeModelMatrix.release();
     }
 

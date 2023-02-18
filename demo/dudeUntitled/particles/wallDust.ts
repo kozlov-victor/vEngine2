@@ -1,9 +1,9 @@
-import {ColorFactory} from "@engine/renderer/common/colorFactory";
-import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {AbstractParticleEmitter} from "./abstractParticleEmitter";
+import {ColorFactory} from "@engine/renderer/common/colorFactory";
 import {Color} from "@engine/renderer/common/color";
+import {Circle} from "@engine/renderable/impl/geometry/circle";
 
-export class GroundDust extends AbstractParticleEmitter {
+export class WallDust extends AbstractParticleEmitter{
 
     private createPrefab(color:Color) {
         const particle = new Circle(this.scene.getGame());
@@ -15,8 +15,8 @@ export class GroundDust extends AbstractParticleEmitter {
 
     protected override createParticlePrefabs() {
         return [
-            this.createPrefab(ColorFactory.fromCSS(`#c5c7c5`)),
-            this.createPrefab(ColorFactory.fromCSS(`#808080`))
+            this.createPrefab(ColorFactory.fromCSS(`#ee7e0f`)),
+            this.createPrefab(ColorFactory.fromCSS(`#f1c100`))
         ];
     }
 

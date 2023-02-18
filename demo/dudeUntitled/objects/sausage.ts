@@ -4,6 +4,7 @@ import {TexturePackerAtlas} from "@engine/animation/frameAnimation/atlas/texture
 import {ARCADE_RIGID_BODY_TYPE, ArcadeRigidBody} from "@engine/physics/arcade/arcadeRigidBody";
 import {ArcadePhysicsSystem} from "@engine/physics/arcade/arcadePhysicsSystem";
 import {MainScene} from "../mainScene";
+import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 
 
 export class Sausage {
@@ -33,6 +34,10 @@ export class Sausage {
         image.getRigidBody<ArcadeRigidBody>().addInfo.host = this;
         image.appendTo(scene);
         this.image = image;
+    }
+
+    public getRenderable():RenderableModel {
+        return this.image;
     }
 
 

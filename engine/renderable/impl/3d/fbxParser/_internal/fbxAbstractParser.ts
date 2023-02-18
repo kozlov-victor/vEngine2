@@ -1,7 +1,6 @@
 import {FbxReader} from "@engine/renderable/impl/3d/fbxParser/_internal/fbxReader";
 import {ObjPrimitive} from "@engine/renderable/impl/3d/objParser/_internal/types";
 import {MathEx} from "@engine/misc/math/mathEx";
-import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Game} from "@engine/core/game";
 import {Texture} from "@engine/renderer/webGl/base/texture";
 import {Optional} from "@engine/core/declarations";
@@ -203,6 +202,7 @@ export abstract class FbxAbstractParser {
             const properties70 = Utils.findNode(m,'Properties70');
             const diffuseColor = Utils.findProperty70(properties70,'DiffuseColor');
             const specular = Utils.findProperty70(properties70,'Shininess');
+            const transparencyFactor = Utils.findProperty70(properties70,'TransparencyFactor') ?? [];
             let specularValue = 0;
             if (specular && specular[4]) {
                 specularValue = specular[4]/100;
@@ -215,6 +215,7 @@ export abstract class FbxAbstractParser {
                     ~~(diffuseColor[6]*0xff) as Uint8
                 );
             }
+            material.transparencyFactor = transparencyFactor[4] ?? 1;
             material.specular = specularValue;
             result.push(material);
         });
@@ -298,6 +299,7 @@ export abstract class FbxAbstractParser {
             const material = materials.find(g => g.uuid === materialId);
             if (!material) continue;
             g.material = material.clone();
+            g.alpha = material.transparencyFactor;
             const texturesToApply = this._findTexturesByMaterialId(materialId,textures,connections);
 
             for (const textureToApply of texturesToApply) {

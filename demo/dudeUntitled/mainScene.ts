@@ -15,7 +15,7 @@ import {Key} from "./objects/key";
 import {DiContainer} from "./ioc";
 import {GroundDust} from "./particles/groundDust";
 import {Script} from "./objects/script";
-import {TileMap} from "@engine/renderable/impl/general/tileMap/tileMap";
+import {WallDust} from "./particles/wallDust";
 
 
 export class MainScene extends Scene {
@@ -50,16 +50,17 @@ export class MainScene extends Scene {
         });
         tileMap.appendTo(this);
 
-        DiContainer.register(tileMap, TileMap.name);
-        DiContainer.register(new GroundDust(this), GroundDust.name);
-        DiContainer.register(new Script(this), Script.name);
+        DiContainer.register(tileMap);
+        DiContainer.register(new GroundDust(this));
+        DiContainer.register(new WallDust(this));
+        DiContainer.register(new Script(this));
 
         this.assets.levelData.layers.find(it=>it.type==='objectgroup')!.objects.forEach(obj=>{
             const typeProp = obj.properties.find(it=>it.name==='class');
             const cl = typeProp?.value;
             switch (cl) {
                 case Character.name:
-                    DiContainer.register(new Character(this,obj),Character.name);
+                    DiContainer.register(new Character(this,obj));
                     break;
                 case Sausage.name:
                     new Sausage(this,obj);

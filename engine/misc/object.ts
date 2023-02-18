@@ -8,7 +8,7 @@ export const isString = (s:unknown):s is string=>{
 };
 
 export const isCommonArray = (a:unknown):a is unknown[]=> {
-    return (a as Array<unknown>).length!==undefined;
+    return (a as Array<unknown>).push!==undefined;
 };
 
 export const isTypedArray = (a:unknown):a is Float32Array|Int32Array=> {

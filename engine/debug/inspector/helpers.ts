@@ -8,13 +8,14 @@ const injectCss = (str:string):void=>{
 export const init = ()=>{
     //language=css
     injectCss(`
-    /* Remove default bullets */
 
     .panel {
         background-color: #e5e5e5ed;
         border-radius: 7px 7px 0 0;
+        font-family: monospace;
     }
 
+    /* Remove default bullets */
     ul {
         list-style-type: none;
     }
@@ -85,6 +86,15 @@ export const init = ()=>{
 
     .listWrap {
         padding: 3px;
+    }
+
+    .propPanel {
+        border: 1px solid grey;
+        padding: 1px;
+    }
+
+    .propTable table{
+        width: 100%;
     }
 
 `);

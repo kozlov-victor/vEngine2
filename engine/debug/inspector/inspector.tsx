@@ -8,11 +8,48 @@ import {ReactiveMethod} from "@engine/renderable/tsx/genetic/reactiveMethod";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Layer} from "@engine/scene/layer";
 import {createDraggableElement, init} from "@engine/debug/inspector/helpers";
+import {isArray, isNumber, isString} from "@engine/misc/object";
 
 
 const game:Game = (window as any).game;
 
 const stateMap:Record<string, boolean> = {};
+let currentModel:RenderableModel|Layer;
+
+const val = (model:any,key:string):string|number|undefined=>{
+    const rawVal = model[key];
+    if (rawVal===null || rawVal===undefined) return undefined;
+    else if (isArray(rawVal)) return undefined;
+    else if (rawVal.toJSON!==undefined) {
+        const val = rawVal.toJSON();
+        return JSON.stringify(val);
+    }
+    else if (isNumber(rawVal)) return `${rawVal}`;
+    else if (isString(rawVal)) return rawVal;
+    else if (rawVal===true || rawVal===false) return `${rawVal}`;
+    else return undefined;
+}
+
+const PropertyPanel = (props:{model:RenderableModel|Layer}&IBaseProps):VirtualNode=>{
+    const keyValPair =
+        Object.keys(props.model).
+        filter(key=>!key.startsWith('_') && !['game'].includes(key)).
+        map(key=>({key,val:val(props.model,key)})).
+        filter(it=>it.val!==undefined);
+    console.log(keyValPair);
+    return (
+        <div className={'propPanel'}>
+            <table>
+                {keyValPair.map(kv=>
+                    <tr>
+                        <td>{kv.key}</td>
+                        <td>{kv.val}</td>
+                    </tr>
+                )}
+            </table>
+        </div>
+    );
+}
 
 const NodeRoot = (props:{nested:boolean,opened:boolean,children?:any[]}&IBaseProps):VirtualNode=>{
     const className = `${props.nested?'nested':'root'} ${props.opened?'active':'inactive'}`;
@@ -30,7 +67,7 @@ const NodeLeafs = (props:{tagName:string,model:RenderableModel|Layer}&IBaseProps
     stateMap[props.model.id] = opened;
     return (
         <li>
-            <span onclick={()=>inspectorWidget.onClicked(props.model.id)} className={`caret ${opened?'caret-down':''}`}>{props.tagName}</span>
+            <span onclick={()=>inspectorWidget.onClicked(props.model)} className={`caret ${opened?'caret-down':''}`}>{props.tagName}</span>
             {
                 (()=>{
                     const arr = [];
@@ -73,22 +110,33 @@ class InspectorWidget extends VEngineTsxComponent{
                     <div className={'close-btn'} onclick={_=>this.hide()}>x</div>
                 </div>
                 <div className={'listWrap'}>
-                    <NodeRoot nested={false} opened={true}>
-                        {game.getCurrentScene().getLayers().map(l=>
-                            <NodeLeafs tagName={l.constructor.name} model={l}/>
-                        )}
-                        {
-                            !game.getCurrentScene().getLayers().length &&
-                            '<'+'empty scene'+'>'
-                        }
-                    </NodeRoot>
+                    <table>
+                        <tr>
+                            <td style={{verticalAlign:'top'}}>
+                                <NodeRoot nested={false} opened={true}>
+                                    {game.getCurrentScene().getLayers().map(l=>
+                                        <NodeLeafs tagName={l.constructor.name} model={l}/>
+                                    )}
+                                    {
+                                        !game.getCurrentScene().getLayers().length &&
+                                        '<'+'empty scene'+'>'
+                                    }
+                                </NodeRoot>
+                            </td>
+                            <td style={{verticalAlign:'top'}}>
+                                {currentModel && <PropertyPanel model={currentModel}/>}
+                            </td>
+                        </tr>
+                    </table>
                 </div>
             </>
         );
     }
 
     @ReactiveMethod()
-    public onClicked(id:string):void {
+    public onClicked(model:RenderableModel|Layer):void {
+        const id = model.id;
+        currentModel = model;
         stateMap[id]??=false;
         stateMap[id]=!stateMap[id];
     }
