@@ -14,6 +14,7 @@ import {ITexture} from "@engine/renderer/common/texture";
 import {Image} from "@engine/renderable/impl/general/image/image";
 import {SepiaColorMatrixFilter} from "@engine/renderer/webGl/filters/colorMatrix/sepiaColorMatrixFilter";
 import {LensDistortionFilter} from "@engine/renderer/webGl/filters/texture/lensDistortionFilter";
+import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
 
 const text:string=
     `Lorem ipsum dolor sit amet,\t\n\r
@@ -45,7 +46,7 @@ export class MainScene extends Scene {
     public override onReady():void {
 
         document.body.style.cursor = 'none';
-        this.mouseEventHandler.on(MOUSE_EVENTS.click, ()=>this.game.getRenderer().requestFullScreen());
+        this.mouseEventHandler.on(MOUSE_EVENTS.click, ()=>this.game.getRenderer(WebGlRenderer).requestFullScreen());
 
 
         const tf = new TextField(this.game,this.fnt);

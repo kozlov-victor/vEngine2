@@ -62,7 +62,7 @@ export class TeacherStuff {
     }
 
     private listenKeyboard():void{
-        const kb:KeyboardControl = this.game.getControl<KeyboardControl>('KeyboardControl')!;
+        const kb = this.game.getControl(KeyboardControl);
         this.game.getCurrentScene().keyboardEventHandler.on(KEYBOARD_EVENTS.keyPressed, async e=>{
             if(kb.isPressed(KEYBOARD_KEY.Z) && kb.isPressed(KEYBOARD_KEY.CONTROL)) {
                 this.surface.clear();

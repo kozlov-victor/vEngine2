@@ -1,4 +1,4 @@
-import {isCommonArray, isEqualArray} from "@engine/misc/object";
+import {isEqualArray, isTypedArray} from "@engine/misc/object";
 import {AbstractPrimitive} from "../../primitives/abstractPrimitive";
 import {ShaderProgram} from "../../base/shaderProgram";
 import {BufferInfo} from "../../base/bufferInfo";
@@ -62,7 +62,7 @@ export class AbstractPainter implements IPainter, IDestroyable{
     }
 
     public setUniform(name:string,value:UNIFORM_VALUE_TYPE):void{
-        if (isCommonArray(value)) {
+        if (isTypedArray(value)) {
             this.setUniformVector(name,value as UNIFORM_VALUE_ARRAY_TYPE);
         } else {
             this.setUniformScalar(name,value as UNIFORM_VALUE_PRIMITIVE_TYPE);

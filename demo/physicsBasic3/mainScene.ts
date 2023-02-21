@@ -7,7 +7,7 @@ export class MainScene extends Scene {
 
     public override onReady():void {
 
-        const physicsSystem:ArcadePhysicsSystem = this.game.getPhysicsSystem();
+        const physicsSystem = this.game.getPhysicsSystem(ArcadePhysicsSystem);
 
         const rect1 = new Rectangle(this.game);
         rect1.size.setWH(350,350);

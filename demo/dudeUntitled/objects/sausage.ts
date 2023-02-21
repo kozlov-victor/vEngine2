@@ -25,7 +25,7 @@ export class Sausage {
         image.size.setWH(frame.width,frame.height);
         image.srcRect.setFrom(frame);
         image.pos.setXY(tiledObject.x,tiledObject.y - tiledObject.height);
-        image.setRigidBody(scene.getGame().getPhysicsSystem<ArcadePhysicsSystem>().createRigidBody({
+        image.setRigidBody(scene.getGame().getPhysicsSystem(ArcadePhysicsSystem).createRigidBody({
             type: ARCADE_RIGID_BODY_TYPE.KINEMATIC,
             rect,
             acceptCollisions: false,

@@ -111,14 +111,14 @@ export class Game {
         return false;
     }
 
-    public getControl<T extends IControl>(type:'KeyboardControl'|'MouseControl'|'GamePadControl'|string):T {
+    public getControl<T extends IControl>(type:ClazzEx<T, Game>):T {
         for (const c of this._controls) {
-            if (c.type===type) {
+            if ((c as any).constructor===type) {
                 return c as T;
             }
         }
         if (DEBUG) {
-            throw new DebugError(`control with type "${type}" is not added`);
+            throw new DebugError(`control with type "${type.name}" is not added`);
         }
         else throw new Error();
     }
@@ -127,9 +127,16 @@ export class Game {
         this._physicsSystem = new clz(this);
     }
 
-    public getPhysicsSystem<T extends IPhysicsSystem>():T {
+    public getPhysicsSystem<T extends IPhysicsSystem>(type?:ClazzEx<T, Game>):T {
         if (DEBUG && this._physicsSystem===undefined) throw new DebugError(`Physics system is not initialized.`);
-        return this._physicsSystem as T;
+        const system = this._physicsSystem as T;
+        if (type===undefined) return system;
+        if (DEBUG) {
+            if ((system as any).constructor!==type) {
+                throw new DebugError(`can not get physics system with type "${type.name} - current system is of type "${system.constructor.name}"`)
+            }
+        }
+        return system;
     }
 
     public hasPhysicsSystem():boolean {
@@ -163,8 +170,15 @@ export class Game {
         this._renderer = new Renderer(this);
     }
 
-    public getRenderer<T extends AbstractRenderer>():T{
-        return this._renderer as T;
+    public getRenderer<T extends AbstractRenderer>(type?:ClazzEx<T,any>):T{
+        const renderer = this._renderer as T;
+        if (type===undefined) return renderer;
+        if (DEBUG) {
+            if ((renderer as any).constructor!==type) {
+                throw new DebugError(`can not get renderer with type "${type.name} - current renderer is of type "${renderer.constructor.name}"`)
+            }
+        }
+        return renderer;
     }
 
     public runScene(scene:Scene, transition?:Optional<ISceneTransition>,replaceStack:boolean = true):void{

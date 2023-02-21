@@ -6,6 +6,7 @@ import {ITexture} from "@engine/renderer/common/texture";
 import {Color} from "@engine/renderer/common/color";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {Image} from "@engine/renderable/impl/general/image/image";
+import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
 
 
 export class MainScene extends Scene {
@@ -33,7 +34,7 @@ export class MainScene extends Scene {
         ps.particleScale = {start:{from:1,to:0.8},end:{from:0.1,to:0}};
         this.appendChild(ps);
         this.mouseEventHandler.on(MOUSE_EVENTS.click,()=>{
-            this.game.getRenderer().requestFullScreen();
+            this.game.getRenderer(WebGlRenderer).requestFullScreen();
         });
         this.mouseEventHandler.on(MOUSE_EVENTS.mouseMove,(e)=>{
             ps.emissionPosition.setXY(e.screenX - image.size.width/2,e.screenY-image.size.height/2);

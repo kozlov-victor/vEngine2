@@ -42,7 +42,7 @@ export class MainScene extends Scene {
             restitution: 0.1,
         });
 
-        const phys = this.game.getPhysicsSystem<ArcadePhysicsSystem>();
+        const phys = this.game.getPhysicsSystem(ArcadePhysicsSystem);
 
         const hero = new AnimatedImage(this.game,this.heroTexture);
         hero.setRigidBody(phys.createRigidBody({

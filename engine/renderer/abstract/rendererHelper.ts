@@ -36,7 +36,7 @@ export abstract class RendererHelper {
     public renderModelToTexture(m: RenderableModel, renderTarget: IRenderTarget, clear: boolean = false): void {
         const renderer = this.game.getRenderer();
         if (m.size.isZero()) m.revalidate();
-        const currRenderTarget = this.game.getRenderer().getRenderTarget();
+        const currRenderTarget = renderer.getRenderTarget();
         const needSave = currRenderTarget !== renderTarget;
         if (needSave) this.saveRenderTarget();
         renderer.setRenderTarget(renderTarget);

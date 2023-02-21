@@ -1,5 +1,6 @@
 import {IRenderTarget} from "../../renderer/abstract/abstractRenderer";
 import {
+    ClazzEx,
     IAlphaBlendable,
     ICloneable,
     IDestroyable,
@@ -165,8 +166,15 @@ export abstract class RenderableModel
         rigidBody.setBoundsAndObserveModel(this);
     }
 
-    public getRigidBody<T extends IRigidBody>(): T {
-        return this._rigidBody as T;
+    public getRigidBody<T extends IRigidBody>(type?:ClazzEx<T, Game>): T {
+        const body = this._rigidBody as T;
+        if (type===undefined) return body;
+        if (DEBUG) {
+            if ((body as any).constructor!==type) {
+                throw new DebugError(`can not get rigid body with type "${type.name} - current rigid body is of type "${body.constructor.name}"`)
+            }
+        }
+        return body;
     }
 
     public abstract draw(): void;

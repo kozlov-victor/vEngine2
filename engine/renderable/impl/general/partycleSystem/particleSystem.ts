@@ -33,8 +33,8 @@ interface IParticleHolder {
     lifeTime:number;
     createdTime:number;
     active:boolean;
-    alphaFromTo:{start:number,end:number};
-    scaleFromTo:{start:number,end:number};
+    alphaFromTo?:{start:number,end:number};
+    scaleFromTo?:{start:number,end:number};
     ps: ParticleSystem;
 }
 
@@ -68,11 +68,11 @@ const onUpdateParticle = function(this:tParticle):void {
         this.velocity.y += this.ps.particleGravity.y;
     }
     const timePassed = time - this.createdTime;
-    if (this.ps.particleAlpha!==undefined) {
+    if (this.alphaFromTo!==undefined) {
         this.alpha =
             EasingLinear(timePassed,this.alphaFromTo.start,this.alphaFromTo.end - this.alphaFromTo.start, this.lifeTime);
     }
-    if (this.ps.particleScale!==undefined) {
+    if (this.scaleFromTo!==undefined) {
         const val =
             EasingLinear(timePassed,this.scaleFromTo.start,this.scaleFromTo.end - this.scaleFromTo.start, this.lifeTime);
         this.scale.setXY(val);
@@ -162,8 +162,6 @@ export class ParticleSystem extends SimpleGameObjectContainer {
                     particle.lifeTime = 0;
                     particle.createdTime = 0;
                     particle.active = true;
-                    particle.alphaFromTo = {start:1,end:1};
-                    particle.scaleFromTo = {start:1,end:1};
                     particle.ps = this;
                     const onUpdate = onUpdateParticle.bind(particle);
                     const onUpdateSelf = particle.update.bind(particle);
@@ -192,23 +190,21 @@ export class ParticleSystem extends SimpleGameObjectContainer {
             particle.pos.y = emissionRadius*Math.sin(a) + this.emissionPosition.y;
 
             if (this.particleAlpha!==undefined) {
+                particle.alphaFromTo??={start:0,end:0};
                 particle.alphaFromTo.start = rnd(this.particleAlpha.start);
                 particle.alphaFromTo.end = rnd(this.particleAlpha.end);
                 particle.alpha = particle.alphaFromTo.start;
             } else {
-                particle.alphaFromTo.start = 1;
-                particle.alphaFromTo.end = 1;
-                particle.alpha = particle.alphaFromTo.start;
+                particle.alphaFromTo = undefined;
             }
 
             if (this.particleScale!==undefined) {
+                particle.scaleFromTo??={start:0,end:0};
                 particle.scaleFromTo.start = rnd(this.particleScale.start);
                 particle.scaleFromTo.end = rnd(this.particleScale.end);
                 particle.scale.setXY(particle.scaleFromTo.start);
             } else {
-                particle.scaleFromTo.start = 1;
-                particle.scaleFromTo.end = 1;
-                particle.scale.setXY(particle.scaleFromTo.start,particle.scaleFromTo.start);
+                particle.scaleFromTo = undefined;
             }
 
             particle.lifeTime = rnd(this.particleLiveTime);

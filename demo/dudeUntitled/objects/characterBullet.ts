@@ -17,7 +17,7 @@ export class CharacterBullet {
         this.container.lineWidth = 0;
         this.container.size.setWH(5);
         this.container.fillColor = BASE_COLOR;
-        this.container.setRigidBody(game.getPhysicsSystem<ArcadePhysicsSystem>().createRigidBody({
+        this.container.setRigidBody(game.getPhysicsSystem(ArcadePhysicsSystem).createRigidBody({
             type: ARCADE_RIGID_BODY_TYPE.DYNAMIC,
             groupNames: ['characterBullet'],
             ignoreCollisionWithGroupNames: ['characterBullet','character'],

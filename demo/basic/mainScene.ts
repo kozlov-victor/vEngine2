@@ -13,6 +13,7 @@ export class MainScene extends Scene {
     public readonly logoTexture:ITexture;
 
     public override onReady():void {
+
         const spr = new Image(this.game, this.logoTexture);
         spr.pos.setXY(10);
         spr.transformPoint.setToCenter();

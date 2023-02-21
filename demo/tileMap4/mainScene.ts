@@ -26,7 +26,7 @@ export class MainScene extends Scene {
         this.rect.size.setWH(5);
         this.rect.pos.setXY(20);
         this.rect.transformPoint.setToCenter();
-        this.rect.setRigidBody(this.game.getPhysicsSystem<ArcadePhysicsSystem>().createRigidBody({
+        this.rect.setRigidBody(this.game.getPhysicsSystem(ArcadePhysicsSystem).createRigidBody({
             type: ARCADE_RIGID_BODY_TYPE.DYNAMIC
         }));
         this.appendChild(this.rect);

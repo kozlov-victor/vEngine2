@@ -30,7 +30,7 @@ export class Character implements Injectable {
         const characterImage = new AnimatedImage(scene.getGame(),scene.assets.characterTexture);
         this.characterImage = characterImage;
         characterImage.pos.setXY(tiledObject.x,tiledObject.y - tiledObject.height);
-        characterImage.setRigidBody(scene.getGame().getPhysicsSystem<ArcadePhysicsSystem>().createRigidBody({
+        characterImage.setRigidBody(scene.getGame().getPhysicsSystem(ArcadePhysicsSystem).createRigidBody({
             type:ARCADE_RIGID_BODY_TYPE.DYNAMIC,
             debug: false,
             rect: new Rect(4,2,30,41),

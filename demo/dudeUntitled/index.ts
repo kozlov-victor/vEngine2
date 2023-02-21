@@ -28,16 +28,17 @@ import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
 
 document.body.style.backgroundColor = 'black';
 ResourceLoader.BASE_URL = './dudeUntitled/assets';
+ArcadePhysicsSystem.SPATIAL_CELL_SIZE.setWH(64);
 
 const game = new Game({width:640,height:480, scaleStrategy: SCALE_STRATEGY.FIT_CANVAS_TO_SCREEN});
-ArcadePhysicsSystem.SPATIAL_CELL_SIZE.setWH(64);
 game.setPhysicsSystem(ArcadePhysicsSystem);
 game.setRenderer(WebGlRenderer);
-game.getRenderer<AbstractCanvasRenderer>().setPixelPerfect(true);
+game.getRenderer(WebGlRenderer).setPixelPerfect(true);
 game.addControl(KeyboardControl);
 game.addControl(MouseControl);
+//game.addControl(GamePadControl);
 
-game.getControl<GamePadControl>('KeyboardControl')!.reflectToSelf(
+game.getControl(KeyboardControl).reflectToSelf(
     {
         [KEYBOARD_KEY.ENTER]: KEYBOARD_KEY.SPACE,
         [KEYBOARD_KEY.DIGIT_5]: KEYBOARD_KEY.CONTROL,
@@ -48,8 +49,6 @@ game.getControl<GamePadControl>('KeyboardControl')!.reflectToSelf(
     }
 );
 
-//game.addControl(GamePadControl);
-//game.addControl(MouseControl);
 const mainScene: Scene = new MainScene(game);
 game.runScene(mainScene);
 

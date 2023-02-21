@@ -232,7 +232,7 @@ export abstract class Scene implements IRevalidatable, ITweenable,IFilterable,IA
     public render():void {
         Scene._currentRenderingScene = this;
         this._renderingObjectStack.clear();
-        const renderer:AbstractRenderer = this.game.getRenderer();
+        const renderer = this.game.getRenderer();
         renderer.transformSave();
         renderer.clearColor.setFrom(this.backgroundColor);
 
@@ -289,7 +289,7 @@ export abstract class Scene implements IRevalidatable, ITweenable,IFilterable,IA
         this._timerDelegate.update();
         for (const a of this._propertyAnimations) a.update();
         for (const l of this._layers) l.update();
-        if (this.game.hasPhysicsSystem()) this.game.getPhysicsSystem().nextTick(this);
+        if (this.game.hasPhysicsSystem()) this.game.getPhysicsSystem(undefined!).nextTick(this);
         this.onUpdate();
     }
 

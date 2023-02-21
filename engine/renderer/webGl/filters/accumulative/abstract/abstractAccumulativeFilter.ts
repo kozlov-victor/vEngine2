@@ -17,7 +17,7 @@ export abstract class AbstractAccumulativeFilter extends AbstractGlFilter {
 
     constructor(game:Game) {
         super(game);
-        const gl:WebGLRenderingContext = this.game.getRenderer<WebGlRenderer>().getNativeContext();
+        const gl:WebGLRenderingContext = this.game.getRenderer(WebGlRenderer).getNativeContext();
         this._simpleRectCopyPainter = new SimpleRectPainter(gl);
         this._simpleRectCopyPainter.initProgram();
         this.accumulatorBefore = new FrameBuffer(gl,this.game.size);
@@ -25,7 +25,7 @@ export abstract class AbstractAccumulativeFilter extends AbstractGlFilter {
     }
 
     private watchFrameBuffer(destFrameBuffer:FrameBuffer):void {
-        const gl:WebGLRenderingContext = this.game.getRenderer<WebGlRenderer>().getNativeContext();
+        const gl:WebGLRenderingContext = this.game.getRenderer(WebGlRenderer).getNativeContext();
         if (this.accumulatorBefore===undefined) {
             this.accumulatorBefore = new FrameBuffer(gl,destFrameBuffer.getTexture().size);
             this.accumulatorAfter = new FrameBuffer(gl,destFrameBuffer.getTexture().size);
@@ -43,7 +43,7 @@ export abstract class AbstractAccumulativeFilter extends AbstractGlFilter {
         // 0. prepare for accumulator drawing
         this._simpleRectCopyPainter.setUniform(this._simpleRectCopyPainter.u_alpha,1);
         this._simpleRectCopyPainter.setUniform(this._simpleRectCopyPainter.u_flip,false);
-        Blender.getSingleton(this.game.getRenderer<WebGlRenderer>().getNativeContext()).setBlendMode(BLEND_MODE.NORMAL);
+        Blender.getSingleton(this.game.getRenderer(WebGlRenderer).getNativeContext()).setBlendMode(BLEND_MODE.NORMAL);
         // 1. copy accumulatorAfter to accumulatorBefore
         this.accumulatorBefore.bind();
         this.accumulatorBefore.clear(Color.NONE);

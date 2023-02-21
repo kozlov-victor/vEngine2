@@ -21,7 +21,7 @@ export abstract class AbstractCompositionFilter extends AbstractGlFilter {
 
     protected constructor(game:Game) {
         super(game);
-        const gl:WebGLRenderingContext = this.game.getRenderer<WebGlRenderer>().getNativeContext();
+        const gl:WebGLRenderingContext = this.game.getRenderer(WebGlRenderer).getNativeContext();
         this._simpleRectCopyPainter = new SimpleRectPainter(gl);
         this._simpleRectCopyPainter.initProgram();
         this.simpleRectPainter.gen.addScalarFragmentUniform(GL_TYPE.SAMPLER_2D,'destTexture');
@@ -40,7 +40,7 @@ export abstract class AbstractCompositionFilter extends AbstractGlFilter {
     }
 
     private watchFrameBuffer(destFrameBuffer:FrameBuffer):void {
-        const gl:WebGLRenderingContext = this.game.getRenderer<WebGlRenderer>().getNativeContext();
+        const gl:WebGLRenderingContext = this.game.getRenderer(WebGlRenderer).getNativeContext();
         if (this.destCopy===undefined) {
             this.destCopy = new FrameBuffer(gl,destFrameBuffer.getTexture().size);
         } else if (!this.destCopy.getTexture().size.equals(destFrameBuffer.getTexture().size)) {
@@ -56,7 +56,7 @@ export abstract class AbstractCompositionFilter extends AbstractGlFilter {
         // 0. prepare for composition drawing
         this._simpleRectCopyPainter.setUniform(this._simpleRectCopyPainter.u_alpha,1);
         this._simpleRectCopyPainter.setUniform(this._simpleRectCopyPainter.u_flip,false);
-        Blender.getSingleton(this.game.getRenderer<WebGlRenderer>().getNativeContext()).setBlendMode(BLEND_MODE.NORMAL);
+        Blender.getSingleton(this.game.getRenderer(WebGlRenderer).getNativeContext()).setBlendMode(BLEND_MODE.NORMAL);
         // 1. copy current destination texture to accumulatorBefore
         this.destCopy.bind();
         this.destCopy.clear(Color.NONE);

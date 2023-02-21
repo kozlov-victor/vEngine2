@@ -96,7 +96,7 @@ export class MainScene extends Scene {
         this.playTheme();
         this.loadLevel();
         this.createUI();
-        this.game.getRenderer<WebGlRenderer>().setPixelPerfect(true);
+        this.game.getRenderer(WebGlRenderer).setPixelPerfect(true);
     }
 
     private extractExtraProperties(properties?: ({ name: string, value: any })[]): IExtraProperties {

@@ -314,7 +314,7 @@ export class TileMap extends RenderableModelWithTexture {
                 }
 
 
-                const rigidBody = this.game.getPhysicsSystem<ArcadePhysicsSystem>().createRigidBody({
+                const rigidBody = this.game.getPhysicsSystem(ArcadePhysicsSystem).createRigidBody({
                     type: ARCADE_RIGID_BODY_TYPE.KINEMATIC,
                     groupNames: collisionInfo.groupNames,
                     ignoreCollisionWithGroupNames: collisionInfo.ignoreCollisionsWithGroupNames,

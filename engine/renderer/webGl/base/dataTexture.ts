@@ -5,7 +5,7 @@ import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
 import {AbstractRenderer} from "@engine/renderer/abstract/abstractRenderer";
 
 const asGlRenderer = (game:Game):WebGlRenderer|undefined=>{
-    const renderer:AbstractRenderer = game.getRenderer();
+    const renderer = game.getRenderer();
     if (renderer.type==='WebGlRenderer') return renderer as WebGlRenderer;
     if (DEBUG) throw new DebugError(`WebGlRenderer is needed`);
     return undefined;

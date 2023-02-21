@@ -9,7 +9,7 @@ import {IRenderTarget} from "@engine/renderer/abstract/abstractRenderer";
 export class WebGlRendererHelper extends RendererHelper {
 
     public createRenderTarget(game:Game,size: ISize): FrameBufferStack {
-        const renderer:WebGlRenderer = this.game.getRenderer();
+        const renderer = this.game.getRenderer() as WebGlRenderer;
         return new FrameBufferStack(game,renderer.getNativeContext(),size);
     }
 

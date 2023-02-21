@@ -10,7 +10,7 @@ const game = new Game({width:160,height:140});
 game.setRenderer(WebGlRenderer);
 game.addControl(KeyboardControl);
 game.addControl(MouseControl);
-game.getRenderer<AbstractCanvasRenderer>().setPixelPerfect(true);
+game.getRenderer(WebGlRenderer).setPixelPerfect(true);
 const mainScene: Scene = new MainScene(game);
 game.runScene(mainScene);
 

@@ -8,7 +8,8 @@ import {SharpenKernelFilter} from "@engine/renderer/webGl/filters/kernel/sharpen
 import {DebugLayer} from "@engine/scene/debugLayer";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {Model3d} from "@engine/renderable/impl/3d/model3d";
-import {Cube} from "@engine/renderer/webGl/primitives/cube";
+import {TrackBall} from "../model3dFromFbx/trackBall";
+import {Sphere} from "@engine/renderer/webGl/primitives/sphere";
 
 export class MainScene extends Scene {
 
@@ -26,15 +27,12 @@ export class MainScene extends Scene {
         },1);
 
 
-        const obj:Model3d = new Model3d(this.game,new Cube(150));
+        const obj:Model3d = new Model3d(this.game,new Sphere(150));
         obj.material.diffuseColor.setRGB(12,22,122);
         obj.texture = texture;
+        obj.alpha = 0.8;
         obj.pos.setXY(this.game.size.width/2,this.game.size.height/2);
         this.appendChild(obj);
-        this.setInterval(()=>{
-            obj.angle3d.x+=0.01;
-            obj.angle3d.y+=0.01;
-        },20);
 
         const filters = [
             new BoxBlurKernelFilter(this.game),
@@ -53,6 +51,8 @@ export class MainScene extends Scene {
             debugLayer.println(filters[cnt]);
             this.getLayerAtIndex(0).filters = [filters[cnt]];
         });
+
+        new TrackBall(this,obj);
 
     }
 }

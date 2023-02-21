@@ -4,7 +4,7 @@ import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Game} from "@engine/core/game";
 import {Color} from "@engine/renderer/common/color";
 import {DebugError} from "@engine/debug/debugError";
-import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
+import type {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
 
 export abstract class Mesh2d extends RenderableModel {
 
@@ -35,7 +35,8 @@ export abstract class Mesh2d extends RenderableModel {
 
     public getBufferInfo():BufferInfo {
         if (this._bufferInfo===undefined) {
-            this._bufferInfo = this.game.getRenderer<WebGlRenderer>().initBufferInfo(this);
+            this._bufferInfo =
+                (this.game.getRenderer() as WebGlRenderer).initBufferInfo(this);
         }
         return this._bufferInfo;
     }
@@ -48,7 +49,7 @@ export abstract class Mesh2d extends RenderableModel {
             this._bufferInfo!==undefined && // it can be uninitialized
             !this._bufferInfo.isDestroyed())  // it can be already destroyed by cloned object, with use the same bufferInfo
         {
-            this.game.getRenderer<WebGlRenderer>().destroyMesh(this);
+            (this.game.getRenderer() as WebGlRenderer).destroyMesh(this);
         }
         super.destroy();
     }

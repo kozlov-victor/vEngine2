@@ -15,8 +15,8 @@ game.addControl(KeyboardControl);
 game.addControl(MouseControl);
 game.addControl(GamePadControl);
 
-game.getControl<GamePadControl>('GamePadControl')!.reflectToControl(
-    game.getControl<KeyboardControl>('KeyboardControl')!,
+game.getControl(GamePadControl).reflectToControl(
+    game.getControl(KeyboardControl),
     {
         [GAME_PAD_BUTTON.STICK_L_UP]: KEYBOARD_KEY.UP,
         [GAME_PAD_BUTTON.STICK_L_DOWN]: KEYBOARD_KEY.DOWN,
@@ -33,8 +33,8 @@ game.getControl<GamePadControl>('GamePadControl')!.reflectToControl(
     }
 );
 
-game.getControl<GamePadControl>('KeyboardControl')!.reflectToControl(
-    game.getControl<KeyboardControl>('KeyboardControl')!,
+game.getControl(KeyboardControl).reflectToControl(
+    game.getControl(KeyboardControl),
     {
         [KEYBOARD_KEY.UP]: KEYBOARD_KEY.SPACE,
     }

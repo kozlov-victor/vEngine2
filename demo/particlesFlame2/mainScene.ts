@@ -3,46 +3,42 @@ import {ParticleSystem} from "@engine/renderable/impl/general/partycleSystem/par
 import {MathEx} from "@engine/misc/math/mathEx";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {ColorFactory} from "@engine/renderer/common/colorFactory";
-import {Vec2} from "@engine/geometry/vec2";
-import {BatchedImage} from "@engine/renderable/impl/general/image/batchedImage";
 import {Color} from "@engine/renderer/common/color";
 import {Game} from "@engine/core/game";
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {ITexture} from "@engine/renderer/common/texture";
-import {PalletOffsetFilter} from "@engine/renderer/webGl/filters/texture/palletOffsetFilter";
 import {TaskQueue} from "@engine/resources/taskQueue";
+import {Image} from "@engine/renderable/impl/general/image/image";
+import {BLEND_MODE} from "@engine/renderable/abstract/renderableModel";
 import {FlameModifier} from "@engine/renderable/impl/general/partycleSystem/modifier/flameModifier";
 
 
 export class MainScene extends Scene {
 
-    @Resource.Texture('./particlesFlame/fire-color-table.png')
-    public readonly palletTexture:ITexture;
+    @Resource.Texture('./particlesFlame2/fire_particle.png')
+    public readonly texture:ITexture;
 
-    @Resource.Texture('./particlesFire2/fire.png')
-    public readonly fireTexture:ITexture;
 
     public override onPreloading(taskQueue:TaskQueue):void {
-        console.log('on preloading');
-        this.backgroundColor = ColorFactory.fromCSS('#280202');
+        //this.backgroundColor = ColorFactory.fromCSS('#280202');
     }
 
     public override onReady():void {
 
         const createParticle = (game:Game,color:Color)=>{
-            const p = new BatchedImage(game);
+            const p = new Image(game,this.texture);
+            p.scale.setXY(15);
             //p.radius = MathEx.random(2,5);
             p.size.setWH(MathEx.random(2,5));
             p.transformPoint.setToCenter();
-            p.fillColor.setFrom(color);
+            p.blendMode = BLEND_MODE.ADDITIVE;
+            p.color.setFrom(color);
             return p;
         }
 
         const container = new SimpleGameObjectContainer(this.game);
         container.size.setFrom(this.game.size);
-        const f = new PalletOffsetFilter(this.game,this.palletTexture);
-        container.filters = [f];
         container.appendTo(this);
 
         const ps: ParticleSystem = new ParticleSystem(this.game);
@@ -50,17 +46,22 @@ export class MainScene extends Scene {
         ps.addParticlePrefab(createParticle(this.game,ColorFactory.fromCSS('rgb(232,0,0)')));
         ps.addParticlePrefab(createParticle(this.game,ColorFactory.fromCSS('rgb(232,0,0)')));
         ps.addParticlePrefab(createParticle(this.game,ColorFactory.fromCSS('rgb(255,241,0)')));
-        ps.emissionRadius = 60;
+        ps.emissionRadius = 10;
         ps.forceDrawChildrenOnNewSurface = true;
 
-        ps.numOfParticlesToEmit = {from:60,to:100};
-        ps.particleLiveTime = {from:500,to:1000};
+        ps.numOfParticlesToEmit = {from:10,to:10};
+        ps.particleLiveTime = {from:500,to:600};
         ps.particleVelocity = {from:100,to:300};
+        ps.emissionPosition.setXY(this.game.width/2,this.game.height/2);
         const modifier = new FlameModifier(ps);
+        modifier.flameDirection.y = 200;
         ps.onEmitParticle(p=>modifier.onEmitParticle(p));
         ps.appendTo(container);
         this.mouseEventHandler.on(MOUSE_EVENTS.mouseMove,(e)=>{
-            ps.emissionPosition.setXY(e.screenX,e.screenY);
+            modifier.flameDirection.setXY(
+                e.screenX - this.game.width/2,
+                e.screenY - this.game.height/2
+            );
         });
     }
 }
