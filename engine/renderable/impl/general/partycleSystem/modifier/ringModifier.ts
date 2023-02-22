@@ -1,23 +1,25 @@
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
-import {Vec2} from "@engine/geometry/vec2";
 import {ParticleSystem} from "@engine/renderable/impl/general/partycleSystem/particleSystem";
-import {Point2d} from "@engine/geometry/point2d";
+import {MathEx} from "@engine/misc/math/mathEx";
 import {IParticleModifier} from "@engine/renderable/impl/general/partycleSystem/modifier/abstract/iParticleModifier";
 
-export class FlameModifier implements IParticleModifier {
+export class RingModifier  implements IParticleModifier {
 
-    public readonly flameDirection = new Point2d(0,-200);
+    public radius = 100;
+    public radiusDeviation = 5;
 
     public constructor(private ps:ParticleSystem) {
     }
 
     public onEmitParticle(p:RenderableModel) {
-        const topPoint = {
-            x:this.ps.emissionPosition.x + this.flameDirection.x,
-            y:this.ps.emissionPosition.y + this.flameDirection.y,
-        };
-        const angle = Vec2.angleTo(p.pos,topPoint);
+        const angle = MathEx.random(0,Math.PI*2);
         const vel = Math.max(Math.abs(p.velocity.x),Math.abs(p.velocity.y));
+        const x = this.radius*Math.cos(angle) + MathEx.random(0,this.radiusDeviation);
+        const y = this.radius*Math.sin(angle) + MathEx.random(0,this.radiusDeviation);
+        p.pos.setXY(
+            this.ps.emissionPosition.x+x,
+            this.ps.emissionPosition.y+y
+        );
         p.velocity.x = vel*Math.cos(angle);
         p.velocity.y = vel*Math.sin(angle);
     }

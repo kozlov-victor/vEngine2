@@ -12,6 +12,7 @@ import {TaskQueue} from "@engine/resources/taskQueue";
 import {Image} from "@engine/renderable/impl/general/image/image";
 import {BLEND_MODE} from "@engine/renderable/abstract/renderableModel";
 import {FlameModifier} from "@engine/renderable/impl/general/partycleSystem/modifier/flameModifier";
+import {RingModifier} from "@engine/renderable/impl/general/partycleSystem/modifier/ringModifier";
 
 
 export class MainScene extends Scene {
@@ -26,43 +27,40 @@ export class MainScene extends Scene {
 
     public override onReady():void {
 
+        const createParticle = (game:Game)=>{
+            const p = new Image(game,this.texture);
+            p.scale.setXY(10);
+            p.size.setWH(MathEx.random(2,5));
+            p.transformPoint.setToCenter();
+            p.blendMode = BLEND_MODE.ADDITIVE;
+            return p;
+        }
 
         const container = new SimpleGameObjectContainer(this.game);
         container.size.setFrom(this.game.size);
         container.appendTo(this);
 
-        const createParticle = (game:Game,color:Color)=>{
-            const p = new Image(game,this.texture);
-            p.scale.setXY(15);
-            //p.radius = MathEx.random(2,5);
-            p.size.setWH(MathEx.random(2,5));
-            p.transformPoint.setToCenter();
-            p.blendMode = BLEND_MODE.ADDITIVE;
-            p.color.setFrom(color);
-            return p;
-        }
-
         const ps: ParticleSystem = new ParticleSystem(this.game);
-        ps.addParticlePrefab(createParticle(this.game,ColorFactory.fromCSS('#d06e50')));
-        ps.addParticlePrefab(createParticle(this.game,ColorFactory.fromCSS('rgb(232,0,0)')));
-        ps.addParticlePrefab(createParticle(this.game,ColorFactory.fromCSS('rgb(232,0,0)')));
-        ps.addParticlePrefab(createParticle(this.game,ColorFactory.fromCSS('rgb(255,241,0)')));
-        ps.emissionRadius = 10;
+        ps.addParticlePrefab(createParticle(this.game));
+        ps.addParticlePrefab(createParticle(this.game));
+        ps.addParticlePrefab(createParticle(this.game));
+        ps.addParticlePrefab(createParticle(this.game));
         ps.forceDrawChildrenOnNewSurface = true;
 
-        ps.numOfParticlesToEmit = {from:10,to:10};
-        ps.particleLiveTime = {from:500,to:505};
-        ps.particleVelocity = {from:300,to:305};
+        ps.numOfParticlesToEmit = {from:10,to:15};
+        ps.particleLiveTime = {from:500,to:510};
+        ps.particleVelocity = {from:100,to:110};
         ps.emissionPosition.setXY(this.game.width/2,this.game.height/2);
-        const modifier = new FlameModifier(ps);
-        modifier.flameDirection.y = 200;
+        const modifier = new RingModifier(ps);
         ps.onEmitParticle(p=>modifier.onEmitParticle(p));
         ps.appendTo(container);
         this.mouseEventHandler.on(MOUSE_EVENTS.mouseMove,(e)=>{
-            modifier.flameDirection.setXY(
-                e.screenX - this.game.width/2,
-                e.screenY - this.game.height/2
-            );
+            if (!e.isMouseDown) return;
+            modifier.radius = Math.sqrt(
+                (e.screenX-this.game.width/2)**2
+                +
+                (e.screenY-this.game.height/2)**2
+            )
         });
     }
 }

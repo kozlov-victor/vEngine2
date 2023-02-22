@@ -5,8 +5,8 @@ import {Face, ObjMeshMaterial, t_obj, t_vertexLib} from "@engine/renderable/impl
 import {IObjParams} from "@engine/renderable/impl/3d/objParser/objParser";
 import {Optional} from "@engine/core/declarations";
 import {ITexture} from "@engine/renderer/common/texture";
-import {MeshMaterial} from "@engine/renderable/impl/3d/meshMaterial";
 import {Color} from "@engine/renderer/common/color";
+import {isNumber} from "@engine/misc/object";
 
 abstract class AbstractDataReader {
     protected parseLine(line:string):{commandName:string|undefined,commandArgs:string[]} {
@@ -72,6 +72,11 @@ class DataMtlReader extends AbstractDataReader{
                 case 'Ns':
                     const specular:number = DataMtlReader.readSpecular(commandArgs.join(''));
                     this.currentMaterial.specular = specular;
+                    break;
+                case 'd':
+                    const alpha:number = +commandArgs;
+                    this.currentMaterial.opacity = isNumber(alpha)?alpha:1;
+                    break;
             }
         });
         return this.materials;
@@ -81,7 +86,7 @@ class DataMtlReader extends AbstractDataReader{
 
 export class DataObjReader extends AbstractDataReader {
 
-    private materialsMap:Record<string, MeshMaterial> = {};
+    private materialsMap:Record<string, ObjMeshMaterial> = {};
     private readonly vertexSource:string;
     private readonly materialSource:Optional<string>;
     private texture:Optional<ITexture>;
@@ -246,6 +251,7 @@ export class DataObjReader extends AbstractDataReader {
                     const currentMtl = this.materialsMap[mtlName];
                     if (currentMtl!==undefined) {
                         this.currentObject.material.diffuseColor = currentMtl.diffuseColor;
+                        this.currentObject.material.opacity = currentMtl.opacity;
                     } else {
                         console.warn(`unknown material: ${mtlName}`);
                     }

@@ -89,6 +89,7 @@ export class ObjParser {
 
             const model3d:Model3d = new Model3d(game,pr);
             model3d.material.diffuseColor.setFrom(obj.material.diffuseColor);
+            model3d.alpha = obj.material.opacity;
             model3d.id = obj.name;
             model3d.cubeMapTexture = params.cubeMapTexture;
             container.appendChild(model3d);

@@ -7,12 +7,13 @@ import {XmlParser} from "@engine/misc/parsers/xml/xmlParser";
 
 // https://www.javatpoint.com/svg-tutorial
 const imageUrls:string[] = [
+    'WhatsApp',
     'test1','car-lite',
     'illustration-1','happy', 'with-css',
     'curve-test','curve-test-2','curve-test-3','curve-test-4','curve-test-5',
     'test-draw',
     'cpu','dino',
-    'ua','WhatsApp','food-orange-svgrepo-com',
+    'ua','food-orange-svgrepo-com',
     'homer-simpson','merge-svgrepo-com','flower'
 ];
 

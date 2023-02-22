@@ -23,6 +23,9 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {SvgImage} from "../svgImage";
 import {ElementStylesHolder} from "./elementStylesHolder";
 import {SvgUtils} from "./svgUtils";
+import {AbstractGradient} from "@engine/renderable/impl/fill/abstract/abstractGradient";
+import {LinearGradient} from "@engine/renderable/impl/fill/linearGradient";
+import {RadialGradient} from "@engine/renderable/impl/fill/radialGradient";
 
 export class SvgElementRenderer {
 
@@ -34,7 +37,50 @@ export class SvgElementRenderer {
         this.css.parseCSS(cssRaw);
     }
 
-    private getFillStrokeParams(el:XmlNode):{lineWidth:Optional<number>,fillColor:Color,drawColor:Color} {
+    private resolveGradientNode(baseNode:Optional<XmlNode>):Optional<XmlNode> {
+        if (!baseNode) return undefined;
+        let href = baseNode.getAttribute('xlink:href');
+        if (!href) return baseNode;
+        baseNode = baseNode.clone();
+        href = href.replace('#','');
+        const refNode = this.document.getElementById(href);
+        if (!refNode) return baseNode;
+        else {
+            // path attributes not impl
+            return refNode;
+        }
+    }
+
+    private resolveGradient(val:string):Optional<AbstractGradient> {
+        const gradientId = val.replace('url(#','').replace(')','');
+        const gradientNode = this.resolveGradientNode(this.document.getElementById(gradientId));
+        if (!gradientNode) return undefined;
+        let gradient:Optional<AbstractGradient>;
+        // gradientUnits="userSpaceOnUse" <-- ignored
+        // gradientTransform="matrix(1,0,0,2.3714286,0,19.951903)" <-- ignored
+        if (gradientNode.tagName==='linearGradient') {
+            gradient = new LinearGradient();
+        }
+        else if (gradientNode.tagName==='radialGradient') {
+            gradient = new RadialGradient();
+            const cx = SvgUtils.getNumber(gradientNode.getAttribute('x'),200);
+            const cy = SvgUtils.getNumber(gradientNode.getAttribute('y'),200);
+            // r attr - ignore
+            (gradient as RadialGradient).center.setXY(cx,cy);
+        }
+
+        if (gradient!=undefined) {
+            gradientNode.getChildNodes().forEach(c=> {
+                if (c.tagName !== 'stop') return;
+                const offset = SvgUtils.getNumber(c.getAttribute('offset'),0)
+                const color = SvgUtils.getColor(c.getAttribute('stop-color'));
+                gradient!.setColorAtPosition(offset,color);
+            });
+        }
+        return gradient;
+    }
+
+    private getFillStrokeParams(el:XmlNode):{lineWidth:Optional<number>,fillColor:Color,fillGradient:Optional<AbstractGradient>,drawColor:Color} {
 
         const rawStrokeValue:string = this.lookUpProperty(el,'stroke',true);
         const rawFillValue:string = this.lookUpProperty(el,'fill',true);
@@ -45,7 +91,14 @@ export class SvgElementRenderer {
             lineWidth = SvgUtils.getNumber(this.lookUpProperty(el,'stroke-width',true),1);
         }
 
-        const fillColor:Color = SvgUtils.getColor(rawFillValue ?? '#000000');
+        let fillGradient:Optional<AbstractGradient>;
+        let fillColor:Color;
+        if (rawFillValue.indexOf('url')>-1) {
+            fillColor = Color.NONE.clone();
+            fillGradient = this.resolveGradient(rawFillValue);
+        } else {
+            fillColor = SvgUtils.getColor(rawFillValue ?? '#000000');
+        }
         const drawColor:Color = SvgUtils.getColor(rawStrokeValue);
 
         const fillOpacity:number = SvgUtils.getNumber(this.lookUpProperty(el,'fill-opacity',true),1);
@@ -54,7 +107,7 @@ export class SvgElementRenderer {
         if (rawFillValue!=='none') fillColor.a = ~~(fillOpacity*255) as Uint8;
         if (rawStrokeValue!=='none') drawColor.a = ~~(strokeOpacity*255) as Uint8;
 
-        return {lineWidth,fillColor,drawColor};
+        return {lineWidth,fillColor,fillGradient,drawColor};
     }
 
     private _parseTransformString(parentView:RenderableModel,transform:string):RenderableModel {
@@ -211,12 +264,13 @@ export class SvgElementRenderer {
         if (!data) return undefined;
 
         const container:RenderableModel = this.createElementContainer(parentView,el);
-        const {lineWidth,fillColor,drawColor} = this.getFillStrokeParams(el);
+        let polygonContainer = new SimpleGameObjectContainer(this.game);
+        const {lineWidth,fillColor,drawColor,fillGradient} = this.getFillStrokeParams(el);
         let fillRule = this.lookUpProperty(el,'fill-rule',true);
         if (['nonzero','evenodd'].indexOf(fillRule)===-1) fillRule = 'nonzero';
 
         // https://developer.mozilla.org/ru/docs/Web/SVG/Attribute/fill-rule
-        container.forceDrawChildrenOnNewSurface = true;
+        polygonContainer.forceDrawChildrenOnNewSurface = true;
         let directionOfBaseShapeIsCc:boolean;
         Polygon.fromMultiCurveSvgPath(this.game,data).forEach((p,i,arr)=>{
             p.fillColor = fillColor;
@@ -226,7 +280,7 @@ export class SvgElementRenderer {
                     p.filters = [new EvenOddCompositionFilter(this.game)];
                 }
             }
-            container.appendChild(p);
+            polygonContainer.appendChild(p);
         });
 
         if (lineWidth!=undefined && lineWidth>0) {
@@ -253,9 +307,13 @@ export class SvgElementRenderer {
 
             PolyLine.fromMultiCurveSvgPath(this.game,data,{lineWidth,endCapStyle,jointStyle}).forEach(p=>{
                 p.color.setFrom(drawColor);
-                container.appendChild(p);
+                polygonContainer.appendChild(p);
             });
         }
+        if (fillGradient!==undefined) {
+            polygonContainer = SvgUtils.applyFillGradient(this.game,polygonContainer,fillGradient);
+        }
+        polygonContainer.appendTo(container);
         this.setCommonProperties(container,el);
     }
 

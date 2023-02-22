@@ -26,7 +26,7 @@ export abstract class AbstractGradient {
         this._points = [...g._points.map(it=>({...it}))];
     }
 
-    public setColorAtPosition(position:number,color:IColor):void {
+    public setColorAtPosition(position:number /*0...1*/,color:IColor):void {
         if (DEBUG && this._points.length>AbstractGradient.MAX_NUM_OF_GRADIENT_POINTS) {
             throw new DebugError(
                 `Maxinum number of gradient points is ${AbstractGradient.MAX_NUM_OF_GRADIENT_POINTS},

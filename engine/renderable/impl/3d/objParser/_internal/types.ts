@@ -21,6 +21,7 @@ export type t_vertexLib = {
 
 
 export class ObjMeshMaterial extends MeshMaterial {
+    public opacity = 1;
     constructor(public name:string) {
         super();
         this.diffuseColor = Color.WHITE.clone();

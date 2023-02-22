@@ -2,6 +2,13 @@ import {Color} from "@engine/renderer/common/color";
 import {ColorFactory} from "@engine/renderer/common/colorFactory";
 import {DebugError} from "@engine/debug/debugError";
 import {BasicStringTokenizer} from "@engine/renderable/impl/geometry/_internal/basicStringTokenizer";
+import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
+import {AbstractGradient} from "@engine/renderable/impl/fill/abstract/abstractGradient";
+import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
+import {Game} from "@engine/core/game";
+import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
+import {BitmapCacheHelper} from "@engine/renderable/bitmapCacheHelper";
+import {AlphaMaskFilter} from "@engine/renderer/webGl/filters/texture/alphaMaskFilter";
 
 export namespace SvgUtils {
 
@@ -72,5 +79,28 @@ export namespace SvgUtils {
         }
         return arr as unknown as T;
     };
+
+    const fitContainerToChildren = (model:RenderableModel):void=> {
+        const maxWidth = Math.max(...[0,...model._children.map(it=>it.pos.x+it.size.width)]);
+        const maxHeight = Math.max(...[0,...model._children.map(it=>it.pos.y+it.size.height)]);
+        model.size.setWH(maxWidth,maxHeight);
+    }
+
+    export const applyFillGradient = (game:Game,model:RenderableModel,gradient:AbstractGradient):RenderableModel=>{
+        fitContainerToChildren(model);
+        if (model.size.width===0 || model.size.height===0) return model;
+        const gradientedRect = new Rectangle(game);
+        gradientedRect.size.setFrom(model.size);
+        gradientedRect.fillGradient = gradient;
+        const cached = BitmapCacheHelper.cacheAsBitmap(game,model);
+        gradientedRect.filters = [new AlphaMaskFilter(game,cached.getTexture(),'a')];
+
+        const drawingSurface = new DrawingSurface(game,model.size);
+        drawingSurface.drawModel(gradientedRect);
+
+        cached.destroy();
+
+        return drawingSurface;
+    }
 
 }
