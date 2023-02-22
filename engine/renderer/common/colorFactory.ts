@@ -148,7 +148,7 @@ const NAMED_COLOR_TABLE:Record<string, `#${string}`> =
 
 export class ColorFactory {
     private static _calculateColorComponentsFromCss(literal:string):IColorJSON {
-        literal = literal.trim();
+        literal = literal.trim().toLowerCase();
         if (NAMED_COLOR_TABLE[literal]!==undefined) literal = NAMED_COLOR_TABLE[literal];
         let r:Uint8 = 0,g:Uint8 = 0,b:Uint8 = 0,a:Uint8 = 0;
         if (literal.substr(0,1)==="#") {

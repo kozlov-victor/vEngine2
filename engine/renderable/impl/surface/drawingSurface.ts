@@ -349,6 +349,11 @@ export class DrawingSurface
 
     constructor(game:Game,size:Readonly<ISize>){
         super(game);
+        if (DEBUG) {
+            if (size.width===0 || size.height===0) {
+                throw new DebugError(`can not create Drawing surface with zero size: {width:${size.width},height:${size.height}}`)
+            }
+        }
         this.size.setFrom(size);
         this._drawingSession = new DrawingSession(this.game,this,this._matrixStack);
         this.canvasImage = new Image(this.game,this._drawingSession._renderTarget.getTexture());

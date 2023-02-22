@@ -46,7 +46,9 @@ export class SvgElementRenderer {
         const refNode = this.document.getElementById(href);
         if (!refNode) return baseNode;
         else {
-            // path attributes not impl
+            Object.keys(baseNode.getAttributes()).forEach(k=>{
+                refNode.setAttribute(k,baseNode!.getAttribute(k));
+            });
             return refNode;
         }
     }
@@ -58,22 +60,29 @@ export class SvgElementRenderer {
         let gradient:Optional<AbstractGradient>;
         // gradientUnits="userSpaceOnUse" <-- ignored
         // gradientTransform="matrix(1,0,0,2.3714286,0,19.951903)" <-- ignored
+        // gradientTransform="rotate(45)"
         if (gradientNode.tagName==='linearGradient') {
             gradient = new LinearGradient();
         }
         else if (gradientNode.tagName==='radialGradient') {
             gradient = new RadialGradient();
-            const cx = SvgUtils.getNumber(gradientNode.getAttribute('x'),200);
-            const cy = SvgUtils.getNumber(gradientNode.getAttribute('y'),200);
-            // r attr - ignore
+            const cx = SvgUtils.getNumberWithMeasure(gradientNode.getAttribute('cx'),1,0.5);
+            const cy = SvgUtils.getNumberWithMeasure(gradientNode.getAttribute('cy'),1,0.5);
+            // r fx fy spreadMethod - ignore
             (gradient as RadialGradient).center.setXY(cx,cy);
+        } else {
+            console.log(`unknown gradient tag: ${gradientNode.tagName}`);
         }
 
         if (gradient!=undefined) {
             gradientNode.getChildNodes().forEach(c=> {
                 if (c.tagName !== 'stop') return;
-                const offset = SvgUtils.getNumber(c.getAttribute('offset'),0)
-                const color = SvgUtils.getColor(c.getAttribute('stop-color'));
+                const offset = SvgUtils.getNumberWithMeasure(this.lookUpProperty(c,'offset',false),1,0)
+                const color = SvgUtils.getColor(this.lookUpProperty(c,'stop-color',false));
+                const opacity = SvgUtils.getNumber(this.lookUpProperty(c,'stop-opacity',false),-1);
+                if (opacity!==-1) {
+                    color.a = (255 * opacity) as Uint8;
+                }
                 gradient!.setColorAtPosition(offset,color);
             });
         }
@@ -244,11 +253,8 @@ export class SvgElementRenderer {
             currentNode = currentNode.parent;
         }
         if (result===undefined) {
-            const className = el.getAttribute('class');
-            if (className) {
-                const cssProps = this.css.getRulesBySelector(`.${className}`);
-                result = cssProps[propName];
-            }
+            const cssProps = this.css.getRulesForElement(el);
+            result = cssProps[propName];
         }
         if (result===undefined) result = '';
         return result;
@@ -310,6 +316,7 @@ export class SvgElementRenderer {
                 polygonContainer.appendChild(p);
             });
         }
+
         if (fillGradient!==undefined) {
             polygonContainer = SvgUtils.applyFillGradient(this.game,polygonContainer,fillGradient);
         }
@@ -319,7 +326,7 @@ export class SvgElementRenderer {
 
     private renderCircle(parentView:RenderableModel,el:XmlNode):void {
         const container:RenderableModel = this.createElementContainer(parentView,el);
-        const {lineWidth = 0,fillColor,drawColor} = this.getFillStrokeParams(el);
+        const {lineWidth = 0,fillColor,drawColor,fillGradient} = this.getFillStrokeParams(el);
         const cx:number = SvgUtils.getNumberWithMeasure(el.getAttribute('cx'),this.rootContainer.size.width,0);
         const cy:number = SvgUtils.getNumberWithMeasure(el.getAttribute('cy'),this.rootContainer.size.height,0);
         const r:number = SvgUtils.getNumberWithMeasure(el.getAttribute('r'),this.rootContainer.size.width,10)+lineWidth/2;
@@ -329,6 +336,7 @@ export class SvgElementRenderer {
         circle.fillColor = fillColor;
         circle.color = drawColor;
         circle.lineWidth = lineWidth;
+        circle.fillGradient = fillGradient;
         circle.radius = r;
         this.setCommonProperties(circle,el);
         container.appendChild(circle);
@@ -355,27 +363,28 @@ export class SvgElementRenderer {
 
     private renderEllipse(parentView:RenderableModel,el:XmlNode):void {
         const container:RenderableModel = this.createElementContainer(parentView,el);
-        const {lineWidth = 0,fillColor,drawColor} = this.getFillStrokeParams(el);
+        const {lineWidth = 0,fillColor,drawColor,fillGradient} = this.getFillStrokeParams(el);
         const cx:number = SvgUtils.getNumberWithMeasure(el.getAttribute('cx'),this.rootContainer.size.width,0);
         const cy:number = SvgUtils.getNumberWithMeasure(el.getAttribute('cy'),this.rootContainer.size.height,0);
         const rx:number = SvgUtils.getNumberWithMeasure(el.getAttribute('rx'),this.rootContainer.size.width,10)+lineWidth/2;
         const ry:number = SvgUtils.getNumberWithMeasure(el.getAttribute('ry'),this.rootContainer.size.width,10)+lineWidth/2;
 
         const ellipse:Ellipse = new Ellipse(this.game);
-        ellipse.center.setXY(cx,cy);
         ellipse.fillColor = fillColor;
         ellipse.color = drawColor;
         ellipse.lineWidth = lineWidth;
         ellipse.radiusX = rx;
         ellipse.radiusY = ry;
+        ellipse.fillGradient = fillGradient;
         this.setCommonProperties(ellipse,el);
+        ellipse.center.setXY(cx,cy);
         container.appendChild(ellipse);
     }
 
     // ry is not supported
     private renderRect(parentView:RenderableModel,el:XmlNode):void {
         const container:RenderableModel = this.createElementContainer(parentView,el);
-        const {lineWidth = 0,fillColor,drawColor} = this.getFillStrokeParams(el);
+        const {lineWidth = 0,fillColor,drawColor,fillGradient} = this.getFillStrokeParams(el);
         const x:number = SvgUtils.getNumberWithMeasure(el.getAttribute('x'),this.rootContainer.size.width,0);
         const y:number = SvgUtils.getNumberWithMeasure(el.getAttribute('y'),this.rootContainer.size.height,0);
         const width:number = SvgUtils.getNumberWithMeasure(el.getAttribute('width'),this.rootContainer.size.width,1);
@@ -386,13 +395,14 @@ export class SvgElementRenderer {
 
         const rect:Rectangle = new Rectangle(this.game);
         rect.size.setWH(width+lineWidth*2,height+lineWidth*2);
-        rect.pos.setXY(x-lineWidth,y-lineWidth);
         rect.fillColor = fillColor;
         rect.color = drawColor;
         rect.lineWidth = lineWidth;
         rect.borderRadius = borderRadius;
         this.setCommonProperties(rect,el);
+        rect.pos.setXY(x-lineWidth,y-lineWidth);
         container.appendChild(rect);
+        rect.fillGradient = fillGradient;
     }
 
     private renderLine(parentView:RenderableModel,el:XmlNode):void {

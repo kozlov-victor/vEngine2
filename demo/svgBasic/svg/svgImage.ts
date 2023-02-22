@@ -10,7 +10,6 @@ import {XmlDocument, XmlNode} from "@engine/misc/parsers/xml/xmlElements";
 import {SvgElementRenderer} from "./_internal/svgElementRenderer";
 import {SvgUtils} from "./_internal/svgUtils";
 
-
 export class SvgImage extends SimpleGameObjectContainer {
 
     private constructor(game:Game, private doc:XmlDocument, private preferredSize?:ISize) {

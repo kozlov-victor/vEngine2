@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 375 200" version="1.1">
+
+  <title>SVG Gradients: Fill & Stroke</title>
+
+  <defs>
+
+    <linearGradient id="blue-gradient" x1="50%" y1="-2.48949813e-15%" x2="50%" y2="100%" >
+      <stop stop-color="#5757D9" offset="0%"/>
+      <stop stop-color="#21D9F7" offset="100%"/>
+    </linearGradient>
+
+  </defs>
+
+	<rect x="25" y="25" width="150" height="150" fill="url(#blue-gradient)"/>
+
+</svg>

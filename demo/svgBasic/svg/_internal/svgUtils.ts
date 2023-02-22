@@ -80,14 +80,16 @@ export namespace SvgUtils {
         return arr as unknown as T;
     };
 
-    const fitContainerToChildren = (model:RenderableModel):void=> {
+    const fitContainerToChildren = (model:RenderableModel)=> {
         const maxWidth = Math.max(...[0,...model._children.map(it=>it.pos.x+it.size.width)]);
         const maxHeight = Math.max(...[0,...model._children.map(it=>it.pos.y+it.size.height)]);
         model.size.setWH(maxWidth,maxHeight);
     }
 
     export const applyFillGradient = (game:Game,model:RenderableModel,gradient:AbstractGradient):RenderableModel=>{
-        fitContainerToChildren(model);
+        if (model.getChildrenCount()>0) {
+            fitContainerToChildren(model);
+        }
         if (model.size.width===0 || model.size.height===0) return model;
         const gradientedRect = new Rectangle(game);
         gradientedRect.size.setFrom(model.size);
@@ -99,7 +101,6 @@ export namespace SvgUtils {
         drawingSurface.drawModel(gradientedRect);
 
         cached.destroy();
-
         return drawingSurface;
     }
 

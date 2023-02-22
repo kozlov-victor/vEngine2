@@ -2,6 +2,8 @@
 // according to
 // https://github.com/jotform/css.js/blob/master/css.js
 
+import {XmlNode} from "@engine/misc/parsers/xml/xmlElements";
+
 interface CssRule {
     directive: string;
     value: string;
@@ -203,6 +205,15 @@ export class CssParser {
             }
         });
         return ret;
+    }
+
+    public getRulesForElement(el:XmlNode):Record<string, string> {
+        const byClass = this.getRulesBySelector(`.${el.getAttribute('class')}`);
+        const byId = this.getRulesBySelector(`#${el.getAttribute('id')}`);
+        Object.keys(byId).forEach(key=>{
+            byClass[key] = byId[key];
+        })
+        return byClass;
     }
 
 

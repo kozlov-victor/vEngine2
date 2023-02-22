@@ -9,7 +9,7 @@ export class LinearGradient extends AbstractGradient implements ICloneable<Linea
 
     public type:string = 'LinearGradient';
 
-    public angle:number = 0.1;
+    public angle:number = 0;
 
     public override set(g:LinearGradient):void{
         super.set(g);
