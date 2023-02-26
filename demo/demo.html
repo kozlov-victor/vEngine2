@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title></title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, minimal-ui, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <meta name="apple-mobile-web-app-title" content="App name">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <link rel="apple-touch-icon" href="./steamSeaBattle/data/images/bullet.png">
     <link rel="apple-touch-icon" sizes="76x76" href="./steamSeaBattle/data/images/bullet.png">
     <link rel="apple-touch-icon" sizes="120x120" href="./steamSeaBattle/data/images/bullet.png">
@@ -20,7 +20,6 @@
             border:none;
             margin: 0;
             padding: 0;
-            overflow: hidden;
             -webkit-touch-callout: none;
             -webkit-user-select: none;
             user-select: none;
@@ -28,15 +27,25 @@
         }
         /* prevent bounce on ios */
         body  {
-            position: fixed;
             overflow: hidden;
             width: 100%;
             height: 100%;
+        }
+        #canvas-wrap {
+            position: fixed;
+            top:0;
+            bottom: 0;
+            left:0;
+            right: 0;
+            width: 100%;
+            z-index: 1;
         }
         canvas {
             display: block;
             margin: 0 auto;
             background-color: black;
+            position: relative;
+            z-index: 2;
         }
 
     </style>
@@ -44,6 +53,8 @@
 </head>
 
 <body>
+
+<div id="canvas-wrap"></div>
 
 <script>
 
@@ -76,11 +87,18 @@
 <script>
     (function(){
         function getQueryParams(qs) {
+            if (!qs) return {};
             qs = qs.split('+').join(' ').split('?').join('');
             var params = {};
             qs.split('&').forEach(pairs=>{
-                const pair = pairs.split('=');
-                params[decodeURIComponent(pair[0])] = decodeURIComponent(pair[1]);
+                var pair = pairs.split('=');
+                var key = pair[0];
+                if (!key) return;
+                key = decodeURIComponent(key);
+                var val = pair[1];
+                if (val) val = decodeURIComponent(val);
+                else val = null;
+                params[key] = val;
             });
             return params;
         }

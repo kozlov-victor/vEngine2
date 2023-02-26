@@ -142,7 +142,7 @@ const leftPad = (s:string,toLength:number):string=>{
 };
 
 const toBin = (n:number)=>{
-    return leftPad(n.toString(2), 8);
+    return leftPad(n.toString(2).substr(0,4), 4);
 };
 
 const strLength = 9;
@@ -156,7 +156,7 @@ export const RESULT = (reverted:boolean):string=>{
             res+=toBin(data[i*strLength+j]);
         }
         if (reverted) res = res.split('').reverse().join('');
-        str+=(res.split('0').join('-').split('1').join('+'))+'\n';
+        str+=(res.split('0').join(' ').split('1').join('*'))+'\n';
     }
     return str;
 };

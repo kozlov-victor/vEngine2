@@ -2,11 +2,9 @@ import {KeyboardControl} from "@engine/control/keyboard/keyboardControl";
 import {Game, SCALE_STRATEGY} from "@engine/core/game";
 import {Scene} from "@engine/scene/scene";
 import {MainScene} from "./mainScene";
-import {GamePadControl} from "@engine/control/gamepad/gamePadControl";
 import {ResourceLoader} from "@engine/resources/resourceLoader";
 import {ArcadePhysicsSystem} from "@engine/physics/arcade/arcadePhysicsSystem";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
-import {AbstractCanvasRenderer} from "@engine/renderer/abstract/abstractCanvasRenderer";
 import {MouseControl} from "@engine/control/mouse/mouseControl";
 import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
 
@@ -30,7 +28,13 @@ document.body.style.backgroundColor = 'black';
 ResourceLoader.BASE_URL = './dudeUntitled/assets';
 ArcadePhysicsSystem.SPATIAL_CELL_SIZE.setWH(64);
 
-const game = new Game({width:640,height:480, scaleStrategy: SCALE_STRATEGY.FIT_CANVAS_TO_SCREEN});
+const game = new Game(
+    {
+        width:890,height:414, // 896
+        scaleStrategy: SCALE_STRATEGY.FIT_CANVAS_TO_SCREEN,
+        containerElement: document.getElementById('canvas-wrap')!
+    }
+);
 game.setPhysicsSystem(ArcadePhysicsSystem);
 game.setRenderer(WebGlRenderer);
 game.getRenderer(WebGlRenderer).setPixelPerfect(true);

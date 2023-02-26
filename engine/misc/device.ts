@@ -6,6 +6,9 @@ export class Device {
     public static readonly isFrame:boolean = window.top!==window.self;
     public static readonly isIPhone:boolean = navigator.platform.toLowerCase().indexOf('iphone')>-1;
     public static readonly isAndroid:boolean = navigator.userAgent.toLowerCase().indexOf('android')>-1;
+    public static readonly isMobile:boolean =
+        this.isIPhone || this.isAndroid;
+
     public static readonly embeddedEngine:boolean = navigator.userAgent==='vEngine';
 
     public static getScreenResolution():[number,number]{

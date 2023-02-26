@@ -5,7 +5,7 @@ import {Rect} from "@engine/geometry/rect";
 import {TexturePackerAtlas} from "@engine/animation/frameAnimation/atlas/texturePackerAtlas";
 import {AtlasFrameAnimation} from "@engine/animation/frameAnimation/atlas/atlasFrameAnimation";
 import {ArcadeSideScrollControl} from "@engine/behaviour/impl/arcadeSideScroll/arcadeSideScrollControl";
-import {ITiledJSON, TileMap} from "@engine/renderable/impl/general/tileMap/tileMap";
+import {ITiledJSON} from "@engine/renderable/impl/general/tileMap/tileMap";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {CharacterBullet} from "./characterBullet";
 import {DiContainer, Injectable} from "../ioc";
@@ -14,8 +14,8 @@ import {GroundDust} from "../particles/groundDust";
 import {Script} from "./script";
 import {Key} from "./key";
 import {AnimatedTileMap} from "@engine/renderable/impl/general/tileMap/animatedTileMap";
-import Inject = DiContainer.Inject;
 import {Sausage} from "./sausage";
+import Inject = DiContainer.Inject;
 
 export class Character implements Injectable {
 

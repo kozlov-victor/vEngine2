@@ -10,13 +10,14 @@ import {Layer, LayerTransformType} from "@engine/scene/layer";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {ScreenSensorCursor} from "@engine/control/screenSensor/screenSensorCursor";
 import {ScreenSensorButton} from "@engine/control/screenSensor/screenSensorButton";
-import {Device} from "@engine/misc/device";
 import {Key} from "./objects/key";
 import {DiContainer} from "./ioc";
 import {GroundDust} from "./particles/groundDust";
 import {Script} from "./objects/script";
 import {WallDust} from "./particles/wallDust";
 import {KeyboardControl} from "@engine/control/keyboard/keyboardControl";
+import {Device} from "@engine/misc/device";
+import {DebugLayer} from "@engine/scene/debugLayer";
 
 
 export class MainScene extends Scene {
@@ -30,7 +31,11 @@ export class MainScene extends Scene {
 
     public override onReady():void {
         this.initLevel();
-        this.initUI();
+        if (Device.isMobile) this.initUI();
+        const debug = new DebugLayer(this.game);
+        debug.setSolidBackground();
+        debug.appendTo(this);
+        debug.println(`${window.innerWidth} * ${window.innerHeight}`);
     }
 
     private initLevel():void {
@@ -81,27 +86,32 @@ export class MainScene extends Scene {
         uiLayer.transformType = LayerTransformType.STICK_TO_CAMERA;
         uiLayer.appendTo(this);
 
-        if (Device.isAndroid || Device.isIPhone) {
-            const sensorCursor = new ScreenSensorCursor(this.game,this,30);
-            sensorCursor.reflectToKeyboardControl(this.game.getControl(KeyboardControl),{
-                [ScreenSensorCursor.DIRECTION.UP]: KEYBOARD_KEY.UP,
-                [ScreenSensorCursor.DIRECTION.DOWN]: KEYBOARD_KEY.DOWN,
-                [ScreenSensorCursor.DIRECTION.LEFT]: KEYBOARD_KEY.LEFT,
-                [ScreenSensorCursor.DIRECTION.RIGHT]: KEYBOARD_KEY.RIGHT,
-            });
-            sensorCursor.appendTo(uiLayer);
-            sensorCursor.getExternalRing().pos.setXY(20,230);
+        const sensorCursor = new ScreenSensorCursor(this.game, this, 65);
+        sensorCursor.reflectToKeyboardControl(this.game.getControl(KeyboardControl), {
+            [ScreenSensorCursor.DIRECTION.UP]: KEYBOARD_KEY.UP,
+            [ScreenSensorCursor.DIRECTION.DOWN]: KEYBOARD_KEY.DOWN,
+            [ScreenSensorCursor.DIRECTION.LEFT]: KEYBOARD_KEY.LEFT,
+            [ScreenSensorCursor.DIRECTION.RIGHT]: KEYBOARD_KEY.RIGHT,
+        });
+        sensorCursor.appendTo(uiLayer);
+        sensorCursor.getExternalRing().pos.setXY(65, 245);
 
-            const jumpButton = new ScreenSensorButton(this.game,15);
-            jumpButton.pos.setXY(200,260);
-            jumpButton.reflectToKeyboardControl(this.game.getControl(KeyboardControl),KEYBOARD_KEY.SPACE);
-            jumpButton.appendTo(uiLayer);
+        const jumpButton = new ScreenSensorButton(this.game, 30);
+        jumpButton.pos.setXY(790, 320);
+        jumpButton.reflectToKeyboardControl(this.game.getControl(KeyboardControl), KEYBOARD_KEY.SPACE);
+        jumpButton.appendTo(uiLayer);
 
-            const fireButton = new ScreenSensorButton(this.game,15);
-            fireButton.pos.setXY(190,220);
-            fireButton.reflectToKeyboardControl(this.game.getControl(KeyboardControl),KEYBOARD_KEY.CONTROL);
-            fireButton.appendTo(uiLayer);
-        }
+        const fireButton = new ScreenSensorButton(this.game, 30);
+        fireButton.pos.setXY(740, 270);
+        fireButton.reflectToKeyboardControl(this.game.getControl(KeyboardControl), KEYBOARD_KEY.CONTROL);
+        fireButton.appendTo(uiLayer);
+
+        // hide address bar
+        document.body.style.minHeight = '1600px';
+        document.body.style.overflow = 'auto';
+        setTimeout(function(){
+            window.scrollTo(0, 1);
+        }, 0);
 
     }
 

@@ -49,8 +49,10 @@ export class ScreenSensorCursor extends SimpleGameObjectContainer {
         const internalRing = new Circle(this.game);
         internalRing.fillColor = Consts.color2;
         internalRing.appendTo(externalRing);
+        internalRing.radius = externalRing.radius/3;
         this.internalRing = internalRing;
         this.resetInternalRing();
+        this.size.setFrom(externalRing.size);
     }
 
     private listenToMouse(scene:Scene):void {

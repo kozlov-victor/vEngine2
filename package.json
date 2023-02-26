@@ -9,7 +9,9 @@
         "@typescript-eslint/eslint-plugin": "5.51.0",
         "@typescript-eslint/parser": "5.51.0",
         "eslint": "8.33.0",
-        "eslint-webpack-plugin": "4.0.0"
+        "eslint-webpack-plugin": "4.0.0",
+        "pngjs": "^7.0.0",
+        "psd": "^3.4.0"
     },
     "dependencies": {
         "@phenomnomnominal/tsquery": "5.0.0",
@@ -24,6 +26,7 @@
     },
     "scripts": {
         "start": "node --inspect node_modules/webpack/bin/webpack.js --env debug=true -w",
+        "editor": "node ./demo/out/editor-server.js",
         "build": "node node_modules/webpack/bin/webpack.js"
     },
     "main": ""

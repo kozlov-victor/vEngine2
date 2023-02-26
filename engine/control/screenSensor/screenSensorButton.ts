@@ -32,6 +32,7 @@ export class ScreenSensorButton extends SimpleGameObjectContainer {
         btn.alpha = Consts.alphaNormal;
         btn.appendTo(this);
         this.btn = btn;
+        this.size.setFrom(btn.size);
     }
 
     private listenToMouse():void {

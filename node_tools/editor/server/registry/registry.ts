@@ -1,6 +1,7 @@
 
 export interface IRegistryItem {
     method: string;
+    url: string;
     controllerMethodName: string;
     controllerInstance: any;
     contentType?: string;
@@ -10,7 +11,7 @@ export class Registry {
 
     private static instance:Registry;
 
-    public registry:Record<string, IRegistryItem> = {};
+    public registry:IRegistryItem[] = [];
 
 
     public static getInstance():Registry {
@@ -20,11 +21,13 @@ export class Registry {
 
     public registerController(c:any) {
         const instance = new c();
-        const methodMaps:Record<string, IRegistryItem> = instance.meta;
-        const baseUrl = instance.constructor?.meta?.baseUrl ?? '/';
-        Object.keys(methodMaps).forEach(key=>{
-            const url = `/`+(`${baseUrl}/${key}`).split('/').filter(it=>!!it).join('/');
-            this.registry[url] = methodMaps[key];
+        const meta:{baseUrl:string,methods:IRegistryItem[]} = instance.constructor?.meta;
+        const baseUrl = meta?.baseUrl ?? '/';
+        (meta.methods ?? []).forEach(m=>{
+            let url = `/`+(`${baseUrl}/${m.url}`).split('/').filter(it=>!!it).join('/');
+            if (!url.endsWith('/')) url = url + '/';
+            m.url = url;
+            this.registry.push(m);
         });
     }
 
