@@ -1,5 +1,5 @@
 import {Image} from "@engine/renderable/impl/general/image/image";
-import {ITileCollisionRect, ITiledJSON} from "@engine/renderable/impl/general/tileMap/tileMap";
+import {ITileCollisionRect, ITiledJSON, TileMap} from "@engine/renderable/impl/general/tileMap/tileMap";
 import {TexturePackerAtlas} from "@engine/animation/frameAnimation/atlas/texturePackerAtlas";
 import {ARCADE_RIGID_BODY_TYPE, ArcadeRigidBody} from "@engine/physics/arcade/arcadeRigidBody";
 import {ArcadePhysicsSystem} from "@engine/physics/arcade/arcadePhysicsSystem";
@@ -9,15 +9,10 @@ import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 
 export class Sausage {
 
-    private image:Image;
+    private readonly image:Image;
     public type = 'Sausage' as const;
 
     constructor(private scene:MainScene,tiledObject:ITiledJSON['layers'][0]['objects'][0]) {
-
-        const objGroup =
-            scene.assets.levelData.tilesets.find(it=>it.name==='sausage')?.
-            tiles?.find((it=>(it as ITileCollisionRect).objectgroup!==undefined));
-        const rect = (objGroup as ITileCollisionRect)?.objectgroup?.objects?.[0];
 
         const image = new Image(scene.getGame(),scene.assets.inventoryTexture);
         const atlas = new TexturePackerAtlas(scene.assets.inventoryAtlas);
@@ -27,7 +22,7 @@ export class Sausage {
         image.pos.setXY(tiledObject.x,tiledObject.y - tiledObject.height);
         image.setRigidBody(scene.getGame().getPhysicsSystem(ArcadePhysicsSystem).createRigidBody({
             type: ARCADE_RIGID_BODY_TYPE.KINEMATIC,
-            rect,
+            rect:TileMap.getCollisionRect(this.scene.assets.levelData,'sausage'),
             acceptCollisions: false,
             groupNames: ['collectable']
         }));

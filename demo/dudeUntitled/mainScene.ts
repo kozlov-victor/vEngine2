@@ -12,13 +12,14 @@ import {ScreenSensorCursor} from "@engine/control/screenSensor/screenSensorCurso
 import {ScreenSensorButton} from "@engine/control/screenSensor/screenSensorButton";
 import {Key} from "./objects/key";
 import {DiContainer} from "./ioc";
-import {GroundDust} from "./particles/groundDust";
+import {GroundDustEmitter} from "./particles/groundDustEmitter";
 import {Script} from "./objects/script";
-import {WallDust} from "./particles/wallDust";
+import {WallDustEmitter} from "./particles/wallDustEmitter";
 import {KeyboardControl} from "@engine/control/keyboard/keyboardControl";
 import {Device} from "@engine/misc/device";
 import {DebugLayer} from "@engine/scene/debugLayer";
 import {Candy} from "./objects/candy";
+import {BonusParticleEmitter} from "./particles/bonusParticleEmitter";
 
 
 export class MainScene extends Scene {
@@ -58,8 +59,9 @@ export class MainScene extends Scene {
         tileMap.appendTo(this);
 
         DiContainer.register(tileMap);
-        DiContainer.register(new GroundDust(this));
-        DiContainer.register(new WallDust(this));
+        DiContainer.register(new GroundDustEmitter(this));
+        DiContainer.register(new WallDustEmitter(this));
+        DiContainer.register(new BonusParticleEmitter(this));
         DiContainer.register(new Script(this));
 
         this.assets.levelData.layers.find(it=>it.type==='objectgroup')!.objects.forEach(obj=>{

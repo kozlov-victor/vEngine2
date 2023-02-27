@@ -4,6 +4,7 @@ import {TexturePackerAtlas} from "@engine/animation/frameAnimation/atlas/texture
 import {ARCADE_RIGID_BODY_TYPE, ArcadeRigidBody} from "@engine/physics/arcade/arcadeRigidBody";
 import {ArcadePhysicsSystem} from "@engine/physics/arcade/arcadePhysicsSystem";
 import {MainScene} from "../mainScene";
+import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 
 
 export class Candy {
@@ -14,11 +15,6 @@ export class Candy {
 
     constructor(private scene:MainScene,tiledObject:ITiledJSON['layers'][0]['objects'][0]) {
 
-        const objGroup =
-            scene.assets.levelData.tilesets.find(it=>it.name==='Candy')?.
-            tiles?.find((it=>(it as ITileCollisionRect).objectgroup!==undefined));
-        const rect = (objGroup as ITileCollisionRect)?.objectgroup?.objects?.[0];
-
         const image = new Image(scene.getGame(),scene.assets.inventoryTexture);
         const atlas = new TexturePackerAtlas(scene.assets.inventoryAtlas);
         const frame = atlas.getFrameByKey('candy');
@@ -27,13 +23,17 @@ export class Candy {
         image.pos.setXY(tiledObject.x,tiledObject.y - tiledObject.height);
         image.setRigidBody(scene.getGame().getPhysicsSystem(ArcadePhysicsSystem).createRigidBody({
             type: ARCADE_RIGID_BODY_TYPE.KINEMATIC,
-            rect,
+            rect: undefined,
             acceptCollisions: false,
             groupNames: ['collectable']
         }));
         image.getRigidBody<ArcadeRigidBody>().addInfo.host = this;
         image.appendTo(scene);
         this.image = image;
+    }
+
+    public getRenderable():RenderableModel {
+        return this.image;
     }
 
 

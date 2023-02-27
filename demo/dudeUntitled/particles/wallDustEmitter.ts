@@ -3,7 +3,7 @@ import {ColorFactory} from "@engine/renderer/common/colorFactory";
 import {Color} from "@engine/renderer/common/color";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
 
-export class WallDust extends AbstractParticleEmitter{
+export class WallDustEmitter extends AbstractParticleEmitter{
 
     private createPrefab(color:Color) {
         const particle = new Circle(this.scene.getGame());

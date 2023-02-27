@@ -140,6 +140,13 @@ export class TileMap extends RenderableModelWithTexture {
     private _tileHeight:number;
     private _dataOffsetIndex:number = 1; // to work properly with "firstgid" tiled property
 
+    public static getCollisionRect(levelData:ITiledJSON,name:string):Optional<IRectJSON> {
+        const objGroup =
+            levelData.tilesets.find(it=>it.name===name)?.
+            tiles?.find((it=>(it as ITileCollisionRect).objectgroup!==undefined));
+        return (objGroup as ITileCollisionRect)?.objectgroup?.objects?.[0];
+    }
+
     protected readonly _drawInfo = {
         firstTileToDrawByX: NaN,
         firstTileToDrawByY: NaN,

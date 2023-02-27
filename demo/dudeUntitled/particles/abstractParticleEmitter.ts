@@ -5,7 +5,8 @@ import {ICloneable} from "@engine/core/declarations";
 import {Scene} from "@engine/scene/scene";
 
 export abstract class AbstractParticleEmitter {
-    private ps:ParticleSystem;
+
+    protected ps:ParticleSystem;
 
     protected abstract createParticlePrefabs():(RenderableModel & ICloneable<RenderableModel & ICloneable<any>>)[];
 

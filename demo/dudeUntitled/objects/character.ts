@@ -10,19 +10,20 @@ import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {CharacterBullet} from "./characterBullet";
 import {DiContainer, Injectable} from "../ioc";
 import {MainScene} from "../mainScene";
-import {GroundDust} from "../particles/groundDust";
+import {GroundDustEmitter} from "../particles/groundDustEmitter";
 import {Script} from "./script";
 import {Key} from "./key";
 import {AnimatedTileMap} from "@engine/renderable/impl/general/tileMap/animatedTileMap";
 import {Sausage} from "./sausage";
 import Inject = DiContainer.Inject;
+import {Candy} from "./candy";
 
 export class Character implements Injectable {
 
     private readonly characterImage:AnimatedImage;
     private body:ArcadeRigidBody;
 
-    @Inject(GroundDust) public readonly groundDust:GroundDust;
+    @Inject(GroundDustEmitter) public readonly groundDust:GroundDustEmitter;
     @Inject(AnimatedTileMap) private readonly tileMap:AnimatedTileMap;
     @Inject(Script) private readonly script:Script;
 
@@ -143,6 +144,10 @@ export class Character implements Injectable {
                     break;
                 case Sausage.name:
                     this.script.onHeroCollectedSausage(host as Sausage);
+                    break;
+                case Candy.name:
+                    this.script.onHeroCollectedCandy(host as Candy);
+                    break;
             }
         });
     }

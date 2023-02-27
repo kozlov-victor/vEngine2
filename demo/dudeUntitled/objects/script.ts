@@ -3,10 +3,12 @@ import {DiContainer, Injectable} from "../ioc";
 import {MainScene} from "../mainScene";
 import {IRectJSON} from "@engine/geometry/rect";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
-import {WallDust} from "../particles/wallDust";
+import {WallDustEmitter} from "../particles/wallDustEmitter";
 import {AnimatedTileMap} from "@engine/renderable/impl/general/tileMap/animatedTileMap";
 import {Sausage} from "./sausage";
 import Inject = DiContainer.Inject;
+import {Candy} from "./candy";
+import {BonusParticleEmitter} from "../particles/bonusParticleEmitter";
 
 export const waitFor = (root:RenderableModel,time:number):Promise<void>=> {
     return new Promise(resolve=>{
@@ -17,7 +19,8 @@ export const waitFor = (root:RenderableModel,time:number):Promise<void>=> {
 export class Script implements Injectable {
 
     @Inject(AnimatedTileMap) private readonly tileMap:AnimatedTileMap;
-    @Inject(WallDust) public readonly wallDust:WallDust;
+    @Inject(WallDustEmitter) public readonly wallDust:WallDustEmitter;
+    @Inject(BonusParticleEmitter) public readonly bonusParticles:BonusParticleEmitter;
 
     constructor(private scene:MainScene) {
     }
@@ -28,6 +31,14 @@ export class Script implements Injectable {
     public onHeroCollectedSausage(sausage:Sausage):void {
         const host = sausage.getRenderable();
         this.wallDust.emit(
+            host.pos.x+host.size.width/2,
+            host.pos.y+host.size.height/2
+        );
+    }
+
+    public onHeroCollectedCandy(candy:Candy):void {
+        const host = candy.getRenderable();
+        this.bonusParticles.emit(
             host.pos.x+host.size.width/2,
             host.pos.y+host.size.height/2
         );

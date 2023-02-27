@@ -16,10 +16,6 @@ export class Key {
 
     constructor(private scene:MainScene,tiledObject:ITiledJSON['layers'][0]['objects'][0]) {
 
-        const objGroup =
-            scene.assets.levelData.tilesets.find(it=>it.name==='key')?.
-            tiles?.find((it=>(it as ITileCollisionRect).objectgroup!==undefined));
-        const rect = (objGroup as ITileCollisionRect)?.objectgroup?.objects?.[0];
 
         const image = new Image(scene.getGame(),scene.assets.inventoryTexture);
         const atlas = new TexturePackerAtlas(scene.assets.inventoryAtlas);
@@ -29,7 +25,7 @@ export class Key {
         image.pos.setXY(tiledObject.x,tiledObject.y - tiledObject.height);
         image.setRigidBody(scene.getGame().getPhysicsSystem(ArcadePhysicsSystem).createRigidBody({
             type: ARCADE_RIGID_BODY_TYPE.KINEMATIC,
-            rect,
+            rect: undefined,
             acceptCollisions: false,
             groupNames: ['collectable']
         }));
