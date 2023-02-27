@@ -18,6 +18,7 @@ import {WallDust} from "./particles/wallDust";
 import {KeyboardControl} from "@engine/control/keyboard/keyboardControl";
 import {Device} from "@engine/misc/device";
 import {DebugLayer} from "@engine/scene/debugLayer";
+import {Candy} from "./objects/candy";
 
 
 export class MainScene extends Scene {
@@ -62,8 +63,7 @@ export class MainScene extends Scene {
         DiContainer.register(new Script(this));
 
         this.assets.levelData.layers.find(it=>it.type==='objectgroup')!.objects.forEach(obj=>{
-            const typeProp = obj.properties.find(it=>it.name==='class');
-            const cl = typeProp?.value;
+            const cl = obj.class;
             switch (cl) {
                 case Character.name:
                     DiContainer.register(new Character(this,obj));
@@ -73,6 +73,9 @@ export class MainScene extends Scene {
                     break;
                 case Key.name:
                     new Key(this,obj);
+                    break;
+                case Candy.name:
+                    new Candy(this,obj);
                     break;
             }
         });

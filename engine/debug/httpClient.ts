@@ -101,7 +101,7 @@ export namespace HttpClient {
         return promise as Promise<T>;
     };
 
-    export const get = <T>(url:string,data:IKeyVal<string|number|boolean>,success?:(arg:T)=>void,error?:(opts:{status:number,error:string})=>void,setup?:(xhr:XMLHttpRequest)=>void)=>{
+    export const get = <T>(url:string,data?:IKeyVal<string|number|boolean>,success?:(arg:T)=>void,error?:(opts:{status:number,error:string})=>void,setup?:(xhr:XMLHttpRequest)=>void)=>{
         return request<T>({
             method:'get',
             url,

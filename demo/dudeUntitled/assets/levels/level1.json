@@ -35,17 +35,11 @@
          "name":"Object Layer 1",
          "objects":[
                 {
-                 "class":"",
+                 "class":"Character",
                  "gid":1,
                  "height":42,
                  "id":2,
                  "name":"",
-                 "properties":[
-                        {
-                         "name":"class",
-                         "type":"string",
-                         "value":"Character"
-                        }],
                  "rotation":0,
                  "visible":true,
                  "width":37,
@@ -53,138 +47,7 @@
                  "y":449.667
                 }, 
                 {
-                 "class":"",
-                 "gid":31,
-                 "height":32,
-                 "id":6,
-                 "name":"",
-                 "properties":[
-                        {
-                         "name":"class",
-                         "type":"string",
-                         "value":"Sausage"
-                        }],
-                 "rotation":0,
-                 "visible":true,
-                 "width":32,
-                 "x":39.3333,
-                 "y":96
-                }, 
-                {
-                 "class":"",
-                 "gid":31,
-                 "height":32,
-                 "id":7,
-                 "name":"",
-                 "properties":[
-                        {
-                         "name":"class",
-                         "type":"string",
-                         "value":"Sausage"
-                        }],
-                 "rotation":0,
-                 "visible":true,
-                 "width":32,
-                 "x":162,
-                 "y":89.3333
-                }, 
-                {
-                 "class":"",
-                 "gid":31,
-                 "height":32,
-                 "id":8,
-                 "name":"",
-                 "properties":[
-                        {
-                         "name":"class",
-                         "type":"string",
-                         "value":"Sausage"
-                        }],
-                 "rotation":0,
-                 "visible":true,
-                 "width":32,
-                 "x":474.667,
-                 "y":120.667
-                }, 
-                {
-                 "class":"",
-                 "gid":31,
-                 "height":32,
-                 "id":10,
-                 "name":"",
-                 "properties":[
-                        {
-                         "name":"class",
-                         "type":"string",
-                         "value":"Sausage"
-                        }],
-                 "rotation":0,
-                 "visible":true,
-                 "width":32,
-                 "x":1741.33,
-                 "y":338.667
-                }, 
-                {
-                 "class":"",
-                 "gid":31,
-                 "height":32,
-                 "id":11,
-                 "name":"",
-                 "properties":[
-                        {
-                         "name":"class",
-                         "type":"string",
-                         "value":"Sausage"
-                        }],
-                 "rotation":0,
-                 "visible":true,
-                 "width":32,
-                 "x":1452,
-                 "y":157.333
-                }, 
-                {
-                 "class":"",
-                 "gid":31,
-                 "height":32,
-                 "id":12,
-                 "name":"",
-                 "properties":[
-                        {
-                         "name":"class",
-                         "type":"string",
-                         "value":"Sausage"
-                        }],
-                 "rotation":0,
-                 "visible":true,
-                 "width":32,
-                 "x":1120.33,
-                 "y":301.333
-                }, 
-                {
-                 "class":"",
-                 "gid":32,
-                 "height":32,
-                 "id":14,
-                 "name":"",
-                 "properties":[
-                        {
-                         "name":"class",
-                         "type":"string",
-                         "value":"Key"
-                        }, 
-                        {
-                         "name":"rectId",
-                         "type":"string",
-                         "value":"1"
-                        }],
-                 "rotation":0,
-                 "visible":true,
-                 "width":32,
-                 "x":1569.67,
-                 "y":293.667
-                }, 
-                {
-                 "class":"",
+                 "class":"OverlapRect",
                  "height":50.6667,
                  "id":15,
                  "name":"",
@@ -193,17 +56,162 @@
                          "name":"id",
                          "type":"string",
                          "value":"1"
-                        }, 
-                        {
-                         "name":"type",
-                         "type":"string",
-                         "value":"overlapRect"
                         }],
                  "rotation":0,
                  "visible":true,
                  "width":142.667,
-                 "x":1512.66666666667,
-                 "y":423.999666666667
+                 "x":1512.67,
+                 "y":424
+                }, 
+                {
+                 "class":"Sausage",
+                 "gid":31,
+                 "height":32,
+                 "id":22,
+                 "name":"",
+                 "rotation":0,
+                 "visible":true,
+                 "width":32,
+                 "x":60,
+                 "y":82.6666666666667
+                }, 
+                {
+                 "class":"Sausage",
+                 "gid":31,
+                 "height":32,
+                 "id":25,
+                 "name":"",
+                 "rotation":0,
+                 "visible":true,
+                 "width":32,
+                 "x":156,
+                 "y":75.3333333333333
+                }, 
+                {
+                 "class":"Sausage",
+                 "gid":31,
+                 "height":32,
+                 "id":26,
+                 "name":"",
+                 "rotation":0,
+                 "visible":true,
+                 "width":32,
+                 "x":394,
+                 "y":104
+                }, 
+                {
+                 "class":"Sausage",
+                 "gid":31,
+                 "height":32,
+                 "id":27,
+                 "name":"",
+                 "rotation":0,
+                 "visible":true,
+                 "width":32,
+                 "x":528.666666666667,
+                 "y":245.333333333333
+                }, 
+                {
+                 "class":"Sausage",
+                 "gid":31,
+                 "height":32,
+                 "id":28,
+                 "name":"",
+                 "rotation":0,
+                 "visible":true,
+                 "width":32,
+                 "x":1123.33333333333,
+                 "y":324.666666666667
+                }, 
+                {
+                 "class":"Sausage",
+                 "gid":31,
+                 "height":32,
+                 "id":29,
+                 "name":"",
+                 "rotation":0,
+                 "visible":true,
+                 "width":32,
+                 "x":1744.66666666667,
+                 "y":464
+                }, 
+                {
+                 "class":"Candy",
+                 "gid":33,
+                 "height":32,
+                 "id":30,
+                 "name":"",
+                 "rotation":0,
+                 "visible":true,
+                 "width":32,
+                 "x":512.666666666667,
+                 "y":71.3333333333333
+                }, 
+                {
+                 "class":"Candy",
+                 "gid":33,
+                 "height":32,
+                 "id":41,
+                 "name":"",
+                 "rotation":0,
+                 "visible":true,
+                 "width":32,
+                 "x":508.666666666667,
+                 "y":121.333333333333
+                }, 
+                {
+                 "class":"Key",
+                 "gid":32,
+                 "height":32,
+                 "id":42,
+                 "name":"",
+                 "properties":[
+                        {
+                         "name":"rectId",
+                         "type":"string",
+                         "value":"1"
+                        }],
+                 "rotation":0,
+                 "visible":true,
+                 "width":32,
+                 "x":1556.66666666667,
+                 "y":301.333333333333
+                }, 
+                {
+                 "class":"Candy",
+                 "gid":33,
+                 "height":32,
+                 "id":46,
+                 "name":"",
+                 "rotation":0,
+                 "visible":true,
+                 "width":32,
+                 "x":1699.33333333333,
+                 "y":236
+                }, 
+                {
+                 "class":"Candy",
+                 "gid":33,
+                 "height":32,
+                 "id":47,
+                 "name":"",
+                 "rotation":0,
+                 "visible":true,
+                 "width":32,
+                 "x":1724,
+                 "y":268.666666666667
+                }, 
+                {
+                 "class":"Candy",
+                 "gid":33,
+                 "height":32,
+                 "id":48,
+                 "name":"",
+                 "rotation":0,
+                 "visible":true,
+                 "width":32,
+                 "x":1698.66666666667,
+                 "y":309.333333333333
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -212,7 +220,7 @@
          "y":0
         }],
  "nextlayerid":4,
- "nextobjectid":16,
+ "nextobjectid":49,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.9.2",
@@ -322,43 +330,42 @@
          "tilewidth":32
         }, 
         {
-         "columns":3,
+         "columns":1,
          "firstgid":31,
-         "image":"..\/inventory\/inventory.png",
-         "imageheight":128,
-         "imagewidth":96,
+         "image":"..\/..\/psd_sources\/flattened\/sausage.png",
+         "imageheight":34,
+         "imagewidth":32,
          "margin":0,
-         "name":"inventory",
+         "name":"sausage",
          "spacing":0,
-         "tilecount":12,
+         "tilecount":1,
          "tileheight":32,
-         "tiles":[
-                {
-                 "id":0,
-                 "objectgroup":
-                    {
-                     "draworder":"index",
-                     "id":5,
-                     "name":"",
-                     "objects":[
-                            {
-                             "class":"",
-                             "height":23.9936,
-                             "id":11,
-                             "name":"",
-                             "rotation":0,
-                             "visible":true,
-                             "width":13.9303,
-                             "x":7.0816,
-                             "y":4.93849
-                            }],
-                     "opacity":1,
-                     "type":"objectgroup",
-                     "visible":true,
-                     "x":0,
-                     "y":0
-                    }
-                }],
+         "tilewidth":32
+        }, 
+        {
+         "columns":1,
+         "firstgid":32,
+         "image":"..\/..\/psd_sources\/flattened\/key.png",
+         "imageheight":35,
+         "imagewidth":32,
+         "margin":0,
+         "name":"key",
+         "spacing":0,
+         "tilecount":1,
+         "tileheight":32,
+         "tilewidth":32
+        }, 
+        {
+         "columns":1,
+         "firstgid":33,
+         "image":"..\/..\/psd_sources\/flattened\/candy.png",
+         "imageheight":32,
+         "imagewidth":32,
+         "margin":0,
+         "name":"candy",
+         "spacing":0,
+         "tilecount":1,
+         "tileheight":32,
          "tilewidth":32
         }],
  "tilewidth":32,

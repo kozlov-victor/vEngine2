@@ -37,7 +37,7 @@ export class Script implements Injectable {
         const targetRect =
             this.scene.assets.levelData.layers.find(it=>it.type==='objectgroup')?.
                 objects?.find(it=>{
-                    return it.properties.find(it => it.name === 'type' && it.value === 'overlapRect') &&
+                    return it.class==='OverlapRect' &&
                         it.properties.find(it => it.name === 'id' && it.value===key.rectId);
                 });
         if (!targetRect) throw Error('no target rect');

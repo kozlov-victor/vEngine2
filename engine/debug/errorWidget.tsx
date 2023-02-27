@@ -38,6 +38,7 @@ const css:string = `
         right: 0;
         top: 0;
         position: absolute;
+        z-index: 100;
     }
     ::selection {
             color: #efff00;

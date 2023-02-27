@@ -17,13 +17,13 @@ export class Key {
     constructor(private scene:MainScene,tiledObject:ITiledJSON['layers'][0]['objects'][0]) {
 
         const objGroup =
-            scene.assets.levelData.tilesets.find(it=>it.name==='inventory')!.
-            tiles?.find((it=>(it as ITileCollisionRect).objectgroup!==undefined)) as ITileCollisionRect;
-        const rect = objGroup.objectgroup.objects[0];
+            scene.assets.levelData.tilesets.find(it=>it.name==='key')?.
+            tiles?.find((it=>(it as ITileCollisionRect).objectgroup!==undefined));
+        const rect = (objGroup as ITileCollisionRect)?.objectgroup?.objects?.[0];
 
         const image = new Image(scene.getGame(),scene.assets.inventoryTexture);
         const atlas = new TexturePackerAtlas(scene.assets.inventoryAtlas);
-        const frame = atlas.getFrameByKey('inventory_key');
+        const frame = atlas.getFrameByKey('key');
         image.size.setWH(frame.width,frame.height);
         image.srcRect.setFrom(frame);
         image.pos.setXY(tiledObject.x,tiledObject.y - tiledObject.height);

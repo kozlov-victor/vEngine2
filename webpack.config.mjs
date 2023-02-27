@@ -5,13 +5,14 @@ import * as child_process from 'child_process';
 import * as TerserPlugin from 'terser-webpack-plugin';
 import * as cliUI from './node_tools/cliUI.mjs';
 import * as ESLintPlugin from 'eslint-webpack-plugin';
-import * as storage from './node_tools/common/storage.mjs';
+import * as storage from './node_tools/common/storage.js';
 import {fileURLToPath} from 'url';
 
 let project;
 let allProjectsGrouped;
 let allProjectsFlat;
 let TextTable;
+
 
 class InputOutputResolver {
 

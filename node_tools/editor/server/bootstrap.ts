@@ -53,9 +53,6 @@ const requestListener = async (req:IncomingMessage, res:ServerResponse)=> {
     Object.keys(queryObject).forEach(k=>params[k]=queryObject[k]);
     Object.keys(body).forEach(k=>params[k]=body[k]);
 
-    console.log('---------------------------');
-    console.log(Registry.getInstance().registry);
-
     for (const registryItem of Registry.getInstance().registry) {
         if (url===registryItem.url && method===registryItem.method) {
             try {
@@ -78,7 +75,10 @@ const requestListener = async (req:IncomingMessage, res:ServerResponse)=> {
     res.end();
 }
 
+const PORT = 8088;
 export const init = ()=>{
     const server = http.createServer(requestListener);
-    server.listen(8088);
+    server.listen(PORT);
+    console.log(`server is running`);
+    console.log(`http://localhost:${PORT}`);
 }

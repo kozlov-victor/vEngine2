@@ -1,5 +1,5 @@
 
-import * as fs from 'fs';
+const fs = require('fs');
 
 const path = './node_tools/build/__cache__';
 
@@ -17,12 +17,14 @@ const save = (json)=>{
     fs.writeFileSync(path,JSON.stringify(json));
 }
 
-export const get = (key)=>{
+const get = (key)=>{
     return read()[key];
 }
 
-export const set = (key,val)=>{
+const set = (key,val)=>{
     const json = read();
     json[key] = val;
     save(json);
 }
+
+module.exports = {get,set};

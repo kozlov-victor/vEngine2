@@ -80,6 +80,7 @@ export interface ITiledJSON {
             gid:number;
             id:number;
             name:string;
+            class: string;
             properties:({
                 name:string;
                 type:string;

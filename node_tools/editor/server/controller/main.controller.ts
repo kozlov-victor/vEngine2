@@ -8,6 +8,7 @@ declare const __non_webpack_require__:any;
 const fs = __non_webpack_require__('fs');
 const PSD = __non_webpack_require__('psd');
 const path = __non_webpack_require__('path');
+const storage = __non_webpack_require__('../../node_tools/common/storage');
 
 let cnt = 0;
 const rnd = ()=>{
@@ -71,14 +72,16 @@ export class MainController {
     }
 
     @Post({url:'/convert',contentType:'text/plain'})
-    public async convert(params:{files:string}) {
+    public async convert(params:{files:string,padding:number,saveLayerImagesTo:string}) {
         if (!fs.existsSync(tmp)) fs.mkdirSync(tmp);
+        if (!params.padding) params.padding = 0;
         const psds = params.files.split(',').map(it=>PSD.fromFile(it));
         const images:IImage[] = [];
         for (const psd of psds) {
             psd.parse();
             const layers = psd.tree().children().map((c:any)=>c.layer);
             for (const layer of layers) {
+                if (layer.name.toLowerCase().startsWith('ignore')) continue;
                 const id = uuid();
                 const fileName = `${tmp}/${id}.png`;
                 await layer.image.saveAsPng(fileName);
@@ -97,29 +100,41 @@ export class MainController {
 
         const rects:RectangleEx[] = [];
         for (const image of images) {
-            const r = new Rectangle(image.rect.width,image.rect.height) as Rectangle&{image:IImage};
+            const r = new RectangleEx(
+                image.rect.width  + 2 * params.padding,
+                image.rect.height + 2 * params.padding);
             r.image = image;
             rects.push(r);
         }
         const {rect:packed} = new TexturePacker(rects).pack();
 
         const bitmap = new Bitmap(packed.width,packed.height);
-        const descriptions:Record<string, IRectJSON> = {};
+        const descriptions = {
+            frames:{} as Record<string, {frame:{x:number,y:number,w:number,h:number}}>,
+            width: packed.width,
+            height: packed.height,
+        };
         for (const r of rects) {
             const bm = await Bitmap.fromPNG(r.image.fileName);
             bitmap.drawImageAt(r.x,r.y,bm);
             const name = getSafeName(descriptions,r.image.name);
-            descriptions[name] = {
-                x:r.x,y:r.y,
-                width:r.width,height:r.height,
+            descriptions.frames[name] = {
+                frame: {
+                    x:      r.x + params.padding,
+                    y:      r.y + params.padding,
+                    w:      r.image.rect.width,
+                    h:      r.image.rect.height,
+                }
             }
         }
         const outFileUUID = uuid();
         await bitmap.toPng(`${tmp}/${outFileUUID}.png`);
-        for (const image of images) {
-            fs.unlinkSync(image.fileName);
+        for (const r of rects) {
+            fs.copyFileSync(r.image.fileName,`${params.saveLayerImagesTo}/${r.image.name}.png`);
+            fs.unlinkSync(r.image.fileName);
         }
         fs.writeFileSync(`${tmp}/${outFileUUID}.json`,JSON.stringify(descriptions,undefined,4));
+        storage.set('saveLayerImagesTo',params.saveLayerImagesTo);
         return outFileUUID;
     }
 
@@ -128,10 +143,23 @@ export class MainController {
         return fs.readFileSync(`${tmp}/${params.uuid}.png`);
     }
 
+    @Get({url:'/loadParams',contentType:'application/json'})
+    public async loadParams() {
+        return {
+            saveTo: storage.get('saveTo'),
+            saveToFileName: storage.get('saveToFileName'),
+            folder: storage.get('folder'),
+            saveLayerImagesTo: storage.get('saveLayerImagesTo'),
+        };
+    }
+
     @Post({url:'/save',contentType:'application/json'})
-    public async save(params:{uuid:string,saveTo:string,saveToFileName:string}) {
+    public async save(params:{uuid:string,saveTo:string,saveToFileName:string,folder:string}) {
         fs.copyFileSync(`${tmp}/${params.uuid}.png`,`${params.saveTo}/${params.saveToFileName}.png`);
         fs.copyFileSync(`${tmp}/${params.uuid}.json`,`${params.saveTo}/${params.saveToFileName}.json`);
+        storage.set('saveTo',params.saveTo);
+        storage.set('saveToFileName',params.saveToFileName);
+        storage.set('folder',params.folder);
         return {};
     }
 

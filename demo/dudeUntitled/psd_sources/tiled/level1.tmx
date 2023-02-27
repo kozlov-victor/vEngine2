@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="60" height="16" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="16">
+<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="60" height="16" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="49">
  <editorsettings>
-  <export target="level1.json" format="json"/>
+  <export target="../../assets/levels/level1.json" format="json"/>
  </editorsettings>
  <tileset firstgid="1" name="character" tilewidth="37" tileheight="42" tilecount="15" columns="5">
-  <image source="../character/character.png" width="215" height="141"/>
+  <image source="../../assets/character/character.png" width="215" height="141"/>
  </tileset>
  <tileset firstgid="16" name="tiles" tilewidth="32" tileheight="32" tilecount="15" columns="3">
-  <image source="tiles.png" width="96" height="160"/>
+  <image source="../../assets/levels/tiles.png" width="96" height="160"/>
   <tile id="1">
    <animation>
     <frame tileid="1" duration="700"/>
@@ -31,13 +31,14 @@
    </objectgroup>
   </tile>
  </tileset>
- <tileset firstgid="31" name="inventory" tilewidth="32" tileheight="32" tilecount="12" columns="3">
-  <image source="../inventory/inventory.png" width="96" height="128"/>
-  <tile id="0">
-   <objectgroup draworder="index" id="5">
-    <object id="11" x="7.0816" y="4.93849" width="13.9303" height="23.9936"/>
-   </objectgroup>
-  </tile>
+ <tileset firstgid="31" name="sausage" tilewidth="32" tileheight="32" tilecount="1" columns="1">
+  <image source="../flattened/sausage.png" width="32" height="34"/>
+ </tileset>
+ <tileset firstgid="32" name="key" tilewidth="32" tileheight="32" tilecount="1" columns="1">
+  <image source="../flattened/key.png" width="32" height="35"/>
+ </tileset>
+ <tileset firstgid="33" name="candy" tilewidth="32" tileheight="32" tilecount="1" columns="1">
+  <image source="../flattened/candy.png" width="32" height="32"/>
  </tileset>
  <layer id="1" name="Tile Layer 1" width="60" height="16">
   <data encoding="csv">
@@ -60,52 +61,27 @@
 </data>
  </layer>
  <objectgroup id="2" name="Object Layer 1">
-  <object id="2" gid="1" x="73.667" y="449.667" width="37" height="42">
+  <object id="2" class="Character" gid="1" x="73.667" y="449.667" width="37" height="42"/>
+  <object id="15" class="OverlapRect" x="1512.67" y="424" width="142.667" height="50.6667">
    <properties>
-    <property name="class" value="Character"/>
+    <property name="id" value="1"/>
    </properties>
   </object>
-  <object id="6" gid="31" x="39.3333" y="96" width="32" height="32">
+  <object id="22" class="Sausage" gid="31" x="60" y="82.6667" width="32" height="32"/>
+  <object id="25" class="Sausage" gid="31" x="156" y="75.3333" width="32" height="32"/>
+  <object id="26" class="Sausage" gid="31" x="394" y="104" width="32" height="32"/>
+  <object id="27" class="Sausage" gid="31" x="528.667" y="245.333" width="32" height="32"/>
+  <object id="28" class="Sausage" gid="31" x="1123.33" y="324.667" width="32" height="32"/>
+  <object id="29" class="Sausage" gid="31" x="1744.67" y="464" width="32" height="32"/>
+  <object id="30" class="Candy" gid="33" x="512.667" y="71.3333" width="32" height="32"/>
+  <object id="41" class="Candy" gid="33" x="508.667" y="121.333" width="32" height="32"/>
+  <object id="42" class="Key" gid="32" x="1556.67" y="301.333" width="32" height="32">
    <properties>
-    <property name="class" value="Sausage"/>
-   </properties>
-  </object>
-  <object id="7" gid="31" x="162" y="89.3333" width="32" height="32">
-   <properties>
-    <property name="class" value="Sausage"/>
-   </properties>
-  </object>
-  <object id="8" gid="31" x="474.667" y="120.667" width="32" height="32">
-   <properties>
-    <property name="class" value="Sausage"/>
-   </properties>
-  </object>
-  <object id="10" gid="31" x="1741.33" y="338.667" width="32" height="32">
-   <properties>
-    <property name="class" value="Sausage"/>
-   </properties>
-  </object>
-  <object id="11" gid="31" x="1452" y="157.333" width="32" height="32">
-   <properties>
-    <property name="class" value="Sausage"/>
-   </properties>
-  </object>
-  <object id="12" gid="31" x="1120.33" y="301.333" width="32" height="32">
-   <properties>
-    <property name="class" value="Sausage"/>
-   </properties>
-  </object>
-  <object id="14" gid="32" x="1569.67" y="293.667" width="32" height="32">
-   <properties>
-    <property name="class" value="Key"/>
     <property name="rectId" value="1"/>
    </properties>
   </object>
-  <object id="15" x="1512.67" y="424" width="142.667" height="50.6667">
-   <properties>
-    <property name="id" value="1"/>
-    <property name="type" value="overlapRect"/>
-   </properties>
-  </object>
+  <object id="46" class="Candy" gid="33" x="1699.33" y="236" width="32" height="32"/>
+  <object id="47" class="Candy" gid="33" x="1724" y="268.667" width="32" height="32"/>
+  <object id="48" class="Candy" gid="33" x="1698.67" y="309.333" width="32" height="32"/>
  </objectgroup>
 </map>
