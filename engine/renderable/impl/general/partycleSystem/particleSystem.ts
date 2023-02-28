@@ -96,7 +96,7 @@ export class ParticleSystem extends SimpleGameObjectContainer {
     public emissionRadius:number = 0;
     public emissionPosition:Point2d = new Point2d();
     public cacheGetPolicy: Optional<{maxParticlesInCache:number,strategy:MAX_PARTICLE_CACHE_STRATEGY}>;
-    public particleGravity:Point2d = new Point2d(0,0);
+    public readonly particleGravity:Point2d = new Point2d(0,0);
     public particleAlpha:Optional<IParticleTimedPropertyDesc>;
     public particleScale:Optional<IParticleTimedPropertyDesc>;
     public declare readonly game:Game;

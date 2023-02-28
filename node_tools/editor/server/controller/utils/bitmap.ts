@@ -102,8 +102,8 @@ export class Bitmap {
         return {r,g,b,a};
     }
 
-    drawImageAt(x:number,y:number,bitmap:Bitmap) {
-        for (let cy=0;cy<bitmap.width;cy++) {
+    public drawImageAt(x:number,y:number,bitmap:Bitmap) {
+        for (let cy=0;cy<bitmap.height;cy++) {
             for (let cx=0;cx<bitmap.width;cx++) {
                 const col = bitmap.getPixelRGBA(cx,cy);
                 this.setPixelRGBA(x+cx,y+cy,col);

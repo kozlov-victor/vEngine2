@@ -85,6 +85,10 @@ export class Vec2 implements IPoint2d {
         return a.x * b.y - a.y * b.x;
     }
 
+    public getAngle():number {
+        return Math.atan2(this.y,this.x);
+    }
+
     public clone():Vec2 {
         return new Vec2(this.x,this.y);
     }

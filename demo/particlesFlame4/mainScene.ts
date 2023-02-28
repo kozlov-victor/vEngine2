@@ -9,7 +9,7 @@ import {ITexture} from "@engine/renderer/common/texture";
 import {TaskQueue} from "@engine/resources/taskQueue";
 import {Image} from "@engine/renderable/impl/general/image/image";
 import {BLEND_MODE} from "@engine/renderable/abstract/renderableModel";
-import {RingModifier} from "@engine/renderable/impl/general/partycleSystem/modifier/ringModifier";
+import {RingTangentModifier} from "@engine/renderable/impl/general/partycleSystem/modifier/ringTangentModifier";
 
 
 export class MainScene extends Scene {
@@ -45,10 +45,10 @@ export class MainScene extends Scene {
         ps.forceDrawChildrenOnNewSurface = true;
 
         ps.numOfParticlesToEmit = {from:10,to:15};
-        ps.particleLiveTime = {from:500,to:510};
-        ps.particleVelocity = {from:100,to:110};
+        ps.particleLiveTime = {from:1000,to:1200};
+        ps.particleVelocity = {from:300,to:350};
         ps.emissionPosition.setXY(this.game.width/2,this.game.height/2);
-        const modifier = new RingModifier(ps);
+        const modifier = new RingTangentModifier(ps);
         ps.onEmitParticle(p=>modifier.onEmitParticle(p));
         ps.appendTo(container);
         this.mouseEventHandler.on(MOUSE_EVENTS.mouseMove,(e)=>{

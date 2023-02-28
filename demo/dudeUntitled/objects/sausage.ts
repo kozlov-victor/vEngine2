@@ -10,19 +10,18 @@ import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 export class Sausage {
 
     private readonly image:Image;
-    public type = 'Sausage' as const;
 
     constructor(private scene:MainScene,tiledObject:ITiledJSON['layers'][0]['objects'][0]) {
 
-        const image = new Image(scene.getGame(),scene.assets.inventoryTexture);
-        const atlas = new TexturePackerAtlas(scene.assets.inventoryAtlas);
-        const frame = atlas.getFrameByKey('sausage');
+        const image = new Image(scene.getGame(),scene.assets.spritesTexture);
+        const atlas = new TexturePackerAtlas(scene.assets.spritesAtlas);
+        const frame = atlas.getFrameByKey('inventory_sausage');
         image.size.setWH(frame.width,frame.height);
         image.srcRect.setFrom(frame);
         image.pos.setXY(tiledObject.x,tiledObject.y - tiledObject.height);
         image.setRigidBody(scene.getGame().getPhysicsSystem(ArcadePhysicsSystem).createRigidBody({
             type: ARCADE_RIGID_BODY_TYPE.KINEMATIC,
-            rect:TileMap.getCollisionRect(this.scene.assets.levelData,'sausage'),
+            rect:TileMap.getCollisionRect(this.scene.assets.levelData,'inventory_sausage'),
             acceptCollisions: false,
             groupNames: ['collectable']
         }));

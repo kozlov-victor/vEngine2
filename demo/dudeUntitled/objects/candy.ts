@@ -9,15 +9,13 @@ import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 
 export class Candy {
 
-    private image:Image;
-
-    public type = 'Candy' as const;
+    private readonly image:Image;
 
     constructor(private scene:MainScene,tiledObject:ITiledJSON['layers'][0]['objects'][0]) {
 
-        const image = new Image(scene.getGame(),scene.assets.inventoryTexture);
-        const atlas = new TexturePackerAtlas(scene.assets.inventoryAtlas);
-        const frame = atlas.getFrameByKey('candy');
+        const image = new Image(scene.getGame(),scene.assets.spritesTexture);
+        const atlas = new TexturePackerAtlas(scene.assets.spritesAtlas);
+        const frame = atlas.getFrameByKey('inventory_candy');
         image.size.setWH(frame.width,frame.height);
         image.srcRect.setFrom(frame);
         image.pos.setXY(tiledObject.x,tiledObject.y - tiledObject.height);

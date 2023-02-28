@@ -1,0 +1,134 @@
+{
+    "frames": {
+        "character_jump2": {
+            "frame": {
+                "x": 2,
+                "y": 2,
+                "w": 38,
+                "h": 43
+            }
+        },
+        "character_fire1": {
+            "frame": {
+                "x": 44,
+                "y": 2,
+                "w": 38,
+                "h": 43
+            }
+        },
+        "character_fire2": {
+            "frame": {
+                "x": 86,
+                "y": 2,
+                "w": 38,
+                "h": 43
+            }
+        },
+        "character_bg": {
+            "frame": {
+                "x": 128,
+                "y": 2,
+                "w": 38,
+                "h": 42
+            }
+        },
+        "character_stand1": {
+            "frame": {
+                "x": 170,
+                "y": 2,
+                "w": 38,
+                "h": 42
+            }
+        },
+        "character_stand2": {
+            "frame": {
+                "x": 212,
+                "y": 2,
+                "w": 38,
+                "h": 42
+            }
+        },
+        "character_step1": {
+            "frame": {
+                "x": 2,
+                "y": 49,
+                "w": 38,
+                "h": 42
+            }
+        },
+        "character_jump1": {
+            "frame": {
+                "x": 44,
+                "y": 49,
+                "w": 37,
+                "h": 42
+            }
+        },
+        "character_climb_vertical1": {
+            "frame": {
+                "x": 85,
+                "y": 49,
+                "w": 32,
+                "h": 41
+            }
+        },
+        "character_climb_vertical2": {
+            "frame": {
+                "x": 121,
+                "y": 49,
+                "w": 32,
+                "h": 41
+            }
+        },
+        "character_step2": {
+            "frame": {
+                "x": 157,
+                "y": 49,
+                "w": 38,
+                "h": 40
+            }
+        },
+        "inventory_key": {
+            "frame": {
+                "x": 199,
+                "y": 49,
+                "w": 32,
+                "h": 35
+            }
+        },
+        "character_climb_horizontal2": {
+            "frame": {
+                "x": 2,
+                "y": 95,
+                "w": 34,
+                "h": 35
+            }
+        },
+        "inventory_sausage": {
+            "frame": {
+                "x": 40,
+                "y": 95,
+                "w": 32,
+                "h": 34
+            }
+        },
+        "character_climb_horizontal1": {
+            "frame": {
+                "x": 76,
+                "y": 95,
+                "w": 36,
+                "h": 34
+            }
+        },
+        "inventory_candy": {
+            "frame": {
+                "x": 116,
+                "y": 95,
+                "w": 32,
+                "h": 32
+            }
+        }
+    },
+    "width": 256,
+    "height": 256
+}

@@ -15,8 +15,8 @@ import {Script} from "./script";
 import {Key} from "./key";
 import {AnimatedTileMap} from "@engine/renderable/impl/general/tileMap/animatedTileMap";
 import {Sausage} from "./sausage";
-import Inject = DiContainer.Inject;
 import {Candy} from "./candy";
+import Inject = DiContainer.Inject;
 
 export class Character implements Injectable {
 
@@ -28,7 +28,7 @@ export class Character implements Injectable {
     @Inject(Script) private readonly script:Script;
 
     constructor(private scene:MainScene, tiledObject:ITiledJSON['layers'][0]['objects'][0]) {
-        const characterImage = new AnimatedImage(scene.getGame(),scene.assets.characterTexture);
+        const characterImage = new AnimatedImage(scene.getGame(),scene.assets.spritesTexture);
         this.characterImage = characterImage;
         characterImage.pos.setXY(tiledObject.x,tiledObject.y - tiledObject.height);
         characterImage.setRigidBody(scene.getGame().getPhysicsSystem(ArcadePhysicsSystem).createRigidBody({
@@ -51,7 +51,7 @@ export class Character implements Injectable {
 
 
     private initBh():void {
-        const texturePackerAtlas = new TexturePackerAtlas(this.scene.assets.characterAtlas);
+        const texturePackerAtlas = new TexturePackerAtlas(this.scene.assets.spritesAtlas);
         const body = this.characterImage.getRigidBody<ArcadeRigidBody>();
         this.body = body;
         const bh = new ArcadeSideScrollControl(this.scene.getGame(),{
@@ -136,8 +136,8 @@ export class Character implements Injectable {
     private initCollisions():void {
         this.body.onOverlappedWithGroup('collectable',e =>{
             e.getHostModel().removeSelf();
-            const host:unknown = e.addInfo.host;
-            const hostType = (host as any)?.type;
+            const host = e.addInfo.host;
+            const hostType = host.constructor.name;
             switch (hostType) {
                 case Key.name:
                     this.script.onHeroCollidedWithKey(host as Key).catch(console.error);

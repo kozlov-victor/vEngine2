@@ -18,7 +18,15 @@ export class Widget extends VEngineTsxComponent {
 
     constructor() {
         super(new HtmlTsxDOMRenderer());
-        this.loadInitialData().catch(e=>console.error(e))
+        this.loadInitialData().
+        then(()=>{
+            return HttpClient.post('/main/cleanUp')
+        }).
+        catch(e=>{
+            console.error(e);
+            this.message = e;
+            this.triggerRendering();
+        });
     }
 
     @ReactiveMethod()

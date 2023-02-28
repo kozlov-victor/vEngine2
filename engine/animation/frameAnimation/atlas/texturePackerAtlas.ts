@@ -2,16 +2,20 @@ import {DebugError} from "@engine/debug/debugError";
 import {IRectJSON} from "@engine/geometry/rect";
 import {Optional} from "@engine/core/declarations";
 
-interface IRect {
+interface IAtlasRect {
     x:number;
     y:number;
     w:number;
     h:number;
 }
 
+export interface ITextureAtlasJSON {
+    frames: Record<string, {frame:IAtlasRect}>
+}
+
 export class TexturePackerAtlas {
 
-    constructor(private json:any) {
+    constructor(private json:ITextureAtlasJSON) {
         if (DEBUG) {
             if (!json) throw new DebugError(`expected object, but ${json} was passed`);
             if (!json.frames) throw new DebugError(`wrong structure, "frames" field not found`);
@@ -20,11 +24,11 @@ export class TexturePackerAtlas {
 
     public getFrameByKey(key:string):IRectJSON {
         const keys = Object.keys(this.json.frames);
-        let target:{frame:IRect} = undefined!;
+        let target:{frame:IAtlasRect} = undefined!;
         for (const currKey of keys) {
             const fileName = currKey.split('.')[0];
             if (fileName===key) {
-                target = this.json.frames[currKey] as {frame:IRect};
+                target = this.json.frames[currKey] as {frame:IAtlasRect};
             }
         }
         if (DEBUG && target===undefined) throw new DebugError(`no such rect: ${key}`);

@@ -16,7 +16,7 @@ export abstract class AbstractParticleEmitter {
         ps.particleVelocity = {from:40, to: 60};
         ps.numOfParticlesToEmit = {from: 1, to: 2};
         ps.emitAuto = false;
-        ps.particleGravity = ArcadePhysicsSystem.gravity;
+        ps.particleGravity.setFrom(ArcadePhysicsSystem.gravity);
         const prefabs = this.createParticlePrefabs();
         prefabs.forEach(p=>{
             ps.addParticlePrefab(p);
@@ -27,7 +27,7 @@ export abstract class AbstractParticleEmitter {
     }
 
     public emit(x:number,y:number):void {
-        this.ps.pos.setXY(x, y);
+        this.ps.emissionPosition.setXY(x, y);
         this.ps.emit();
     }
 }

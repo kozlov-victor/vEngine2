@@ -1,5 +1,4 @@
 import {Controller, Get, Post} from "../decorator/decorator";
-import {IRectJSON} from "@engine/geometry/rect";
 import {Rectangle, TexturePacker} from "./utils/rectPacker";
 import {Bitmap} from "./utils/bitmap";
 
@@ -75,9 +74,12 @@ export class MainController {
     public async convert(params:{files:string,padding:number,saveLayerImagesTo:string}) {
         if (!fs.existsSync(tmp)) fs.mkdirSync(tmp);
         if (!params.padding) params.padding = 0;
-        const psds = params.files.split(',').map(it=>PSD.fromFile(it));
+        const psdFileNames = params.files.split(',');
         const images:IImage[] = [];
-        for (const psd of psds) {
+        for (const psdFileName of psdFileNames) {
+            const psd = PSD.fromFile(psdFileName);
+            const psdFileNameNoExt =
+                path.basename(psdFileName).replace('.psd','');
             psd.parse();
             const layers = psd.tree().children().map((c:any)=>c.layer);
             for (const layer of layers) {
@@ -87,7 +89,7 @@ export class MainController {
                 await layer.image.saveAsPng(fileName);
                 images.push({
                     fileName,
-                    name: layer.name,
+                    name: `${psdFileNameNoExt}_${layer.name}`,
                     rect: {
                         left: layer.left,
                         top: layer.top,
@@ -102,7 +104,8 @@ export class MainController {
         for (const image of images) {
             const r = new RectangleEx(
                 image.rect.width  + 2 * params.padding,
-                image.rect.height + 2 * params.padding);
+                image.rect.height + 2 * params.padding
+            );
             r.image = image;
             rects.push(r);
         }
@@ -116,7 +119,11 @@ export class MainController {
         };
         for (const r of rects) {
             const bm = await Bitmap.fromPNG(r.image.fileName);
-            bitmap.drawImageAt(r.x,r.y,bm);
+            bitmap.drawImageAt(
+                r.x+params.padding,
+                r.y+params.padding,
+                bm
+            );
             const name = getSafeName(descriptions,r.image.name);
             descriptions.frames[name] = {
                 frame: {
@@ -160,7 +167,22 @@ export class MainController {
         storage.set('saveTo',params.saveTo);
         storage.set('saveToFileName',params.saveToFileName);
         storage.set('folder',params.folder);
+        this._cleanUp();
         return {};
+    }
+
+    @Post({url:'/cleanUp',contentType:'application/json'})
+    public async cleanUp() {
+        this._cleanUp();
+        return {};
+    }
+
+    private _cleanUp() {
+        if (fs.existsSync(tmp)) {
+            fs.readdirSync(tmp).forEach((f:string)=>{
+                fs.unlinkSync(`${tmp}/${f}`);
+            });
+        }
     }
 
 }
