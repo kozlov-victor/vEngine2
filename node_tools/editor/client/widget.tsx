@@ -4,6 +4,8 @@ import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactor
 import {HtmlTsxDOMRenderer} from "@engine/renderable/tsx/dom/htmlTsxDOMRenderer";
 import {ReactiveMethod} from "@engine/renderable/tsx/genetic/reactiveMethod";
 import {HttpClient} from "@engine/debug/httpClient";
+import {Frame} from "./components/frame";
+import {StatusBar} from "./components/statusBar";
 
 export class Widget extends VEngineTsxComponent {
 
@@ -14,7 +16,10 @@ export class Widget extends VEngineTsxComponent {
     private saveToFileName:string = '';
     private files:string[] = [];
     private convertedImageUUID:string;
-    private message:string;
+    private operationResult = {
+        message: '',
+        success: true,
+    };
 
     constructor() {
         super(new HtmlTsxDOMRenderer());
@@ -22,71 +27,101 @@ export class Widget extends VEngineTsxComponent {
         then(()=>{
             return HttpClient.post('/main/cleanUp')
         }).
+        then(()=>{
+            this.operationResult.message = 'Ok';
+            this.operationResult.success = true;
+        }).
         catch(e=>{
             console.error(e);
-            this.message = e;
+            this.operationResult.message = e;
+            this.operationResult.success = false;
             this.triggerRendering();
         });
     }
 
     @ReactiveMethod()
     private async loadInitialData() {
-        const payload:any = await HttpClient.get('/main/loadParams');
-        this.folder = payload.folder;
-        this.saveTo = payload.saveTo;
-        this.saveLayerImagesTo = payload.saveLayerImagesTo;
-        this.saveToFileName = payload.saveToFileName;
+        try {
+            const payload:any = await HttpClient.get('/main/loadParams');
+            this.folder = payload.folder;
+            this.saveTo = payload.saveTo;
+            this.saveLayerImagesTo = payload.saveLayerImagesTo;
+            this.saveToFileName = payload.saveToFileName;
+        } catch (e:any) {
+            this.operationResult.message = e.toString();
+            this.operationResult.success = false;
+        }
     }
 
     @ReactiveMethod()
     private async getFiles() {
         if (!this.folder) this.files = [];
         else {
-            this.files = await HttpClient.get('/main/getFiles',{folder:this.folder});
-            this.message = 'loaded';
+            try {
+                this.files = await HttpClient.get('/main/getFiles',{folder:this.folder});
+                this.operationResult.message = 'Loaded';
+                this.operationResult.success = true;
+            } catch (e:any) {
+                this.operationResult.message = e.toString();
+                this.operationResult.success = false;
+            }
         }
     }
 
     @ReactiveMethod()
     private async convert() {
-        this.convertedImageUUID = await HttpClient.post(
-            '/main/convert',
-            {
-                files:this.files.join(','),
-                padding: this.padding,
-                saveLayerImagesTo:this.saveLayerImagesTo,
-            });
-        this.message = 'converted';
+        try {
+            this.convertedImageUUID = await HttpClient.post(
+                '/main/convert',
+                {
+                    files:this.files.join(','),
+                    padding: this.padding,
+                    saveLayerImagesTo:this.saveLayerImagesTo,
+                });
+            this.operationResult.message = 'converted';
+            this.operationResult.success = true;
+        } catch (e:any) {
+            this.operationResult.message = e.toString();
+            this.operationResult.success = false;
+        }
     }
 
     @ReactiveMethod()
     private async save() {
-        await HttpClient.post('/main/save',
-            {
-                uuid:this.convertedImageUUID,
-                saveTo:this.saveTo,
-                folder: this.folder,
-                saveToFileName:this.saveToFileName,
-                saveLayerImagesTo: this.saveLayerImagesTo,
-            }
-        );
-        this.message = 'saved!';
+        try {
+            await HttpClient.post('/main/save',
+                {
+                    uuid:this.convertedImageUUID,
+                    saveTo:this.saveTo,
+                    folder: this.folder,
+                    saveToFileName:this.saveToFileName,
+                    saveLayerImagesTo: this.saveLayerImagesTo,
+                }
+            );
+            this.operationResult.message = 'saved!';
+            this.operationResult.success = true;
+        } catch (e:any) {
+            this.operationResult.message = e.toString();
+            this.operationResult.success = false;
+        }
     }
 
     render(): VirtualNode {
         return (
-            <div>
-                <input value={this.folder} onchange={e=>this.folder = (e.target as HTMLInputElement).value}/>
-                <button onclick={e=>this.getFiles()}>get files</button>
-                <div>
-                    <ul>
-                        {this.files.map(f=>
-                            <li>{f}</li>
-                        )}
-                    </ul>
-                </div>
+            <>
+                <Frame title='Files'>
+                    <input value={this.folder} onchange={e=>this.folder = (e.target as HTMLInputElement).value}/>
+                    <button onclick={e=>this.getFiles()}>get files</button>
+                    <div>
+                        <ul>
+                            {this.files.map(f=>
+                                <li>{f}</li>
+                            )}
+                        </ul>
+                    </div>
+                </Frame>
                 {this.files.length>0 &&
-                    <>
+                    <Frame title={'Save layer images'}>
                         <div>
                             <input value={this.saveLayerImagesTo} onchange={e=>this.saveLayerImagesTo = (e.target as HTMLInputElement).value}/>
                             save layer images to
@@ -96,37 +131,36 @@ export class Widget extends VEngineTsxComponent {
                         <div>
                             <button onclick={e=>this.convert()}>convert</button>
                         </div>
-                    </>
+                    </Frame>
                 }
-                <div>
-                    {this.convertedImageUUID &&
+                {this.convertedImageUUID &&
+                    <Frame title={'Conversion'}>
+                        <img
+                            alt=""
+                            src={`/main/getConvertedImage?uuid=${this.convertedImageUUID}`}
+                            style={{
+                                maxWidth: '250px',
+                                border: '1px solid black',
+                            }}
+                        />
+                    </Frame>
+                }
+                {this.convertedImageUUID &&
+                    <Frame title={'Saving'}>
                         <div>
-                            <img
-                                alt=""
-                                src={`/main/getConvertedImage?uuid=${this.convertedImageUUID}`}
-                                style={{
-                                    maxWidth: '250px',
-                                    border: '1px solid black',
-                                }}
-                            />
+                            <input value={this.saveToFileName} onchange={e=>this.saveToFileName = (e.target as HTMLInputElement).value}/>
+                            file name
                         </div>
-                    }
-                    {this.convertedImageUUID &&
-                        <>
-                            <div>
-                                <input value={this.saveToFileName} onchange={e=>this.saveToFileName = (e.target as HTMLInputElement).value}/>
-                                file name
-                            </div>
-                            <div>
-                                <input value={this.saveTo} onchange={e=>this.saveTo = (e.target as HTMLInputElement).value}/>
-                                <button onclick={e=>this.save()}>save</button>
-                            </div>
-                        </>
-                    }
-                </div>
-                <hr/>
-                <div>{this.message}</div>
-            </div>
+                        <div>
+                            <input value={this.saveTo} onchange={e=>this.saveTo = (e.target as HTMLInputElement).value}/>
+                            <button onclick={e=>this.save()}>save</button>
+                        </div>
+                    </Frame>
+                }
+                <StatusBar
+                    text={this.operationResult.message}
+                    success={this.operationResult.success}/>
+            </>
         );
     }
 
