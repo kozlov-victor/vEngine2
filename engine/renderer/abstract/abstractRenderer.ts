@@ -152,7 +152,7 @@ export abstract class AbstractRenderer implements IDestroyable,IMatrixTransforma
         this._matrixStack.rotateZ(angleInRadians);
     }
 
-    public transformTranslate(x:number, y:number, z:number=0):void{
+    public transformTranslate(x:number, y:number, z:number):void{
         if (x===0 && y===0 && z===0) return;
         this._matrixStack.translate(x,y,z);
     }

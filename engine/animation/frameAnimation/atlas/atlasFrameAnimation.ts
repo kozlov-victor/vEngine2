@@ -1,6 +1,6 @@
 import {AbstractFrameAnimation} from "@engine/animation/frameAnimation/abstract/abstractFrameAnimation";
 import {ICloneable, IRevalidatable} from "@engine/core/declarations";
-import {IRectJSON, Rect} from "@engine/geometry/rect";
+import {IRectJSON} from "@engine/geometry/rect";
 
 
 export class AtlasFrameAnimation extends AbstractFrameAnimation<IRectJSON> implements IRevalidatable, ICloneable<AtlasFrameAnimation>{
@@ -18,9 +18,9 @@ export class AtlasFrameAnimation extends AbstractFrameAnimation<IRectJSON> imple
     }
 
     protected onNextFrame(i: number): void {
-        const currRect:IRectJSON = this._frames[i];
+        const currRect = this._frames[i];
         this._target.srcRect.setFrom(currRect);
-        const rect:Rect = this._target.srcRect;
+        const rect = this._target.srcRect;
         this._target.size.setWH(rect.width,rect.height);
     }
 

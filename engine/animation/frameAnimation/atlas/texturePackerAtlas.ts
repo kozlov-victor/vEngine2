@@ -1,6 +1,5 @@
 import {DebugError} from "@engine/debug/debugError";
 import {IRectJSON} from "@engine/geometry/rect";
-import {Optional} from "@engine/core/declarations";
 
 interface IAtlasRect {
     x:number;
@@ -10,7 +9,11 @@ interface IAtlasRect {
 }
 
 export interface ITextureAtlasJSON {
-    frames: Record<string, {frame:IAtlasRect}>
+    frames: Record<string, {
+        frame:IAtlasRect,
+    }>
+    width: number;
+    height: number;
 }
 
 export class TexturePackerAtlas {
@@ -24,11 +27,11 @@ export class TexturePackerAtlas {
 
     public getFrameByKey(key:string):IRectJSON {
         const keys = Object.keys(this.json.frames);
-        let target:{frame:IAtlasRect} = undefined!;
+        let target:ITextureAtlasJSON['frames'][''] = undefined!;
         for (const currKey of keys) {
             const fileName = currKey.split('.')[0];
             if (fileName===key) {
-                target = this.json.frames[currKey] as {frame:IAtlasRect};
+                target = this.json.frames[currKey];
             }
         }
         if (DEBUG && target===undefined) throw new DebugError(`no such rect: ${key}`);

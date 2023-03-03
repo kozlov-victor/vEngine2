@@ -3,20 +3,12 @@ import {ColorFactory} from "@engine/renderer/common/colorFactory";
 import {Color} from "@engine/renderer/common/color";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {Scene} from "@engine/scene/scene";
-import {RingModifier} from "@engine/renderable/impl/general/partycleSystem/modifier/ringModifier";
-import {ArcadePhysicsSystem} from "@engine/physics/arcade/arcadePhysicsSystem";
 
 export class WallDustEmitter extends AbstractParticleEmitter {
 
     constructor(scene:Scene) {
         super(scene);
         this.ps.numOfParticlesToEmit = {from: 10, to: 30};
-        this.ps.particleGravity.setXY(0,ArcadePhysicsSystem.gravity.y/10);
-        const modifier = new RingModifier(this.ps);
-        modifier.radius = 10;
-        this.ps.onEmitParticle(p=>{
-            modifier.onEmitParticle(p);
-        })
     }
 
     private createPrefab(color:Color) {

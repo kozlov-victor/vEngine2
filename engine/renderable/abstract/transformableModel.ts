@@ -144,7 +144,7 @@ export abstract class TransformableModel extends BaseModel implements ITransform
     public abstract revalidate():void;
 
     public _translate():void{
-        const renderer:AbstractRenderer = this.game.getRenderer();
+        const renderer = this.game.getRenderer();
         renderer.transformTranslate(
             this.pos.x-this.anchorPoint.x+this.transformPoint.x,
             this.pos.y-this.anchorPoint.y+this.transformPoint.y,
@@ -161,7 +161,7 @@ export abstract class TransformableModel extends BaseModel implements ITransform
         renderer.transformScale(scaleArr[0],scaleArr[1],scaleArr[2]);
         renderer.transformSkewX(this.skew.x);
         renderer.transformSkewY(this.skew.y);
-        renderer.transformTranslate(-this.transformPoint.x,-this.transformPoint.y);
+        renderer.transformTranslate(-this.transformPoint.x,-this.transformPoint.y,0);
         if (this.billBoard) renderer.transformRotationReset();
     }
 

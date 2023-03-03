@@ -7,11 +7,12 @@ import {
 } from "@engine/animation/frameAnimation/abstract/abstractFrameAnimation";
 import {Image} from "@engine/renderable/impl/general/image/image";
 import {ITexture} from "@engine/renderer/common/texture";
+import {Point2d} from "@engine/geometry/point2d";
 
 
 export class AnimatedImage extends Image implements ICloneable<AnimatedImage>{
 
-    public override readonly type:string = 'AnimatedImage';
+    public override readonly type = 'AnimatedImage' as const;
     public _currFrameAnimation:Optional<AbstractFrameAnimation<any>>;
 
     private _frameAnimations:AbstractFrameAnimation<any>[] = [];
@@ -21,7 +22,7 @@ export class AnimatedImage extends Image implements ICloneable<AnimatedImage>{
     }
 
     public override clone():AnimatedImage {
-        const cloned:AnimatedImage = new AnimatedImage(this.game,this.getTexture());
+        const cloned = new AnimatedImage(this.game,this.getTexture());
         this.setClonedProperties(cloned);
         return cloned;
     }

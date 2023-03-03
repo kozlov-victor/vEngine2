@@ -15,7 +15,7 @@ export class Candy {
 
         const image = new Image(scene.getGame(),scene.assets.spritesTexture);
         const atlas = new TexturePackerAtlas(scene.assets.spritesAtlas);
-        const frame = atlas.getFrameByKey('inventory_candy');
+        const frame = atlas.getFrameByKey('candy_frame_1');
         image.size.setWH(frame.width,frame.height);
         image.srcRect.setFrom(frame);
         image.pos.setXY(tiledObject.x,tiledObject.y - tiledObject.height);

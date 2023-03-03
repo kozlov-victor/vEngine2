@@ -202,16 +202,52 @@
                  "y":309.333
                 }, 
                 {
-                 "class":"Character",
-                 "gid":19,
-                 "height":42,
-                 "id":50,
+                 "class":"Fire",
+                 "gid":20,
+                 "height":32,
+                 "id":51,
                  "name":"",
                  "rotation":0,
                  "visible":true,
-                 "width":38,
-                 "x":415,
-                 "y":415
+                 "width":32,
+                 "x":708,
+                 "y":320.333
+                }, 
+                {
+                 "class":"Fire",
+                 "gid":20,
+                 "height":32,
+                 "id":52,
+                 "name":"",
+                 "rotation":0,
+                 "visible":true,
+                 "width":32,
+                 "x":1630,
+                 "y":320.333
+                }, 
+                {
+                 "class":"Fire",
+                 "gid":20,
+                 "height":32,
+                 "id":54,
+                 "name":"",
+                 "rotation":0,
+                 "visible":true,
+                 "width":32,
+                 "x":1378,
+                 "y":256
+                }, 
+                {
+                 "class":"Character",
+                 "gid":19,
+                 "height":35,
+                 "id":55,
+                 "name":"",
+                 "rotation":0,
+                 "visible":true,
+                 "width":34,
+                 "x":416.333333333333,
+                 "y":432.666666666667
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -220,7 +256,7 @@
          "y":0
         }],
  "nextlayerid":4,
- "nextobjectid":51,
+ "nextobjectid":57,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.9.2",
@@ -319,7 +355,7 @@
         {
          "columns":1,
          "firstgid":16,
-         "image":"..\/..\/psd_sources\/flattened\/inventory_sausage.png",
+         "image":"..\/..\/psd_sources\/flattened\/sausage_frame_1.png",
          "imageheight":34,
          "imagewidth":32,
          "margin":0,
@@ -359,7 +395,7 @@
         {
          "columns":1,
          "firstgid":17,
-         "image":"..\/..\/psd_sources\/flattened\/inventory_key.png",
+         "image":"..\/..\/psd_sources\/flattened\/key_frame_1.png",
          "imageheight":35,
          "imagewidth":32,
          "margin":0,
@@ -372,7 +408,7 @@
         {
          "columns":1,
          "firstgid":18,
-         "image":"..\/..\/psd_sources\/flattened\/inventory_candy.png",
+         "image":"..\/..\/psd_sources\/flattened\/candy_frame_1.png",
          "imageheight":32,
          "imagewidth":32,
          "margin":0,
@@ -385,15 +421,55 @@
         {
          "columns":1,
          "firstgid":19,
-         "image":"..\/..\/psd_sources\/flattened\/character_stand1.png",
-         "imageheight":42,
-         "imagewidth":38,
+         "image":"..\/..\/psd_sources\/flattened\/character_climb_horizontal2.png",
+         "imageheight":35,
+         "imagewidth":34,
          "margin":0,
          "name":"character",
          "spacing":0,
          "tilecount":1,
-         "tileheight":42,
-         "tilewidth":38
+         "tileheight":35,
+         "tilewidth":34
+        }, 
+        {
+         "columns":1,
+         "firstgid":20,
+         "image":"..\/..\/psd_sources\/flattened\/fire_fire1.png",
+         "imageheight":32,
+         "imagewidth":32,
+         "margin":0,
+         "name":"fire",
+         "spacing":0,
+         "tilecount":1,
+         "tileheight":32,
+         "tiles":[
+                {
+                 "id":0,
+                 "objectgroup":
+                    {
+                     "draworder":"index",
+                     "id":2,
+                     "name":"",
+                     "objects":[
+                            {
+                             "class":"",
+                             "height":29,
+                             "id":1,
+                             "name":"",
+                             "rotation":0,
+                             "visible":true,
+                             "width":19,
+                             "x":5,
+                             "y":3
+                            }],
+                     "opacity":1,
+                     "type":"objectgroup",
+                     "visible":true,
+                     "x":0,
+                     "y":0
+                    }
+                }],
+         "tilewidth":32
         }],
  "tilewidth":32,
  "type":"map",

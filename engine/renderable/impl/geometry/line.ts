@@ -48,7 +48,7 @@ export class Line extends RenderableModel implements ICloneable<Line>, ILineProp
 
     public override _translate():void{
         super._translate();
-        this.game.getRenderer().transformTranslate(0,-this.lineWidth/2);
+        this.game.getRenderer().transformTranslate(0,-this.lineWidth/2,0);
     }
 
     public getRectangleRepresentation():Rectangle{

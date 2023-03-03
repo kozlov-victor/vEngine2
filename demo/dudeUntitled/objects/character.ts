@@ -17,11 +17,16 @@ import {AnimatedTileMap} from "@engine/renderable/impl/general/tileMap/animatedT
 import {Sausage} from "./sausage";
 import {Candy} from "./candy";
 import Inject = DiContainer.Inject;
+import {Fire} from "./fire";
+
+const JUMP_VEL = 200;
 
 export class Character implements Injectable {
 
-    private readonly characterImage:AnimatedImage;
+    private readonly image:AnimatedImage;
     private body:ArcadeRigidBody;
+
+    private blinking = false;
 
     @Inject(GroundDustEmitter) public readonly groundDust:GroundDustEmitter;
     @Inject(AnimatedTileMap) private readonly tileMap:AnimatedTileMap;
@@ -29,7 +34,7 @@ export class Character implements Injectable {
 
     constructor(private scene:MainScene, tiledObject:ITiledJSON['layers'][0]['objects'][0]) {
         const characterImage = new AnimatedImage(scene.getGame(),scene.assets.spritesTexture);
-        this.characterImage = characterImage;
+        this.image = characterImage;
         characterImage.pos.setXY(tiledObject.x,tiledObject.y - tiledObject.height);
         characterImage.setRigidBody(scene.getGame().getPhysicsSystem(ArcadePhysicsSystem).createRigidBody({
             type:ARCADE_RIGID_BODY_TYPE.DYNAMIC,
@@ -49,14 +54,18 @@ export class Character implements Injectable {
         this.initCollisions();
     }
 
+    public acceptDamage() {
+
+    }
+
 
     private initBh():void {
         const texturePackerAtlas = new TexturePackerAtlas(this.scene.assets.spritesAtlas);
-        const body = this.characterImage.getRigidBody<ArcadeRigidBody>();
+        const body = this.image.getRigidBody<ArcadeRigidBody>();
         this.body = body;
         const bh = new ArcadeSideScrollControl(this.scene.getGame(),{
             velocity: 100,
-            jumpVelocity: 200,
+            jumpVelocity: JUMP_VEL,
             verticalLadderTileIds: [3,7],
             horizontalLadderTileIds: [4],
             waterTileIds: [1,2],
@@ -118,7 +127,7 @@ export class Character implements Injectable {
                 this.groundDust.emit(body.getMidX(),body.getBottom());
             }
         });
-        const characterImage = this.characterImage;
+        const characterImage = this.image;
         characterImage.addBehaviour(bh);
 
         this.scene.keyboardEventHandler.onKeyPressed(KEYBOARD_KEY.CONTROL, e=>{
@@ -147,6 +156,26 @@ export class Character implements Injectable {
                     break;
                 case Candy.name:
                     this.script.onHeroCollectedCandy(host as Candy);
+                    break;
+            }
+        });
+        this.body.onOverlappedWithGroup('damageable',e =>{
+            const host = e.addInfo.host;
+            const hostType = host.constructor.name;
+            switch (hostType) {
+                case Fire.name:
+                    if (!this.blinking) {
+                        this.blinking = true;
+                        const blinkInterval = this.image.setInterval(()=>{
+                            this.image.visible=!this.image.visible;
+                        },150);
+                        this.image.setTimeout(()=>{
+                            blinkInterval.kill();
+                            this.image.visible = true;
+                            this.blinking = false;
+                        },3000);
+                        this.script.onHeroCollidedWithFile(this);
+                    }
                     break;
             }
         });

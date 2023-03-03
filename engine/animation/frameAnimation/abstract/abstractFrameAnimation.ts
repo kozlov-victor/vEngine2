@@ -121,10 +121,10 @@ export abstract class AbstractFrameAnimation<T> implements ITargetAnimation, ICl
 
     public update():void {
         if (!this._isPlaying) return;
-        const time:number = this.game.getCurrentTime();
+        const time = this.game.getCurrentTime();
         if (this._startTime===0) this._startTime = time;
-        const delta:number = (time - this._startTime) % this._duration;
-        let currFrame:number = ~~((this._frames.length) * delta / this._duration);
+        const delta = (time - this._startTime) % this._duration;
+        let currFrame = ~~((this._frames.length) * delta / this._duration);
         currFrame = currFrame % this._frames.length;
 
         if (currFrame===0 && this._loopReached) {

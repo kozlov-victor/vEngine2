@@ -184,7 +184,7 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
     }
 
     public override transformTranslate(x:number, y:number):void {
-        super.transformTranslate(x,y);
+        super.transformTranslate(x,y,0);
         const ctx = this.renderTarget.getTexture().getContext();
         ctx.translate(x,y);
     }

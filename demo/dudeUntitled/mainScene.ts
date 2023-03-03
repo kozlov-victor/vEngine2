@@ -20,6 +20,8 @@ import {Device} from "@engine/misc/device";
 import {DebugLayer} from "@engine/scene/debugLayer";
 import {Candy} from "./objects/candy";
 import {BonusParticleEmitter} from "./particles/bonusParticleEmitter";
+import {Fire} from "./objects/fire";
+import {FireEmitter} from "./particles/fireEmitter";
 
 
 export class MainScene extends Scene {
@@ -62,6 +64,7 @@ export class MainScene extends Scene {
         DiContainer.register(new GroundDustEmitter(this));
         DiContainer.register(new WallDustEmitter(this));
         DiContainer.register(new BonusParticleEmitter(this));
+        DiContainer.register(new FireEmitter(this));
         DiContainer.register(new Script(this));
 
         this.assets.levelData.layers.find(it=>it.type==='objectgroup')!.objects.forEach(obj=>{
@@ -78,6 +81,9 @@ export class MainScene extends Scene {
                     break;
                 case Candy.name:
                     new Candy(this,obj);
+                    break;
+                case Fire.name:
+                    new Fire(this,obj);
                     break;
             }
         });

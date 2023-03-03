@@ -42,7 +42,7 @@ class ContainerForDrawingSurface extends SimpleGameObjectContainer {
         const renderer:AbstractRenderer = this.game.getRenderer();
         renderer.transformSave();
         renderer.transformSet(this.matrixStack.getCurrentValue());
-        renderer.transformTranslate(this.pos.x,this.pos.y);
+        renderer.transformTranslate(this.pos.x,this.pos.y,0);
         this.pos.setXY(0);
         this.worldTransformDirty = true;
         super.render();

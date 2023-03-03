@@ -6,9 +6,10 @@ import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {WallDustEmitter} from "../particles/wallDustEmitter";
 import {AnimatedTileMap} from "@engine/renderable/impl/general/tileMap/animatedTileMap";
 import {Sausage} from "./sausage";
-import Inject = DiContainer.Inject;
 import {Candy} from "./candy";
 import {BonusParticleEmitter} from "../particles/bonusParticleEmitter";
+import {Character} from "./character";
+import Inject = DiContainer.Inject;
 
 export const waitFor = (root:RenderableModel,time:number):Promise<void>=> {
     return new Promise(resolve=>{
@@ -42,6 +43,10 @@ export class Script implements Injectable {
             host.pos.x+host.size.width/2,
             host.pos.y+host.size.height/2
         );
+    }
+
+    public onHeroCollidedWithFile(hero:Character) {
+
     }
 
     public async onHeroCollidedWithKey(key:Key):Promise<void> {

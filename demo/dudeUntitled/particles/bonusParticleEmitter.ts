@@ -15,7 +15,7 @@ export class BonusParticleEmitter extends AbstractParticleEmitter {
         modifier.radius = 16;
         this.ps.onEmitParticle(p=>{
             modifier.onEmitParticle(p);
-        })
+        });
     }
 
     private createPrefab(color:Color) {

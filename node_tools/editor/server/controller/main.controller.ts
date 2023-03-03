@@ -1,6 +1,7 @@
 import {Controller, Get, Post} from "../decorator/decorator";
 import {Rectangle, TexturePacker} from "./utils/rectPacker";
 import {Bitmap} from "./utils/bitmap";
+import {ITextureAtlasJSON} from "@engine/animation/frameAnimation/atlas/texturePackerAtlas";
 
 declare const __non_webpack_require__:any;
 
@@ -38,6 +39,11 @@ const getSafeName = (obj:Record<string, any>,name:string)=> {
 interface IImage {
     fileName: string;
     name: string;
+    psdFileName: string;
+    size: {
+        width: number,
+        height: number,
+    }
     rect: {
         left: number;
         top: number;
@@ -89,7 +95,12 @@ export class MainController {
                 await layer.image.saveAsPng(fileName);
                 images.push({
                     fileName,
+                    psdFileName: psdFileNameNoExt,
                     name: `${psdFileNameNoExt}_${layer.name}`,
+                    size: {
+                        width: psd.header.cols,
+                        height: psd.header.rows,
+                    },
                     rect: {
                         left: layer.left,
                         top: layer.top,
@@ -103,8 +114,8 @@ export class MainController {
         const rects:RectangleEx[] = [];
         for (const image of images) {
             const r = new RectangleEx(
-                image.rect.width  + 2 * params.padding,
-                image.rect.height + 2 * params.padding
+                image.size.width  + 2 * params.padding,
+                image.size.height + 2 * params.padding
             );
             r.image = image;
             rects.push(r);
@@ -112,31 +123,34 @@ export class MainController {
         const {rect:packed} = new TexturePacker(rects).pack();
 
         const bitmap = new Bitmap(packed.width,packed.height);
-        const descriptions = {
-            frames:{} as Record<string, {frame:{x:number,y:number,w:number,h:number}}>,
+        const descriptions:ITextureAtlasJSON = {
+            frames: {} as ITextureAtlasJSON['frames'],
             width: packed.width,
             height: packed.height,
         };
         for (const r of rects) {
             const bm = await Bitmap.fromPNG(r.image.fileName);
             bitmap.drawImageAt(
-                r.x+params.padding,
-                r.y+params.padding,
+                r.x + r.image.rect.left + params.padding,
+                r.y + r.image.rect.top + params.padding,
                 bm
             );
             const name = getSafeName(descriptions,r.image.name);
             descriptions.frames[name] = {
                 frame: {
-                    x:      r.x + params.padding,
-                    y:      r.y + params.padding,
-                    w:      r.image.rect.width,
-                    h:      r.image.rect.height,
+                    x: r.x + params.padding,
+                    y: r.y + params.padding,
+                    w: r.image.size.width,
+                    h: r.image.size.height,
                 }
             }
         }
         const outFileUUID = uuid();
         await bitmap.toPng(`${tmp}/${outFileUUID}.png`);
+        const saved:Record<string, boolean> = {};
         for (const r of rects) {
+            if (saved[r.image.psdFileName]) continue;
+            saved[r.image.psdFileName] = true;
             fs.copyFileSync(r.image.fileName,`${params.saveLayerImagesTo}/${r.image.name}.png`);
             fs.unlinkSync(r.image.fileName);
         }
