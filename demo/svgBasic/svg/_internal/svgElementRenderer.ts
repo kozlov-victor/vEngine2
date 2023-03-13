@@ -506,7 +506,7 @@ export class SvgElementRenderer {
         return this.renderTag(parentView,refElementCloned);
     }
 
-    public renderTag(view:RenderableModel,el:XmlNode):Optional<RenderableModel> {
+    private renderTag(view:RenderableModel,el:XmlNode):Optional<RenderableModel> {
         switch (el.tagName) {
             case 'svg': {
                 el.getChildNodes().forEach(c=>this.renderTag(view,c));
@@ -565,6 +565,10 @@ export class SvgElementRenderer {
                 return undefined;
             }
         }
+    }
+
+    public renderTo(root:RenderableModel):void {
+        this.renderTag(root,this.document)
     }
 
 }

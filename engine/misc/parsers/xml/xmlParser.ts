@@ -1,4 +1,4 @@
-import {IXmlTextNode, XmlNode} from "@engine/misc/parsers/xml/xmlELements";
+import {IXmlTextNode, XmlDocument, XmlNode} from "@engine/misc/parsers/xml/xmlELements";
 import {DebugError} from "@engine/debug/debugError";
 import {IParser} from "@engine/misc/parsers/iParser";
 
@@ -24,6 +24,7 @@ export class XmlParser implements IParser<XmlNode>{
     private readonly text:string;
 
     private tree:XmlNode = new XmlNode();
+    private doc:XmlDocument;
     private errors:IParseError[] = [];
 
     private preserveWhitespace = false;
@@ -63,8 +64,8 @@ export class XmlParser implements IParser<XmlNode>{
         return text;
     }
 
-    public getTree():XmlNode {
-        return this.tree;
+    public getTree():XmlDocument {
+        return this.doc;
     }
 
     public asString():string {
@@ -196,7 +197,8 @@ export class XmlParser implements IParser<XmlNode>{
     }
 
     private afterParsed():void {
-        this.tree = this.tree.children[0] as XmlNode;
+        const root = this.tree.children[0] as XmlNode;
+        this.doc = XmlDocument.create(root);
     }
 
     private throwParseError(key:string, tag:string):never {

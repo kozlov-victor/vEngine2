@@ -22,6 +22,8 @@ import {Candy} from "./objects/candy";
 import {BonusParticleEmitter} from "./particles/bonusParticleEmitter";
 import {Fire} from "./objects/fire";
 import {FireEmitter} from "./particles/fireEmitter";
+import {PlatformMoveable} from "./objects/platformMoveable";
+import {BumpRect} from "./objects/bumpRect";
 
 
 export class MainScene extends Scene {
@@ -84,6 +86,12 @@ export class MainScene extends Scene {
                     break;
                 case Fire.name:
                     new Fire(this,obj);
+                    break;
+                case PlatformMoveable.name:
+                    new PlatformMoveable(this,obj);
+                    break;
+                case BumpRect.name:
+                    new BumpRect(this,obj);
                     break;
             }
         });

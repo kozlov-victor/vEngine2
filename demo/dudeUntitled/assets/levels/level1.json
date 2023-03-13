@@ -38,7 +38,7 @@
                  "class":"OverlapRect",
                  "height":50.6667,
                  "id":15,
-                 "name":"",
+                 "name":"overlap",
                  "properties":[
                         {
                          "name":"id",
@@ -48,8 +48,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":142.667,
-                 "x":1512.67,
-                 "y":424
+                 "x":1523.33666666667,
+                 "y":420
                 }, 
                 {
                  "class":"Sausage",
@@ -246,8 +246,100 @@
                  "rotation":0,
                  "visible":true,
                  "width":34,
-                 "x":416.333333333333,
-                 "y":432.666666666667
+                 "x":416.333,
+                 "y":432.667
+                }, 
+                {
+                 "class":"PlatformMoveable",
+                 "gid":21,
+                 "height":16,
+                 "id":57,
+                 "name":"",
+                 "rotation":0,
+                 "visible":true,
+                 "width":64,
+                 "x":1429.33666666667,
+                 "y":263.999666666667
+                }, 
+                {
+                 "class":"PlatformMoveable",
+                 "gid":21,
+                 "height":16,
+                 "id":58,
+                 "name":"",
+                 "rotation":0,
+                 "visible":true,
+                 "width":64,
+                 "x":245.333333333333,
+                 "y":390.666666666667
+                }, 
+                {
+                 "class":"BumpRect",
+                 "height":50.6667,
+                 "id":61,
+                 "name":"bump",
+                 "properties":[
+                        {
+                         "name":"id",
+                         "type":"string",
+                         "value":"1"
+                        }],
+                 "rotation":0,
+                 "visible":true,
+                 "width":142.667,
+                 "x":209.999833333333,
+                 "y":86.6666499999999
+                }, 
+                {
+                 "class":"BumpRect",
+                 "height":50.6667,
+                 "id":63,
+                 "name":"bump",
+                 "properties":[
+                        {
+                         "name":"id",
+                         "type":"string",
+                         "value":"1"
+                        }],
+                 "rotation":0,
+                 "visible":true,
+                 "width":142.667,
+                 "x":209.999833333333,
+                 "y":425.333316666667
+                }, 
+                {
+                 "class":"BumpRect",
+                 "height":50.6667,
+                 "id":64,
+                 "name":"bump",
+                 "properties":[
+                        {
+                         "name":"id",
+                         "type":"string",
+                         "value":"1"
+                        }],
+                 "rotation":0,
+                 "visible":true,
+                 "width":142.667,
+                 "x":1404.6665,
+                 "y":54.66665
+                }, 
+                {
+                 "class":"BumpRect",
+                 "height":44.0000333333333,
+                 "id":65,
+                 "name":"bump",
+                 "properties":[
+                        {
+                         "name":"id",
+                         "type":"string",
+                         "value":"1"
+                        }],
+                 "rotation":0,
+                 "visible":true,
+                 "width":142.667,
+                 "x":1396.6665,
+                 "y":299.999983333333
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -256,7 +348,7 @@
          "y":0
         }],
  "nextlayerid":4,
- "nextobjectid":57,
+ "nextobjectid":66,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.9.2",
@@ -470,6 +562,19 @@
                     }
                 }],
          "tilewidth":32
+        }, 
+        {
+         "columns":1,
+         "firstgid":21,
+         "image":"..\/..\/psd_sources\/flattened\/platform_moveable_frame_1.png",
+         "imageheight":16,
+         "imagewidth":64,
+         "margin":0,
+         "name":"platform_moveable_frame_1",
+         "spacing":0,
+         "tilecount":1,
+         "tileheight":16,
+         "tilewidth":64
         }],
  "tilewidth":32,
  "type":"map",

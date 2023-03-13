@@ -24,21 +24,22 @@ const enum DIRECTION_CORRECTION {
 }
 
 export class Camera implements IUpdatable, ITransformable, IRevalidatable  {
-    public static readonly FOLLOW_FACTOR:Point2d = new Point2d(0.1,0.1);
 
-    public readonly pos:Point3d = new Point3d(0,0,0);
-    public readonly scale:Point2d = new Point2d(1,1);
+    public static readonly FOLLOW_FACTOR = new Point2d(0.1,0.1);
+
+    public readonly pos = new Point3d(0,0,0);
+    public readonly scale = new Point2d(1,1);
     public worldTransformDirty:boolean = true;
-    public readonly worldTransformMatrix:Mat16Holder = new Mat16Holder();
+    public readonly worldTransformMatrix = new Mat16Holder();
 
     private _objFollowTo:Optional<RenderableModel>;
     private _objFollowToPrevPos = new Point2d();
     private _directionCorrection:DIRECTION_CORRECTION;
     private _angle:number = 0;
 
-    private _rect:Rect = new Rect();
+    private _rect = new Rect();
     private _cameraShakeTween:Optional<Tween<ICameraTweenTarget>>;
-    private _cameraPosCorrection:{current:Point2d,max:Point2d} = {
+    private _cameraPosCorrection = {
         current: new Point2d(),
         max: new Point2d()
     };
@@ -51,7 +52,6 @@ export class Camera implements IUpdatable, ITransformable, IRevalidatable  {
         Mat4.makeIdentity(this.worldTransformMatrix);
         this.revalidate();
     }
-
 
     get angle(): number {
         return this._angle;
@@ -68,7 +68,6 @@ export class Camera implements IUpdatable, ITransformable, IRevalidatable  {
         this.worldTransformDirty = true;
     }
 
-
     public followTo(gameObject:Optional<RenderableModel>):void {
         if (gameObject===undefined) {
             this._objFollowTo = undefined;
@@ -82,7 +81,7 @@ export class Camera implements IUpdatable, ITransformable, IRevalidatable  {
 
     public update():void {
 
-        const gameObject:Optional<RenderableModel> = this._objFollowTo;
+        const gameObject = this._objFollowTo;
 
         if (gameObject!==undefined) {
 
@@ -94,7 +93,7 @@ export class Camera implements IUpdatable, ITransformable, IRevalidatable  {
 
             this._objFollowToPrevPos.setFrom(gameObject.pos);
 
-            const {width,height} = this.getRect();
+            const {width,height} = this.game.size;
             if (this._directionCorrection === DIRECTION_CORRECTION.RIGHT)
                 this._cameraPosCorrection.max.x=width/3;
             else if (this._directionCorrection === DIRECTION_CORRECTION.LEFT)
@@ -104,44 +103,44 @@ export class Camera implements IUpdatable, ITransformable, IRevalidatable  {
             else if (this._directionCorrection === DIRECTION_CORRECTION.UP)
                 this._cameraPosCorrection.max.y=-height/3;
 
-            const currCorrection:Point2d =
+            const currCorrection =
                 this._cameraPosCorrection.max.
                 subtract(this._cameraPosCorrection.current).
-                multiply(0.05);
+                multiply(0.01);
 
-            this._cameraPosCorrection.current.add(currCorrection);
+            this._cameraPosCorrection.current.add(currCorrection).truncate();
 
-            const newPos:Point2d = Point2d.fromPool();
-            const pointToFollow:Point2d = Point2d.fromPool();
-            const scene:Scene = this.scene;
+            const scene = this.scene;
 
-            const w:number = this.game.size.width;
-            const h:number = this.game.size.height;
-            const wDiv2:number = w/2;
-            const hDiv2:number = h/2;
+            const w = this.game.size.width;
+            const h = this.game.size.height;
+            const wDiv2 = w / 2;
+            const hDiv2 = h / 2;
 
-            pointToFollow.setFrom(gameObject.pos);
-            pointToFollow.addXY(-wDiv2,-hDiv2);
-            newPos.x = this.pos.x+(pointToFollow.x + this._cameraPosCorrection.current.x - this.pos.x)*Camera.FOLLOW_FACTOR.x;
-            newPos.y = this.pos.y+(pointToFollow.y + this._cameraPosCorrection.current.y - this.pos.y)*Camera.FOLLOW_FACTOR.y;
+            let newPosX =
+                this.pos.x +
+                (gameObject.pos.x - wDiv2 + this._cameraPosCorrection.current.x - this.pos.x) *
+                Camera.FOLLOW_FACTOR.x;
+            let newPosY =
+                this.pos.y +
+                (gameObject.pos.y - hDiv2 + this._cameraPosCorrection.current.y - this.pos.y) *
+                Camera.FOLLOW_FACTOR.y;
 
-            if (newPos.x < 0) {
-                newPos.x = 0;
+            if (newPosX < 0) {
+                newPosX = 0;
             }
-            if (newPos.y < 0) {
-                newPos.y = 0;
-            }
-
-            if (newPos.x > scene.size.width - w) {
-                newPos.x = scene.size.width - w;
-            }
-            if (newPos.y > scene.size.height - h) {
-                newPos.y = scene.size.height - h;
+            if (newPosY < 0) {
+                newPosY = 0;
             }
 
-            this.pos.setFrom(newPos);
-            Point2d.toPool(newPos);
-            Point2d.toPool(pointToFollow);
+            if (newPosX > scene.size.width - w) {
+                newPosX = scene.size.width - w;
+            }
+            if (newPosY > scene.size.height - h) {
+                newPosY = scene.size.height - h;
+            }
+
+            this.pos.setXY(newPosX,newPosY);
 
         }
         if (this._cameraShakeTween!==undefined) this._cameraShakeTween.update();
@@ -149,14 +148,14 @@ export class Camera implements IUpdatable, ITransformable, IRevalidatable  {
     }
 
     public shake(amplitude:number,time:number):void {
-        const tweenTarget:ICameraTweenTarget = {time:0,point:new Point2d(0,0)};
+        const tweenTarget:ICameraTweenTarget = {time:0,point:new Point2d()};
         this._cameraShakeTween = new Tween(this.game,{
             target:tweenTarget,
             time,
             to:{time},
             progress:()=>{
-                const r1:number = MathEx.random(-amplitude/2,amplitude/2);
-                const r2:number = MathEx.random(-amplitude/2,amplitude/2);
+                const r1 = MathEx.random(-amplitude/2,amplitude/2);
+                const r2 = MathEx.random(-amplitude/2,amplitude/2);
                 tweenTarget.point.setXY(r1,r2);
             },
             complete:()=>this._cameraShakeTween = undefined
@@ -191,10 +190,6 @@ export class Camera implements IUpdatable, ITransformable, IRevalidatable  {
         return Mat4.unproject(p.x,p.y,this.worldTransformMatrix);
     }
 
-    private getRect():Rect{
-        this._rect.setXY(this.pos.x,this.pos.y);
-        return this._rect;
-    }
 }
 
 

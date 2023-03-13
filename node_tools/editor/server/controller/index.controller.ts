@@ -17,4 +17,9 @@ export class IndexController {
         return fs.readFileSync('./demo/out/editor-client.js','utf8');
     }
 
+    @Get({url:'/PressStart2P-Regular.ttf',contentType:'application/octet-stream'})
+    public getFont() {
+        return fs.readFileSync('./node_tools/editor/client/PressStart2P-Regular.ttf');
+    }
+
 }

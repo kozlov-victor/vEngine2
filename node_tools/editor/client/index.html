@@ -4,6 +4,14 @@
     <meta charset="UTF-8">
     <title></title>
     <style>
+        @font-face {
+            font-family: 'PressStart2P';
+            src: url('/PressStart2P-Regular.ttf');
+        }
+        * {
+            font-family: 'PressStart2P';
+            font-size: 12px;
+        }
         body {
             background-color: #e7e7e7;
         }
@@ -38,12 +46,15 @@
             padding: 15px 5px;
         }
         ul {
-            margin: 0;
+            margin: 10px 0;
             padding: 0;
         }
         li {
             margin-left: 20px;
             list-style-type: square;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            text-emphasis: #af0000;
         }
         .status_bar {
             padding: 5px;
@@ -67,6 +78,12 @@
             padding: 5px;
             position: relative;
             box-shadow: 5px 5px 1px #363636;
+        }
+        button::before {
+            content: '◀';
+        }
+        button::after {
+            content: '▶';
         }
         button:active {
             left: 3px;

@@ -8,7 +8,7 @@ export class WallDustEmitter extends AbstractParticleEmitter {
 
     constructor(scene:Scene) {
         super(scene);
-        this.ps.numOfParticlesToEmit = {from: 10, to: 30};
+        this.ps.numOfParticlesToEmit = {from: 20, to: 30};
     }
 
     private createPrefab(color:Color) {

@@ -27,7 +27,7 @@ export class Vtx extends AbstractChipTrack {
         // Bits 0-2 determine stereo mode:
         // 0 – MONO, 1 – ABC, 2 – ACB, 3 – BAC,
         // 4 – BCA, 5 – CAB, 6 – CBA (dec)
-        const stereoMode:number = this.buffer.readUint8();
+        const stereoMode:number = this.buffer.readUInt8();
         if (stereoMode>6) throw new Error(`bad stereo mode: ${stereoMode}`);
 
         //  Loop VBL number (from zero =
@@ -40,7 +40,7 @@ export class Vtx extends AbstractChipTrack {
         if (this.masterClock<100000 || this.masterClock>100000000) throw new Error(`wrong master clock frequency (${this.masterClock})`);
 
         // Player frequency (VBL per sec)
-        this.frameFreq = this.buffer.readUint8();
+        this.frameFreq = this.buffer.readUInt8();
         console.log(this.frameFreq);
 
         // Year of composition creating

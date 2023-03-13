@@ -40,7 +40,7 @@ function readNode(data: BinBuffer, header64: boolean) {
     if (endOffset === 0) return null
     const numProperties = header64 ? Number(data.readUInt64(true)) : data.readUInt32(true)
     const propertyListLen = header64 ? Number(data.readUInt64(true)) : data.readUInt32(true)
-    const nameLen = data.readUint8()
+    const nameLen = data.readUInt8()
     const name = data.readString(nameLen)
 
     const node: FBXNode = {
@@ -70,7 +70,7 @@ function readProperty(data: BinBuffer) {
 
     const read: { [index: string]: () => any } = {
         Y: () => data.readInt16(true),
-        C: () => data.readUint8() > 0,
+        C: () => data.readUInt8() > 0,
         I: () => data.readInt32(true),
         F: () => data.readFloat32(true),
         D: () => data.readFloat64(true),
@@ -79,7 +79,7 @@ function readProperty(data: BinBuffer) {
         d: () => readPropertyArray(data, (r) => r.readFloat64(true)),
         l: () => readPropertyArray(data, (r) => r.readInt64(true)),
         i: () => readPropertyArray(data, (r) => r.readInt32(true)),
-        b: () => readPropertyArray(data, (r) => r.readUint8() > 0),
+        b: () => readPropertyArray(data, (r) => r.readUInt8() > 0),
         S: () => data.readString(data.readUInt32(true)),
         R: () => data.readUints8(data.readUInt32(true)),
     }

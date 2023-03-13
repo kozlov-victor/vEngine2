@@ -39,8 +39,7 @@ export class SvgImage extends SimpleGameObjectContainer {
         if (viewBox[2]===0) viewBox[2] = width;
         if (viewBox[3]===0) viewBox[3] = height;
 
-        const rootView:RenderableModel = new SimpleGameObjectContainer(this.game);
-        rootView.pos.setXY(-viewBox[0],-viewBox[1]);
+        const rootView = new SimpleGameObjectContainer(this.game);
         if (this.preferredSize!==undefined) {
             this.size.setFrom(this.preferredSize);
         } else {
@@ -48,10 +47,11 @@ export class SvgImage extends SimpleGameObjectContainer {
         }
         const scaleByViewPort:number = Math.min(this.size.width/viewBox[2],this.size.height/viewBox[3]);
         rootView.scale.setXY(scaleByViewPort);
+        rootView.pos.setXY(-viewBox[0]*scaleByViewPort,-viewBox[1]*scaleByViewPort);
 
-        this.svgElementRenderer = new SvgElementRenderer(this.game,rootSvgTag,this,this.preloadedTextures);
+        const svgElementRenderer = new SvgElementRenderer(this.game,rootSvgTag,this,this.preloadedTextures);
+        svgElementRenderer.renderTo(rootView);
 
-        this.traverseDocument(rootView,rootSvgTag);
         const drawingSurface = new LazyImageCacheSurface(this.game,this.size);
         drawingSurface.appendChild(rootView);
         drawingSurface.requestRedraw();
@@ -72,10 +72,6 @@ export class SvgImage extends SimpleGameObjectContainer {
             if (!url) continue;
             this.preloadedTextures[url] = await taskQueue.getLoader().loadTexture(url);
         }
-    }
-
-    private traverseDocument(view:RenderableModel,el:XmlNode):void {
-        this.svgElementRenderer.renderTag(view,el);
     }
 
 }

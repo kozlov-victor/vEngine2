@@ -27,6 +27,8 @@ const NAMED_COLOR_TABLE:Record<string, `#${string}`> =
         darkblue: "#00008b",
         darkcyan: "#008b8b",
         darkgoldenrod: "#b8860b",
+        gray: "#808080",
+        grey: "#808080", // alias for "gray"
         darkgray: "#a9a9a9",
         darkgreen: "#006400",
         darkkhaki: "#bdb76b",
@@ -53,7 +55,6 @@ const NAMED_COLOR_TABLE:Record<string, `#${string}`> =
         ghostwhite: "#f8f8ff",
         gold: "#ffd700",
         goldenrod: "#daa520",
-        gray: "#808080",
         green: "#008000",
         greenyellow: "#adff2f",
         honeydew: "#f0fff0",

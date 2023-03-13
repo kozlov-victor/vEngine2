@@ -21,8 +21,8 @@ export class Ym extends AbstractChipTrack {
             this.readBody();
         } else { // lha-compressed
             bb.resetPointer();
-            const sizeOfHeader:number = bb.readUint8();
-            bb.readUint8(); // Header checksum
+            const sizeOfHeader:number = bb.readUInt8();
+            bb.readUInt8(); // Header checksum
             const methodId:'lh4'|'lh5' = bb.readString(5).split('-').join('') as 'lh4'|'lh5';
             if (['lh4','lh5'].indexOf(methodId)===-1) throw new Error(`unsupported method: ${methodId}`);
             bb.readUInt32(); // compressed size

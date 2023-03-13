@@ -10,3 +10,4 @@ demo/out/**
 demo/**.exe
 demo/index.json
 node_tools/build/*
+__tmp/*

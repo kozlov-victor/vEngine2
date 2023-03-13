@@ -42,6 +42,7 @@ export class Character implements Injectable {
             rect: new Rect(4,2,30,41),
             restitution:0.3,
             groupNames:['character'],
+            ignoreOverlapWithGroupNames: ['bump'],
         }));
 
         characterImage.appendTo(scene);

@@ -42,7 +42,7 @@ const getReqBody = (request:IncomingMessage):Promise<string>=> {
 const requestListener = async (req:IncomingMessage, res:ServerResponse)=> {
     const headers = req.headers;
     const method = req.method;
-    const parsedUrl = urlModule.parse(req.url!, true);
+    const parsedUrl = urlModule.parse(req.url, true);
     let url:string = parsedUrl.pathname;
     if (!url.endsWith('/')) url = url + '/';
     const queryObject = parsedUrl.query;

@@ -82,6 +82,10 @@ export class XmlNode implements IXmlNode, ICloneable<XmlNode> {
         this.attributes[name] = value.toString();
     }
 
+    public appendChild(node:XmlNode):void {
+        this.children.push(node);
+    }
+
     public toJSON():IXmlNode {
         const res:IXmlNode = {tagName:this.tagName,attributes:{...this.attributes},children:[]};
         for (const c of this.children) {
@@ -124,6 +128,20 @@ export class XmlNode implements IXmlNode, ICloneable<XmlNode> {
         return node;
     }
 
+    protected _asXmlText(indent:number):string {
+        const attrKeys = Object.keys(this.attributes);
+        let attrStr = attrKeys.map(it=>`${it}="${this.attributes[it]}"`).join(' ');
+        if (attrKeys.length>0) attrStr = ' ' + attrStr;
+        const indentStr = new Array(indent*4).fill('').join(' ');
+        let out = `${indentStr}<${this.tagName}${attrStr}>\n`;
+        this.children.forEach((c)=>{
+            if (c instanceof XmlNode) out+=`${indentStr}${c._asXmlText(indent+1)}\n`;
+            else out+=`${indentStr}${c.data}\n`;
+        });
+        out+=`${indentStr}</${this.tagName}>`;
+        return out;
+    }
+
 }
 
 export class XmlDocument extends XmlNode {
@@ -135,8 +153,22 @@ export class XmlDocument extends XmlNode {
         return doc;
     }
 
+    public static createEmptyDocument(tagName:string):XmlDocument {
+        return this.create({tagName,children:[],attributes:{}});
+    }
+
     private constructor(){
         super();
+    }
+
+    public createElement(tagName:string):XmlNode {
+        const node = new XmlNode();
+        node.tagName = tagName;
+        return node;
+    }
+
+    public asXmlString():string {
+        return this._asXmlText(0);
     }
 
 }

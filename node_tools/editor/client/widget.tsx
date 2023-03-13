@@ -136,7 +136,7 @@ export class Widget extends VEngineTsxComponent {
                 {this.convertedImageUUID &&
                     <Frame title={'Conversion'}>
                         <img
-                            alt=""
+                            alt="converted image"
                             src={`/main/getConvertedImage?uuid=${this.convertedImageUUID}`}
                             style={{
                                 maxWidth: '250px',

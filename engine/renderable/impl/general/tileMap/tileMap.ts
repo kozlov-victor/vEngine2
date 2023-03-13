@@ -329,7 +329,7 @@ export class TileMap extends RenderableModelWithTexture {
                     restitution: collisionInfo.restitution,
                     acceptCollisions: TileMap._isTileCollideable(tileId,collisionInfo),
                 });
-                rigidBody.addInfo = {tileId,tileX:x,tileY:y};
+                rigidBody.addInfo = {tile:true,tileId,tileX:x,tileY:y};
 
                 if (collisionInfo.slopes?.floorUp?.includes(tileId)) {
                     rigidBody.addInfo.slopeType = SLOPE_TYPE.FLOOR_UP;

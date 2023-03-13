@@ -72,6 +72,7 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
     public readonly acceleration:Point2d = new Point2d();
     public groupNames:Int = 0 as Int;
     public ignoreCollisionWithGroupNames:Int = 0 as Int;
+    public ignoreOverlapWithGroupNames:Int = 0 as Int;
     public readonly spatialCellsOccupied:SpatialCell[] = [];
 
     public readonly collisionEventHandler:EventEmitterDelegate<ARCADE_COLLISION_EVENT, ArcadeRigidBody> = new EventEmitterDelegate(this.game);
@@ -82,7 +83,7 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
     public gravityImpact:number = 1;
     public acceptCollisions:boolean = true;
 
-    public addInfo:Record<any, any> = {};
+    public addInfo:Record<string, any> = {};
     public _modelType: ARCADE_RIGID_BODY_TYPE = ARCADE_RIGID_BODY_TYPE.DYNAMIC;
     public readonly _boundRect = new RectWithUpdateId();
     public _restitution:number = 0.5;
@@ -108,9 +109,10 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
 
     public nextTick():void {
 
+        const delta:number = this.game.getDeltaTime() / 1000;
+
         if (this._modelType===ARCADE_RIGID_BODY_TYPE.DYNAMIC) {
             this._oldPos.setFrom(this.pos);
-            const delta:number = this.game.getDeltaTime() / 1000;
             (this._collisionFlagsOld as CollisionFlags).copyFrom(this.collisionFlags as CollisionFlags);
             (this.collisionFlags as CollisionFlags).reset();
             this.overlappedWith = undefined;
@@ -119,9 +121,10 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
             if (!this._collisionFlagsOld.bottom) this.velocity.y += this.acceleration.y * delta;
             this.velocity.x += ArcadePhysicsSystem.gravity.x;
             this.velocity.y += ArcadePhysicsSystem.gravity.y*this.gravityImpact;
-            this.pos.x += this.velocity.x * delta;
-            this.pos.y += this.velocity.y * delta;
         }
+
+        this.pos.x += this.velocity.x * delta;
+        this.pos.y += this.velocity.y * delta;
 
         const spatialSpace = this.game.getCurrentScene()._spatialSpace;
         if (spatialSpace!==undefined) {
@@ -246,6 +249,7 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
         body._rect = this._rect.clone();
         body.groupNames = this.groupNames;
         body.ignoreCollisionWithGroupNames = this.ignoreCollisionWithGroupNames;
+        body.ignoreOverlapWithGroupNames = this.ignoreOverlapWithGroupNames;
         body.setBoundsAndObserveModel(this._model);
         body.gravityImpact = this.gravityImpact;
     }

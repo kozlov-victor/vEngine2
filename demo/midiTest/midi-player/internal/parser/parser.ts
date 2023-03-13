@@ -58,7 +58,7 @@ interface ITrack {
 const readVarInt = (p:BinBuffer)=> {
     let result = 0;
     while (!p.isEOF()) {
-        const b = p.readUint8();
+        const b = p.readUInt8();
         if (b & 0x80) {
             result += (b & 0x7f)
             result <<= 7;
@@ -72,9 +72,9 @@ const readVarInt = (p:BinBuffer)=> {
 }
 
 const readUInt24 =(p:BinBuffer):number=> {
-    const b0 = p.readUint8(),
-        b1 = p.readUint8(),
-        b2 = p.readUint8();
+    const b0 = p.readUInt8(),
+        b1 = p.readUInt8(),
+        b2 = p.readUInt8();
     return (b0 << 16) + (b1 << 8) + b2
 }
 
@@ -121,14 +121,14 @@ const readEvent =(header:IHeader,p:BinBuffer)=> {
         absoluteTime: 0,
     }
 
-    let eventTypeByte = p.readUint8();
+    let eventTypeByte = p.readUInt8();
 
     if ((eventTypeByte & 0xf0) === 0xf0) {
         // system / meta event
         if (eventTypeByte === 0xff) {
             // meta event
             event.meta = true;
-            const metatypeByte = p.readUint8() as number;
+            const metatypeByte = p.readUInt8() as number;
             const length = readVarInt(p);
             switch (metatypeByte) {
                 case 0x00:
@@ -167,12 +167,12 @@ const readEvent =(header:IHeader,p:BinBuffer)=> {
                 case 0x20:
                     event.type = 'channelPrefix';
                     if (length != 1) throw "Expected length for channelPrefix event is 1, got " + length;
-                    event.channel = p.readUint8();
+                    event.channel = p.readUInt8();
                     return event;
                 case 0x21:
                     event.type = 'portPrefix'
                     if (length != 1) throw "Expected length for portPrefix event is 1, got " + length;
-                    event.port = p.readUint8();
+                    event.port = p.readUInt8();
                     return event;
                 case 0x2f:
                     event.type = 'endOfTrack'
@@ -186,23 +186,23 @@ const readEvent =(header:IHeader,p:BinBuffer)=> {
                 case 0x54:
                     event.type = 'smpteOffset';
                     if (length != 5) throw "Expected length for smpteOffset event is 5, got " + length;
-                    const hourByte = p.readUint8();
+                    const hourByte = p.readUInt8();
                     const FRAME_RATES:Record<number, number> = { 0x00: 24, 0x20: 25, 0x40: 29, 0x60: 30 }
                     event.frameRate = FRAME_RATES[hourByte & 0x60];
                     event.hour = hourByte & 0x1f;
-                    event.min = p.readUint8();
-                    event.sec = p.readUint8();
-                    event.frame = p.readUint8();
-                    event.subFrame = p.readUint8();
+                    event.min = p.readUInt8();
+                    event.sec = p.readUInt8();
+                    event.frame = p.readUInt8();
+                    event.subFrame = p.readUInt8();
                     return event;
                 case 0x58:
                     event.type = 'timeSignature';
                     if (length != 2 && length != 4) throw "Expected length for timeSignature event is 4 or 2, got " + length
-                    event.numerator = p.readUint8();
-                    event.denominator = (1 << p.readUint8());
+                    event.numerator = p.readUInt8();
+                    event.denominator = (1 << p.readUInt8());
                     if (length === 4) {
-                        event.metronome = p.readUint8();
-                        event.thirtyseconds = p.readUint8();
+                        event.metronome = p.readUInt8();
+                        event.thirtyseconds = p.readUInt8();
                     } else {
                         event.metronome = 0x24;
                         event.thirtyseconds = 0x08;
@@ -212,7 +212,7 @@ const readEvent =(header:IHeader,p:BinBuffer)=> {
                     event.type = 'keySignature';
                     if (length != 2) throw "Expected length for keySignature event is 2, got " + length
                     event.key = p.readInt8();
-                    event.scale = p.readUint8();
+                    event.scale = p.readUInt8();
                     return event;
                 case 0x7f:
                     event.type = 'sequencerSpecific';
@@ -250,7 +250,7 @@ const readEvent =(header:IHeader,p:BinBuffer)=> {
             eventTypeByte = lastEventTypeByte as Uint8;
             event.running = true;
         } else {
-            param1 = p.readUint8();
+            param1 = p.readUInt8();
             lastEventTypeByte = eventTypeByte;
         }
         const eventType = (eventTypeByte >> 4) as number;
@@ -259,10 +259,10 @@ const readEvent =(header:IHeader,p:BinBuffer)=> {
             case 0x08:
                 event.type = 'noteOff';
                 event.noteNumber = param1;
-                event.velocity = p.readUint8();
+                event.velocity = p.readUInt8();
                 return event;
             case 0x09:
-                const velocity = p.readUint8();
+                const velocity = p.readUInt8();
                 event.type = velocity === 0 ? 'noteOff' : 'noteOn'
                 event.noteNumber = param1;
                 event.velocity = velocity;
@@ -271,13 +271,13 @@ const readEvent =(header:IHeader,p:BinBuffer)=> {
             case 0x0a:
                 event.type = 'noteAftertouch';
                 event.noteNumber = param1;
-                event.amount = p.readUint8();
+                event.amount = p.readUInt8();
                 console.log(`noteAftertouch: ${event.amount}`);
                 return event;
             case 0x0b:
                 event.type = 'controller';
                 event.controllerType = param1;
-                event.value = p.readUint8();
+                event.value = p.readUInt8();
                 return event;
             case 0x0c:
                 event.type = 'programChange';
@@ -290,7 +290,7 @@ const readEvent =(header:IHeader,p:BinBuffer)=> {
                 return event;
             case 0x0e:
                 event.type = 'pitchBend';
-                event.value = (param1 + (p.readUint8() << 7)) - 0x2000;
+                event.value = (param1 + (p.readUInt8() << 7)) - 0x2000;
                 return event;
             default:
                 throw "Unrecognised MIDI event type: " + eventType;

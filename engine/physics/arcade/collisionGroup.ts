@@ -5,7 +5,7 @@ export class CollisionGroup {
     private static _currentIndex:number = 0;
     private static _cache:Record<string, Int> = {};
 
-    public static createGroupBitMaskByName(name:string):Int {
+    public static createOrFindGroupBitMaskByName(name:string):Int {
         if (DEBUG && this._currentIndex>=31) {
             throw new DebugError(`only up to 32 groups can be used at the same time`);
         }

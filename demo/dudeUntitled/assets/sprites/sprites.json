@@ -104,7 +104,7 @@
                 "h": 32
             }
         },
-        "key_frame_1": {
+        "platform_wheel_frame_1": {
             "frame": {
                 "x": 38,
                 "y": 94,
@@ -112,7 +112,7 @@
                 "h": 32
             }
         },
-        "fire_fire1": {
+        "key_frame_1": {
             "frame": {
                 "x": 74,
                 "y": 94,
@@ -120,7 +120,7 @@
                 "h": 32
             }
         },
-        "fire_fire2": {
+        "fire_fire1": {
             "frame": {
                 "x": 110,
                 "y": 94,
@@ -128,7 +128,7 @@
                 "h": 32
             }
         },
-        "fire_fire3": {
+        "fire_fire2": {
             "frame": {
                 "x": 146,
                 "y": 94,
@@ -136,7 +136,7 @@
                 "h": 32
             }
         },
-        "fire_fire4": {
+        "fire_fire3": {
             "frame": {
                 "x": 182,
                 "y": 94,
@@ -144,7 +144,7 @@
                 "h": 32
             }
         },
-        "fire_fire5": {
+        "fire_fire4": {
             "frame": {
                 "x": 218,
                 "y": 94,
@@ -152,12 +152,28 @@
                 "h": 32
             }
         },
-        "candy_frame_1": {
+        "fire_fire5": {
             "frame": {
                 "x": 2,
                 "y": 130,
                 "w": 32,
                 "h": 32
+            }
+        },
+        "candy_frame_1": {
+            "frame": {
+                "x": 38,
+                "y": 130,
+                "w": 32,
+                "h": 32
+            }
+        },
+        "platform_moveable_frame_1": {
+            "frame": {
+                "x": 74,
+                "y": 130,
+                "w": 64,
+                "h": 16
             }
         }
     },

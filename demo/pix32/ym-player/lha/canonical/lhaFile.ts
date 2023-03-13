@@ -98,7 +98,7 @@ export class LhaFile {
     public read_2(pos: number): number {
         if (pos !== this.pos) this.raf.setPointer(pos);
 
-        const n: number = this.raf.readUint8();
+        const n: number = this.raf.readUInt8();
         if (n > 0) this.pos = pos + 1;
 
         return (n);

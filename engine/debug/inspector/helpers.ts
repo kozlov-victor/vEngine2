@@ -105,6 +105,7 @@ export const createDraggableElement = ({className = ''} = {}):HTMLDivElement=>{
     el.style.position = 'absolute';
     el.style.left = '0';
     el.style.top = '0';
+    el.style.zIndex = '1000';
     el.className = className;
     const mouseDownPoint = {x:0,y:0};
     let isMouseDown:boolean = false;

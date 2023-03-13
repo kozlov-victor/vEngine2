@@ -7,6 +7,7 @@ import {IndexController} from "./controller/index.controller";
 Registry.getInstance().registerController(TestController);
 Registry.getInstance().registerController(MainController);
 Registry.getInstance().registerController(IndexController);
+console.log(Registry.getInstance().registry.map(it=>it.url));
 init();
 
 

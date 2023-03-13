@@ -34,7 +34,7 @@ export class ResourceLoader {
 
     private static _loadHtmlImage = (imgUrl:URI|IURLRequest|Base64,progress?:(n:number)=>void):Promise<HTMLImageElement>=>{
         let url:string = (imgUrl as IURLRequest).url?(imgUrl as IURLRequest).url:(imgUrl as string);
-        if (url.indexOf('data:')!==0) url = addUrlParameter(url,'modified',BUILD_AT);
+        if (!this._isGlobalUrl(url)) url = addUrlParameter(url,'modified',BUILD_AT);
         return new Promise<HTMLImageElement>((resolve,reject)=>{
             const img = new window.Image();
             img.src = url;
@@ -99,14 +99,26 @@ export class ResourceLoader {
         return postProcess(text);
     }
 
+    private static _isGlobalUrl(url:string):boolean {
+        return (
+            url.startsWith('data:') ||
+            url.startsWith('https:') ||
+            url.startsWith('http:')
+        );
+    }
+
     private static _pathJoin(prefix:string|'',req:string | IURLRequest):string | IURLRequest {
         if ((req as IURLRequest).url) {
             const segment = (req as IURLRequest).url;
-            if (!segment.startsWith('data:')) (req as IURLRequest).url = path.join(this.BASE_URL,prefix,segment);
+            if (!this._isGlobalUrl(segment)) {
+                (req as IURLRequest).url = path.join(this.BASE_URL,prefix,segment);
+            }
             return req;
         } else {
             const segment = req as string;
-            if (!segment.startsWith('data:')) return path.join(this.BASE_URL,prefix,segment);
+            if (!this._isGlobalUrl(segment)) {
+                return path.join(this.BASE_URL,prefix,segment);
+            }
             else return req;
         }
     }
@@ -238,7 +250,7 @@ export class ResourceLoader {
         }
         const plainText = await this.loadText(docUrl,n=>progress && progress(n/2));
         const parser = new docParser(plainText);
-        const doc = parser.getTree() as XmlNode;
+        const doc = parser.getTree() as XmlDocument;
         return this.loadFontFromAtlas(baseUrl,doc,n=>progress && progress(n/2));
     }
 

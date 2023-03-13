@@ -16,6 +16,7 @@ export class MainScene extends Scene {
     public override async onReady():Promise<void> {
 
         const fonts:[string,number][] = [
+            ['test',30],
             ['zx',30],
             ['vintage',30],
             ['PressStart2P',30],

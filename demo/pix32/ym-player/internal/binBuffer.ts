@@ -73,7 +73,7 @@ export class BinBuffer {
         const restSize:number = this.getByteLength() - this.getPointer();
         const res:Uint8[] = new Array<Uint8>(restSize);
         for (let i:number = 0; i < restSize; i++) {
-            res[i] = this.readUint8();
+            res[i] = this.readUInt8();
         }
         return res;
     }
@@ -148,7 +148,7 @@ export class BinBuffer {
         return res;
     }
 
-    public readUint8():Uint8{
+    public readUInt8():Uint8{
         const res:Uint8 = this.view.getUint8(this.pointer) as Uint8;
         this.pointer++;
         return res;
@@ -168,7 +168,7 @@ export class BinBuffer {
         if (n<0) throw new Error(`wont argument: ${n}`);
         const res:Uint8[] = [];
         for (let i = 0; i < n; i++) {
-            res.push(this.readUint8());
+            res.push(this.readUInt8());
         }
         return res;
     }
@@ -187,7 +187,7 @@ export class BinBuffer {
         for (let i = 0; i < length; i++) {
             const pos:number = i + off;
             if (this.pointer<this.view.byteLength-1) {
-                arr[pos] = this.readUint8();
+                arr[pos] = this.readUInt8();
                 readed++;
             }
 

@@ -65,14 +65,15 @@ export class Script implements Injectable {
         };
         const tiles = this.tileMap.getTilesAtRect(rect);
         for (const tile of tiles) {
-            await waitFor(this.tileMap,300);
-            this.tileMap.setValueAtCellXY(tile.xTile,tile.yTile,undefined);
-            this.tileMap.redefineRigidBodies();
-            this.tileMap.drawForced();
             this.wallDust.emit(
                 tile.x+tile.width/2,
                 tile.y+tile.height/2,
             );
+            await waitFor(this.tileMap,300);
+            this.tileMap.setValueAtCellXY(tile.xTile,tile.yTile,undefined);
+            this.tileMap.redefineRigidBodies();
+            this.tileMap.drawForced();
+            await waitFor(this.tileMap,300);
         }
     }
 

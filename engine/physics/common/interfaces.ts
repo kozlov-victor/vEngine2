@@ -11,6 +11,7 @@ export interface IRigidBody extends ICloneable<IRigidBody>{
     acceleration:Point2d;
     groupNames:Int;
     ignoreCollisionWithGroupNames:Int;
+    ignoreOverlapWithGroupNames:Int;
     spatialCellsOccupied:SpatialCell[];
     setBoundsAndObserveModel(model:RenderableModel):void;
     calcAndGetBoundRect():RectWithUpdateId;
@@ -18,7 +19,7 @@ export interface IRigidBody extends ICloneable<IRigidBody>{
     nextTick():void;
     debugRender():void;
     getHostModel():RenderableModel;
-    addInfo:Record<any, any>;
+    addInfo:Record<string, any>;
 }
 
 export interface IPhysicsSystem {

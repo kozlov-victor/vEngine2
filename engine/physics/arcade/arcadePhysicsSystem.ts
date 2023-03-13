@@ -21,6 +21,7 @@ export interface ICreateRigidBodyParams {
     debug?:boolean;
     groupNames?:string[];
     ignoreCollisionWithGroupNames?:string[];
+    ignoreOverlapWithGroupNames?:string[];
     gravityImpact?:number; // 0..1
     acceptCollisions?:boolean;
 }
@@ -69,16 +70,18 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
         if (params?.debug!==undefined) (body as {debug:boolean}).debug = params.debug;
         if (params?.groupNames) {
             params.groupNames.forEach(g=>{
-                const mask = CollisionGroup.createGroupBitMaskByName(g);
+                const mask = CollisionGroup.createOrFindGroupBitMaskByName(g);
                 body.groupNames = ((body.groupNames as number) | (mask as number)) as Int;
             });
         }
-        if (params?.ignoreCollisionWithGroupNames) {
-            params.ignoreCollisionWithGroupNames.forEach(g=>{
-                const mask = CollisionGroup.createGroupBitMaskByName(g);
-                body.ignoreCollisionWithGroupNames = ((body.ignoreCollisionWithGroupNames as number) | (mask as number)) as Int;
-            });
-        }
+        params?.ignoreCollisionWithGroupNames?.forEach(g=>{
+            const mask = CollisionGroup.createOrFindGroupBitMaskByName(g);
+            body.ignoreCollisionWithGroupNames = ((body.ignoreCollisionWithGroupNames as number) | (mask as number)) as Int;
+        });
+        params?.ignoreOverlapWithGroupNames?.forEach(g=>{
+            const mask = CollisionGroup.createOrFindGroupBitMaskByName(g);
+            body.ignoreOverlapWithGroupNames = ((body.ignoreOverlapWithGroupNames as number) | (mask as number)) as Int;
+        });
         return body;
     }
 
@@ -118,7 +121,12 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
                         intersect(playerBody.groupNames, entityBody.ignoreCollisionWithGroupNames) ||
                         intersect(entityBody.groupNames,playerBody.ignoreCollisionWithGroupNames)
                     ) {
-                        resolveOverlap_AABB(playerBody, entityBody);
+                        if (
+                            !intersect(playerBody.groupNames, entityBody.ignoreOverlapWithGroupNames) &&
+                            !intersect(entityBody.groupNames, playerBody.ignoreOverlapWithGroupNames)
+                        ) {
+                            resolveOverlap_AABB(playerBody, entityBody);
+                        }
                     } else {
                         if (playerBody.addInfo.slopeType!==undefined || entityBody.addInfo.slopeType!==undefined) {
                             resolveCollision_AABB_withSlope(playerBody, p1, entityBody);
