@@ -78,7 +78,6 @@ export abstract class RenderableModel
 
     public _lastProgramId:number;
 
-    private _destRect: Rect = new Rect();
     private _behaviours: BaseAbstractBehaviour[] = [];
     private _propertyAnimations: IAnimation[] = [];
     private _layer: Optional<Layer>;
@@ -131,11 +130,6 @@ export abstract class RenderableModel
 
     public _setScene(value: Scene): void {
         this._scene = value;
-    }
-
-    public getDestRect(): Readonly<IRect> {
-        this._destRect.setXYWH(this.pos.x,this.pos.y,this.size.width,this.size.height);
-        return this._destRect;
     }
 
     public addBehaviour(b: BaseAbstractBehaviour): void {

@@ -34,7 +34,8 @@ export class PlatformMoveable {
             if (e.addInfo?.host?.constructor?.name===BumpRect.name) {
                 const bumper = e.addInfo.host as BumpRect;
                 if (this.lastBumped!==bumper) {
-                    rigidBody.velocity.y=-rigidBody.velocity.y;
+                    rigidBody.velocity.y = -rigidBody.velocity.y;
+                    wheel.angleVelocity = -wheel.angleVelocity;
                 }
                 this.lastBumped = bumper;
             }
@@ -52,9 +53,7 @@ export class PlatformMoveable {
         wheel.prependTo(container);
         wheel.transformPoint.setToCenter();
         wheel.pos.setXY(5,-12);
-        wheel.setInterval(()=>{
-            wheel.angle+=0.1;
-        },100);
+        wheel.angleVelocity = 2;
 
     }
 
