@@ -85,6 +85,13 @@ export class Camera implements IUpdatable, ITransformable, IRevalidatable  {
 
         if (gameObject!==undefined) {
 
+            const w = this.game.size.width;
+            const h = this.game.size.height;
+            const wDiv2 = w / 2;
+            const hDiv2 = h / 2;
+            const wDiv3 = w / 3;
+            const hDiv3 = h / 3;
+
             if ((gameObject.pos.x - this._objFollowToPrevPos.x)>0) this._directionCorrection = DIRECTION_CORRECTION.RIGHT;
             else if ((gameObject.pos.x - this._objFollowToPrevPos.x)<0) this._directionCorrection = DIRECTION_CORRECTION.LEFT;
 
@@ -93,15 +100,14 @@ export class Camera implements IUpdatable, ITransformable, IRevalidatable  {
 
             this._objFollowToPrevPos.setFrom(gameObject.pos);
 
-            const {width,height} = this.game.size;
             if (this._directionCorrection === DIRECTION_CORRECTION.RIGHT)
-                this._cameraPosCorrection.max.x=width/3;
+                this._cameraPosCorrection.max.x=wDiv3;
             else if (this._directionCorrection === DIRECTION_CORRECTION.LEFT)
-                this._cameraPosCorrection.max.x=-width/3;
+                this._cameraPosCorrection.max.x=-wDiv3;
             else if (this._directionCorrection === DIRECTION_CORRECTION.DOWN)
-                this._cameraPosCorrection.max.y=height/3;
+                this._cameraPosCorrection.max.y=hDiv3;
             else if (this._directionCorrection === DIRECTION_CORRECTION.UP)
-                this._cameraPosCorrection.max.y=-height/3;
+                this._cameraPosCorrection.max.y=-hDiv3;
 
             const currCorrection =
                 this._cameraPosCorrection.max.
@@ -109,13 +115,7 @@ export class Camera implements IUpdatable, ITransformable, IRevalidatable  {
                 multiply(0.01);
 
             this._cameraPosCorrection.current.add(currCorrection).truncate();
-
             const scene = this.scene;
-
-            const w = this.game.size.width;
-            const h = this.game.size.height;
-            const wDiv2 = w / 2;
-            const hDiv2 = h / 2;
 
             let newPosX =
                 this.pos.x +
