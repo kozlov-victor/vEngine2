@@ -10,7 +10,7 @@ import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 export class MainScene extends Scene {
 
     @Resource.ResourceHolder()
-    public readonly logoRes:LogoResources;
+    private logoRes:LogoResources;
 
     public override onReady():void {
 

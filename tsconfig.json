@@ -3,7 +3,7 @@
         "module": "esnext",
         "moduleResolution": "node",
         "target": "ES5",
-        "experimentalDecorators": true,
+        "experimentalDecorators": false,
         "emitDecoratorMetadata": false,
         "useDefineForClassFields": false,
         "lib": [
@@ -33,6 +33,7 @@
         "jsx": "react",
         "jsxFactory": "VEngineTsxFactory.createElement",
         "jsxFragmentFactory": "VEngineTsxFactory.createFragment",
+        "forceConsistentCasingInFileNames": false
     },
     "exclude": [
         "node_modules"

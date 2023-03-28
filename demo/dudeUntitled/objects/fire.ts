@@ -16,7 +16,7 @@ export class Fire {
 
     private readonly image:Image;
 
-    @Inject(FireEmitter) public readonly fireEmitter:FireEmitter;
+    @Inject(FireEmitter) private readonly fireEmitter:FireEmitter;
 
     constructor(private scene:MainScene,tiledObject:ITiledJSON['layers'][0]['objects'][0]) {
 

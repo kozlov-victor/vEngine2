@@ -21,7 +21,7 @@ export class Script implements Injectable {
 
     @Inject(AnimatedTileMap) private readonly tileMap:AnimatedTileMap;
     @Inject(WallDustEmitter) public readonly wallDust:WallDustEmitter;
-    @Inject(BonusParticleEmitter) public readonly bonusParticles:BonusParticleEmitter;
+    @Inject(BonusParticleEmitter) private readonly bonusParticles:BonusParticleEmitter;
 
     constructor(private scene:MainScene) {
     }

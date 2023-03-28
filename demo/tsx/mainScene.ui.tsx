@@ -29,7 +29,6 @@ export class MainSceneUi extends VEngineTsxComponent {
 
     public render():VirtualNode {
         return (
-
             <>
                 <v_circle
                     center={{x:122,y:102}}

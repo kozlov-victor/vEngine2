@@ -37,22 +37,28 @@ export namespace DiContainer {
     }
 
     export const Inject = (clazz:{new(...args:any):any})=>{
-        return <K extends string,T extends Injectable>(target: T, fieldName: K):void => {
-            const tkn = clazz.name;
-            (target as any).__injected ??=[];
-            (target as any).__injected.push(tkn);
+        return <This,Value>(value: undefined, context: ClassFieldDecoratorContext<This,Value>):void => {
+            context.addInitializer(function(){
+                const tkn = clazz.name;
+                console.log({tkn,tt:(this as any).constructor.name});
+                (this as any).__injected ??=[];
+                (this as any).__injected.push(tkn);
 
-            Object.defineProperty(target, fieldName,{
-                get: ()=>{
-                    if (DEBUG && !completed) {
-                        throw new DebugError(`DI container is not completed`);
+                Object.defineProperty(this, context.name,{
+                    get: ()=>{
+                        if (DEBUG && !completed) {
+                            throw new DebugError(`DI container is not completed`);
+                        }
+                        const obj = get(tkn);
+                        if (DEBUG && obj===undefined) {
+                            throw new DebugError(`can not retrieve object by token "${tkn}"`);
+                        }
+                        return obj;
+                    },
+                    set:val=>{
+                        // pass
                     }
-                    const obj = get(tkn);
-                    if (DEBUG && obj===undefined) {
-                        throw new DebugError(`can not retrieve object by token "${tkn}"`);
-                    }
-                    return obj;
-                }
+                });
             });
         };
     }

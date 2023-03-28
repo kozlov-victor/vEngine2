@@ -44,7 +44,7 @@ export namespace HttpClient {
         const xhr=new XMLHttpRequest();
         let resolveFn = noop as (arg:T)=>void, rejectFn = noop;
         let promise;
-        if (window.Promise) {
+        if ('Promise' in window) {
             promise = new Promise<T>((resolve,reject)=>{
                 resolveFn = resolve;
                 rejectFn = reject;

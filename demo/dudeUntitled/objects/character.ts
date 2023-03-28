@@ -28,9 +28,9 @@ export class Character implements Injectable {
 
     private blinking = false;
 
-    @Inject(GroundDustEmitter) public readonly groundDust:GroundDustEmitter;
+    @Inject(GroundDustEmitter) private readonly groundDust:GroundDustEmitter;
     @Inject(AnimatedTileMap) private readonly tileMap:AnimatedTileMap;
-    @Inject(Script) private readonly script:Script;
+    @Inject(Script) private script:Script;
 
     constructor(private scene:MainScene, tiledObject:ITiledJSON['layers'][0]['objects'][0]) {
         const characterImage = new AnimatedImage(scene.getGame(),scene.assets.spritesTexture);

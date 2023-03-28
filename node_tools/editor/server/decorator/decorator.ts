@@ -6,50 +6,50 @@ export interface IMethodParam {
 }
 
 export const Controller = function(url:string) {
-    return function<T extends { new (...args: any[]): any }>(constructor: T) {
-        (constructor as any).meta ??={};
-        (constructor as any).meta.baseUrl = url;
-        return constructor;
+    return function<Value>(value:Value, context:ClassDecoratorContext) {
+        context.addInitializer(function(){
+            (this as any).meta ??={};
+            (this as any).meta.baseUrl = url;
+        });
     }
 }
 
 export const Post = function(param:IMethodParam) {
     return function (
-        instance: any,
-        key: string | symbol,
-        descriptor: PropertyDescriptor
+        originalMethod:any, context:ClassMethodDecoratorContext
     ) {
-
-        instance.constructor.meta ??= {};
-        instance.constructor.meta.methods ??=[];
-        instance.constructor.meta.methods.push({
-                method: 'POST',
-                url: param.url ?? key,
-                controllerMethodName: key,
-                controllerInstance: instance,
-                contentType: param.contentType,
-            } as IRegistryItem
-        );
-        return descriptor;
+        context.addInitializer(function(){
+            const ctor = (this as any).constructor as any;
+            ctor.meta ??= {};
+            ctor.meta.methods ??=[];
+            ctor.meta.methods.push({
+                    method: 'POST',
+                    url: param.url ?? context.name,
+                    controllerMethodName: context.name,
+                    controllerInstance: ctor,
+                    contentType: param.contentType,
+                } as IRegistryItem
+            );
+        });
     };
 }
 
 export const Get = function(param:IMethodParam = {}) {
-    return function (
-        instance: any,
-        key: string | symbol,
-        descriptor: PropertyDescriptor
+    return function(
+        originalMethod:any, context:ClassMethodDecoratorContext
     ) {
-        instance.constructor.meta ??= {};
-        instance.constructor.meta.methods ??=[];
-        instance.constructor.meta.methods.push({
-                method: 'GET',
-                url: param.url ?? key,
-                controllerMethodName: key,
-                controllerInstance: instance,
-                contentType: param.contentType,
-            } as IRegistryItem
-        );
-        return descriptor;
+        context.addInitializer(function(){
+            const ctor = (this as any).constructor as any;
+            ctor.meta ??= {};
+            ctor.meta.methods ??=[];
+            ctor.meta.methods.push({
+                    method: 'GET',
+                    url: param.url ?? context.name,
+                    controllerMethodName: context.name,
+                    controllerInstance: ctor,
+                    contentType: param.contentType,
+                } as IRegistryItem
+            );
+        });
     };
 }
