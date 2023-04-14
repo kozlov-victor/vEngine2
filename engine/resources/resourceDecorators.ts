@@ -7,6 +7,9 @@ import type {XmlParser} from "@engine/misc/parsers/xml/xmlParser";
 import type {YamlParser} from "@engine/misc/parsers/yaml/yamlParser";
 import ICssFontParameters = FontTypes.ICssFontParameters;
 import ICssFontParameters = FontTypes.ICssFontParameters;
+import {ICubeMapTexture, ITexture} from "@engine/renderer/common/texture";
+import {Image} from "@engine/renderable/impl/general/image/image";
+import {Sound} from "@engine/media/sound";
 
 
 export const Resource = {
