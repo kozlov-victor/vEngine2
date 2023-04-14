@@ -2,7 +2,7 @@
 // http://www.angelcode.com/products/bmfont/
 // http://www.angelcode.com/products/bmfont/doc/file_format.html
 
-import {XmlNode} from "@engine/misc/parsers/xml/xmlELements";
+import {XmlNode} from "@engine/misc/parsers/xml/xmlElements";
 import {IParser} from "@engine/misc/parsers/iParser";
 
 export class AngelCodeParser implements IParser<XmlNode> {

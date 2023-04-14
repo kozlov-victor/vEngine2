@@ -1,6 +1,5 @@
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 import {Game} from "@engine/core/game";
-import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {ISize} from "@engine/geometry/size";
 import {DebugError} from "@engine/debug/debugError";
 import {LazyImageCacheSurface} from "@engine/renderable/impl/surface/lazyImageCacheSurface";

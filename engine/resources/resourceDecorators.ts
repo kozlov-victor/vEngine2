@@ -1,17 +1,11 @@
-import {Scene} from "@engine/scene/scene";
 import {IURLRequest} from "@engine/resources/urlLoader";
 import {DebugError} from "@engine/debug/debugError";
-import {ResourceAutoHolder} from "@engine/resources/resourceAutoHolder";
-import {IXmlNode, XmlDocument} from "@engine/misc/parsers/xml/xmlELements";
+import {IXmlNode, XmlDocument} from "@engine/misc/parsers/xml/xmlElements";
 import {FontTypes} from "@engine/renderable/impl/general/font/fontTypes";
-import ICssFontParameters = FontTypes.ICssFontParameters;
 import {IParser} from "@engine/misc/parsers/iParser";
 import type {XmlParser} from "@engine/misc/parsers/xml/xmlParser";
 import type {YamlParser} from "@engine/misc/parsers/yaml/yamlParser";
-import {ICubeMapTexture, ITexture} from "@engine/renderer/common/texture";
-import type {Image} from "@engine/renderable/impl/general/image/image";
-import type {Sound} from "@engine/media/sound";
-import type {Font} from "@engine/renderable/impl/general/font/font";
+import ICssFontParameters = FontTypes.ICssFontParameters;
 
 
 export const Resource = {

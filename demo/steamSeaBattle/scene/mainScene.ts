@@ -12,7 +12,7 @@ import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
 import {ImageButton} from "@engine/renderable/impl/ui/button/imageButton";
-import {XmlNode} from "@engine/misc/parsers/xml/xmlELements";
+import {XmlNode} from "@engine/misc/parsers/xml/xmlElements";
 import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 
 const MANOMETER_SCALE:number = MathEx.degToRad(360-111);

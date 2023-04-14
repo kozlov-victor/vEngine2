@@ -2,7 +2,7 @@ import {FontContextAbstractFactory} from "@engine/renderable/impl/general/font/f
 import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
 import {EvenOddCompositionFilter} from "@engine/renderer/webGl/filters/composition/evenOddCompositionFilter";
 import {Game} from "@engine/core/game";
-import {XmlDocument} from "@engine/misc/parsers/xml/xmlELements";
+import {XmlDocument} from "@engine/misc/parsers/xml/xmlElements";
 import {ISize} from "@engine/geometry/size";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Polygon} from "@engine/renderable/impl/geometry/polygon";

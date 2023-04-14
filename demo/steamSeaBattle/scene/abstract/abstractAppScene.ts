@@ -11,7 +11,7 @@ import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleG
 import {DebugError} from "@engine/debug/debugError";
 import {ImageButton} from "@engine/renderable/impl/ui/button/imageButton";
 import {TaskQueue} from "@engine/resources/taskQueue";
-import {XmlNode} from "@engine/misc/parsers/xml/xmlELements";
+import {XmlNode} from "@engine/misc/parsers/xml/xmlElements";
 
 
 export abstract class AbstractAppScene extends Scene {

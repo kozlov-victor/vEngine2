@@ -15,19 +15,19 @@ declare interface IElementDescription {
 }
 
 declare module "*.xml" {
-    import {XmlDocument} from "@engine/misc/parsers/xml/xmlELements";
+    import {XmlDocument} from "@engine/misc/parsers/xml/xmlElements";
     const value:XmlDocument;
     export = value;
 }
 
 declare module "xml/xml-loader!*" {
-    import {XmlDocument} from "@engine/misc/parsers/xml/xmlELements";
+    import {XmlDocument} from "@engine/misc/parsers/xml/xmlElements";
     const value:XmlDocument;
     export = value;
 }
 
 declare module "xml/angelcode-loader!*" {
-    import {XmlDocument} from "@engine/misc/parsers/xml/xmlELements";
+    import {XmlDocument} from "@engine/misc/parsers/xml/xmlElements";
     const value:XmlDocument;
     export = value;
 }

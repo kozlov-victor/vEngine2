@@ -26,7 +26,7 @@ export const Post = function(param:IMethodParam) {
                     method: 'POST',
                     url: param.url ?? context.name,
                     controllerMethodName: context.name,
-                    controllerInstance: ctor,
+                    controllerInstance: undefined,
                     contentType: param.contentType,
                 } as IRegistryItem
             );

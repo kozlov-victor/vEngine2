@@ -20,7 +20,7 @@ import {Scene} from "@engine/scene/scene";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {SvgImage} from "../svgBasic/svg/svgImage";
 import {TaskQueue} from "@engine/resources/taskQueue";
-import {XmlDocument} from "@engine/misc/parsers/xml/xmlELements";
+import {XmlDocument} from "@engine/misc/parsers/xml/xmlElements";
 
 const images:XmlDocument[] = [
     rabbit, dog,
@@ -35,7 +35,7 @@ export class MainScene extends Scene {
     public override onReady():void {
 
         let i = 0;
-        let lastImage:SvgImage;
+        let lastImage:SvgImage|undefined;
 
         const placeNextImage = async ()=>{
             if (lastImage!==undefined) lastImage.removeSelf();
@@ -47,7 +47,7 @@ export class MainScene extends Scene {
             await queue.scheduleStart();
         };
 
-        placeNextImage();
+        placeNextImage().then(_ => {});
         this.mouseEventHandler.on(MOUSE_EVENTS.click, ()=>placeNextImage());
     }
 }

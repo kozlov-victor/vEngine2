@@ -145,7 +145,7 @@ import {Scene} from "@engine/scene/scene";
 import {SvgImage} from "./svg/svgImage";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {TaskQueue} from "@engine/resources/taskQueue";
-import {XmlDocument} from "@engine/misc/parsers/xml/xmlELements";
+import {XmlDocument} from "@engine/misc/parsers/xml/xmlElements";
 
 const images:XmlDocument[] = [
 

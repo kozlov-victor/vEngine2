@@ -146,8 +146,8 @@ export abstract class RenderableModel
         return this._children.length;
     }
 
-    public getChildAt(index: number): this {
-        return this._children[index] as this;
+    public getChildAt(index: number): RenderableModel {
+        return this._children[index];
     }
 
     public setPosAndSize(x: number, y: number, w: number, h: number): void {

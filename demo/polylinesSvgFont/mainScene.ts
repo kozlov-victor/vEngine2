@@ -3,7 +3,7 @@ import {ResourceLoader} from "@engine/resources/resourceLoader";
 import {XmlParser} from "@engine/misc/parsers/xml/xmlParser";
 import {Color} from "@engine/renderer/common/color";
 import {EditTextField} from "@engine/renderable/impl/ui/textField/editTextField/editTextField";
-import {FontContextSvgFactory} from "./fontContextSvgFActory";
+import {FontContextSvgFactory} from "./fontContextSvgFactory";
 import {ColorFactory} from "@engine/renderer/common/colorFactory";
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";

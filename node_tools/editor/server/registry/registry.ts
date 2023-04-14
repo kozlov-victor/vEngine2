@@ -21,12 +21,13 @@ export class Registry {
 
     public registerController(c:any) {
         const instance = new c();
-        const meta:{baseUrl:string,methods:IRegistryItem[]} = instance.constructor?.meta;
+        const meta:{baseUrl:string,methods:IRegistryItem[]} = c.meta;
         const baseUrl = meta?.baseUrl ?? '/';
         (meta.methods ?? []).forEach(m=>{
             let url = `/`+(`${baseUrl}/${m.url}`).split('/').filter(it=>!!it).join('/');
             if (!url.endsWith('/')) url = url + '/';
             m.url = url;
+            m.controllerInstance = instance;
             this.registry.push(m);
         });
     }

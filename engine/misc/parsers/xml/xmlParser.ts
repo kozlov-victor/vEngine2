@@ -1,4 +1,4 @@
-import {IXmlTextNode, XmlDocument, XmlNode} from "@engine/misc/parsers/xml/xmlELements";
+import {IXmlTextNode, XmlDocument, XmlNode} from "@engine/misc/parsers/xml/xmlElements";
 import {DebugError} from "@engine/debug/debugError";
 import {IParser} from "@engine/misc/parsers/iParser";
 
@@ -30,24 +30,24 @@ export class XmlParser implements IParser<XmlNode>{
     private preserveWhitespace = false;
     private lowerCase = false;
 
-    private patTag = /([^<]*?)<([^>]+)>/g;
-    private patSpecialTag = /^\s*([!?])/;
-    private patPITag = /^\s*\?/;
-    private patStandardTag = /^\s*(\/?)([\w\-:.]+)\s*([\s\S]*)$/;
-    private patSelfClosing = /\/\s*$/;
-    private patAttrib = new RegExp("([\\w\\-:.]+)\\s*=\\s*([\"'])([^\\2]*?)\\2", "g");
-    private patPINode = /^\s*\?\s*([\w\-:]+)\s*(.*)$/;
-    private patNextClose = /([^>]*?)>/g;
+    private expTag = /([^<]*?)<([^>]+)>/g;
+    private expSpecialTag = /^\s*([!?])/;
+    private expPITag = /^\s*\?/;
+    private expStandardTag = /^\s*(\/?)([\w\-:.]+)\s*([\s\S]*)$/;
+    private expSelfClosing = /\/\s*$/;
+    private expAttrib = new RegExp("([\\w\\-:.]+)\\s*=\\s*([\"'])([^\\2]*?)\\2", "g");
+    private expPINode = /^\s*\?\s*([\w\-:]+)\s*(.*)$/;
+    private expNextClose = /([^>]*?)>/g;
 
-    private patCommentTag = /^\s*!--/;
-    private patEndComment = /--$/;
+    private expCommentTag = /^\s*!--/;
+    private expEndComment = /--$/;
 
-    private patDTDTag = /^\s*!DOCTYPE/;
-    private patInlineDTDNode = /^\s*!DOCTYPE\s+([\w\-:]+)/;
+    private expDTDTag = /^\s*!DOCTYPE/;
+    private expInlineDTDNode = /^\s*!DOCTYPE\s+([\w\-:]+)/;
 
-    private patCDATATag = /^\s*!\s*\[\s*CDATA/;
-    private patEndCDATA = /]]$/;
-    private patCDATANode = /^\s*!\s*\[\s*CDATA\s*\[([^]*)]]/;
+    private expCDATATag = /^\s*!\s*\[\s*CDATA/;
+    private expEndCDATA = /]]$/;
+    private expCDATANode = /^\s*!\s*\[\s*CDATA\s*\[([^]*)]]/;
 
     private static getError(error:IParseError):string {
         // get formatted error
@@ -107,7 +107,7 @@ export class XmlParser implements IParser<XmlNode>{
         let matches:RegExpMatchArray|null = null;
 
         // match each tag, plus preceding text
-        while ( matches = this.patTag.exec(this.text) ) {
+        while ( matches = this.expTag.exec(this.text) ) {
             const before = matches[1];
             let tag = matches[2];
 
@@ -120,12 +120,12 @@ export class XmlParser implements IParser<XmlNode>{
             }
 
             // parse based on tag type
-            if (tag.match(this.patSpecialTag)) {
+            if (tag.match(this.expSpecialTag)) {
                 // special tag
-                if (tag.match(this.patPITag)) tag = this.parsePINode(tag);
-                else if (tag.match(this.patCommentTag)) tag = this.parseCommentNode(tag);
-                else if (tag.match(this.patDTDTag)) tag = this.parseDTDNode(tag);
-                else if (tag.match(this.patCDATATag)) {
+                if (tag.match(this.expPITag)) tag = this.parsePINode(tag);
+                else if (tag.match(this.expCommentTag)) tag = this.parseCommentNode(tag);
+                else if (tag.match(this.expDTDTag)) tag = this.parseDTDNode(tag);
+                else if (tag.match(this.expCDATATag)) {
                     tag = this.parseCDATANode(tag);
                     const textNode:IXmlTextNode = {
                         data: !this.preserveWhitespace ? XmlUtils.trim(XmlUtils.decodeEntities(tag)) : XmlUtils.decodeEntities(tag)
@@ -141,14 +141,14 @@ export class XmlParser implements IParser<XmlNode>{
             } // special tag
             else {
                 // Tag is standard, so parse name and attributes (if any)
-                matches = tag.match(this.patStandardTag);
+                matches = tag.match(this.expStandardTag);
                 if (!matches) {
                     this.throwParseError( "Malformed tag", tag );
                 }
 
-                const closing = matches[1];
-                const nodeName = this.lowerCase ? matches[2].toLowerCase() : matches[2];
-                const attribsRaw = matches[3];
+                const closing = matches?.[1];
+                const nodeName = this.lowerCase ? matches?.[2].toLowerCase() : matches?.[2];
+                const attribsRaw = matches?.[3];
 
                 // If this is a closing tag, make sure it matches its opening tag
                 if (closing) {
@@ -163,14 +163,14 @@ export class XmlParser implements IParser<XmlNode>{
                 else {
                     // Not a closing tag, so parse attributes into hash.  If tag
                     // is self-closing, no recursive parsing is needed.
-                    const selfClosing:boolean = !!attribsRaw.match(this.patSelfClosing);
+                    const selfClosing:boolean = !!attribsRaw.match(this.expSelfClosing);
                     const leaf:XmlNode = new XmlNode();
                     leaf.tagName = nodeName;
                     leaf.parent = branch;
 
                     // parse attributes
-                    this.patAttrib.lastIndex = 0;
-                    while ( matches = this.patAttrib.exec(attribsRaw) ) {
+                    this.expAttrib.lastIndex = 0;
+                    while ( matches = this.expAttrib.exec(attribsRaw) ) {
                         const key:string = this.lowerCase ? matches[1].toLowerCase() : matches[1];
                         leaf.attributes[key] = XmlUtils.decodeEntities( matches[3] );
                     } // foreach attrib
@@ -203,7 +203,7 @@ export class XmlParser implements IParser<XmlNode>{
 
     private throwParseError(key:string, tag:string):never {
         // log error and locate current line number in source XmlParser document
-        const parsedSource:string = this.text.substring(0, this.patTag.lastIndex);
+        const parsedSource:string = this.text.substring(0, this.expTag.lastIndex);
         // eslint-disable-next-line @typescript-eslint/ban-types
         const eolMatch:RegExpMatchArray|null = parsedSource.match(/\n/g);
         let lineNum:number = (eolMatch ? eolMatch.length : 0) + 1;
@@ -232,7 +232,7 @@ export class XmlParser implements IParser<XmlNode>{
 
     private parsePINode(tag:string):string {
         // Parse Processor Instruction Node, e.g. <?xml version="1.0"?>
-        if (!tag.match(this.patPINode)) {
+        if (!tag.match(this.expPINode)) {
             this.throwParseError( "Malformed processor instruction", tag );
         }
         return tag;
@@ -242,10 +242,10 @@ export class XmlParser implements IParser<XmlNode>{
         // Parse Comment Node, e.g. <!-- hello -->
         // eslint-disable-next-line @typescript-eslint/ban-types
         let matches:RegExpMatchArray|null = null;
-        this.patNextClose.lastIndex = this.patTag.lastIndex;
+        this.expNextClose.lastIndex = this.expTag.lastIndex;
 
-        while (!tag.match(this.patEndComment)) {
-            matches = this.patNextClose.exec(this.text);
+        while (!tag.match(this.expEndComment)) {
+            matches = this.expNextClose.exec(this.text);
             if (matches) {
                 tag += '>' + matches[1];
             }
@@ -254,22 +254,22 @@ export class XmlParser implements IParser<XmlNode>{
             }
         }
 
-        this.patTag.lastIndex = this.patNextClose.lastIndex;
+        this.expTag.lastIndex = this.expNextClose.lastIndex;
         return tag;
     }
 
     private parseDTDNode(tag:string):string {
         // Parse Document Type Descriptor Node, e.g. <!DOCTYPE ... >
         //let matches:RegExpExecArray | null = null;
-        if (tag.match(this.patInlineDTDNode)) {
+        if (tag.match(this.expInlineDTDNode)) {
             //console.log('match');
             // Tag is inline, so check for nested nodes.
-            this.patNextClose.lastIndex = this.patTag.lastIndex;
+            this.expNextClose.lastIndex = this.expTag.lastIndex;
 
             if (tag.indexOf('[')>-1) {
                 let matches = null;
                 while (!tag.match(/]/)) {
-                    matches = this.patNextClose.exec(this.text);
+                    matches = this.expNextClose.exec(this.text);
                     if (matches) {
                         tag += '>' + matches[1];
                     }
@@ -277,7 +277,7 @@ export class XmlParser implements IParser<XmlNode>{
                         this.throwParseError( "Unclosed DTD tag", tag );
                     }
                 }
-                this.patTag.lastIndex = this.patNextClose.lastIndex;
+                this.expTag.lastIndex = this.expNextClose.lastIndex;
             }
 
         }
@@ -292,10 +292,10 @@ export class XmlParser implements IParser<XmlNode>{
         // Parse CDATA Node, e.g. <![CDATA[Brooks & Shields]]>
         // eslint-disable-next-line @typescript-eslint/ban-types
         let matches:RegExpMatchArray | null = null;
-        this.patNextClose.lastIndex = this.patTag.lastIndex;
+        this.expNextClose.lastIndex = this.expTag.lastIndex;
 
-        while (!tag.match(this.patEndCDATA)) {
-            matches = this.patNextClose.exec(this.text);
+        while (!tag.match(this.expEndCDATA)) {
+            matches = this.expNextClose.exec(this.text);
             if (matches) {
                 tag += '>' + matches[1];
             }
@@ -304,8 +304,8 @@ export class XmlParser implements IParser<XmlNode>{
             }
         }
 
-        this.patTag.lastIndex = this.patNextClose.lastIndex;
-        matches = tag.match(this.patCDATANode);
+        this.expTag.lastIndex = this.expNextClose.lastIndex;
+        matches = tag.match(this.expCDATANode);
         if (matches) {
             return matches[1];
         }

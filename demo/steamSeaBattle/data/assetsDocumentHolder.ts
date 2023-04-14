@@ -1,11 +1,7 @@
 import * as docDesc from './scenes.xml';
-import {XmlDocument} from "@engine/misc/parsers/xml/xmlELements";
+import {XmlDocument} from "@engine/misc/parsers/xml/xmlElements";
 
 export abstract class AssetsDocumentHolder {
-
-    private constructor(){
-
-    }
 
     private static document:XmlDocument;
 

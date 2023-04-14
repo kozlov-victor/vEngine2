@@ -1,11 +1,10 @@
 import {Game} from "@engine/core/game";
-import {XmlDocument, XmlNode} from "@engine/misc/parsers/xml/xmlELements";
+import {XmlDocument, XmlNode} from "@engine/misc/parsers/xml/xmlElements";
 import {Font} from "@engine/renderable/impl/general/font/font";
 import {FontTypes} from "@engine/renderable/impl/general/font/fontTypes";
+import {DebugError} from "@engine/debug/debugError";
 import ITextureWithId = FontTypes.ITextureWithId;
 import IFontContext = FontTypes.IFontContext;
-import {DebugError} from "@engine/debug/debugError";
-import {isNumber} from "@engine/misc/object";
 
 const querySelector = (doc:XmlDocument, path:string, attrName:string,required:boolean = false):string=>{
     const res:XmlNode = doc.querySelector(path);

@@ -2,7 +2,7 @@ import {Game} from "../core/game";
 import {addUrlParameter, IURLRequest, UrlLoader} from "@engine/resources/urlLoader";
 import {ICubeMapTexture, ITexture} from "@engine/renderer/common/texture";
 import {Base64, URI} from "@engine/core/declarations";
-import type {IXmlNode, XmlDocument, XmlNode} from "@engine/misc/parsers/xml/xmlELements";
+import type {IXmlNode, XmlDocument, XmlNode} from "@engine/misc/parsers/xml/xmlElements";
 import type {Font} from "@engine/renderable/impl/general/font/font";
 import {Sound} from "@engine/media/sound";
 import {ITask, Queue} from "@engine/resources/queue";
