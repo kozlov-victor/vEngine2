@@ -10,11 +10,12 @@ import ICssFontParameters = FontTypes.ICssFontParameters;
 import {ICubeMapTexture, ITexture} from "@engine/renderer/common/texture";
 import {Image} from "@engine/renderable/impl/general/image/image";
 import {Sound} from "@engine/media/sound";
+import {ResourceAutoHolder} from "@engine/resources/resourceAutoHolder";
 
 
 export const Resource = {
     ResourceHolder: ()=>{
-        return <This,Value>(value: undefined, context: ClassFieldDecoratorContext<This,Value>):void => {
+        return <This,Value extends ResourceAutoHolder>(value: undefined, context: ClassFieldDecoratorContext<This,Value>):void => {
             // stub for precompiler only
             throw new DebugError(`something wrong with precompiler for Texture decorator`);
         };
