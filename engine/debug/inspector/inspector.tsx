@@ -30,7 +30,7 @@ const val = (model:any,key:string):string|number|undefined=>{
     else return undefined;
 }
 
-const PropertyPanel = (props:{model:RenderableModel|Layer}&IBaseProps):VirtualNode=>{
+const PropertyPanel = (props:{model:RenderableModel|Layer}&IBaseProps)=>{
     const keyValPair =
         Object.keys(props.model).
         filter(key=>!key.startsWith('_') && !['game'].includes(key)).
@@ -51,7 +51,7 @@ const PropertyPanel = (props:{model:RenderableModel|Layer}&IBaseProps):VirtualNo
     );
 }
 
-const NodeRoot = (props:{nested:boolean,opened:boolean,children?:any[]}&IBaseProps):VirtualNode=>{
+const NodeRoot = (props:{nested:boolean,opened:boolean,children?:any}&IBaseProps)=>{
     const className = `${props.nested?'nested':'root'} ${props.opened?'active':'inactive'}`;
     return (
         <ul className={className}>
@@ -60,7 +60,7 @@ const NodeRoot = (props:{nested:boolean,opened:boolean,children?:any[]}&IBasePro
     );
 }
 
-const NodeLeafs = (props:{tagName:string,model:RenderableModel|Layer}&IBaseProps):VirtualNode=>{
+const NodeLeafs = (props:{tagName:string,model:RenderableModel|Layer}&IBaseProps)=>{
     let opened = stateMap[props.model.id];
     if (props.model.getChildrenCount()===0 && opened===undefined) opened = true;
     opened??=false;
@@ -101,7 +101,7 @@ class InspectorWidget extends VEngineTsxComponent{
         super(new HtmlTsxDOMRenderer());
     }
 
-    render(): VirtualNode {
+    render(): JSX.Element {
         if (!game || !this._shown) return <></>;
         return (
             <>

@@ -45,7 +45,7 @@ class IntroSceneUI extends VEngineTsxComponent {
         });
     }
 
-    public render():VirtualNode {
+    public render() {
         return (
             <>
                 <BgMatrix/>

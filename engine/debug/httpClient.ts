@@ -101,7 +101,7 @@ export namespace HttpClient {
         return promise as Promise<T>;
     };
 
-    export const get = <T>(url:string,data?:IKeyVal<string|number|boolean>,success?:(arg:T)=>void,error?:(opts:{status:number,error:string})=>void,setup?:(xhr:XMLHttpRequest)=>void)=>{
+    export const get = <T>(url:string,data?:IKeyVal<string|number|boolean>,success?:(arg:T)=>void,error?:(opts:{status:number,error:string})=>void,setup?:(xhr:XMLHttpRequest)=>void):Promise<T>=>{
         return request<T>({
             method:'get',
             url,
@@ -112,7 +112,7 @@ export namespace HttpClient {
         });
     };
 
-    export const  post = <T>(url:string,data?:any,success?:(arg:T)=>void,error?:(opts:{status:number,error:string})=>void,setup?:(xhr:XMLHttpRequest)=>void)=>{
+    export const  post = <T>(url:string,data?:any,success?:(arg:T)=>void,error?:(opts:{status:number,error:string})=>void,setup?:(xhr:XMLHttpRequest)=>void):Promise<T>=>{
         return request<T>({
             method:'post',
             url,
@@ -124,7 +124,7 @@ export namespace HttpClient {
         });
     };
 
-    export const  postMultiPart = <T>(url:string,file:File,data:IKeyVal<string|number|boolean>,success?:(arg:T)=>void,error?:(opts:{status:number,error:string})=>void,setup?:(xhr:XMLHttpRequest)=>void)=>{
+    export const  postMultiPart = <T>(url:string,file:File,data:IKeyVal<string|number|boolean>,success?:(arg:T)=>void,error?:(opts:{status:number,error:string})=>void,setup?:(xhr:XMLHttpRequest)=>void):Promise<T>=>{
         const formData = new FormData();
         Object.keys(data).forEach((key)=>{
             formData.append(key,data[key] as string);

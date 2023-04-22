@@ -35,7 +35,7 @@ export class BgMatrix extends BaseTsxComponent {
         },100);
     }
 
-    render(): VirtualNode {
+    render() {
 
         const cells:IPositionableProps[] = [];
         let cnt = 0;

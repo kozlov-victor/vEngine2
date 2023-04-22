@@ -52,7 +52,7 @@ export class MainWidget extends VEngineTsxComponent {
 
     }
 
-    public render():VirtualNode {
+    public render(): JSX.Element {
         return (
             <>
                 <v_textField

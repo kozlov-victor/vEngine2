@@ -74,7 +74,7 @@ export class Widget extends VEngineTsxComponent {
         this.loadingInfo = '';
     }
 
-    render():VirtualNode {
+    render(): JSX.Element {
         return(
             <div className="layout">
                 <div className="up">
@@ -82,7 +82,7 @@ export class Widget extends VEngineTsxComponent {
                     <iframe
                         ref={(el)=>this.frameRef = el}
                         onload={()=>this.onFrameLoaded()}
-                        src={this.selectedIndex!==undefined?'./demo.html?name='+this.allItemNames[this.selectedIndex]:undefined}
+                        src={this.selectedIndex!==undefined?'./demo.html?name='+this.allItemNames[this.selectedIndex]:''}
                         frameBorder="0" id="frame"/>
                 </div>
                 <div className="down" ref={el=>this.scrollableWrapperRef = el}>
@@ -96,7 +96,7 @@ export class Widget extends VEngineTsxComponent {
                                         item.names.map((name)=>{
                                             ind++;
                                             return (
-                                                <li className={ind===this.selectedIndex ? 'active' : undefined}>
+                                                <li className={ind===this.selectedIndex ? 'active' : ''}>
                                                     <div className={((index % 2 === 0) ? 'even' : 'odd')+' ' + 'even_odd'}>
                                                         <a
                                                             className={'selectItem'}

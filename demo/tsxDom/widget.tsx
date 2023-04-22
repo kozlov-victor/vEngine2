@@ -18,7 +18,7 @@ class Component1 extends BaseTsxComponent {
         console.log(this);
     }
 
-    override render(): VirtualNode {
+    override render(): JSX.Element {
         return(
             <div>
                 <div>
@@ -71,7 +71,7 @@ export class Widget extends VEngineTsxComponent {
         this.selected = val;
     }
 
-    render():VirtualNode {
+    render(): JSX.Element {
 
         const style = 'button {margin: 10px}';
         if (this.selected==='1') {

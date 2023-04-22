@@ -16,7 +16,7 @@ export class MainSceneUi extends VEngineTsxComponent {
         super(new VEngineTsxDOMRenderer(game));
     }
 
-    public render():VirtualNode {
+    public render(): JSX.Element {
         const arr:number[] = this.numOfCircles>0?new Array(this.numOfCircles):[];
         arr.fill(0);
         return (

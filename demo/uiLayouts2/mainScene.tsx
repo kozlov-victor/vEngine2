@@ -16,7 +16,7 @@ class SceneUI extends VEngineTsxComponent {
 
     }
 
-    public override render(): VirtualNode {
+    public override render(): JSX.Element {
         return(
             <>
                 <v_linearLayout

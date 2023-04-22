@@ -4,7 +4,7 @@ export interface IBaseProps {
     __id?:number;
 }
 
-export class VirtualNode implements INode{
+export class VirtualNode implements INode, JSX.Element {
 
     public index:number = 0;
     public loopIndex:number = undefined!;

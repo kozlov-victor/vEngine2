@@ -30,7 +30,7 @@ class ResultSceneUI extends VEngineTsxComponent {
         super(new VEngineTsxDOMRenderer(game));
     }
 
-    public override render(): VirtualNode {
+    public override render(): JSX.Element {
         return (
             <>
                 <BgMatrix/>

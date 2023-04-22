@@ -15,7 +15,7 @@ export class MainWidget extends VEngineTsxComponent{
         super(new VEngineTsxDOMRenderer(game));
     }
 
-    public render():VirtualNode {
+    public render(): JSX.Element {
 
         return (
             <v_rectangle

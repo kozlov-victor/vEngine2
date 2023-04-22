@@ -1,6 +1,6 @@
 import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
 
-export class VirtualFragment {
+export class VirtualFragment implements JSX.Element{
 
     public type = 'virtualFragment' as const;
 

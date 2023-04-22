@@ -167,7 +167,7 @@ declare namespace JSX {
         v_animatedTextField:        ITextFieldProps;
         v_editTextField:            IEditTextFieldProps;
         v_scrollableTextField:      ITextFieldProps;
-        v_richTextField:            ITextFieldProps & {richText?:INode[]};
+        v_richTextField:            ITextFieldProps & {richText?:JSX.Element};
         v_button:                   ITextFieldProps;
         v_imageButton:              IImageButtonProps;
         v_checkBox:                 ICheckBoxProps;
@@ -183,4 +183,5 @@ declare namespace JSX {
         v_verticalLayout:           IWidgetContainerProps;
         v_horizontalLayout:         IWidgetContainerProps;
     }
+    export interface Element {}
 }

@@ -1,7 +1,6 @@
 import {VEngineTsxComponent} from "@engine/renderable/tsx/genetic/vEngineTsxComponent";
 import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
 import {HtmlTsxDOMRenderer} from "@engine/renderable/tsx/dom/htmlTsxDOMRenderer";
-import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
 import {ReactiveMethod} from "@engine/renderable/tsx/genetic/reactiveMethod";
 
 
@@ -20,7 +19,7 @@ export class Widget extends VEngineTsxComponent {
     }
 
     @ReactiveMethod()
-    public print(...args:string[]|number[]):void {
+    public print(...args:(string|number)[]):void {
         if (this.lines.length>128) this.lines.shift();
         this.lines.push(args.join(''));
     }
@@ -68,7 +67,7 @@ export class Widget extends VEngineTsxComponent {
         this.valueFromInput = '';
     }
 
-    render():VirtualNode {
+    render(): JSX.Element {
         this.nativeInput = undefined;
         const node =  (
             <>

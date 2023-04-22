@@ -8,8 +8,6 @@ export class MainScene extends Scene {
 
     private surface:DrawingSurface;
 
-    private fnt:Font = Font.fromCssDescription(this.game,{fontFamily:'monospace',fontSize:32});
-
     private renderScene:(session:IDrawingSession)=>void = ():void=>{};
 
     // https://www.dwitter.net/d/25472
@@ -46,7 +44,6 @@ export class MainScene extends Scene {
         };
 
         x.setLineWidth(0);
-        x.setFont(this.fnt);
         x.setPixelPerfect(true);
         x.scale.setXY(2,1);
 

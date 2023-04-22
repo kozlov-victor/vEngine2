@@ -166,7 +166,7 @@ export class WidgetContainer extends MarkableGameObjectContainer implements ICon
         return super.getChildrenCount() - this.INTERNAL_CHILD_OFFSET_INDEX;
     }
 
-    public override getChildAt(index: number): this {
+    public override getChildAt(index: number) {
         return super.getChildAt(index + this.INTERNAL_CHILD_OFFSET_INDEX);
     }
 
@@ -199,8 +199,12 @@ export class WidgetContainer extends MarkableGameObjectContainer implements ICon
             const memoized:RenderableModel = this.getMemoizedView(props.backgroundDisabled);
             if (memoized!==this.backgroundDisabled) this.setBackgroundActive(memoized);
         }
-        if (props.padding && props.padding.length>0) this.setPadding(...props.padding as [number]);
-        if (props.margin && props.margin.length>0) this.setMargin(...props.margin as [number]);
+        if (props.padding && props.padding.length>0) {
+            this.setPadding(props.padding[0],props.padding[1],props.padding[2],props.padding[3]);
+        }
+        if (props.margin && props.margin.length>0) {
+            this.setMargin(props.margin[0],props.margin[1],props.margin[2],props.margin[3]);
+        }
     }
 
     public blur(): void {

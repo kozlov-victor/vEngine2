@@ -18,7 +18,7 @@ class SceneUI extends VEngineTsxComponent {
 
     }
 
-    public override render(): VirtualNode {
+    public override render(): JSX.Element {
         return(
             <>
                 <v_linearLayout size={{width:this.game.size.width,height:this.game.size.height}}>

@@ -93,7 +93,7 @@ class QuizSceneUI extends VEngineTsxComponent {
         return state;
     }
 
-    public override render(): VirtualNode {
+    public override render() {
         return (
             <>
                 <BgMatrix/>

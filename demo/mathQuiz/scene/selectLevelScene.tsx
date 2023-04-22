@@ -28,7 +28,7 @@ class SelectLevelSceneUI extends VEngineTsxComponent {
         super(new VEngineTsxDOMRenderer(game));
     }
 
-    public render(): VirtualNode {
+    public render(): JSX.Element {
         return (
             <>
                 <BgMatrix/>

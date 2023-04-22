@@ -1,7 +1,4 @@
 import {Widget} from "./widget";
-import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
-import {Color} from "@engine/renderer/common/color";
-import {Texture} from "@engine/renderer/webGl/base/texture";
 import {ColorFactory} from "@engine/renderer/common/colorFactory";
 
 const wait = async (time:number)=>{
@@ -15,7 +12,7 @@ export class CommandsAttacher {
     }
 
     private attachCommonCommands() {
-        const print = (...args:string[]|number[])=>{
+        const print = (...args:(string|number)[])=>{
             this.widget.print(...args);
         }
 

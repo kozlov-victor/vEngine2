@@ -76,7 +76,7 @@ const css:string = `
 
 
 
-const prettifyDebugInfo = (debugInfo?:IDebugInfo):Optional<VirtualNode>=>{
+const prettifyDebugInfo = (debugInfo?:IDebugInfo)=>{
     if (!debugInfo) return undefined;
     const strings:string[] = debugInfo.file.split('\n');
     const linesAfter:number = 5;
@@ -118,7 +118,7 @@ export class ErrorWidget extends VEngineTsxComponent {
         this.errors.splice(i,1);
     }
 
-    render():VirtualNode {
+    render(): JSX.Element {
         return (
             <>
                 <style>{css}</style>

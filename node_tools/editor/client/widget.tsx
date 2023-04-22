@@ -106,7 +106,7 @@ export class Widget extends VEngineTsxComponent {
         }
     }
 
-    render(): VirtualNode {
+    render() {
         return (
             <>
                 <Frame title='Files'>

@@ -139,7 +139,7 @@ export class EditTextField extends RichTextField implements IKeyboardFocusable{
         if (this.cursor!==undefined) this.cursor.currentRow = undefined;
     }
 
-    public override setRichText(node: VirtualNode):void {
+    public override setRichText(node: VirtualNode|JSX.Element):void {
         super.setRichText(node);
         if (this.cursor!==undefined) this.cursor.currentRow = undefined;
     }

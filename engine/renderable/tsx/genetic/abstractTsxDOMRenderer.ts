@@ -16,7 +16,7 @@ export abstract class AbstractTsxDOMRenderer<T extends IRealNode> {
     public render(component:VEngineTsxComponent, root:T):VirtualNode{
         component.rootNativeElement = root;
         if (debug) console.log('before render');
-        const newVirtualNode:VirtualNode = component.render();
+        const newVirtualNode = component.render() as VirtualNode;
         const newVirtualNodeChildren:VirtualNode[] = [];
         if (newVirtualNode.type==='virtualFragment') {
             newVirtualNodeChildren.push(...newVirtualNode.children);

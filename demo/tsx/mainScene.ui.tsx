@@ -27,7 +27,7 @@ export class MainSceneUi extends VEngineTsxComponent {
         };
     }
 
-    public render():VirtualNode {
+    public render(): JSX.Element {
         return (
             <>
                 <v_circle

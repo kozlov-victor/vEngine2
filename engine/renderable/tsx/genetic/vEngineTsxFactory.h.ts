@@ -21,7 +21,7 @@ export class VEngineTsxFactory<T> {
         // eslint-disable-next-line @typescript-eslint/ban-types
         props:Record<string, any>|null,
         ...children: VirtualNode[]
-    ):VirtualNode{
+    ):JSX.Element {
         if (props===null) props = {};
 
         const flattened:VirtualNode[] =
@@ -51,7 +51,7 @@ export class VEngineTsxFactory<T> {
             } else {
                 const instance = new (item as any)(props) as BaseTsxComponent;
                 VEngineTsxFactory.components[props.__id] = instance;
-                const node = instance.render();
+                const node = instance.render() as VirtualNode;
                 node.parentComponent = instance;
                 instance.onMounted();
                 return node;

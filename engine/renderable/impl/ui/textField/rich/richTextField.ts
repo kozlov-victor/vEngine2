@@ -20,9 +20,9 @@ export class RichTextField extends ScrollableTextField {
 
     public override readonly type:string = 'RichTextField';
 
-    public setRichText(node:VirtualNode):void{
+    public setRichText(node:VirtualNode|JSX.Element):void{
         const fragments:ITextFragment[] = [];
-        this.traverseNode(node,fragments);
+        this.traverseNode(node as VirtualNode,fragments);
         this._textEx = this.textFragmentToStringEx(fragments);
         this.markAsDirty();
     }
