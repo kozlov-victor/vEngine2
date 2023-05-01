@@ -26,6 +26,11 @@ declare module "xml/xml-loader!*" {
     export = value;
 }
 
+declare module "ls/ls-loader!*" {
+    const value:string[];
+    export = value;
+}
+
 declare module "xml/angelcode-loader!*" {
     import {XmlDocument} from "@engine/misc/parsers/xml/xmlElements";
     const value:XmlDocument;
