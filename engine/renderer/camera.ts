@@ -10,17 +10,11 @@ import {Mat4} from "@engine/misc/math/mat4";
 import {IRevalidatable, ITransformable, IUpdatable, Optional} from "@engine/core/declarations";
 import Mat16Holder = Mat4.Mat16Holder;
 import {Point3d} from "@engine/geometry/point3d";
+import {Vec2} from "@engine/geometry/vec2";
 
 interface ICameraTweenTarget {
     time:number;
     point:Point2d;
-}
-
-const enum DIRECTION_CORRECTION {
-    RIGHT,
-    LEFT,
-    UP,
-    DOWN,
 }
 
 export class Camera implements IUpdatable, ITransformable, IRevalidatable  {
@@ -33,16 +27,12 @@ export class Camera implements IUpdatable, ITransformable, IRevalidatable  {
     public readonly worldTransformMatrix = new Mat16Holder();
 
     private _objFollowTo:Optional<RenderableModel>;
-    private _objFollowToPrevPos = new Point2d();
-    private _directionCorrection:DIRECTION_CORRECTION;
     private _angle:number = 0;
 
     private _rect = new Rect();
     private _cameraShakeTween:Optional<Tween<ICameraTweenTarget>>;
-    private _cameraPosCorrection = {
-        current: new Point2d(),
-        max: new Point2d()
-    };
+    private _cameraPointFollowTo = new Point2d();
+    private _objFollowToPrevPos = new Point2d();
 
     constructor(protected game:Game,private scene:Scene){
         const observer = ()=>this.worldTransformDirty = true;
@@ -74,8 +64,11 @@ export class Camera implements IUpdatable, ITransformable, IRevalidatable  {
             return;
         }
         this._objFollowTo = gameObject;
-        this.pos.setXY(this._objFollowTo.pos.x - this.game.width/2, this._objFollowTo.pos.y - this.game.height/2);
-        this._objFollowToPrevPos.setFrom(this.pos);
+        this.pos.setXY(
+            this._objFollowTo.pos.x - this.game.width/2,
+            this._objFollowTo.pos.y - this.game.height/2
+        );
+        this._cameraPointFollowTo.setFrom(this.pos);
         this.revalidate();
     }
 
@@ -89,58 +82,55 @@ export class Camera implements IUpdatable, ITransformable, IRevalidatable  {
             const h = this.game.size.height;
             const wDiv2 = w / 2;
             const hDiv2 = h / 2;
-            const wDiv3 = w / 3;
-            const hDiv3 = h / 3;
-
-            if ((gameObject.pos.x - this._objFollowToPrevPos.x)>0) this._directionCorrection = DIRECTION_CORRECTION.RIGHT;
-            else if ((gameObject.pos.x - this._objFollowToPrevPos.x)<0) this._directionCorrection = DIRECTION_CORRECTION.LEFT;
-
-            if ((gameObject.pos.y - this._objFollowToPrevPos.y)>0) this._directionCorrection = DIRECTION_CORRECTION.DOWN;
-            else if ((gameObject.pos.y - this._objFollowToPrevPos.y)<0) this._directionCorrection = DIRECTION_CORRECTION.UP;
-
-            this._objFollowToPrevPos.setFrom(gameObject.pos);
-
-            if (this._directionCorrection === DIRECTION_CORRECTION.RIGHT)
-                this._cameraPosCorrection.max.x=wDiv3;
-            else if (this._directionCorrection === DIRECTION_CORRECTION.LEFT)
-                this._cameraPosCorrection.max.x=-wDiv3;
-            else if (this._directionCorrection === DIRECTION_CORRECTION.DOWN)
-                this._cameraPosCorrection.max.y=hDiv3;
-            else if (this._directionCorrection === DIRECTION_CORRECTION.UP)
-                this._cameraPosCorrection.max.y=-hDiv3;
-
-            const currCorrection =
-                this._cameraPosCorrection.max.
-                subtract(this._cameraPosCorrection.current).
-                multiply(0.01);
-
-            this._cameraPosCorrection.current.add(currCorrection).truncate();
+            const wDiv4 = w / 4;
+            const hDiv4 = h / 4;
+            const pointFollowTo = this._cameraPointFollowTo;
             const scene = this.scene;
+            const base = 0;
 
-            let newPosX =
-                this.pos.x +
-                (gameObject.pos.x - wDiv2 + this._cameraPosCorrection.current.x - this.pos.x) *
-                Camera.FOLLOW_FACTOR.x;
-            let newPosY =
-                this.pos.y +
-                (gameObject.pos.y - hDiv2 + this._cameraPosCorrection.current.y - this.pos.y) *
-                Camera.FOLLOW_FACTOR.y;
-
-            if (newPosX < 0) {
-                newPosX = 0;
+            if ((gameObject.pos.x - this._objFollowToPrevPos.x)>base) { // character is going to right side
+                pointFollowTo.x = gameObject.pos.x  - wDiv2 + wDiv4;
+                this._objFollowToPrevPos.x = gameObject.pos.x;
             }
-            if (newPosY < 0) {
-                newPosY = 0;
+            else if ((gameObject.pos.x - this._objFollowToPrevPos.x)<-base) { // character is going to left side
+                pointFollowTo.x = gameObject.pos.x  - wDiv2 - wDiv4;
+                this._objFollowToPrevPos.x = gameObject.pos.x;
             }
 
-            if (newPosX > scene.size.width - w) {
-                newPosX = scene.size.width - w;
+            if ((gameObject.pos.y - this._objFollowToPrevPos.y)>base) { // character is going downside
+                pointFollowTo.y = gameObject.pos.y - hDiv2 + hDiv4;
+                this._objFollowToPrevPos.y = gameObject.pos.y;
             }
-            if (newPosY > scene.size.height - h) {
-                newPosY = scene.size.height - h;
+            else if ((gameObject.pos.y - this._objFollowToPrevPos.y)<-base) { // character is going upside
+                pointFollowTo.y = gameObject.pos.y - hDiv2 - hDiv4;
+                this._objFollowToPrevPos.y = gameObject.pos.y;
             }
 
-            this.pos.setXY(newPosX,newPosY);
+            const distanceSqToNewPoint = Vec2.distanceSquared(this.pos,pointFollowTo);
+            const maxMoveFroOneFrame = 5;
+            if (distanceSqToNewPoint>maxMoveFroOneFrame) {
+                const angle = Vec2.angleTo(this.pos,pointFollowTo);
+                pointFollowTo.x = this.pos.x+maxMoveFroOneFrame*Math.cos(angle);
+                pointFollowTo.y = this.pos.y+maxMoveFroOneFrame*Math.sin(angle);
+            }
+
+            if (pointFollowTo.x < 0) {
+                pointFollowTo.x = 0;
+            }
+            if (pointFollowTo.y < 0) {
+                pointFollowTo.y = 0;
+            }
+
+            if (pointFollowTo.x > scene.size.width - w) {
+                pointFollowTo.x = scene.size.width - w;
+            }
+            if (pointFollowTo.y > scene.size.height - h) {
+                pointFollowTo.y = scene.size.height - h;
+            }
+
+
+            this.pos.setFrom(pointFollowTo);
+
 
         }
         if (this._cameraShakeTween!==undefined) this._cameraShakeTween.update();
