@@ -27,7 +27,7 @@ import {SceneLifeCycleState} from "@engine/scene/sceneLifeCicleState";
 import {Size} from "@engine/geometry/size";
 import {RenderingObjectStack} from "@engine/scene/internal/renderingObjectStack";
 import {RenderingSessionInfo} from "@engine/scene/internal/renderingSessionInfo";
-import {Camera} from "@engine/renderer/camera";
+import {Camera} from "@engine/renderer/camera/camera";
 import {TaskQueue} from "@engine/resources/taskQueue";
 import {KeyboardEventEmitterDelegate} from "@engine/delegates/eventDelegates/keyboardEventEmitterDelegate";
 import {MouseEventEmitterDelegate} from "@engine/delegates/eventDelegates/mouseEventEmitterDelegate";

@@ -1,7 +1,7 @@
 import {Game} from "@engine/core/game";
 import {Image} from "@engine/renderable/impl/general/image/image";
 import {DebugError} from "@engine/debug/debugError";
-import {Camera} from "@engine/renderer/camera";
+import {Camera} from "@engine/renderer/camera/camera";
 import {ISize, Size} from "@engine/geometry/size";
 import {Optional} from "@engine/core/declarations";
 import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";

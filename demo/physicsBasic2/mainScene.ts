@@ -3,7 +3,7 @@ import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {ArcadePhysicsSystem} from "@engine/physics/arcade/arcadePhysicsSystem";
 import {ARCADE_RIGID_BODY_TYPE, ArcadeRigidBody} from "@engine/physics/arcade/arcadeRigidBody";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
-import {Camera} from "@engine/renderer/camera";
+import {Camera} from "@engine/renderer/camera/camera";
 import * as doc from "./level.xml";
 import {Color} from "@engine/renderer/common/color";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable/draggable";
@@ -17,8 +17,6 @@ export class MainScene extends Scene {
     private player: Rectangle;
 
     public override onReady():void {
-
-        Camera.FOLLOW_FACTOR.y = 0.06;
 
         const physicsSystem: ArcadePhysicsSystem = this.game.getPhysicsSystem() as ArcadePhysicsSystem;
 
