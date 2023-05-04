@@ -1,8 +1,39 @@
 import {IScaleStrategy} from "@engine/renderer/abstract/scaleStrategy/interface/IScaleStrategy";
 import {Game} from "@engine/core/game";
-import {Size} from "@engine/geometry/size";
+import {ISize, Size} from "@engine/geometry/size";
 import {Device} from "@engine/misc/device";
 import {AbstractRenderer} from "@engine/renderer/abstract/abstractRenderer";
+import {IPoint2d} from "@engine/geometry/point2d";
+
+export class ScaleHelper {
+
+    public static calcMetrixToFitRectToWindow(rect:ISize, window:ISize):{scale:IPoint2d,pos:IPoint2d,size:ISize} {
+        const rectRatio:number = rect.height / rect.width;
+        const windowRatio:number = window.height / window.width;
+        let width:number;
+        let height:number;
+        if (windowRatio < rectRatio) {
+            height = window.height;
+            width = height / rectRatio;
+        } else {
+            width = window.width;
+            height = width * rectRatio;
+        }
+
+        return {
+            scale: {
+                x: width / rect.width,
+                y: height / rect.height,
+            },
+            pos: {
+                x: (window.width - width)/2,
+                y: (window.height - height)/2,
+            },
+            size: {width,height},
+        }
+    }
+
+}
 
 export class ScaleStrategyFitCanvasToScreen implements IScaleStrategy {
 
@@ -10,30 +41,17 @@ export class ScaleStrategyFitCanvasToScreen implements IScaleStrategy {
 
         const [innerWidth,innerHeight] = Device.getScreenResolution();
 
-        const canvasRatio:number = game.size.height / game.size.width;
-        const windowRatio:number = innerHeight / innerWidth;
-        let width:number;
-        let height:number;
+        const metrics =
+            ScaleHelper.calcMetrixToFitRectToWindow(game.size,{width:innerWidth,height:innerHeight});
 
-        if (windowRatio < canvasRatio) {
-            height = innerHeight;
-            width = height / canvasRatio;
-        } else {
-            width = innerWidth;
-            height = width * canvasRatio;
-        }
+        game.scale.setFrom(metrics.scale);
+        game.pos.setFrom(metrics.pos);
 
-        game.scale.setXY(width / game.size.width, height / game.size.height);
-        game.pos.setXY(
-            (innerWidth - width) / 2,
-            (innerHeight - height) / 2
-        );
-
-        container.style.width = width + 'px';
-        container.style.height = height + 'px';
+        container.style.width = metrics.size.width + 'px';
+        container.style.height = metrics.size.height + 'px';
         container.style.marginTop = `${game.pos.y}px`;
 
-        (renderer.viewPortSize as Size).setWH(width,height);
+        (renderer.viewPortSize as Size).setFrom(metrics.size);
     }
 
 }

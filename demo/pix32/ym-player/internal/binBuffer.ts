@@ -16,6 +16,7 @@ export class BinBuffer {
     }
 
     public static isBitSet(nBit:number,n:number):boolean {
+        if (nBit<0) throw new Error(`wrong nBit value: ${nBit}`);
         const mask:number = 1<<nBit;
         return (n & mask) > 0;
     }
