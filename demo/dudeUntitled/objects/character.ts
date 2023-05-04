@@ -45,6 +45,8 @@ export class Character implements Injectable {
             ignoreOverlapWithGroupNames: ['bump'],
         }));
 
+        (window as any).hero = characterImage;
+
         characterImage.appendTo(scene);
         scene.camera.followTo(characterImage);
 

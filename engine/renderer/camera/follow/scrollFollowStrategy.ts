@@ -49,7 +49,6 @@ export class ScrollFollowStrategy implements ICameraFollowStrategy {
             }
             else if ((targetObject.pos.x - this._objFollowToPrevPos.x)<-cameraToleranceVal) { // camera moves left
                 posCorrection.x = targetObject.pos.x - wDiv2 - wDiv3;
-                this._objFollowToPrevPos.setFrom(targetObject.pos);
                 this._objFollowToPrevPos.x = targetObject.pos.x;
             }
 

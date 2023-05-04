@@ -12,7 +12,6 @@ export class MainScene extends Scene {
 
     public override onReady():void {
 
-        Camera.FOLLOW_FACTOR.y = 0;
 
         const physicsSystem:ArcadePhysicsSystem = this.game.getPhysicsSystem();
 
