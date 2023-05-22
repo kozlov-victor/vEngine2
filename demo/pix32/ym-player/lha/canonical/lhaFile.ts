@@ -1,8 +1,9 @@
-import {BinBuffer} from "../../internal/binBuffer";
+
 import {LhaEntry} from "./lhaEntry";
 import {LhaEntryReader} from "./lhaEntryReader";
 import {LhaException} from "./lhaException";
 import {LhaDecoderInputStream} from "./lhaDecoderInputStream";
+import {BinBuffer} from "@engine/misc/parsers/bin/binBuffer";
 
 
 export class LhaFile {

@@ -1,9 +1,9 @@
 import {ISize} from "@engine/geometry/size";
-import {BinBuffer} from "../pix32/ym-player/internal/binBuffer";
 import {DataTexture} from "@engine/renderer/webGl/base/dataTexture";
 import {Game} from "@engine/core/game";
 import {Image} from "@engine/renderable/impl/general/image/image";
 import {ColorFactory} from "@engine/renderer/common/colorFactory";
+import {BinBuffer} from "@engine/misc/parsers/bin/binBuffer";
 
 const leftPad = (s:string,toLength:number):string=>{
     let pad = "";
