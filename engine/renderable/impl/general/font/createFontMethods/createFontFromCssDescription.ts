@@ -1,5 +1,4 @@
 import {Game} from "@engine/core/game";
-import {FontContextCanvasFactory} from "@engine/renderable/impl/general/font/factory/fontContextCanvasFactory";
 import {Font} from "@engine/renderable/impl/general/font/font";
 import {FontTypes} from "@engine/renderable/impl/general/font/fontTypes";
 import {
@@ -17,6 +16,8 @@ export const createFontFromCssDescription = (game:Game,params:ICssFontParameters
     const fontSize:number = params.fontSize ?? DEFAULT_FONT_PARAMS.fontSize;
 
     const cssFontDescription:string = fontAsCss(fontSize,fontFamily);
+
+    const {FontContextCanvasFactory} = require("@engine/renderable/impl/general/font/factory/fontContextCanvasFactory");
 
     const fontFactory = new FontContextCanvasFactory(game,cssFontDescription);
     return fontFactory.createFont(

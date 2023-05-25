@@ -5,7 +5,7 @@ module.exports = function(content) {
     const resourceDirPath = this.context;
     const resourceDirName = resourceDirPath.replace(/\\/g, '/').split('/').pop();
     fs.readdirSync(resourceDirPath).forEach(f=>{
-        if (f==='index.js') return;
+        if (f==='index.js' || f==='index.ts') return;
         ls.push(`./${resourceDirName}/${f}`);
     });
 

@@ -2,49 +2,44 @@ import {FontContextAbstractFactory} from "@engine/renderable/impl/general/font/f
 import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
 import {EvenOddCompositionFilter} from "@engine/renderer/webGl/filters/composition/evenOddCompositionFilter";
 import {Game} from "@engine/core/game";
-import {XmlDocument, XmlNode} from "@engine/misc/parsers/xml/xmlElements";
 import {ISize} from "@engine/geometry/size";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Polygon} from "@engine/renderable/impl/geometry/polygon";
 import {Color} from "@engine/renderer/common/color";
 import {Font} from "@engine/renderable/impl/general/font/font";
 import {Optional} from "@engine/core/declarations";
+import {ITtfFontData, TtfFont} from "@engine/misc/parsers/ttf/ttfFont";
+import {
+    CYR_CHARS,
+    LAT_CHARS,
+    STANDARD_SYMBOLS
+} from "@engine/renderable/impl/general/font/createFontMethods/params/createFontParams";
 
 const DEFAULT_SIZE = 10;
 const PAD = 4;
 
-// https://convertio.co/ttf-svg/
-
-export class FontContextSvgFactory extends FontContextAbstractFactory<DrawingSurface> {
+export class FontContextTtfFactory extends FontContextAbstractFactory<DrawingSurface> {
 
     private evenOddCompositionFilter = new EvenOddCompositionFilter(this.game);
     private readonly _fontHeight:number;
     private readonly scale:number;
-    private readonly glyphs:({node:XmlNode,glyph:string})[];
+    private font: ITtfFontData;
 
-    constructor(game:Game, private fontDocument:XmlDocument,fontSize:number) {
+    constructor(game:Game, private buff:ArrayBuffer,fontSize:number) {
         super(game);
-        this.glyphs =
-            this.fontDocument.getElementsByTagName('glyph').map(it=>{
-                return {
-                    node: it,
-                    glyph: FontContextSvgFactory.hexEntityToStr(it.getAttribute('unicode')),
-                }
-            });
+        const symbols = (LAT_CHARS+STANDARD_SYMBOLS+CYR_CHARS).split('');
+        this.font = TtfFont.parse(this.buff,symbols);
+        console.log(this.font);
+        if (this.font.glyphs.length===0) throw new Error(`no glyphs in font`);
         this.fontSize = fontSize;
-        const polygons:Polygon[] = [];
-        'Height!'.split('').forEach(c=>{
-            const p = this.findLetterPolygons(c);
-            if (p) polygons.push(...p);
-        });
-        const maxLetterHeight = Math.max(...polygons.map(it=>it.size.height));
+        const maxLetterHeight = this.font.yMax;
         this.scale = 1/maxLetterHeight*fontSize;
-        this._fontHeight = maxLetterHeight * this.scale + PAD;
-        polygons.forEach(p => p.destroy());
+        this._fontHeight = maxLetterHeight * this.scale + 2*PAD;
     }
 
-    public override createFont(standardChars: readonly string[], extraChars: readonly string[], fontFamily: string, fontSize: number): Font {
-        const font = super.createFont(standardChars, extraChars, fontFamily, fontSize);
+    public override createFont(_: readonly string[], __: readonly string[], ___: string, fontSize: number): Font {
+        const chars = this.font.glyphs.map(it=>it.code);
+        const font = super.createFont(chars, [], this.font.fontFamily, fontSize);
         this.evenOddCompositionFilter.destroy();
         return font;
     }
@@ -69,7 +64,9 @@ export class FontContextSvgFactory extends FontContextAbstractFactory<DrawingSur
     }
 
     protected override drawLetter(context: DrawingSurface, letter: string, x: number, y: number): void {
-        const polygons = this.findLetterPolygons(letter);
+        const polygons =
+            this.findLetterPolygons(letter) ??
+            this.findLetterPolygons(this.font.glyphs[0].code);
         if (!polygons) return;
         polygons.forEach(p=>{
             p.scale.setXY(this.scale,-this.scale);
@@ -87,17 +84,17 @@ export class FontContextSvgFactory extends FontContextAbstractFactory<DrawingSur
     }
 
     private findLetterPolygons(letter:string):Optional<Polygon[]> {
-        const glyph = this.glyphs.find(it=>it.glyph===letter);
+        const glyph = this.font.glyphs.find(it=>it.code===letter);
         if (!glyph) return undefined;
-        const path = glyph.node.getAttribute('d');
+        const path = glyph.path;
         if (!path) return undefined;
         return Polygon.fromMultiCurveSvgPath(this.game,path);
     }
 
     protected override getLetterWidth(letter: string): number {
-        const glyph = this.glyphs.find(it => it.glyph === letter);
+        const glyph = this.font.glyphs.find(it => it.code === letter);
         if (!glyph) return DEFAULT_SIZE;
-        const path = glyph.node.getAttribute('d');
+        const path = glyph.path;
         if (!path) return DEFAULT_SIZE;
         const polygons = Polygon.fromMultiCurveSvgPath(this.game, path);
         if (!polygons.length) return DEFAULT_SIZE;

@@ -483,7 +483,10 @@ export class SvgElementRenderer {
 
     private renderUse(parentView:RenderableModel,el:XmlNode):Optional<RenderableModel>{
         let idRef:string = el.getAttribute('xlink:href');
-        if (idRef.indexOf('#')!==0) throw new DebugError(`wrong reference: ${idRef}`);
+        if (idRef.indexOf('#')!==0) {
+            console.error(`wrong reference: ${idRef}`);
+            return undefined;
+        }
         idRef = idRef.substr(1);
         const refElement:XmlNode = this.document.getElementById(idRef)!;
         if (refElement.tagName==='symbol') { // render symbol as group

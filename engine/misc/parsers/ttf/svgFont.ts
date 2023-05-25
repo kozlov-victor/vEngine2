@@ -42,7 +42,7 @@ export class SVGFont {
         return sb.toString();
     }
 
-    protected static getContourAsSVGPathData(glyph: Glyph, startIndex: number, count: number):string {
+    private static getContourAsSVGPathData(glyph: Glyph, startIndex: number, count: number):string {
 
         // If this is a single point on it's own, we can't do anything with it
         if (glyph.getPoint(startIndex).endOfContour) {
@@ -129,7 +129,7 @@ export class SVGFont {
         const unitsPerEm = font.getHeadTable().unitsPerEm;
         const panose = font.getOS2Table().panose.toString();
         const ascent = font.getHheaTable().ascender;
-        const descent = font.getHheaTable().ascender;
+        const descent = font.getHheaTable().descender;
         const baseline = 0; // bit 0 of head.flags will indicate if this is true
 
         //      <!ELEMENT font-face (%descTitleMetadata;,font-face-src?,definition-src?) >
@@ -196,6 +196,7 @@ export class SVGFont {
      * @param id An XML id attribute for the font element
      * @param first The first character in the output range
      * @param last The last character in the output range
+     * @param autoRange
      * @param forceAscii Force the use of the ASCII character map
      */
     protected static writeFontAsSVGFragment(ps: PrintStream, font: Font, id: string, first: number, last: number, autoRange: boolean, forceAscii: boolean):void {
@@ -345,7 +346,7 @@ export class SVGFont {
         // ps.println("</font>");
     }
 
-    protected static _getGlyphAsSVG(
+    private static _getGlyphAsSVG(
             font: Font,
             glyph: Glyph,
             glyphIndex: number,
@@ -415,7 +416,7 @@ export class SVGFont {
         return sb.toString();
     }
 
-    protected static getGlyphAsSVG(
+    private static getGlyphAsSVG(
             font: Font,
             glyph: Glyph,
             glyphIndex: number,
@@ -641,10 +642,9 @@ export class SVGFont {
         const id = '';
         const low:number = undefined!;
         const high:number = undefined!;
-        const autoRange:boolean = false;
-        const ascii:boolean = false;
-        const testCard:boolean = false;
-
+        const autoRange = false;
+        const ascii = false;
+        const testCard = false;
 
         // Write the various parts of the SVG file
         SVGFont.writeSvgBegin(ps);

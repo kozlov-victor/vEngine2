@@ -7,6 +7,7 @@ import {XmlParser} from "@engine/misc/parsers/xml/xmlParser";
 
 // https://www.javatpoint.com/svg-tutorial
 const imageUrls:string[] = [
+    'asf-logo', 'anne', 'barChart', 'batik3D',
     'transforms', 'scales', 'rotate','skew','gradientDemo',
     'linGradient', 'linGradient2','radialGradient','radialGradient2','gradient3',
     'WhatsApp',
