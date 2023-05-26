@@ -41,17 +41,11 @@ export class FontContextTtfFactory extends FontContextAbstractFactory<DrawingSur
     public override createFont(_: readonly string[], __: readonly string[], ___: string, fontSize: number): Font {
         const chars = this.font.glyphs.map(it=>it.code);
         const font = super.createFont(chars, [], this.font.fontFamily, fontSize);
+        this.font.kerning.forEach(kern=>{
+            font.context.kerning[`${kern.left}${kern.right}`] = kern.value * this.scale;
+        });
         this.evenOddCompositionFilter.destroy();
         return font;
-    }
-
-    public static hexEntityToStr(str:string = ''):string{
-        if (str.indexOf('&#x')===0) {
-            str = str.replace('&#x','');
-            return String.fromCharCode(Number.parseInt(str,16));
-        } else {
-            return str;
-        }
     }
 
     protected override createTexturePage(size: ISize): DrawingSurface {

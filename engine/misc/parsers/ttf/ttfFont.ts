@@ -20,6 +20,12 @@ export interface IGlyph {
     width: number;
 }
 
+export interface IKerning {
+    left: string;
+    right: string;
+    value: number;
+}
+
 export interface ITtfFontData {
     fontFamily: string;
     glyphs: IGlyph[];
@@ -27,6 +33,7 @@ export interface ITtfFontData {
     yMax: number;
     ascent: number;
     descent: number;
+    kerning:IKerning[];
 }
 
 export class TtfFont {
@@ -49,6 +56,7 @@ export class TtfFont {
         const descent = font.getHheaTable().descender;
         const horiz_advance_x = font.getOS2Table().xAvgCharWidth;
         const glyphs:IGlyph[] = [];
+        const kerning:IKerning[] = [];
 
         // Decide upon a cmap table to use for our character to glyph look-up
         let cmapFmt:CmapFormat;
@@ -162,7 +170,11 @@ export class TtfFont {
                     const kpair = kst.getKerningPair(i);
                     // check if left and right are both in our glyph set
                     if (glyphSet.has(kpair.left) && glyphSet.has(kpair.right)) {
-                        //ps.println(this.getKerningPairAsSVG(kpair, post)); // todo
+                        const kern: IKerning = {
+                            left: String.fromCharCode(kpair.left),
+                            right: String.fromCharCode(kpair.right),
+                            value: kpair.value,
+                        }
                     }
                 }
             }
@@ -177,6 +189,7 @@ export class TtfFont {
             yMax,
             ascent,
             descent,
+            kerning,
         }
 
     }

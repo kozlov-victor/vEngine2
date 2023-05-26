@@ -7,7 +7,7 @@ import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {ResourceLoader} from "@engine/resources/resourceLoader";
-import * as files from "ls/ls-loader!./fonts";
+import * as files from "ls/ls-loader!./fonts?sort=name&asc=0";
 
 export class MainScene extends Scene {
 
