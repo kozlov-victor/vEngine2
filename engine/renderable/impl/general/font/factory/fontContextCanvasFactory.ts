@@ -48,6 +48,10 @@ export class FontContextCanvasFactory extends FontContextAbstractFactory<CanvasR
         return ~~this.measureCanvas.measureText(letter).width;
     }
 
+    protected getAdvancedWidth(letter: string): number {
+        return this.getLetterWidth(letter);
+    }
+
     protected override texturePageToTexture(page: CanvasRenderingContext2D): ITexture {
         // const img = document.createElement('img');
         // img.src = page.canvas.toDataURL();

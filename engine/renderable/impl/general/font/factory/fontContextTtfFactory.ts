@@ -15,15 +15,16 @@ import {
     STANDARD_SYMBOLS
 } from "@engine/renderable/impl/general/font/createFontMethods/params/createFontParams";
 
+// https://learn.microsoft.com/en-us/typography/opentype/spec/ttch01
+
 const DEFAULT_SIZE = 10;
-const PAD = 4;
 
 export class FontContextTtfFactory extends FontContextAbstractFactory<DrawingSurface> {
 
     private evenOddCompositionFilter = new EvenOddCompositionFilter(this.game);
     private readonly _fontHeight:number;
     private readonly scale:number;
-    private font: ITtfFontData;
+    private readonly font: ITtfFontData;
 
     constructor(game:Game, private buff:ArrayBuffer,fontSize:number) {
         super(game);
@@ -32,9 +33,9 @@ export class FontContextTtfFactory extends FontContextAbstractFactory<DrawingSur
         console.log(this.font);
         if (this.font.glyphs.length===0) throw new Error(`no glyphs in font`);
         this.fontSize = fontSize;
-        const maxLetterHeight = this.font.yMax;
+        const maxLetterHeight = this.font.unitsPerEm;
         this.scale = 1/maxLetterHeight*fontSize;
-        this._fontHeight = maxLetterHeight * this.scale + 2*PAD;
+        this._fontHeight = maxLetterHeight * this.scale;
     }
 
     public override createFont(_: readonly string[], __: readonly string[], ___: string, fontSize: number): Font {
@@ -65,13 +66,13 @@ export class FontContextTtfFactory extends FontContextAbstractFactory<DrawingSur
 
     protected override drawLetter(context: DrawingSurface, letter: string, x: number, y: number): void {
         const polygons =
-            this.findLetterPolygons(letter) ??
-            this.findLetterPolygons(this.font.glyphs[0].code);
+            this.getLetterPolygons(letter) ??
+            this.getLetterPolygons(this.font.glyphs[0].code);
         if (!polygons) return;
         polygons.forEach(p=>{
             p.scale.setXY(this.scale,-this.scale);
             p.pos.x = x;
-            p.pos.y = y + this.getFontHeight() - PAD;
+            p.pos.y = y + this.getFontHeight() + this.font.descent*this.scale;
             p.fillColor = Color.BLACK;
             p.filters = [this.evenOddCompositionFilter];
             context.drawModel(p);
@@ -83,7 +84,7 @@ export class FontContextTtfFactory extends FontContextAbstractFactory<DrawingSur
         return this._fontHeight;
     }
 
-    private findLetterPolygons(letter:string):Optional<Polygon[]> {
+    private getLetterPolygons(letter:string):Optional<Polygon[]> {
         const glyph = this.font.glyphs.find(it=>it.code===letter);
         if (!glyph) return undefined;
         const path = glyph.path;
@@ -100,7 +101,14 @@ export class FontContextTtfFactory extends FontContextAbstractFactory<DrawingSur
         if (!polygons.length) return DEFAULT_SIZE;
         const res = Math.max(DEFAULT_SIZE,...polygons.map(it=>it.size.width*this.scale));
         polygons.forEach(p => p.destroy());
-        return res + PAD;
+        return res;
+    }
+
+    protected getAdvancedWidth(letter: string): number {
+        const glyph = this.font.glyphs.find(it => it.code === letter);
+        if (!glyph) return DEFAULT_SIZE;
+        if (!glyph.width) return DEFAULT_SIZE;
+        return glyph.width*this.scale;
     }
 
 }

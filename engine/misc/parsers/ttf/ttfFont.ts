@@ -13,9 +13,11 @@ import {StringBuffer} from "@engine/misc/parsers/ttf/misc/stringBuffer";
 import {SvgConstants} from "@engine/misc/parsers/ttf/constants/svgConstants";
 import {toInt} from "@engine/misc/parsers/ttf/misc/toInt";
 
+
 export interface IGlyph {
     code: string;
     path: string;
+    width: number;
 }
 
 export interface ITtfFontData {
@@ -23,6 +25,8 @@ export interface ITtfFontData {
     glyphs: IGlyph[];
     unitsPerEm: number;
     yMax: number;
+    ascent: number;
+    descent: number;
 }
 
 export class TtfFont {
@@ -118,7 +122,7 @@ export class TtfFont {
 
 
             // Include our requested range
-            const glyphSet = new Set();
+            const glyphSet = new Set<number>();
 
             let rangeToRender:number[];
             if (symbolsToRender) rangeToRender = symbolsToRender.map(it=>it.charCodeAt(0));
@@ -171,6 +175,8 @@ export class TtfFont {
             glyphs,
             unitsPerEm,
             yMax,
+            ascent,
+            descent,
         }
 
     }
@@ -293,6 +299,7 @@ export class TtfFont {
                 }
             }
             parsedGlyph.path = pathAccum.toString();
+            parsedGlyph.width = glyph.advanceWidth;
         }
 
         return parsedGlyph;

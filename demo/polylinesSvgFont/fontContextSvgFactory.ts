@@ -106,4 +106,8 @@ export class FontContextSvgFactory extends FontContextAbstractFactory<DrawingSur
         return res + PAD;
     }
 
+    protected getAdvancedWidth(letter: string): number {
+        return this.getLetterWidth(letter);
+    }
+
 }
