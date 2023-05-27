@@ -14,7 +14,6 @@ export class MainScene extends Scene {
 
     public override onReady():void {
 
-
         let i = -1;
         let lastTf:TextField;
         let text = 'vEngine supports native TTF, 123456, Кирилиця';

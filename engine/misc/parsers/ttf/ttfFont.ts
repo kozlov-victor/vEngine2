@@ -175,6 +175,7 @@ export class TtfFont {
                             right: String.fromCharCode(kpair.right),
                             value: kpair.value,
                         }
+                        kerning.push(kern);
                     }
                 }
             }
