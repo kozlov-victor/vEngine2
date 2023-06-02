@@ -1,8 +1,5 @@
 import {Scene} from "@engine/scene/scene";
-import {VEngineTsxComponent} from "@engine/renderable/tsx/genetic/vEngineTsxComponent";
 import {Game} from "@engine/core/game";
-import {VEngineTsxDOMRenderer} from "@engine/renderable/tsx/vEngine/vEngineTsxDOMRenderer";
-import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
 import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 import {Assets} from "../asset/assets";
@@ -29,16 +26,17 @@ import {Flip3dHorizontalInTransition} from "@engine/scene/transition/flip/flip3d
 import {QuizScene} from "./quizScene";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
+import {VEngineRootComponent} from "@engine/renderable/tsx/vEngine/vEngineRootComponent";
 
-class IntroSceneUI extends VEngineTsxComponent {
+class IntroSceneUI extends VEngineRootComponent {
 
     private textField:AnimatedTextField;
     private started:boolean = false;
     private readonly classLevel:number;
     private assets:Assets = Assets.getInstance();
 
-    constructor(private game:Game,private level:number) {
-        super(new VEngineTsxDOMRenderer(game));
+    constructor(game:Game,private level:number) {
+        super(game);
         this.classLevel = this.level===0?6:9;
         game.getCurrentScene().keyboardEventHandler.once(KEYBOARD_EVENTS.keyPressed, e=>{
             this.start().catch(e=>console.log(e));

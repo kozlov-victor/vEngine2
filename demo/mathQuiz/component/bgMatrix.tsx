@@ -1,4 +1,3 @@
-import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
 import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
 import {BaseTsxComponent} from "@engine/renderable/tsx/genetic/baseTsxComponent";
 import {Game} from "@engine/core/game";

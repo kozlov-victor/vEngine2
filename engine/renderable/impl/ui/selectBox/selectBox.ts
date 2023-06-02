@@ -109,15 +109,14 @@ export class SelectBox extends VerticalList {
 
     public override setProps(props:ISelectBoxProps<any>):void {
         super.setProps(props);
-        if (props.data!==undefined && this.getOptions()!==props.data) {
+        if (props.data && this.getOptions()!==props.data) {
             const renderItemFn =
                 props.renderItem===undefined?undefined:
                 (item:any):WidgetContainer=> {
-                    const node:VirtualNode = props.renderItem!(item) as VirtualNode;
+                    const node = props.renderItem!(item) as VirtualNode;
                     const VEngineElementCreator =
-                        // eslint-disable-next-line @typescript-eslint/no-var-requires
-                        require('@engine/renderable/tsx/vEngine/vEngineElementCreator').VEngineElementCreator;
-                    const model:WidgetContainer =
+                        require('@engine/renderable/tsx/vEngine/internal/vEngineElementCreator').VEngineElementCreator;
+                    const model =
                         VEngineElementCreator.getCreatedInstance().createElementByTagName(node) as WidgetContainer;
                     VEngineElementCreator.getCreatedInstance().setProps(model,node);
                     return model;

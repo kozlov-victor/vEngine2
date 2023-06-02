@@ -1,7 +1,7 @@
 import {DebugError} from "@engine/debug/debugError";
 import {Color, IColorJSON} from "@engine/renderer/common/color";
 
-const NAMED_COLOR_TABLE:Record<string, `#${string}`> =
+const NAMED_COLOR_TABLE:Readonly<Record<string, `#${string}`>> =
     {
         aliceblue: "#f0f8ff",
         antiquewhite: "#faebd7",
@@ -28,7 +28,7 @@ const NAMED_COLOR_TABLE:Record<string, `#${string}`> =
         darkcyan: "#008b8b",
         darkgoldenrod: "#b8860b",
         gray: "#808080",
-        grey: "#808080", // alias for "gray"
+        grey: "#808080", // alias
         darkgray: "#a9a9a9",
         darkgreen: "#006400",
         darkkhaki: "#bdb76b",
@@ -72,6 +72,7 @@ const NAMED_COLOR_TABLE:Record<string, `#${string}`> =
         lightcyan: "#e0ffff",
         lightgoldenrodyellow: "#fafad2",
         lightgrey: "#d3d3d3",
+        lightgray: "#d3d3d3", // alias
         lightgreen: "#90ee90",
         lightpink: "#ffb6c1",
         lightsalmon: "#ffa07a",

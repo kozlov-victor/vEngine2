@@ -1,20 +1,14 @@
 import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
-import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
-import {VEngineTsxComponent} from "@engine/renderable/tsx/genetic/vEngineTsxComponent";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
-import {VEngineTsxDOMRenderer} from "@engine/renderable/tsx/vEngine/vEngineTsxDOMRenderer";
-import {Game} from "@engine/core/game";
 import {ReactiveMethod} from "@engine/renderable/tsx/genetic/reactiveMethod";
 import {IObjectMouseEvent} from "@engine/control/mouse/mousePoint";
+import {VEngineRootComponent} from "@engine/renderable/tsx/vEngine/vEngineRootComponent";
 
 
-export class MainSceneUi extends VEngineTsxComponent {
+export class MainSceneUi extends VEngineRootComponent {
 
     private numOfCircles = 1;
 
-    constructor(private game:Game) {
-        super(new VEngineTsxDOMRenderer(game));
-    }
 
     public render(): JSX.Element {
         const arr:number[] = this.numOfCircles>0?new Array(this.numOfCircles):[];

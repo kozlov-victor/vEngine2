@@ -17,6 +17,7 @@ export abstract class FontContextAbstractFactory<T> {
 
 
     protected abstract getLetterWidth(letter:string):number;
+    protected abstract getAdvancedWidth(letter:string):number;
     protected abstract getFontHeight():number;
     protected abstract createTexturePage(size:ISize):T;
     protected abstract texturePageToTexture(page:T):ITexture;
@@ -49,7 +50,7 @@ export abstract class FontContextAbstractFactory<T> {
 
     private putCharOnContext(char:string):void {
         const textWidth:number = this.getLetterWidth(char);
-        const textWidthPlusPadding:number = textWidth + 2 * this.SYMBOL_PADDING;
+        const textWidthPlusPadding:number = this.getAdvancedWidth(char) + 2 * this.SYMBOL_PADDING;
         if (textWidthPlusPadding === 0) return;
         if (this.currX + textWidthPlusPadding > this.WIDTH) {
             this.currX = 0;

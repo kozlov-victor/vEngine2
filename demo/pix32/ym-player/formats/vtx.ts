@@ -1,6 +1,7 @@
-import {BinBuffer} from "../internal/binBuffer";
+
 import {LhaReader} from "../lha/light/lhaDecoderLight";
 import {AbstractChipTrack} from "../abstract/abstractChipTrack";
+import {BinBuffer} from "@engine/misc/parsers/bin/binBuffer";
 
 
 export class Vtx extends AbstractChipTrack {

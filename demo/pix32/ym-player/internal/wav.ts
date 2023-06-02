@@ -1,10 +1,10 @@
-import {BinBuffer} from "./binBuffer";
+import {BinBuffer} from "@engine/misc/parsers/bin/binBuffer";
 
 export class Wave {
 
     public static encodeWAV(samples:number[],sampleRate:number):Blob {
 
-        const binBuffer:BinBuffer = new BinBuffer(44 + samples.length * 2);
+        const binBuffer = new BinBuffer(44 + samples.length * 2);
         binBuffer.writeString('RIFF');
         binBuffer.writeUInt32(32 + samples.length * 2, true);
         binBuffer.writeString('WAVE');

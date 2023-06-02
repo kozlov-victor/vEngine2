@@ -2,8 +2,7 @@
 // https://github.com/carter-thaxton/midi-file/blob/master/lib/midi-parser.js
 // https://github.com/Tonejs/Midi/blob/master/src/Midi.ts
 
-
-import {BinBuffer} from "../../../../pix32/ym-player/internal/binBuffer";
+import {BinBuffer} from "@engine/misc/parsers/bin/binBuffer";
 
 interface IHeader {
     format: number;

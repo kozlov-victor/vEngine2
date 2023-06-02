@@ -1,11 +1,8 @@
 import {Scene} from "@engine/scene/scene";
-import {VEngineTsxComponent} from "@engine/renderable/tsx/genetic/vEngineTsxComponent";
-import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
 import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
 import {Assets} from "../asset/assets";
 import {waitFor} from "../helper";
 import {Game} from "@engine/core/game";
-import {VEngineTsxDOMRenderer} from "@engine/renderable/tsx/vEngine/vEngineTsxDOMRenderer";
 import {BgMatrix} from "../component/bgMatrix";
 import {Color} from "@engine/renderer/common/color";
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
@@ -20,14 +17,15 @@ import {Flip3dVerticalOutTransition} from "@engine/scene/transition/flip/flip3dT
 import {ColorFactory} from "@engine/renderer/common/colorFactory";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
+import {VEngineRootComponent} from "@engine/renderable/tsx/vEngine/vEngineRootComponent";
 
 
-class ResultSceneUI extends VEngineTsxComponent {
+class ResultSceneUI extends VEngineRootComponent {
 
     private assets:Assets = Assets.getInstance();
 
-    constructor(private game:Game, private correct:number, private total:number) {
-        super(new VEngineTsxDOMRenderer(game));
+    constructor(game:Game, private correct:number, private total:number) {
+        super(game);
     }
 
     public override render(): JSX.Element {

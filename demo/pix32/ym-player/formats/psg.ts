@@ -1,5 +1,6 @@
 import {AbstractChipTrack, tFrame} from "../abstract/abstractChipTrack";
-import {BinBuffer} from "../internal/binBuffer";
+import {BinBuffer} from "@engine/misc/parsers/bin/binBuffer";
+
 
 export class Psg extends AbstractChipTrack {
 

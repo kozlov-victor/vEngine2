@@ -1,14 +1,13 @@
-import {VEngineTsxComponent} from "@engine/renderable/tsx/genetic/vEngineTsxComponent";
-import {IBaseProps, VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
-import {HtmlTsxDOMRenderer} from "@engine/renderable/tsx/dom/htmlTsxDOMRenderer";
+import {IBaseProps} from "@engine/renderable/tsx/genetic/virtualNode";
 import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
-import {HTMLElementWrap} from "@engine/renderable/tsx/dom/HTMLElementWrap";
 import {Game} from "@engine/core/game";
 import {ReactiveMethod} from "@engine/renderable/tsx/genetic/reactiveMethod";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Layer} from "@engine/scene/layer";
 import {createDraggableElement, init} from "@engine/debug/inspector/helpers";
 import {isArray, isNumber, isString} from "@engine/misc/object";
+import {DomRootComponent} from "@engine/renderable/tsx/dom/domRootComponent";
+import {HTMLElementWrap} from "@engine/renderable/tsx/dom/internal/HTMLElementWrap";
 
 
 const game:Game = (window as any).game;
@@ -93,13 +92,10 @@ const NodeLeafs = (props:{tagName:string,model:RenderableModel|Layer}&IBaseProps
 };
 
 
-class InspectorWidget extends VEngineTsxComponent{
+class InspectorWidget extends DomRootComponent{
 
     private _shown:boolean = true;
 
-    constructor() {
-        super(new HtmlTsxDOMRenderer());
-    }
 
     render(): JSX.Element {
         if (!game || !this._shown) return <></>;

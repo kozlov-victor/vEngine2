@@ -1,11 +1,8 @@
 import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
-import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
-import {VEngineTsxComponent} from "@engine/renderable/tsx/genetic/vEngineTsxComponent";
 import {ChildComponent} from "./childComponent";
 import {BtnComponent} from "./btnComponent";
-import {Game} from "@engine/core/game";
-import {VEngineTsxDOMRenderer} from "@engine/renderable/tsx/vEngine/vEngineTsxDOMRenderer";
 import {ReactiveMethod} from "@engine/renderable/tsx/genetic/reactiveMethod";
+import {VEngineRootComponent} from "@engine/renderable/tsx/vEngine/vEngineRootComponent";
 
 interface IState {
     circles:{radius:number}[];
@@ -13,7 +10,7 @@ interface IState {
     btnRemove: {height:number};
 }
 
-export class MainWidget extends VEngineTsxComponent {
+export class MainWidget extends VEngineRootComponent {
 
     private state:IState = {
         circles : [
@@ -24,9 +21,6 @@ export class MainWidget extends VEngineTsxComponent {
         btnRemove: {height:10},
     };
 
-    constructor(private game:Game) {
-        super(new VEngineTsxDOMRenderer(game));
-    }
 
     public render(): JSX.Element {
         return (

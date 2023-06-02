@@ -1,6 +1,6 @@
 import {AbstractElementCreator} from "@engine/renderable/tsx/genetic/abstractElementCreator";
-import {HTMLElementWrap} from "@engine/renderable/tsx/dom/HTMLElementWrap";
 import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
+import {HTMLElementWrap} from "@engine/renderable/tsx/dom/internal/HTMLElementWrap";
 
 const ELEMENT_PROPERTIES = ['value','checked','selected','focus','disabled','readonly'];
 const SPECIAL_ATTRIBUTES = ['children','__id'];

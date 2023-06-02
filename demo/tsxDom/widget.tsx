@@ -1,9 +1,8 @@
-import {VEngineTsxComponent} from "@engine/renderable/tsx/genetic/vEngineTsxComponent";
 import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
-import {HtmlTsxDOMRenderer} from "@engine/renderable/tsx/dom/htmlTsxDOMRenderer";
 import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
 import {ReactiveMethod} from "@engine/renderable/tsx/genetic/reactiveMethod";
 import {BaseTsxComponent} from "@engine/renderable/tsx/genetic/baseTsxComponent";
+import {DomRootComponent} from "@engine/renderable/tsx/dom/domRootComponent";
 
 class Component1 extends BaseTsxComponent {
 
@@ -38,13 +37,13 @@ const Button = (props:{onclick:()=>void,children?:VirtualNode[],__id?:number})=>
     );
 };
 
-export class Widget extends VEngineTsxComponent {
+export class Widget extends DomRootComponent {
 
     private items:{number:number}[] = [];
     private selected:string = '1';
 
     constructor() {
-        super(new HtmlTsxDOMRenderer());
+        super();
         this.add();
         this.add();
         this.add();

@@ -1,5 +1,6 @@
-import {BinBuffer} from "../../../../../../demo/pix32/ym-player/internal/binBuffer";
+
 import {FBXData, FBXNode, FBXProperty} from "@engine/renderable/impl/3d/fbxParser/_internal/types";
+import {BinBuffer} from "@engine/misc/parsers/bin/binBuffer";
 
 // based on https://github.com/picode7/fbx-parser/
 

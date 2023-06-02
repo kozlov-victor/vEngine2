@@ -1,6 +1,7 @@
-import {BinBuffer} from "../internal/binBuffer";
+
 import {AbstractChipTrack} from "../abstract/abstractChipTrack";
 import {LhaReader} from "../lha/light/lhaDecoderLight";
+import {BinBuffer} from "@engine/misc/parsers/bin/binBuffer";
 
 const LEONARD = '!LeOnArD!' as const;
 const END = 'End!' as const;
@@ -14,7 +15,7 @@ export class Ym extends AbstractChipTrack {
 
     constructor(arr:number[]|ArrayBuffer) {
         super();
-        const bb:BinBuffer = new BinBuffer(arr);
+        const bb = new BinBuffer(arr);
         if (bb.readString(2)==='YM') { // this is uncompressed file
             bb.resetPointer();
             this.buffer = bb;

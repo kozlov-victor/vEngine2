@@ -1,11 +1,8 @@
 import {Scene} from "@engine/scene/scene";
-import {VEngineTsxComponent} from "@engine/renderable/tsx/genetic/vEngineTsxComponent";
-import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
 import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
 import {Assets} from "../asset/assets";
 import {waitFor, waitForKey} from "../helper";
 import {Game} from "@engine/core/game";
-import {VEngineTsxDOMRenderer} from "@engine/renderable/tsx/vEngine/vEngineTsxDOMRenderer";
 import {BgMatrix} from "../component/bgMatrix";
 import {Color} from "@engine/renderer/common/color";
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
@@ -26,9 +23,10 @@ import {Flip3dHorizontalInTransition} from "@engine/scene/transition/flip/flip3d
 import {ColorFactory} from "@engine/renderer/common/colorFactory";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
+import {VEngineRootComponent} from "@engine/renderable/tsx/vEngine/vEngineRootComponent";
 
 
-class QuizSceneUI extends VEngineTsxComponent {
+class QuizSceneUI extends VEngineRootComponent {
 
     private currentButton:0|1|2|3|undefined = undefined;
     private answerSelected:boolean = false;
@@ -55,8 +53,8 @@ class QuizSceneUI extends VEngineTsxComponent {
         return rect;
     })();
 
-    constructor(private game:Game, level:number) {
-        super(new VEngineTsxDOMRenderer(game));
+    constructor(game:Game, level:number) {
+        super(game);
         this.quizRunner = new QuizRunner(DATA(),level);
         this.nextQuestion().catch(e=>console.log(e));
     }

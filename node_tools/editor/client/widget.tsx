@@ -1,13 +1,11 @@
-import {VEngineTsxComponent} from "@engine/renderable/tsx/genetic/vEngineTsxComponent";
-import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
 import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
-import {HtmlTsxDOMRenderer} from "@engine/renderable/tsx/dom/htmlTsxDOMRenderer";
 import {ReactiveMethod} from "@engine/renderable/tsx/genetic/reactiveMethod";
 import {HttpClient} from "@engine/debug/httpClient";
 import {Frame} from "./components/frame";
 import {StatusBar} from "./components/statusBar";
+import {DomRootComponent} from "@engine/renderable/tsx/dom/domRootComponent";
 
-export class Widget extends VEngineTsxComponent {
+export class Widget extends DomRootComponent {
 
     private folder:string = '';
     private padding = 2;
@@ -22,7 +20,7 @@ export class Widget extends VEngineTsxComponent {
     };
 
     constructor() {
-        super(new HtmlTsxDOMRenderer());
+        super();
         this.loadInitialData().
         then(()=>{
             return HttpClient.post('/main/cleanUp')

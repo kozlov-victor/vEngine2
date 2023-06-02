@@ -1,21 +1,18 @@
 import {Scene} from "@engine/scene/scene";
-import {VEngineTsxComponent} from "@engine/renderable/tsx/genetic/vEngineTsxComponent";
 import {Game} from "@engine/core/game";
-import {VEngineTsxDOMRenderer} from "@engine/renderable/tsx/vEngine/vEngineTsxDOMRenderer";
-import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
 import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 import {Assets} from "./assets";
 import {ReactiveMethod} from "@engine/renderable/tsx/genetic/reactiveMethod";
 import {AlignTextContentHorizontal, AlignTextContentVertical} from "@engine/renderable/impl/ui/textField/textAlign";
+import {DomRootComponent} from "@engine/renderable/tsx/dom/domRootComponent";
 
-class SceneUI extends VEngineTsxComponent {
+class SceneUI extends DomRootComponent {
 
     private result:string = 'text...';
 
     constructor(private game: Game,private assets:Assets) {
-        super(new VEngineTsxDOMRenderer(game));
-
+        super();
     }
 
     public override render(): JSX.Element {
