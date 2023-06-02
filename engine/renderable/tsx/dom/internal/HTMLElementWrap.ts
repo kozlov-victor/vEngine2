@@ -1,5 +1,5 @@
 import {IRealNode} from "@engine/renderable/tsx/genetic/realNode";
-import {ElementFactory} from "@engine/renderable/tsx/dom/domElementCreator";
+import {ElementFactory} from "@engine/renderable/tsx/dom/internal/domElementCreator";
 
 
 export class HTMLElementWrap implements IRealNode {

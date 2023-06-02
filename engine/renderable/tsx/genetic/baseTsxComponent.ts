@@ -1,4 +1,3 @@
-import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
 
 export abstract class BaseTsxComponent implements JSX.Element {
 

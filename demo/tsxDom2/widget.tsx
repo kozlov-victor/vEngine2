@@ -1,10 +1,9 @@
-import {VEngineTsxComponent} from "@engine/renderable/tsx/genetic/vEngineTsxComponent";
 import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
-import {HtmlTsxDOMRenderer} from "@engine/renderable/tsx/dom/htmlTsxDOMRenderer";
 import {ReactiveMethod} from "@engine/renderable/tsx/genetic/reactiveMethod";
+import {DomRootComponent} from "@engine/renderable/tsx/dom/domRootComponent";
 
 
-export class Widget extends VEngineTsxComponent {
+export class Widget extends DomRootComponent {
 
     private lines:string[] = [];
     private isInputMode:boolean = false;
@@ -12,11 +11,6 @@ export class Widget extends VEngineTsxComponent {
     private resolveInputPromise:(str:string)=>void;
     private nativeInput:HTMLInputElement|undefined;
     private error:any;
-
-    constructor() {
-        super(new HtmlTsxDOMRenderer());
-
-    }
 
     @ReactiveMethod()
     public print(...args:(string|number)[]):void {

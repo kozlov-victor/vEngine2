@@ -1,10 +1,7 @@
-import {VEngineTsxComponent} from "@engine/renderable/tsx/genetic/vEngineTsxComponent";
 import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
-import {HtmlTsxDOMRenderer} from "@engine/renderable/tsx/dom/htmlTsxDOMRenderer";
-import {HTMLElementWrap} from "@engine/renderable/tsx/dom/HTMLElementWrap";
-import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
-import {Optional} from "@engine/core/declarations";
 import {ReactiveMethod} from "@engine/renderable/tsx/genetic/reactiveMethod";
+import {DomRootComponent} from "@engine/renderable/tsx/dom/domRootComponent";
+import {HTMLElementWrap} from "@engine/renderable/tsx/dom/internal/HTMLElementWrap";
 
 interface IDebugInfo {
     file:string;
@@ -100,13 +97,10 @@ const prettifyDebugInfo = (debugInfo?:IDebugInfo)=>{
     );
 };
 
-export class ErrorWidget extends VEngineTsxComponent {
+class ErrorWidget extends DomRootComponent {
 
     private errors:IErrorInfo[] = [];
 
-    constructor() {
-        super(new HtmlTsxDOMRenderer());
-    }
 
     @ReactiveMethod()
     public addError(err:IErrorInfo):void{

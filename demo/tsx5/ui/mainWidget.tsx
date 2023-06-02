@@ -1,8 +1,5 @@
 import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
-import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
-import {VEngineTsxComponent} from "@engine/renderable/tsx/genetic/vEngineTsxComponent";
 import {Game} from "@engine/core/game";
-import {VEngineTsxDOMRenderer} from "@engine/renderable/tsx/vEngine/vEngineTsxDOMRenderer";
 import {ResourceHolder} from "../resource/resourceHolder";
 import {
     AlignTextContentHorizontal,
@@ -18,9 +15,10 @@ import {IChangeEditTextFieldEvent} from "@engine/renderable/impl/ui/textField/ed
 import {IChangeSelectBoxEvent} from "@engine/renderable/impl/ui/selectBox/selectBoxEvents";
 import {ReactiveMethod} from "@engine/renderable/tsx/genetic/reactiveMethod";
 import {ColorFactory} from "@engine/renderer/common/colorFactory";
+import {VEngineRootComponent} from "@engine/renderable/tsx/vEngine/vEngineRootComponent";
 
 
-export class MainWidget extends VEngineTsxComponent {
+export class MainWidget extends VEngineRootComponent {
 
     private calculator:Calculator = new Calculator();
 
@@ -42,8 +40,8 @@ export class MainWidget extends VEngineTsxComponent {
     private editedText:string = 'text';
     private listData:({index:number})[] = [];
 
-    constructor(private game:Game, private resourceHolder:ResourceHolder) {
-        super(new VEngineTsxDOMRenderer(game));
+    constructor(game:Game, private resourceHolder:ResourceHolder) {
+        super(game);
         this.refs.radioGroup = new RadioButtonGroup();
 
         for (let i=0;i<120;i++) {

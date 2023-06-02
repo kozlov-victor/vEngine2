@@ -1,9 +1,7 @@
-import {VEngineTsxComponent} from "@engine/renderable/tsx/genetic/vEngineTsxComponent";
 import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
-import {HtmlTsxDOMRenderer} from "@engine/renderable/tsx/dom/htmlTsxDOMRenderer";
 import {HttpClient} from "@engine/debug/httpClient";
-import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
 import {ReactiveMethod} from "@engine/renderable/tsx/genetic/reactiveMethod";
+import {DomRootComponent} from "@engine/renderable/tsx/dom/domRootComponent";
 
 
 interface IItem {
@@ -11,7 +9,7 @@ interface IItem {
     names: string[];
 }
 
-export class Widget extends VEngineTsxComponent {
+export class Widget extends DomRootComponent {
 
     private loadingInfo:string = '';
     private selectedIndex: number;
@@ -23,7 +21,7 @@ export class Widget extends VEngineTsxComponent {
     private allItemNames:string[] = [];
 
     constructor() {
-        super(new HtmlTsxDOMRenderer());
+        super();
         this.loadList().then(_=>{
             this.items.forEach(item=>{
                 item.names.forEach(name=>{

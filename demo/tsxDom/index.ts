@@ -1,5 +1,6 @@
-import {HTMLElementWrap} from "@engine/renderable/tsx/dom/HTMLElementWrap";
+
 import {Widget} from "./widget";
+import {HTMLElementWrap} from "@engine/renderable/tsx/dom/internal/HTMLElementWrap";
 
 const root = document.createElement('div');
 root.id = 'root';

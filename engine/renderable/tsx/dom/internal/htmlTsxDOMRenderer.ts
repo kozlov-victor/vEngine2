@@ -1,6 +1,7 @@
 import {AbstractTsxDOMRenderer} from "@engine/renderable/tsx/genetic/abstractTsxDOMRenderer";
-import {DomElementCreator} from "@engine/renderable/tsx/dom/domElementCreator";
-import {HTMLElementWrap} from "@engine/renderable/tsx/dom/HTMLElementWrap";
+import {DomElementCreator} from "@engine/renderable/tsx/dom/internal/domElementCreator";
+import {HTMLElementWrap} from "@engine/renderable/tsx/dom/internal/HTMLElementWrap";
+
 
 
 export class HtmlTsxDOMRenderer extends AbstractTsxDOMRenderer<HTMLElementWrap> {

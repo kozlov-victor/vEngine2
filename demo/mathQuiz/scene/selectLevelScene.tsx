@@ -1,9 +1,6 @@
 import {Scene} from "@engine/scene/scene";
-import {VEngineTsxComponent} from "@engine/renderable/tsx/genetic/vEngineTsxComponent";
 import {Game} from "@engine/core/game";
 import {Assets} from "../asset/assets";
-import {VEngineTsxDOMRenderer} from "@engine/renderable/tsx/vEngine/vEngineTsxDOMRenderer";
-import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
 import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
 import {BgMatrix} from "../component/bgMatrix";
 import {AnswerButton} from "../component/answerButton";
@@ -17,15 +14,16 @@ import {IntroScene} from "./introScene";
 import {Flip3dVerticalInTransition} from "@engine/scene/transition/flip/flip3dTransition";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
+import {VEngineRootComponent} from "@engine/renderable/tsx/vEngine/vEngineRootComponent";
 
-class SelectLevelSceneUI extends VEngineTsxComponent {
+class SelectLevelSceneUI extends VEngineRootComponent {
 
     private currentButton:number|undefined = undefined;
     private answerSelected:boolean = false;
 
 
-    constructor(private game:Game) {
-        super(new VEngineTsxDOMRenderer(game));
+    constructor(game: Game) {
+        super(game);
     }
 
     public render(): JSX.Element {

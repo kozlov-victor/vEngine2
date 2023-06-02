@@ -1,6 +1,7 @@
-import {HTMLElementWrap} from "@engine/renderable/tsx/dom/HTMLElementWrap";
+
 import {Widget} from "./widget";
 import {CommandsAttacher} from "./commandsAttacher";
+import {HTMLElementWrap} from "@engine/renderable/tsx/dom/internal/HTMLElementWrap";
 
 
 const style = document.createElement('style');
