@@ -29,12 +29,12 @@ export class MainScene extends Scene {
                 const targetCnt = 0;
                 const f = new BrightnessColorMatrixFilter(this.game);
                 f.setBrightness(b);
-                this.keyboardEventHandler.onKeyHold(KEYBOARD_KEY.ADD, _=>{
+                this.keyboardEventHandler.onKeyHold(KEYBOARD_KEY.NUMPAD_PLUS, _=>{
                     if (cnt!==targetCnt) return;
                     b+=0.1;
                     f.setBrightness(b);
                 });
-                this.keyboardEventHandler.onKeyHold(KEYBOARD_KEY.SUBTRACT, _=>{
+                this.keyboardEventHandler.onKeyHold(KEYBOARD_KEY.NUMPAD_MINUS, _=>{
                     if (cnt!==targetCnt) return;
                     b-=0.1;
                     f.setBrightness(b);
@@ -46,12 +46,12 @@ export class MainScene extends Scene {
                 const f = new SaturationColorMatrixFilter(this.game);
                 const targetCnt = 1;
                 f.setSaturation(s);
-                this.keyboardEventHandler.onKeyHold(KEYBOARD_KEY.ADD, _=>{
+                this.keyboardEventHandler.onKeyHold(KEYBOARD_KEY.NUMPAD_PLUS, _=>{
                     if (cnt!==targetCnt) return;
                     s+=0.1;
                     f.setSaturation(s);
                 });
-                this.keyboardEventHandler.onKeyHold(KEYBOARD_KEY.SUBTRACT, _=>{
+                this.keyboardEventHandler.onKeyHold(KEYBOARD_KEY.NUMPAD_MINUS, _=>{
                     if (cnt!==targetCnt) return;
                     s-=0.1;
                     f.setSaturation(s);
@@ -63,12 +63,12 @@ export class MainScene extends Scene {
                 const f = new ContrastColorMatrixFilter(this.game);
                 const targetCnt = 2;
                 f.setContrast(c);
-                this.keyboardEventHandler.onKeyHold(KEYBOARD_KEY.ADD, _=>{
+                this.keyboardEventHandler.onKeyHold(KEYBOARD_KEY.NUMPAD_PLUS, _=>{
                     if (cnt!==targetCnt) return;
                     c+=0.1;
                     f.setContrast(c);
                 });
-                this.keyboardEventHandler.onKeyHold(KEYBOARD_KEY.SUBTRACT, _=>{
+                this.keyboardEventHandler.onKeyHold(KEYBOARD_KEY.NUMPAD_MINUS, _=>{
                     if (cnt!==targetCnt) return;
                     c-=0.1;
                     f.setContrast(c);

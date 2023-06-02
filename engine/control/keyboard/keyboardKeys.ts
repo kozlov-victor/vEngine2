@@ -53,8 +53,10 @@ export const enum KEYBOARD_KEY {
     HOME = 36,
     END = 35,
     TAB = 9,
-    ADD = 107,
-    SUBTRACT = 109,
+    NUMPAD_PLUS = 107,
+    NUMPAD_MINUS = 109,
+    PLUS = 187,
+    MINUS = 189,
 
     PAGE_UP = 33,
     PAGE_DOWN = 34,
@@ -96,6 +98,7 @@ export const enum KEYBOARD_KEY {
     F12 = 123,
 
     BACK_QUOTE = 192, // ё
+    BACKSLASH = 220,
 
     SOFT_RIGHT = -1,
     SOFT_LEFT = -2,
@@ -103,5 +106,6 @@ export const enum KEYBOARD_KEY {
     END_CALL = 95,
     STAR = 170,
     HASH = 163,
+    SLASH = 191,
 
 }

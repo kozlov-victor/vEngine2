@@ -15,6 +15,7 @@ import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleG
 import {ReleaseableEntity} from "@engine/misc/releaseableEntity";
 import {TaskQueue} from "@engine/resources/taskQueue";
 import {noop} from "@engine/misc/object";
+import {EasingBezier} from "@engine/misc/easing/functions/bezier";
 
 const POOL_SIZE:number = 128;
 
@@ -588,8 +589,8 @@ abstract class TimelineKey extends ReleaseableEntity{
             return (EasingQuart.InOut(t, this.c1, this.c2, 1.0));
         } else if (this.curveType === 'QUINTIC') {
             return (EasingQuint.InOut(t, this.c1, this.c2, this.c3));
-        } else if (this.curveType === 'BEZIER') { // todo
-            return (cubic(0.0, this.c1, this.c2, 1.0, t));
+        } else if (this.curveType === 'BEZIER') {
+            return (EasingBezier(t, this.c1, this.c2, this.c3, this.c4));
         } else throw new DebugError(`unsupported curve type: ${this.curveType}`);
 
     }

@@ -57,7 +57,7 @@ export class MainScene extends Scene {
 
         loadNextFont(1).then();
         this.keyboardEventHandler.on(KEYBOARD_EVENTS.keyPressed, e=>{
-            if (e.button===KEYBOARD_KEY.ADD) loadNextFont(1).then();
+            if (e.button===KEYBOARD_KEY.NUMPAD_PLUS) loadNextFont(1).then();
         });
 
     }
