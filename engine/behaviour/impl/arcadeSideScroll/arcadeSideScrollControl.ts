@@ -13,6 +13,15 @@ import {
 import {IRectJSON} from "@engine/geometry/rect";
 import {TileMap} from "@engine/renderable/impl/general/tileMap/tileMap";
 
+export interface IUpdateParams {
+    runAnimation?: AbstractFrameAnimation<IRectJSON>;
+    idleAnimation?: AbstractFrameAnimation<IRectJSON>;
+    jumpAnimation?: AbstractFrameAnimation<IRectJSON>;
+    fireAnimation?:AbstractFrameAnimation<IRectJSON>;
+    climbVerticalAnimation?:AbstractFrameAnimation<IRectJSON>;
+    climbHorizontalAnimation?:AbstractFrameAnimation<IRectJSON>;
+}
+
 interface IParams {
     velocity: number;
     jumpVelocity: number;
@@ -188,6 +197,14 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
                 this.parameters.jumpAnimation?.play();
             }
         }
+    }
+
+    public setFireAnimation(an:AbstractFrameAnimation<any>) {
+        if (this.parameters.fireAnimation) {
+            this.gameObject.removeFrameAnimation(this.parameters.fireAnimation);
+        }
+        this.parameters.fireAnimation = an;
+        this.gameObject.addFrameAnimation(this.parameters.fireAnimation);
     }
 
     private init():void {

@@ -2,7 +2,7 @@ import {Wave} from "../../pix32/ym-player/internal/wav";
 import {CHANNEL_PRESET, IMidiJson, INTERNAL_MIDI_COMMAND, IWaveFormItem, SAMPLE} from "./internal/types";
 import {Instrument} from "./internal/instrument";
 import {Oscillator} from "./internal/oscillator";
-import {MIDI_NOTE_TO_FREQUENCY_TABLE, wait} from "./internal/consts";
+import {wait} from "./internal/consts";
 import {PlayingContext} from "./internal/playingContext";
 import {AdsrForm} from "./internal/adsrForm";
 import {TrackFromJsonSetter} from "./internal/parser/trackFromJsonSetter";
@@ -70,7 +70,7 @@ export class MidiTracker {
 
     private playingContext:PlayingContext;
 
-    public async play1():Promise<void> {
+    public async play():Promise<void> {
 
         await this.playingContext?.stop();
 

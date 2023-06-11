@@ -8,6 +8,7 @@ import {
 import {Image} from "@engine/renderable/impl/general/image/image";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Point2d} from "@engine/geometry/point2d";
+import {removeFromArray} from "@engine/misc/object";
 
 
 export class AnimatedImage extends Image implements ICloneable<AnimatedImage>{
@@ -37,6 +38,10 @@ export class AnimatedImage extends Image implements ICloneable<AnimatedImage>{
         this._frameAnimations.push(fa);
         fa._target = this;
         fa.revalidate();
+    }
+
+    public removeFrameAnimation(fa:AbstractFrameAnimation<any>) {
+        removeFromArray(this._frameAnimations,it=>it===fa);
     }
 
     public getCurrentFrameAnimation():Optional<AbstractFrameAnimation<any>>{

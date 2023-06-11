@@ -32,6 +32,8 @@ export class Character implements Injectable {
     @Inject(AnimatedTileMap) private readonly tileMap:AnimatedTileMap;
     @Inject(Script) private script:Script;
 
+    private bh:ArcadeSideScrollControl;
+
     constructor(private scene:MainScene, tiledObject:ITiledJSON['layers'][0]['objects'][0]) {
         const characterImage = new AnimatedImage(scene.getGame(),scene.assets.spritesTexture);
         this.image = characterImage;
@@ -66,7 +68,7 @@ export class Character implements Injectable {
         const texturePackerAtlas = new TexturePackerAtlas(this.scene.assets.spritesAtlas);
         const body = this.image.getRigidBody<ArcadeRigidBody>();
         this.body = body;
-        const bh = new ArcadeSideScrollControl(this.scene.getGame(),{
+        this.bh = new ArcadeSideScrollControl(this.scene.getGame(),{
             velocity: 100,
             jumpVelocity: JUMP_VEL,
             verticalLadderTileIds: [3,7],
@@ -131,10 +133,10 @@ export class Character implements Injectable {
             }
         });
         const characterImage = this.image;
-        characterImage.addBehaviour(bh);
+        characterImage.addBehaviour(this.bh);
 
         this.scene.keyboardEventHandler.onKeyPressed(KEYBOARD_KEY.CONTROL, e=>{
-            bh.fire();
+            this.bh.fire();
             const bullet = new CharacterBullet(this.scene.getGame());
             bullet.getContainer().getRigidBody().velocity.x = 300*characterImage.scale.x;
             bullet.getContainer().pos.setXY(
@@ -142,6 +144,19 @@ export class Character implements Injectable {
                 characterImage.pos.y + characterImage.size.height / 2
             );
             bullet.getContainer().appendTo(this.scene.getLayerAtIndex(0));
+        });
+
+        this.scene.keyboardEventHandler.onKeyPressed(KEYBOARD_KEY.DIGIT_1, e=>{
+            this.bh.setFireAnimation(
+                new AtlasFrameAnimation(this.scene.getGame(),{
+                    frames: [
+                        texturePackerAtlas.getFrameByKey('character_shoot1'),
+                        texturePackerAtlas.getFrameByKey('character_shoot2'),
+                    ],
+                    isRepeating: false,
+                    durationOfOneFrame: 200,
+                })
+            )
         });
     }
 

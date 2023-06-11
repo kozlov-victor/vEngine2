@@ -103,7 +103,7 @@ export class MainScene extends Scene {
                 tracker.setTrackFromMidiBin(data);
             }
 
-            await tracker.play1();
+            await tracker.play();
             debugLayer.log(`${tracks[i]}: Ready`);
             debugLayer.log(`Press "->" to play next track`);
         }
