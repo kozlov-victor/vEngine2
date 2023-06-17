@@ -51,7 +51,7 @@ export class MainWidget extends VEngineRootComponent {
                     {this.state.circles.map((it,ind)=>
                         <ChildComponent
                             ind={ind}
-                            onClick={this.updateCircleRadius.bind(this)}
+                            onClick={this.updateCircleRadius}
                             radius={it.radius}
                             key={ind}/>)
                     }
@@ -67,10 +67,10 @@ export class MainWidget extends VEngineRootComponent {
                 </v_null_game_object>
 
                 <v_null_game_object>
-                    <BtnComponent x={20} y={100} height={this.state.btnRemove.height} onClick={this.onMinusClick.bind(this)}/>
+                    <BtnComponent x={20} y={100} height={this.state.btnRemove.height} onClick={this.onMinusClick}/>
                 </v_null_game_object>
 
-                <BtnComponent x={120} y={100} height={this.state.btnAdd.height} onClick={this.onPlusClick.bind(this)}/>
+                <BtnComponent x={120} y={100} height={this.state.btnAdd.height} onClick={this.onPlusClick}/>
 
             </v_rectangle>
 

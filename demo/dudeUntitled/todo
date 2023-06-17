@@ -1,13 +1,13 @@
 SPRINT 1
-DU-01: static obstacle (fire)
++DU-01: static obstacle (fire)
 DU-02: robot
 DU-03: flash obstacle (electricity)
 DU-04: candy collectable to open door to next level
 DU-05: elevator?
-DU-06: movable platform
++DU-06: movable platform
 DU-07: falling platform
 DU-08: bat
-DU-09: water
++DU-09: water
 DU-10: health bar and life
 
 BACKLOG
@@ -16,6 +16,6 @@ intro
 menu
 mini games
 quiz
-collectable fire
++collectable fire
 fire power up
 text dialogs

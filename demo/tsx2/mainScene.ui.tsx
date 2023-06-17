@@ -27,7 +27,7 @@ export class MainSceneUi extends VEngineRootComponent {
                         center={{x:40+ind*45,y:50}}
                         fillColor={{r:22,g:133,b:43}}
                         lineWidth={1}
-                        click={this.onCircleClick.bind(this)}
+                        click={this.onCircleClick}
                     >
                     </v_circle>
                 )}
@@ -43,13 +43,13 @@ export class MainSceneUi extends VEngineRootComponent {
                 <v_rectangle
                     pos={{x:20,y:100}}
                     size={{width:50,height:50}}
-                    click={this.onMinusClick.bind(this)}
+                    click={this.onMinusClick}
                 />
 
                 <v_rectangle
                     pos={{x:120,y:100}}
                     size={{width:50,height:50}}
-                    click={this.onPlusClick.bind(this)}
+                    click={this.onPlusClick}
                 />
 
             </v_rectangle>

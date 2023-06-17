@@ -33,7 +33,7 @@ export class MainSceneUi extends VEngineRootComponent {
                     fillColor={{r:22,g:133,b:43}}
                     radius={22}
                     lineWidth={1}
-                    click={_=>this.onCircleClick()}
+                    click={this.onCircleClick}
                 />
 
                 <v_ellipse
@@ -42,7 +42,7 @@ export class MainSceneUi extends VEngineRootComponent {
                     radiusX={this.state.ellipseRadiusX}
                     radiusY={this.state.ellipseRadiusY}
                     lineWidth={2}
-                    click={this.onEllipseClick.bind(this)}
+                    click={this.onEllipseClick}
                 />
 
                 <v_null_game_object pos={{x:30,y:50}}>
@@ -68,7 +68,7 @@ export class MainSceneUi extends VEngineRootComponent {
         this.state.ellipsePosX = this.state.ellipsePosX + 1;
     }
 
-     @ReactiveMethod()
+    @ReactiveMethod()
     private onEllipseClick():void{
         this.state.ellipseRadiusX = this.state.ellipseRadiusX+1;
     }

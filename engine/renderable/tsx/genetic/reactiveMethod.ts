@@ -3,7 +3,7 @@ import {VEngineTsxComponent} from "@engine/renderable/tsx/genetic/vEngineTsxComp
 export const ReactiveMethod = function(){
     return (originalMethod:any,context:ClassMethodDecoratorContext) => {
         context.addInitializer(function(){
-            (this as any)[context.name] = (...args: any[])=>{
+            (this as any)[context.name] = ((...args: any[])=>{
                 const result = originalMethod.apply(this, args);
                 (this as VEngineTsxComponent & {triggerRendering:()=>void}).triggerRendering();
                 if (result instanceof Promise) {
@@ -12,7 +12,7 @@ export const ReactiveMethod = function(){
                     });
                 }
                 return result;
-            }
+            });
         });
     };
 };
