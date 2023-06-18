@@ -1,6 +1,6 @@
 import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
 import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
-import {ReactiveMethod} from "@engine/renderable/tsx/genetic/reactiveMethod";
+import {Reactive} from "@engine/renderable/tsx/genetic/reactive";
 import {BaseTsxComponent} from "@engine/renderable/tsx/genetic/baseTsxComponent";
 import {DomRootComponent} from "@engine/renderable/tsx/dom/domRootComponent";
 
@@ -49,23 +49,23 @@ export class Widget extends DomRootComponent {
         this.add();
     }
 
-    @ReactiveMethod()
+    @Reactive.Method()
     add():void{
         console.log(this);
         this.items.push({number:this.items.length-1});
     }
 
-    @ReactiveMethod()
+    @Reactive.Method()
     remove():void{
         this.items.splice(-1);
     }
 
-    @ReactiveMethod()
+    @Reactive.Method()
     removeAt(i:number):void{
         this.items.splice(i,1);
     }
 
-    @ReactiveMethod()
+    @Reactive.Method()
     onSelected(val:string):void {
         this.selected = val;
     }

@@ -1,8 +1,8 @@
 import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Game} from "@engine/core/game";
-import {ReactiveMethod} from "@engine/renderable/tsx/genetic/reactiveMethod";
 import {VEngineRootComponent} from "@engine/renderable/tsx/vEngine/vEngineRootComponent";
+import {Reactive} from "@engine/renderable/tsx/genetic/reactive";
 
 interface IState {
     ellipseRadiusX: number;
@@ -62,13 +62,13 @@ export class MainSceneUi extends VEngineRootComponent {
         );
     }
 
-    @ReactiveMethod()
+    @Reactive.Method()
     private onCircleClick():void {
         console.log('on circle click');
         this.state.ellipsePosX = this.state.ellipsePosX + 1;
     }
 
-    @ReactiveMethod()
+    @Reactive.Method()
     private onEllipseClick():void{
         this.state.ellipseRadiusX = this.state.ellipseRadiusX+1;
     }

@@ -1,7 +1,7 @@
 import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
 import {HttpClient} from "@engine/debug/httpClient";
-import {ReactiveMethod} from "@engine/renderable/tsx/genetic/reactiveMethod";
 import {DomRootComponent} from "@engine/renderable/tsx/dom/domRootComponent";
+import {Reactive} from "@engine/renderable/tsx/genetic/reactive";
 
 
 interface IItem {
@@ -58,7 +58,7 @@ export class Widget extends DomRootComponent {
         this.listLoading = false;
     }
 
-    @ReactiveMethod()
+    @Reactive.Method()
     private selectItem(e:Event,name:string):void{
         e.preventDefault();
         const index = this.allItemNames.indexOf(name);
@@ -67,7 +67,7 @@ export class Widget extends DomRootComponent {
         this.loadingInfo = 'loading...';
     }
 
-    @ReactiveMethod()
+    @Reactive.Method()
     private onFrameLoaded():void{
         this.loadingInfo = '';
     }

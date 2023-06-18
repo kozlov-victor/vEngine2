@@ -1,6 +1,6 @@
 import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
-import {ReactiveMethod} from "@engine/renderable/tsx/genetic/reactiveMethod";
+import {Reactive} from "@engine/renderable/tsx/genetic/reactive";
 import {IObjectMouseEvent} from "@engine/control/mouse/mousePoint";
 import {VEngineRootComponent} from "@engine/renderable/tsx/vEngine/vEngineRootComponent";
 
@@ -57,19 +57,19 @@ export class MainSceneUi extends VEngineRootComponent {
         );
     }
 
-    @ReactiveMethod()
+    @Reactive.Method()
     public onMinusClick():void{
         console.log('onMinusClick');
         this.numOfCircles = this.numOfCircles-1;
     }
 
-    @ReactiveMethod()
+    @Reactive.Method()
     public onPlusClick():void{
         console.log('onPlusClick');
         this.numOfCircles = this.numOfCircles+1;
     }
 
-    @ReactiveMethod()
+    @Reactive.Method()
     public onCircleClick(e:IObjectMouseEvent):void{
         console.log('onCircleClick',e);
         (e.currentTarget as Circle).radius+=1;

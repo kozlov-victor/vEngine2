@@ -47,8 +47,6 @@ export class Character implements Injectable {
             ignoreOverlapWithGroupNames: ['bump'],
         }));
 
-        (window as any).hero = characterImage;
-
         characterImage.appendTo(scene);
         scene.camera.followTo(characterImage);
 
@@ -152,6 +150,18 @@ export class Character implements Injectable {
                     frames: [
                         texturePackerAtlas.getFrameByKey('character_shoot1'),
                         texturePackerAtlas.getFrameByKey('character_shoot2'),
+                    ],
+                    isRepeating: false,
+                    durationOfOneFrame: 200,
+                })
+            )
+        });
+        this.scene.keyboardEventHandler.onKeyPressed(KEYBOARD_KEY.DIGIT_2, e=>{
+            this.bh.setFireAnimation(
+                new AtlasFrameAnimation(this.scene.getGame(),{
+                    frames: [
+                        texturePackerAtlas.getFrameByKey('character_gun1'),
+                        texturePackerAtlas.getFrameByKey('character_gun2'),
                     ],
                     isRepeating: false,
                     durationOfOneFrame: 200,

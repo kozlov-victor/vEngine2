@@ -13,7 +13,7 @@ import {RadioButtonGroup} from "@engine/renderable/impl/ui/toggleButton/radioBut
 import {IChangeNumericSliderEvent} from "@engine/renderable/impl/ui/numericSlider/_intrtnal/abstractNumericSlider";
 import {IChangeEditTextFieldEvent} from "@engine/renderable/impl/ui/textField/editTextField/editTextField";
 import {IChangeSelectBoxEvent} from "@engine/renderable/impl/ui/selectBox/selectBoxEvents";
-import {ReactiveMethod} from "@engine/renderable/tsx/genetic/reactiveMethod";
+import {Reactive} from "@engine/renderable/tsx/genetic/reactive";
 import {ColorFactory} from "@engine/renderer/common/colorFactory";
 import {VEngineRootComponent} from "@engine/renderable/tsx/vEngine/vEngineRootComponent";
 
@@ -286,32 +286,32 @@ export class MainWidget extends VEngineRootComponent {
         );
     }
 
-    @ReactiveMethod()
+    @Reactive.Method()
     private onCalcButtonClick(str:string):void {
         this.calculator.keyPress(str);
     }
 
-    @ReactiveMethod()
+    @Reactive.Method()
     private onAlignTextClick(value:AlignTextContentHorizontal):void {
         this.textAlign = value;
     }
 
-    @ReactiveMethod()
+    @Reactive.Method()
     private onGlitchChanged(e:{value:boolean}):void {
         this.glitches = e.value;
     }
 
-    @ReactiveMethod()
+    @Reactive.Method()
     private onTextColorChanged(e:IChangeSelectBoxEvent):void {
         this.colorSelected = e.selectedIndex;
     }
 
-    @ReactiveMethod()
+    @Reactive.Method()
     private onHorizontalScrollChanged(e:IChangeNumericSliderEvent):void {
         this.horizontalScrollValue = e.value;
     }
 
-    @ReactiveMethod()
+    @Reactive.Method()
     private onEditTextChanged(e:IChangeEditTextFieldEvent):void {
         this.editedText = e.value;
     }

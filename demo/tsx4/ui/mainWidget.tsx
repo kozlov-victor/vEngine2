@@ -1,7 +1,7 @@
 import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
 import {ChildComponent} from "./childComponent";
 import {MousePoint} from "@engine/control/mouse/mousePoint";
-import {ReactiveMethod} from "@engine/renderable/tsx/genetic/reactiveMethod";
+import {Reactive} from "@engine/renderable/tsx/genetic/reactive";
 import {VEngineRootComponent} from "@engine/renderable/tsx/vEngine/vEngineRootComponent";
 
 export class MainWidget extends VEngineRootComponent {
@@ -32,7 +32,7 @@ export class MainWidget extends VEngineRootComponent {
         );
     }
 
-    @ReactiveMethod()
+    @Reactive.Method()
     public btnClick(e:MousePoint):void{
         this.radius++;
     }

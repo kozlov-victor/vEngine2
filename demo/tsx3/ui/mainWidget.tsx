@@ -1,7 +1,7 @@
 import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
 import {ChildComponent} from "./childComponent";
 import {BtnComponent} from "./btnComponent";
-import {ReactiveMethod} from "@engine/renderable/tsx/genetic/reactiveMethod";
+import {Reactive} from "@engine/renderable/tsx/genetic/reactive";
 import {VEngineRootComponent} from "@engine/renderable/tsx/vEngine/vEngineRootComponent";
 
 interface IState {
@@ -77,19 +77,19 @@ export class MainWidget extends VEngineRootComponent {
         );
     }
 
-    @ReactiveMethod()
+    @Reactive.Method()
     public onMinusClick():void{
         this.state.btnRemove.height+=1;
         this.state.circles.push({radius:10});
     }
 
-    @ReactiveMethod()
+    @Reactive.Method()
     public onPlusClick():void{
         this.state.btnAdd.height+=1;
         this.state.circles.splice(-1,1);
     }
 
-    @ReactiveMethod()
+    @Reactive.Method()
     private updateCircleRadius(index:number):void {
         this.state.circles[index].radius+=1;
     }

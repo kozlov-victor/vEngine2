@@ -4,7 +4,6 @@ import {Assets} from "../asset/assets";
 import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
 import {BgMatrix} from "../component/bgMatrix";
 import {AnswerButton} from "../component/answerButton";
-import {ReactiveMethod} from "@engine/renderable/tsx/genetic/reactiveMethod";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {waitFor} from "../helper";
 import {Color} from "@engine/renderer/common/color";
@@ -15,6 +14,7 @@ import {Flip3dVerticalInTransition} from "@engine/scene/transition/flip/flip3dTr
 import {Resource} from "@engine/resources/resourceDecorators";
 import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 import {VEngineRootComponent} from "@engine/renderable/tsx/vEngine/vEngineRootComponent";
+import {Reactive} from "@engine/renderable/tsx/genetic/reactive";
 
 class SelectLevelSceneUI extends VEngineRootComponent {
 
@@ -44,13 +44,13 @@ class SelectLevelSceneUI extends VEngineRootComponent {
         );
     }
 
-    @ReactiveMethod()
+    @Reactive.Method()
     private onAnswerClick(answer:number):void {
         if (this.answerSelected) return;
         this.currentButton = answer;
     }
 
-    @ReactiveMethod()
+    @Reactive.Method()
     public onUpBtnClicked():void {
         if (this.answerSelected) return;
         if (this.currentButton===undefined) this.currentButton = 0;
@@ -58,7 +58,7 @@ class SelectLevelSceneUI extends VEngineRootComponent {
         Assets.getInstance().btn1Sound.play();
     }
 
-    @ReactiveMethod()
+    @Reactive.Method()
     public onDownBtnClicked():void {
         if (this.answerSelected) return;
         if (this.currentButton===undefined) this.currentButton = 0;

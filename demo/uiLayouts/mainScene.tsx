@@ -3,7 +3,7 @@ import {Game} from "@engine/core/game";
 import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 import {Assets} from "./assets";
-import {ReactiveMethod} from "@engine/renderable/tsx/genetic/reactiveMethod";
+import {Reactive} from "@engine/renderable/tsx/genetic/reactive";
 import {AlignTextContentHorizontal, AlignTextContentVertical} from "@engine/renderable/impl/ui/textField/textAlign";
 import {DomRootComponent} from "@engine/renderable/tsx/dom/domRootComponent";
 
@@ -66,7 +66,7 @@ class SceneUI extends DomRootComponent {
         );
     }
 
-    @ReactiveMethod()
+    @Reactive.Method()
     private onButtonClicked(num:number) {
         this.result = num.toString();
     }

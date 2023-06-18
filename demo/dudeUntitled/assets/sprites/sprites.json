@@ -112,9 +112,25 @@
                 "h": 42
             }
         },
-        "sausage_frame_1": {
+        "character_gun1": {
             "frame": {
                 "x": 86,
+                "y": 94,
+                "w": 38,
+                "h": 42
+            }
+        },
+        "character_gun2": {
+            "frame": {
+                "x": 128,
+                "y": 94,
+                "w": 38,
+                "h": 42
+            }
+        },
+        "sausage_frame_1": {
+            "frame": {
+                "x": 170,
                 "y": 94,
                 "w": 32,
                 "h": 32
@@ -122,7 +138,7 @@
         },
         "platform_wheel_frame_1": {
             "frame": {
-                "x": 122,
+                "x": 206,
                 "y": 94,
                 "w": 32,
                 "h": 32
@@ -130,29 +146,13 @@
         },
         "key_frame_1": {
             "frame": {
-                "x": 158,
-                "y": 94,
-                "w": 32,
-                "h": 32
-            }
-        },
-        "fire_fire1": {
-            "frame": {
-                "x": 194,
-                "y": 94,
-                "w": 32,
-                "h": 32
-            }
-        },
-        "fire_fire2": {
-            "frame": {
                 "x": 2,
                 "y": 140,
                 "w": 32,
                 "h": 32
             }
         },
-        "fire_fire3": {
+        "fire_fire1": {
             "frame": {
                 "x": 38,
                 "y": 140,
@@ -160,7 +160,7 @@
                 "h": 32
             }
         },
-        "fire_fire4": {
+        "fire_fire2": {
             "frame": {
                 "x": 74,
                 "y": 140,
@@ -168,7 +168,7 @@
                 "h": 32
             }
         },
-        "fire_fire5": {
+        "fire_fire3": {
             "frame": {
                 "x": 110,
                 "y": 140,
@@ -176,7 +176,7 @@
                 "h": 32
             }
         },
-        "candy_frame_1": {
+        "fire_fire4": {
             "frame": {
                 "x": 146,
                 "y": 140,
@@ -184,10 +184,26 @@
                 "h": 32
             }
         },
-        "platform_moveable_frame_1": {
+        "fire_fire5": {
             "frame": {
                 "x": 182,
                 "y": 140,
+                "w": 32,
+                "h": 32
+            }
+        },
+        "candy_frame_1": {
+            "frame": {
+                "x": 218,
+                "y": 140,
+                "w": 32,
+                "h": 32
+            }
+        },
+        "platform_moveable_frame_1": {
+            "frame": {
+                "x": 2,
+                "y": 176,
                 "w": 64,
                 "h": 16
             }

@@ -14,7 +14,6 @@ import {
 } from "@engine/renderable/impl/ui/textField/textAlign";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {AnswerButton} from "../component/answerButton";
-import {ReactiveMethod} from "@engine/renderable/tsx/genetic/reactiveMethod";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {IQuizQuestion, QuizRunner} from "../quizRunner";
 import {DATA} from "../asset/resource/questions";
@@ -24,15 +23,16 @@ import {ColorFactory} from "@engine/renderer/common/colorFactory";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 import {VEngineRootComponent} from "@engine/renderable/tsx/vEngine/vEngineRootComponent";
+import {Reactive} from "@engine/renderable/tsx/genetic/reactive";
 
 
 class QuizSceneUI extends VEngineRootComponent {
 
     private currentButton:0|1|2|3|undefined = undefined;
-    private answerSelected:boolean = false;
-    private answerBlink:boolean = false;
-    private questionBlink:boolean = false;
-    private correctAnswer:0|1|2|3|undefined = undefined;
+    @Reactive.Property() private answerSelected:boolean = false;
+    @Reactive.Property() private answerBlink:boolean = false;
+    @Reactive.Property() private questionBlink:boolean = false;
+    @Reactive.Property() private correctAnswer:0|1|2|3|undefined = undefined;
 
     private quizRunner:QuizRunner;
     private currentQuestion:IQuizQuestion;
@@ -68,7 +68,7 @@ class QuizSceneUI extends VEngineRootComponent {
             this.answerBlink = false;
             this.correctAnswer = undefined;
             for (let i=0;i<7;i++) {
-                this.triggerRendering();
+                //this.triggerRendering();
                 await waitFor(100);
                 this.questionBlink = !this.questionBlink;
             }
@@ -138,13 +138,13 @@ class QuizSceneUI extends VEngineRootComponent {
         );
     }
 
-    @ReactiveMethod()
+    @Reactive.Method()
     private onAnswerClick(btnIndex:0|1|2|3):void {
         if (this.answerSelected) return;
         this.currentButton = btnIndex;
     }
 
-    @ReactiveMethod()
+    @Reactive.Method()
     public onLeftBtnClicked():void {
         if (this.answerSelected) return;
         if (this.currentButton===1) this.currentButton = 0;
@@ -153,7 +153,7 @@ class QuizSceneUI extends VEngineRootComponent {
         this.assets.btn1Sound.play();
     }
 
-    @ReactiveMethod()
+    @Reactive.Method()
     public onRightBtnClicked():void {
         if (this.answerSelected) return;
         if (this.currentButton===0) this.currentButton = 1;
@@ -162,7 +162,7 @@ class QuizSceneUI extends VEngineRootComponent {
         this.assets.btn1Sound.play();
     }
 
-    @ReactiveMethod()
+    @Reactive.Method()
     public onDownBtnClicked():void {
         if (this.answerSelected) return;
         if (this.currentButton===0) this.currentButton = 2;
@@ -171,7 +171,7 @@ class QuizSceneUI extends VEngineRootComponent {
         this.assets.btn1Sound.play();
     }
 
-    @ReactiveMethod()
+    @Reactive.Method()
     public onUpBtnClicked():void {
         if (this.answerSelected) return;
         if (this.currentButton===2) this.currentButton = 0;
@@ -180,7 +180,7 @@ class QuizSceneUI extends VEngineRootComponent {
         this.assets.btn1Sound.play();
     }
 
-    @ReactiveMethod()
+    @Reactive.Method()
     public async onAnswerSelected() {
         if (this.currentButton===undefined) {
             this.assets.btn1Sound.play();
@@ -190,12 +190,12 @@ class QuizSceneUI extends VEngineRootComponent {
         this.assets.selectedSound.play();
         this.answerSelected = true;
         for (let i=0;i<13;i++) {
-            this.triggerRendering();
+            //this.triggerRendering();
             await waitFor(200);
             this.answerBlink = !this.answerBlink;
         }
         this.answerBlink = true;
-        this.triggerRendering();
+        //this.triggerRendering();
         await waitFor(3000);
         this.correctAnswer = this.currentQuestion.answers.findIndex(it=>it.correct) as 0|1|2|3;
         if (this.correctAnswer===this.currentButton) {
@@ -204,7 +204,7 @@ class QuizSceneUI extends VEngineRootComponent {
         } else {
             this.assets.failSound.play();
         }
-        this.triggerRendering();
+        //this.triggerRendering();
         await waitForKey(this.game,KEYBOARD_KEY.SPACE);
         this.nextQuestion();
     }

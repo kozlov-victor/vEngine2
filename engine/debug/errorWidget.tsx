@@ -1,5 +1,5 @@
 import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
-import {ReactiveMethod} from "@engine/renderable/tsx/genetic/reactiveMethod";
+import {Reactive} from "@engine/renderable/tsx/genetic/reactive";
 import {DomRootComponent} from "@engine/renderable/tsx/dom/domRootComponent";
 import {HTMLElementWrap} from "@engine/renderable/tsx/dom/internal/HTMLElementWrap";
 
@@ -102,12 +102,12 @@ class ErrorWidget extends DomRootComponent {
     private errors:IErrorInfo[] = [];
 
 
-    @ReactiveMethod()
+    @Reactive.Method()
     public addError(err:IErrorInfo):void{
         this.errors.push(err);
     }
 
-    @ReactiveMethod()
+    @Reactive.Method()
     private removeItem(i:number):void{
         this.errors.splice(i,1);
     }

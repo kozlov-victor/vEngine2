@@ -1,6 +1,6 @@
 import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
-import {ReactiveMethod} from "@engine/renderable/tsx/genetic/reactiveMethod";
 import {DomRootComponent} from "@engine/renderable/tsx/dom/domRootComponent";
+import {Reactive} from "@engine/renderable/tsx/genetic/reactive";
 
 
 export class Widget extends DomRootComponent {
@@ -12,18 +12,18 @@ export class Widget extends DomRootComponent {
     private nativeInput:HTMLInputElement|undefined;
     private error:any;
 
-    @ReactiveMethod()
+    @Reactive.Method()
     public print(...args:(string|number)[]):void {
         if (this.lines.length>128) this.lines.shift();
         this.lines.push(args.join(''));
     }
 
-    @ReactiveMethod()
+    @Reactive.Method()
     public clearScreen():void {
         this.lines.length = 0;
     }
 
-    @ReactiveMethod()
+    @Reactive.Method()
     public input(prompt:string):Promise<string> {
         this.isInputMode = true;
         if (prompt) this.print(prompt);
@@ -42,7 +42,7 @@ export class Widget extends DomRootComponent {
         });
     }
 
-    @ReactiveMethod()
+    @Reactive.Method()
     public catchError(e:any):void {
         console.log('error!!!!!',e);
         console.log(e.name);
@@ -51,7 +51,7 @@ export class Widget extends DomRootComponent {
         this.error = e;
     }
 
-    @ReactiveMethod()
+    @Reactive.Method()
     private onInputFormSubmitted(e:Event):void {
         e.stopPropagation();
         e.preventDefault();

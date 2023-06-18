@@ -1,7 +1,7 @@
 import {IBaseProps} from "@engine/renderable/tsx/genetic/virtualNode";
 import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
 import {Game} from "@engine/core/game";
-import {ReactiveMethod} from "@engine/renderable/tsx/genetic/reactiveMethod";
+import {Reactive} from "@engine/renderable/tsx/genetic/reactive";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Layer} from "@engine/scene/layer";
 import {createDraggableElement, init} from "@engine/debug/inspector/helpers";
@@ -129,7 +129,7 @@ class InspectorWidget extends DomRootComponent{
         );
     }
 
-    @ReactiveMethod()
+    @Reactive.Method()
     public onClicked(model:RenderableModel|Layer):void {
         const id = model.id;
         currentModel = model;
@@ -137,12 +137,12 @@ class InspectorWidget extends DomRootComponent{
         stateMap[id]=!stateMap[id];
     }
 
-    @ReactiveMethod()
+    @Reactive.Method()
     public show():void {
         this._shown = true;
     }
 
-    @ReactiveMethod()
+    @Reactive.Method()
     public hide():void {
         this._shown = false;
     }

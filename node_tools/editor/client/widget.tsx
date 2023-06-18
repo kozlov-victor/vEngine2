@@ -1,5 +1,5 @@
 import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
-import {ReactiveMethod} from "@engine/renderable/tsx/genetic/reactiveMethod";
+import {Reactive} from "@engine/renderable/tsx/genetic/reactive";
 import {HttpClient} from "@engine/debug/httpClient";
 import {Frame} from "./components/frame";
 import {StatusBar} from "./components/statusBar";
@@ -37,7 +37,7 @@ export class Widget extends DomRootComponent {
         });
     }
 
-    @ReactiveMethod()
+    @Reactive.Method()
     private async loadInitialData() {
         try {
             const payload:any = await HttpClient.get('/main/loadParams');
@@ -51,7 +51,7 @@ export class Widget extends DomRootComponent {
         }
     }
 
-    @ReactiveMethod()
+    @Reactive.Method()
     private async getFiles() {
         if (!this.folder) this.files = [];
         else {
@@ -66,7 +66,7 @@ export class Widget extends DomRootComponent {
         }
     }
 
-    @ReactiveMethod()
+    @Reactive.Method()
     private async convert() {
         try {
             this.convertedImageUUID = await HttpClient.post(
@@ -84,7 +84,7 @@ export class Widget extends DomRootComponent {
         }
     }
 
-    @ReactiveMethod()
+    @Reactive.Method()
     private async save() {
         try {
             await HttpClient.post('/main/save',
