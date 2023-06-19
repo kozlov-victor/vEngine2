@@ -1,8 +1,8 @@
 import {Game} from "@engine/core/game";
-import {DataTexture} from "@engine/renderer/webGl/base/dataTexture";
 import {BORDER, H, W} from "./index";
 import {AudioStream} from "./audioStream";
 import {ITexture} from "@engine/renderer/common/texture";
+import {DataTexture} from "@engine/renderer/webGl/base/texture/dataTexture";
 
 
 const INT = (n:number):number=>{

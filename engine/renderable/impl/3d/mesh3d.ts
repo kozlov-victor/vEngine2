@@ -3,8 +3,8 @@ import {ICubeMapTexture, ITexture} from "@engine/renderer/common/texture";
 import {Mesh2d} from "@engine/renderable/abstract/mesh2d";
 import {Game} from "@engine/core/game";
 import {IPrimitive} from "@engine/renderer/webGl/primitives/abstractPrimitive";
-import {BufferInfo} from "@engine/renderer/webGl/base/bufferInfo";
 import {MeshMaterial} from "@engine/renderable/impl/3d/meshMaterial";
+import {BufferInfo} from "@engine/renderer/webGl/base/buffer/bufferInfo";
 
 export const enum CullFace {
     front,

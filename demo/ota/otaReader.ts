@@ -1,9 +1,9 @@
 
-import {DataTexture} from "@engine/renderer/webGl/base/dataTexture";
 import {Game} from "@engine/core/game";
 import {Image} from "@engine/renderable/impl/general/image/image";
 import {ColorFactory} from "@engine/renderer/common/colorFactory";
 import {BinBuffer} from "@engine/misc/parsers/bin/binBuffer";
+import {DataTexture} from "@engine/renderer/webGl/base/texture/dataTexture";
 
 
 export class OtaReader {

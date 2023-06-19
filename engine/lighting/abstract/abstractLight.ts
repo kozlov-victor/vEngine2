@@ -1,5 +1,5 @@
 import {Color} from "../../renderer/common/color";
-import {UNIFORM_VALUE_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
+import {UNIFORM_VALUE_TYPE} from "@engine/renderer/webGl/base/program/shaderProgramUtils";
 import {FastMap} from "@engine/misc/collection/fastMap";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 

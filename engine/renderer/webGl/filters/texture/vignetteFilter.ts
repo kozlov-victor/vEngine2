@@ -1,7 +1,7 @@
 import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstractGlFilter";
 import {Game} from "@engine/core/game";
 import {ShaderGenerator} from "@engine/renderer/webGl/shaderGenerator/shaderGenerator";
-import {GL_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
+import {GL_TYPE} from "@engine/renderer/webGl/base/program/shaderProgramUtils";
 
 
 // from https://github.com/daviestar/glfx-es6/blob/master/src/filters/adjust/vignette.js with adaptations to the engine

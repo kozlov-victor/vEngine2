@@ -5,7 +5,6 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {TrackBall} from "../model3dFromFbx/trackBall";
 import {StlParser} from "@engine/renderable/impl/3d/stlParser/stlParser";
 import {SkyBox} from "@engine/renderable/impl/skyBox";
-import {CubeMapTexture} from "@engine/renderer/webGl/base/cubeMapTexture";
 
 
 export class MainScene extends Scene {
@@ -21,7 +20,7 @@ export class MainScene extends Scene {
         './model3dFromStl/textures/miramar_front.png',
         './model3dFromStl/textures/miramar_back.png',
     )
-    public readonly cubeTexture:CubeMapTexture;
+    public readonly cubeTexture:ICubeMapTexture;
 
 
     public override onReady():void {

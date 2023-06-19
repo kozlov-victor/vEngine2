@@ -1,6 +1,5 @@
 import {BatchPainter} from "@engine/renderer/webGl/programs/impl/batch/batchPainter";
-import {VertexBuffer} from "@engine/renderer/webGl/base/vertexBuffer";
-import {arr} from "../../../../../../../../demo/pix32/ym-player/lha/canonical/utils";
+import {VertexBuffer} from "@engine/renderer/webGl/base/buffer/vertexBuffer";
 
 export const NUM_OF_VERTICES_IN_QUAD = 4;
 

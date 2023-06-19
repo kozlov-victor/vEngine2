@@ -1,7 +1,7 @@
 import {DebugError} from "@engine/debug/debugError";
 import {Game} from "@engine/core/game";
-import {DataTexture} from "@engine/renderer/webGl/base/dataTexture";
 import {ITexture} from "@engine/renderer/common/texture";
+import {DataTexture} from "@engine/renderer/webGl/base/texture/dataTexture";
 
 export class PbmReader {
 

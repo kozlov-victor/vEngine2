@@ -1,13 +1,13 @@
 
 // http://www.geeks3d.com/20101029/shader-library-pixelation-post-processing-effect-glsl/
-// adopted to webGl ES
+// adapted to webGl ES
 
 import {AbstractGlFilter} from "../abstract/abstractGlFilter";
 import {ShaderGenerator} from "../../shaderGenerator/shaderGenerator";
-import {GL_TYPE} from "../../base/shaderProgramUtils";
-import {FrameBuffer} from "../../base/frameBuffer";
+import {GL_TYPE} from "../../base/program/shaderProgramUtils";
 import {Game} from "@engine/core/game";
 import {Size} from "@engine/geometry/size";
+import {FrameBuffer} from "@engine/renderer/webGl/base/buffer/frameBuffer";
 
 export class PixelFilter extends AbstractGlFilter {
 

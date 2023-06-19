@@ -1,8 +1,8 @@
 import {ShaderGenerator} from "@engine/renderer/webGl/shaderGenerator/shaderGenerator";
 import {Game} from "@engine/core/game";
 import {AbstractAccumulativeFilter} from "@engine/renderer/webGl/filters/accumulative/abstract/abstractAccumulativeFilter";
-import {GL_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
-import {FrameBuffer} from "@engine/renderer/webGl/base/frameBuffer";
+import {GL_TYPE} from "@engine/renderer/webGl/base/program/shaderProgramUtils";
+import {FrameBuffer} from "@engine/renderer/webGl/base/buffer/frameBuffer";
 
 export type Kernel3x3 = [
     number,number,number,

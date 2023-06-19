@@ -4,7 +4,7 @@ import {Game} from "@engine/core/game";
 
 export class DomTexture implements ITexture {
 
-    public kind: "texture";
+    public __kind__ =  'Texture'as const;
     public imageUrl:string;
 
     constructor(game:Game,public size:ISize,div?:HTMLDivElement) {

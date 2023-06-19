@@ -1,9 +1,9 @@
 import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstractGlFilter";
 import {ShaderGenerator} from "@engine/renderer/webGl/shaderGenerator/shaderGenerator";
-import {GL_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
-import {FrameBuffer} from "@engine/renderer/webGl/base/frameBuffer";
+import {GL_TYPE} from "@engine/renderer/webGl/base/program/shaderProgramUtils";
 import {Game} from "@engine/core/game";
 import {Size} from "@engine/geometry/size";
+import {FrameBuffer} from "@engine/renderer/webGl/base/buffer/frameBuffer";
 
 // https://clemz.io/article-retro-shaders-webgl.html
 

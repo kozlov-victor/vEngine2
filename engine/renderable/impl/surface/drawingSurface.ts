@@ -28,8 +28,8 @@ import {
 import {SvgPathToVertexArrayBuilder} from "@engine/renderable/impl/geometry/_internal/svgPathToVertexArrayBuilder";
 import {BatchedImage} from "@engine/renderable/impl/general/image/batchedImage";
 import Mat16Holder = Mat4.Mat16Holder;
-import {FrameBufferStack} from "@engine/renderer/webGl/base/frameBufferStack";
 import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
+import {FrameBufferStack} from "@engine/renderer/webGl/base/buffer/frameBufferStack";
 
 
 class ContainerForDrawingSurface extends SimpleGameObjectContainer {

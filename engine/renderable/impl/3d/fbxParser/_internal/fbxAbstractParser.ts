@@ -2,7 +2,6 @@ import {FbxReader} from "@engine/renderable/impl/3d/fbxParser/_internal/fbxReade
 import {ObjPrimitive} from "@engine/renderable/impl/3d/objParser/_internal/types";
 import {MathEx} from "@engine/misc/math/mathEx";
 import {Game} from "@engine/core/game";
-import {Texture} from "@engine/renderer/webGl/base/texture";
 import {Optional} from "@engine/core/declarations";
 import {
     FbxMaterial,

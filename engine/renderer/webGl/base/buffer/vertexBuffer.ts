@@ -1,7 +1,7 @@
 import {DebugError} from "@engine/debug/debugError";
 import {AbstractBuffer} from "@engine/renderer/webGl/base/abstract/abstractBuffer";
 import {Optional} from "@engine/core/declarations";
-import {IVertexArrayInfo} from "@engine/renderer/webGl/base/bufferInfo";
+import {IVertexArrayInfo} from "@engine/renderer/webGl/base/buffer/bufferInfo";
 
 export class VertexBuffer extends AbstractBuffer {
 

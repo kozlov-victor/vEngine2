@@ -5,8 +5,8 @@ import {Resource} from "@engine/resources/resourceDecorators";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {TrackBall} from "../model3dFromFbx/trackBall";
 import {Knot} from "@engine/renderer/webGl/primitives/knot";
-import {DRAW_METHOD} from "@engine/renderer/webGl/base/bufferInfo";
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
+import {DRAW_METHOD} from "@engine/renderer/webGl/base/buffer/bufferInfo";
 
 export class MainScene extends Scene {
 

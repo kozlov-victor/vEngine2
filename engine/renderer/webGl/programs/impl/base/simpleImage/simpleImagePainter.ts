@@ -1,10 +1,10 @@
 import {AbstractPainter} from "@engine/renderer/webGl/programs/abstract/abstractPainter";
 import {ShaderGenerator} from "@engine/renderer/webGl/shaderGenerator/shaderGenerator";
-import {GL_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
+import {GL_TYPE} from "@engine/renderer/webGl/base/program/shaderProgramUtils";
 import {Z_To_W_MATRIX_SOURCE} from "@engine/renderer/webGl/programs/misc";
-import {ShaderProgram} from "@engine/renderer/webGl/base/shaderProgram";
+import {ShaderProgram} from "@engine/renderer/webGl/base/program/shaderProgram";
 import {Plane} from "@engine/renderer/webGl/primitives/plane";
-import {BufferInfo, DRAW_METHOD, IBufferInfoDescription} from "@engine/renderer/webGl/base/bufferInfo";
+import {BufferInfo, DRAW_METHOD, IBufferInfoDescription} from "@engine/renderer/webGl/base/buffer/bufferInfo";
 
 
 export class SimpleImagePainter extends AbstractPainter {

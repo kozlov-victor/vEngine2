@@ -3,8 +3,8 @@ import {RenderableModel} from "../renderable/abstract/renderableModel";
 import {IAlphaBlendable, IFilterable, IParentChild, IWithId, Optional} from "@engine/core/declarations";
 import {ParentChildDelegate} from "@engine/delegates/parentChildDelegate";
 import {Scene} from "@engine/scene/scene";
-import {IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
 import {Incrementer} from "@engine/resources/incrementer";
+import {IStateStackPointer} from "@engine/renderer/webGl/base/buffer/frameBufferStack";
 
 export const enum LayerTransformType {
     TRANSFORM,

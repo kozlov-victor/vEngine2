@@ -4,7 +4,7 @@ import {ISize} from "@engine/geometry/size";
 
 export class CanvasTexture implements ITexture {
 
-    public kind: "texture";
+    public __kind__ = 'Texture' as const;
     private readonly context:CanvasRenderingContext2D;
     private readonly canvas:HTMLCanvasElement;
 

@@ -1,7 +1,7 @@
 import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstractGlFilter";
 import {Game} from "@engine/core/game";
 import {ShaderGenerator} from "@engine/renderer/webGl/shaderGenerator/shaderGenerator";
-import {GL_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
+import {GL_TYPE} from "@engine/renderer/webGl/base/program/shaderProgramUtils";
 
 export abstract class AbstractColorMatrixFilter extends AbstractGlFilter {
 

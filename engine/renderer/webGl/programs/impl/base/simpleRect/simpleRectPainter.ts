@@ -1,10 +1,10 @@
 import {Plane} from "../../../../primitives/plane";
-import {ShaderProgram} from "../../../../base/shaderProgram";
+import {ShaderProgram} from "../../../../base/program/shaderProgram";
 import {AbstractPainter} from "../../../abstract/abstractPainter";
-import {BufferInfo, DRAW_METHOD, IBufferInfoDescription} from "../../../../base/bufferInfo";
+import {BufferInfo, DRAW_METHOD, IBufferInfoDescription} from "../../../../base/buffer/bufferInfo";
 import {ShaderGenerator} from "@engine/renderer/webGl/shaderGenerator/shaderGenerator";
 import {DebugError} from "@engine/debug/debugError";
-import {GL_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
+import {GL_TYPE} from "@engine/renderer/webGl/base/program/shaderProgramUtils";
 
 
 export class SimpleRectPainter extends AbstractPainter {

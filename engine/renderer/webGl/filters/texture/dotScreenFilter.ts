@@ -1,8 +1,8 @@
 import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstractGlFilter";
 import {ShaderGenerator} from "@engine/renderer/webGl/shaderGenerator/shaderGenerator";
 import {Game} from "@engine/core/game";
-import {FrameBuffer} from "@engine/renderer/webGl/base/frameBuffer";
-import {GL_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
+import {GL_TYPE} from "@engine/renderer/webGl/base/program/shaderProgramUtils";
+import {FrameBuffer} from "@engine/renderer/webGl/base/buffer/frameBuffer";
 
 // https://github.com/spite/Wagner/blob/master/fragment-shaders/dot-screen-fs.glsl
 

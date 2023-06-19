@@ -1,9 +1,9 @@
 import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstractGlFilter";
 import {ShaderGenerator} from "@engine/renderer/webGl/shaderGenerator/shaderGenerator";
-import {GL_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
-import {FrameBuffer} from "@engine/renderer/webGl/base/frameBuffer";
+import {GL_TYPE} from "@engine/renderer/webGl/base/program/shaderProgramUtils";
 import {Game} from "@engine/core/game";
 import {ISize} from "@engine/geometry/size";
+import {FrameBuffer} from "@engine/renderer/webGl/base/buffer/frameBuffer";
 
 // https://www.geeks3d.com/20140213/glsl-shader-library-fish-eye-and-dome-and-barrel-distortion-post-processing-filters/6/
 

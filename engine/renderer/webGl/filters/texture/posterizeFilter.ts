@@ -3,7 +3,7 @@
 // adopted to webGl ES
 
 import {AbstractGlFilter} from "../abstract/abstractGlFilter";
-import {GL_TYPE} from "../../base/shaderProgramUtils";
+import {GL_TYPE} from "../../base/program/shaderProgramUtils";
 import {Game} from "@engine/core/game";
 
 export class PosterizeFilter extends AbstractGlFilter {

@@ -13,8 +13,8 @@ import type {Mesh3d} from "@engine/renderable/impl/3d/mesh3d";
 import {CanvasRendererHelper} from "@engine/renderer/canvas/canvasRendererHelper";
 import {CanvasRenderTarget} from "@engine/renderer/canvas/canvasRenderTarget";
 import {CanvasTexture} from "@engine/renderer/canvas/canvasTexture";
-import Mat16Holder = Mat4.Mat16Holder;
 import type {BatchedImage} from "@engine/renderable/impl/general/image/batchedImage";
+import Mat16Holder = Mat4.Mat16Holder;
 
 
 interface ICanvasRenderingContext2DEx extends CanvasRenderingContext2D {
@@ -71,10 +71,8 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
         ctx.globalAlpha = img.alpha;
 
         if (img.offset.x || img.offset.y) {
-            const pattern:CanvasPattern = ctx.createPattern(
-                (img.getTexture() as CanvasTexture).getCanvas(),
-                'repeat') as CanvasPattern;
-            ctx.fillStyle = pattern;
+            ctx.fillStyle =
+                ctx.createPattern((img.getTexture() as CanvasTexture).getCanvas(), 'repeat') as CanvasPattern;
 
             ctx.save();
             ctx.translate(-img.offset.x,-img.offset.y);

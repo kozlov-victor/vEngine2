@@ -1,6 +1,6 @@
 import {AbstractGlFilter} from "../abstract/abstractGlFilter";
 import {ShaderGenerator} from "../../shaderGenerator/shaderGenerator";
-import {GL_TYPE} from "../../base/shaderProgramUtils";
+import {GL_TYPE} from "../../base/program/shaderProgramUtils";
 import {Color} from "../../../common/color";
 import {Game} from "@engine/core/game";
 

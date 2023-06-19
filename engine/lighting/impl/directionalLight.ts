@@ -1,5 +1,5 @@
 import {PointLight} from "@engine/lighting/impl/pointLight";
-import {UNIFORM_VALUE_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
+import {UNIFORM_VALUE_TYPE} from "@engine/renderer/webGl/base/program/shaderProgramUtils";
 import {FastMap} from "@engine/misc/collection/fastMap";
 import {Vec4} from "@engine/geometry/vec4";
 import {Mat4} from "@engine/misc/math/mat4";

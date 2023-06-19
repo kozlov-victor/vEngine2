@@ -3,9 +3,9 @@ import {Polygon} from "@engine/renderable/impl/geometry/polygon";
 import {Vec2} from "@engine/geometry/vec2";
 import {Line} from "@engine/renderable/impl/geometry/line";
 import {PolylineTriangulator} from "@engine/renderable/impl/geometry/_internal/polyline-triangulate/polylineTriangulator";
-import {DRAW_METHOD} from "@engine/renderer/webGl/base/bufferInfo";
 import {Game} from "@engine/core/game";
 import {AbstractPrimitive} from "@engine/renderer/webGl/primitives/abstractPrimitive";
+import {DRAW_METHOD} from "@engine/renderer/webGl/base/buffer/bufferInfo";
 
 export interface ITriangulatedPathParams {
     lineWidth?: number;

@@ -1,10 +1,10 @@
 import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstractGlFilter";
 import {ShaderGenerator} from "@engine/renderer/webGl/shaderGenerator/shaderGenerator";
-import {GL_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
+import {GL_TYPE} from "@engine/renderer/webGl/base/program/shaderProgramUtils";
 import {Game} from "@engine/core/game";
-import {FrameBuffer} from "@engine/renderer/webGl/base/frameBuffer";
 import {Optional} from "@engine/core/declarations";
 import {createRange} from "@engine/misc/object";
+import {FrameBuffer} from "@engine/renderer/webGl/base/buffer/frameBuffer";
 
 // thanks to https://codepen.io/Blindman67/pen/pwVyVx
 

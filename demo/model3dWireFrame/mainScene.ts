@@ -1,9 +1,9 @@
 import {Scene} from "@engine/scene/scene";
 import {Model3d} from "@engine/renderable/impl/3d/model3d";
-import {DRAW_METHOD} from "@engine/renderer/webGl/base/bufferInfo";
 import {Sphere} from "@engine/renderer/webGl/primitives/sphere";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {TrackBall} from "../model3dFromFbx/trackBall";
+import {DRAW_METHOD} from "@engine/renderer/webGl/base/buffer/bufferInfo";
 
 export class MainScene extends Scene {
 

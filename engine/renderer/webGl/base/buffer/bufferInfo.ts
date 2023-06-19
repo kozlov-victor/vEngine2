@@ -3,10 +3,10 @@ import {DebugError} from "@engine/debug/debugError";
 
 import {VertexBuffer} from "./vertexBuffer";
 import {IndexBuffer} from "./indexBuffer";
-import {ShaderProgram} from "./shaderProgram";
 import {DebugUtil} from "@engine/renderer/webGl/debug/debugUtil";
 import glEnumToString = DebugUtil.glEnumToString;
 import {Optional} from "@engine/core/declarations";
+import {ShaderProgram} from "@engine/renderer/webGl/base/program/shaderProgram";
 
 export interface IVertexArrayInfo {
     array:Float32Array;

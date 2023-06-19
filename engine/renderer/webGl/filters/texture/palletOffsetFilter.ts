@@ -1,10 +1,10 @@
 import {AbstractGlFilter} from "../abstract/abstractGlFilter";
 import {ShaderGenerator} from "../../shaderGenerator/shaderGenerator";
-import {GL_TYPE} from "../../base/shaderProgramUtils";
+import {GL_TYPE} from "../../base/program/shaderProgramUtils";
 import {Game} from "@engine/core/game";
-import {FrameBuffer} from "@engine/renderer/webGl/base/frameBuffer";
-import {Texture} from "@engine/renderer/webGl/base/texture";
 import {ITexture} from "@engine/renderer/common/texture";
+import {Texture} from "@engine/renderer/webGl/base/texture/texture";
+import {FrameBuffer} from "@engine/renderer/webGl/base/buffer/frameBuffer";
 
 export class PalletOffsetFilter extends AbstractGlFilter{
 

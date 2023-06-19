@@ -2,7 +2,7 @@ import {Game} from "@engine/core/game";
 import {Mesh3d} from "@engine/renderable/impl/3d/mesh3d";
 import {IPrimitive} from "@engine/renderer/webGl/primitives/abstractPrimitive";
 import {ICloneable} from "@engine/core/declarations";
-import {BufferInfo} from "@engine/renderer/webGl/base/bufferInfo";
+import {BufferInfo} from "@engine/renderer/webGl/base/buffer/bufferInfo";
 
 export class Model3d extends Mesh3d implements ICloneable<Model3d>{
 

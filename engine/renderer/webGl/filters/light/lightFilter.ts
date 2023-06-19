@@ -1,15 +1,15 @@
 import {AbstractGlFilter} from "../abstract/abstractGlFilter";
 import {Game} from "@engine/core/game";
 import {ShaderGenerator} from "../../shaderGenerator/shaderGenerator";
-import {GL_TYPE, UNIFORM_VALUE_TYPE} from "../../base/shaderProgramUtils";
-import {FrameBuffer} from "@engine/renderer/webGl/base/frameBuffer";
+import {GL_TYPE, UNIFORM_VALUE_TYPE} from "../../base/program/shaderProgramUtils";
 import {LightSet} from "@engine/lighting/lightSet";
 import {FastMap} from "@engine/misc/collection/fastMap";
-import {Texture} from "@engine/renderer/webGl/base/texture";
 import {Optional} from "@engine/core/declarations";
 import {ITexture} from "@engine/renderer/common/texture";
 import {light2dShader} from "@engine/renderer/webGl/filters/light/shader/light2dShader";
 import {Light2dShaderFunctions} from "@engine/renderer/webGl/filters/light/shader/light2dShaderFunctions";
+import {FrameBuffer} from "@engine/renderer/webGl/base/buffer/frameBuffer";
+import {Texture} from "@engine/renderer/webGl/base/texture/texture";
 
 
 export class LightFilter extends AbstractGlFilter {

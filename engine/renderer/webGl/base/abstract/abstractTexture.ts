@@ -1,5 +1,5 @@
 import {Optional} from "@engine/core/declarations";
-import {ShaderProgram} from "@engine/renderer/webGl/base/shaderProgram";
+import {ShaderProgram} from "@engine/renderer/webGl/base/program/shaderProgram";
 import {DebugError} from "@engine/debug/debugError";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Size} from "@engine/geometry/size";
@@ -13,9 +13,9 @@ export const enum INTERPOLATION_MODE {
     LINEAR = 1,
 }
 
-export abstract class AbstractTexture implements ITexture {
+export abstract class AbstractTexture  {
 
-    public readonly kind = 'texture';
+    public abstract type:string;
 
     protected constructor(protected readonly gl:WebGLRenderingContext){
         if (DEBUG) {

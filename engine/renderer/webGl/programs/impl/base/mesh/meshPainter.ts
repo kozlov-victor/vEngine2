@@ -1,6 +1,5 @@
-import {ShaderProgram} from "../../../../base/shaderProgram";
+import {ShaderProgram} from "../../../../base/program/shaderProgram";
 import {AbstractPainter} from "../../../abstract/abstractPainter";
-import {BufferInfo, DRAW_METHOD, IBufferInfoDescription} from "../../../../base/bufferInfo";
 import type {Mesh2d} from "@engine/renderable/abstract/mesh2d";
 import {DebugError} from "@engine/debug/debugError";
 import * as fragmentSource from "./mesh.fragment.glsl";
@@ -11,6 +10,7 @@ import type {Mesh3d} from "@engine/renderable/impl/3d/mesh3d";
 import MAT16 = Mat4.MAT16;
 import {parametrizeString} from "@engine/misc/object";
 import {Z_To_W_MATRIX_SOURCE} from "@engine/renderer/webGl/programs/misc";
+import {BufferInfo, DRAW_METHOD, IBufferInfoDescription} from "@engine/renderer/webGl/base/buffer/bufferInfo";
 
 
 export class MeshPainter extends AbstractPainter {

@@ -12,12 +12,12 @@ import {ICubeMapTexture, ITexture} from "@engine/renderer/common/texture";
 import {IDestroyable, Optional} from "@engine/core/declarations";
 import {RendererHelper} from "@engine/renderer/abstract/rendererHelper";
 import {IMatrixTransformable, MatrixStack} from "@engine/misc/math/matrixStack";
-import {IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
 import {Mat4} from "@engine/misc/math/mat4";
 import type {Mesh3d} from "@engine/renderable/impl/3d/mesh3d";
 import {ScaleStrategyFactory} from "@engine/renderer/abstract/scaleStrategy/factory/ScaleStrategyFactory";
 import Mat16Holder = Mat4.Mat16Holder;
 import type {BatchedImage} from "@engine/renderable/impl/general/image/batchedImage";
+import {IStateStackPointer} from "@engine/renderer/webGl/base/buffer/frameBufferStack";
 
 interface IHTMLElement extends HTMLElement{
     requestFullScreen:()=>Promise<void>;

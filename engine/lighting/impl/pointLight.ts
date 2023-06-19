@@ -1,6 +1,6 @@
 import {Game} from "../../core/game";
 import {AbstractLight} from "../abstract/abstractLight";
-import {UNIFORM_VALUE_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
+import {UNIFORM_VALUE_TYPE} from "@engine/renderer/webGl/base/program/shaderProgramUtils";
 import {FastMap} from "@engine/misc/collection/fastMap";
 
 /*

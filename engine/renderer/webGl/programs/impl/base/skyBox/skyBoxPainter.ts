@@ -1,9 +1,9 @@
 import {AbstractPainter} from "@engine/renderer/webGl/programs/abstract/abstractPainter";
 import {ShaderGenerator} from "@engine/renderer/webGl/shaderGenerator/shaderGenerator";
-import {GL_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
-import {BufferInfo, DRAW_METHOD, IBufferInfoDescription} from "@engine/renderer/webGl/base/bufferInfo";
+import {GL_TYPE} from "@engine/renderer/webGl/base/program/shaderProgramUtils";
+    import {BufferInfo, DRAW_METHOD, IBufferInfoDescription} from "@engine/renderer/webGl/base/buffer/bufferInfo";
 import {Plane} from "@engine/renderer/webGl/primitives/plane";
-import {ShaderProgram} from "@engine/renderer/webGl/base/shaderProgram";
+import {ShaderProgram} from "@engine/renderer/webGl/base/program/shaderProgram";
 
 export class SkyBoxPainter extends AbstractPainter {
 

@@ -1,5 +1,4 @@
 import {Scene} from "@engine/scene/scene";
-import {Texture} from "@engine/renderer/webGl/base/texture";
 import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
 import {BoxBlurKernelFilter} from "@engine/renderer/webGl/filters/kernel/boxBlurKernelFilter";
 import {EdgeDetectionKernelFilter} from "@engine/renderer/webGl/filters/kernel/edgeDetectionKernelFilter";
@@ -10,6 +9,7 @@ import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {Model3d} from "@engine/renderable/impl/3d/model3d";
 import {TrackBall} from "../model3dFromFbx/trackBall";
 import {Sphere} from "@engine/renderer/webGl/primitives/sphere";
+import {Texture} from "@engine/renderer/webGl/base/texture/texture";
 
 export class MainScene extends Scene {
 

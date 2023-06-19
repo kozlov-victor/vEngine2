@@ -1,12 +1,11 @@
 import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstractGlFilter";
-import {FrameBuffer} from "@engine/renderer/webGl/base/frameBuffer";
 import {SimpleRectPainter} from "@engine/renderer/webGl/programs/impl/base/simpleRect/simpleRectPainter";
 import {Game} from "@engine/core/game";
 import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
-import {Mat4} from "@engine/misc/math/mat4";
 import {Color} from "@engine/renderer/common/color";
 import {Blender} from "@engine/renderer/webGl/blender/blender";
 import {BLEND_MODE} from "@engine/renderable/abstract/renderableModel";
+import {FrameBuffer} from "@engine/renderer/webGl/base/buffer/frameBuffer";
 
 
 export abstract class AbstractAccumulativeFilter extends AbstractGlFilter {

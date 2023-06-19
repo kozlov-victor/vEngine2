@@ -1,10 +1,11 @@
-import {BufferInfo} from "../../renderer/webGl/base/bufferInfo";
+
 import {IPrimitive} from "../../renderer/webGl/primitives/abstractPrimitive";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Game} from "@engine/core/game";
 import {Color} from "@engine/renderer/common/color";
 import {DebugError} from "@engine/debug/debugError";
 import type {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
+import {BufferInfo} from "@engine/renderer/webGl/base/buffer/bufferInfo";
 
 export abstract class Mesh2d extends RenderableModel {
 

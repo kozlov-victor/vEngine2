@@ -1,13 +1,9 @@
 import {Scene} from "@engine/scene/scene";
-import {DraggableBehaviour} from "@engine/behaviour/impl/draggable/draggable";
-import {Model3d} from "@engine/renderable/impl/3d/model3d";
-import {ITexture} from "@engine/renderer/common/texture";
-import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
+import {ICubeMapTexture, ITexture} from "@engine/renderer/common/texture";
 import {Color} from "@engine/renderer/common/color";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {ObjParser} from "@engine/renderable/impl/3d/objParser/objParser";
 import {TrackBall} from "../model3dFromFbx/trackBall";
-import {CubeMapTexture} from "@engine/renderer/webGl/base/cubeMapTexture";
 import {SkyBox} from "@engine/renderable/impl/skyBox";
 
 // https://free3d.com/ru/3d-models/obj
@@ -30,7 +26,7 @@ export class MainScene extends Scene {
         './model3dFromObj3/cube/back.png',
         './model3dFromObj3/cube/front.png',
     )
-    public readonly cubeTexture:CubeMapTexture;
+    public readonly cubeTexture:ICubeMapTexture;
 
     public override onReady():void {
 

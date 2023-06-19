@@ -1,10 +1,10 @@
 import {Game} from "@engine/core/game";
 import {isString} from "@engine/misc/object";
 import {Image} from "@engine/renderable/impl/general/image/image";
-import {Texture} from "@engine/renderer/webGl/base/texture";
 import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
 import {path} from "@engine/resources/path";
 import {ResourceLoader} from "@engine/resources/resourceLoader";
+import {Texture} from "@engine/renderer/webGl/base/texture/texture";
 
 export class Video extends Image {
 

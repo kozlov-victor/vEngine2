@@ -2,10 +2,10 @@ import {Scene} from "@engine/scene/scene";
 import {Emulator} from "./emulator";
 import {Game} from "@engine/core/game";
 import {Image} from "@engine/renderable/impl/general/image/image";
-import {DataTexture} from "@engine/renderer/webGl/base/dataTexture";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {TaskQueue} from "@engine/resources/taskQueue";
 import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
+import {DataTexture} from "@engine/renderer/webGl/base/texture/dataTexture";
 
 class EngineEmulator extends Emulator {
 

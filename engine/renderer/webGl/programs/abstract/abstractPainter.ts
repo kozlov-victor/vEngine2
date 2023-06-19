@@ -1,18 +1,18 @@
 import {isEqualArray, isTypedArray} from "@engine/misc/object";
 import {AbstractPrimitive} from "../../primitives/abstractPrimitive";
-import {ShaderProgram} from "../../base/shaderProgram";
-import {BufferInfo} from "../../base/bufferInfo";
+import {ShaderProgram} from "../../base/program/shaderProgram";
 import {IPainter} from "../interface/iPainter";
 import {DebugError} from "@engine/debug/debugError";
 import {
     UNIFORM_VALUE_ARRAY_TYPE,
     UNIFORM_VALUE_PRIMITIVE_TYPE,
     UNIFORM_VALUE_TYPE
-} from "@engine/renderer/webGl/base/shaderProgramUtils";
+} from "@engine/renderer/webGl/base/program/shaderProgramUtils";
 import {IDestroyable, Optional} from "@engine/core/declarations";
 import {FastMap} from "@engine/misc/collection/fastMap";
 import {AbstractTexture} from "@engine/renderer/webGl/base/abstract/abstractTexture";
 import {Incrementer} from "@engine/resources/incrementer";
+import {BufferInfo} from "@engine/renderer/webGl/base/buffer/bufferInfo";
 
 
 interface ITextureInfo {

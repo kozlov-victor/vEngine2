@@ -1,7 +1,6 @@
 import {DebugError} from "@engine/debug/debugError";
 import {FILL_TYPE, SHAPE_TYPE, ShapePainter} from "@engine/renderer/webGl/programs/impl/base/shape/shapePainter";
 import {MatrixStack} from "@engine/misc/math/matrixStack";
-import {Texture} from "@engine/renderer/webGl/base/texture";
 import {IRectJSON, Rect} from "@engine/geometry/rect";
 import {Game, SCALE_STRATEGY} from "@engine/core/game";
 import {AbstractCanvasRenderer} from "@engine/renderer/abstract/abstractCanvasRenderer";
@@ -24,14 +23,11 @@ import {DebugUtil} from "@engine/renderer/webGl/debug/debugUtil";
 import {ClazzEx, IDestroyable, Optional} from "@engine/core/declarations";
 import {RendererHelper} from "@engine/renderer/abstract/rendererHelper";
 import {WebGlRendererHelper} from "@engine/renderer/webGl/renderer/webGlRendererHelper";
-import {FrameBufferStack, IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
 import {INTERPOLATION_MODE} from "@engine/renderer/webGl/base/abstract/abstractTexture";
-import {CubeMapTexture} from "@engine/renderer/webGl/base/cubeMapTexture";
 import {SimpleColoredRectPainter} from "@engine/renderer/webGl/programs/impl/base/simpleRect/simpleColoredRectPainter";
 import {Mat4Special} from "@engine/misc/math/mat4Special";
 import type {Mesh3d} from "@engine/renderable/impl/3d/mesh3d";
 import {CullFace} from "@engine/renderable/impl/3d/mesh3d";
-import {BufferInfo} from "@engine/renderer/webGl/base/bufferInfo";
 import {GlCachedAccessor} from "@engine/renderer/webGl/blender/glCachedAccessor";
 import {LruMap} from "@engine/misc/collection/lruMap";
 import {BatchPainter} from "@engine/renderer/webGl/programs/impl/batch/batchPainter";
@@ -47,6 +43,11 @@ import Mat16Holder = Mat4.Mat16Holder;
 import glEnumToString = DebugUtil.glEnumToString;
 import IDENTITY = Mat4.IDENTITY;
 import MAT16 = Mat4.MAT16;
+import {CubeMapTexture} from "@engine/renderer/webGl/base/texture/cubeMapTexture";
+import {FrameBufferStack, IStateStackPointer} from "@engine/renderer/webGl/base/buffer/frameBufferStack";
+import {BufferInfo} from "@engine/renderer/webGl/base/buffer/bufferInfo";
+import {Texture} from "@engine/renderer/webGl/base/texture/texture";
+import {NullTexture} from "@engine/renderer/webGl/base/texture/nullTexture";
 
 
 const getCtx = (el:HTMLCanvasElement):Optional<WebGLRenderingContext>=>{
@@ -141,7 +142,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     private _skyBoxPainterHolder = new InstanceHolder(SkyBoxPainter);
     private _batchPainterHolder = new InstanceHolder(BatchPainter);
 
-    private _nullTextureHolder = new  InstanceHolder(Texture);
+    private _nullTextureHolder = new  InstanceHolder(NullTexture);
     private _nullCubeMapTextureHolder = new InstanceHolder(CubeMapTexture,(it)=>it.setAsZero());
 
     private _origFrameBufferStack:FrameBufferStack;
@@ -316,7 +317,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
         sbp.setUniformVector(sbp.u_viewDirectionProjectionInverse,viewDirectionProjectionMatrix.mat16);
 
-        sbp.attachTexture(sbp.u_skybox,model.texture);
+        sbp.attachTexture(sbp.u_skybox,model.texture as CubeMapTexture);
         this._glCachedAccessor.setDepthTest(false);
         this._glCachedAccessor.setCullFace(CullFace.none);
         sbp.draw();

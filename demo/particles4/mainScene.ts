@@ -5,7 +5,6 @@ import {EvenOddCompositionFilter} from "@engine/renderer/webGl/filters/compositi
 import {LightenCompositionFilter} from "@engine/renderer/webGl/filters/composition/lightenCompositionFilter";
 import {Image} from "@engine/renderable/impl/general/image/image";
 import {Resource} from "@engine/resources/resourceDecorators";
-import {Texture} from "@engine/renderer/webGl/base/texture";
 import {DarkenCompositionFilter} from "@engine/renderer/webGl/filters/composition/darkenCompositionFilter";
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 import {ScreenCompositionFilter} from "@engine/renderer/webGl/filters/composition/screenCompositionFilter";
@@ -24,7 +23,7 @@ import {DifferenceCompositionFilter} from "@engine/renderer/webGl/filters/compos
 export class MainScene extends Scene {
 
     @Resource.Texture('./assets/star.png')
-    public readonly img:Texture;
+    public readonly img:ITexture;
 
     @Resource.Texture('./assets/repeat.jpg')
     public readonly bgTexture:ITexture;

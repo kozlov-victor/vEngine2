@@ -1,12 +1,14 @@
 import {DebugError} from "@engine/debug/debugError";
 
 
-import {Texture} from "./texture";
 import {Color} from "@engine/renderer/common/color";
 import {IDestroyable, Optional} from "@engine/core/declarations";
 import {ISize} from "@engine/geometry/size";
 import {IRenderTarget} from "@engine/renderer/abstract/abstractRenderer";
 import {INTERPOLATION_MODE} from "@engine/renderer/webGl/base/abstract/abstractTexture";
+import {FrameBufferTexture} from "@engine/renderer/webGl/base/texture/frameBufferTexture";
+import {Texture} from "@engine/renderer/webGl/base/texture/texture";
+
 
 
 export class FrameBuffer implements IRenderTarget, IDestroyable {
@@ -19,7 +21,7 @@ export class FrameBuffer implements IRenderTarget, IDestroyable {
         this._width = size.width;
         this._height = size.height;
 
-        this.texture = new Texture(_gl);
+        this.texture = new FrameBufferTexture(_gl);
         this.texture.setImage(undefined,size);
         this._init(_gl,size);
         const lastBound = FrameBuffer.currentBuffer;

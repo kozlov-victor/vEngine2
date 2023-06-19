@@ -1,7 +1,4 @@
 import {Scene} from "@engine/scene/scene";
-import {Texture} from "@engine/renderer/webGl/base/texture";
-import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
-import {Image} from "@engine/renderable/impl/general/image/image";
 import {BoxBlurKernelFilter} from "@engine/renderer/webGl/filters/kernel/boxBlurKernelFilter";
 import {EdgeDetectionKernelFilter} from "@engine/renderer/webGl/filters/kernel/edgeDetectionKernelFilter";
 import {EmbossKernelFilter} from "@engine/renderer/webGl/filters/kernel/embossKernelFilter";
@@ -13,7 +10,9 @@ import {HexagonalFilter} from "@engine/renderer/webGl/filters/texture/hexagonalF
 import {LowResolutionFilter} from "@engine/renderer/webGl/filters/texture/lowResolutionFilter";
 import {MotionBlurFilter} from "@engine/renderer/webGl/filters/texture/motionBlurFilter";
 import {PosterizeFilter} from "@engine/renderer/webGl/filters/texture/posterizeFilter";
-import {InvertBgColorCompositionFilter} from "@engine/renderer/webGl/filters/composition/invertBgColorCompositionFilter";
+import {
+    InvertBgColorCompositionFilter
+} from "@engine/renderer/webGl/filters/composition/invertBgColorCompositionFilter";
 import {InvertColorFilter} from "@engine/renderer/webGl/filters/texture/invertColorFilter";
 import {Video} from "@engine/renderable/impl/general/image/video";
 import {DraggableBehaviour} from "@engine/behaviour/impl/draggable/draggable";

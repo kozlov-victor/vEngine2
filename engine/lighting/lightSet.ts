@@ -1,6 +1,6 @@
 import {DebugError} from "../debug/debugError";
 import {Game} from "../core/game";
-import {UNIFORM_VALUE_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
+import {UNIFORM_VALUE_TYPE} from "@engine/renderer/webGl/base/program/shaderProgramUtils";
 import {AbstractLight} from "@engine/lighting/abstract/abstractLight";
 import {PointLight} from "@engine/lighting/impl/pointLight";
 import {AmbientLight} from "@engine/lighting/impl/ambientLight";

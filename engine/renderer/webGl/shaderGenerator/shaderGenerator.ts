@@ -1,4 +1,4 @@
-import {GL_TYPE, normalizeUniformName} from "../base/shaderProgramUtils";
+import {GL_TYPE, normalizeUniformName} from "../base/program/shaderProgramUtils";
 
 interface IInfo {
     type: string;

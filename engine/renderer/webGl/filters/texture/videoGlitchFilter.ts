@@ -1,9 +1,9 @@
 import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstractGlFilter";
 import {ShaderGenerator} from "@engine/renderer/webGl/shaderGenerator/shaderGenerator";
 import {Game} from "@engine/core/game";
-import {GL_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
-import {FrameBuffer} from "@engine/renderer/webGl/base/frameBuffer";
+import {GL_TYPE} from "@engine/renderer/webGl/base/program/shaderProgramUtils";
 import {ISize} from "@engine/geometry/size";
+import {FrameBuffer} from "@engine/renderer/webGl/base/buffer/frameBuffer";
 
 // from https://www.shadertoy.com/view/XtK3W3
 

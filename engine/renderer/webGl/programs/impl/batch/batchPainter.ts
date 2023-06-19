@@ -1,17 +1,17 @@
 import {AbstractPainter} from "@engine/renderer/webGl/programs/abstract/abstractPainter";
 import {ShaderGenerator} from "@engine/renderer/webGl/shaderGenerator/shaderGenerator";
-import {GL_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
-import {ShaderProgram} from "@engine/renderer/webGl/base/shaderProgram";
-import {BufferInfo, DRAW_METHOD, IBufferInfoDescription} from "@engine/renderer/webGl/base/bufferInfo";
+import {GL_TYPE} from "@engine/renderer/webGl/base/program/shaderProgramUtils";
+import {ShaderProgram} from "@engine/renderer/webGl/base/program/shaderProgram";
 
 import * as batchVertexSource from "@engine/renderer/webGl/programs/impl/batch/shaders/batch.vertex.glsl";
 import * as batchFragmentSource from "@engine/renderer/webGl/programs/impl/batch/shaders/batch.fragment.glsl";
 import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
-import {Texture} from "@engine/renderer/webGl/base/texture";
 import {BatchedImage} from "@engine/renderable/impl/general/image/batchedImage";
 import {ColorBatchArray} from "@engine/renderer/webGl/programs/impl/batch/batchArrays/colorBatchArray";
 import {AngleBatchArray} from "@engine/renderer/webGl/programs/impl/batch/batchArrays/angleBatchArray";
 import {PosBatchArray} from "@engine/renderer/webGl/programs/impl/batch/batchArrays/posBatchArray";
+import {BufferInfo, DRAW_METHOD, IBufferInfoDescription} from "@engine/renderer/webGl/base/buffer/bufferInfo";
+import {Texture} from "@engine/renderer/webGl/base/texture/texture";
 
 // http://tmtg.nl/glesjs/glesjs-demo/game.js
 

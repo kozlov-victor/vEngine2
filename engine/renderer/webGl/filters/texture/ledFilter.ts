@@ -1,8 +1,8 @@
 import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstractGlFilter";
 import {Game} from "@engine/core/game";
 import {ShaderGenerator} from "@engine/renderer/webGl/shaderGenerator/shaderGenerator";
-import {FrameBuffer} from "@engine/renderer/webGl/base/frameBuffer";
 import {ISize} from "@engine/geometry/size";
+import {FrameBuffer} from "@engine/renderer/webGl/base/buffer/frameBuffer";
 
 // https://www.construct.net/en/forum/extending-construct-2/effects-31/effect-led-filter-98586
 

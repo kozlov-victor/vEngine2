@@ -1,5 +1,5 @@
 import {Optional} from "@engine/core/declarations";
-import {DRAW_METHOD} from "@engine/renderer/webGl/base/bufferInfo";
+import {DRAW_METHOD} from "@engine/renderer/webGl/base/buffer/bufferInfo";
 
 export interface IPrimitive {
     vertexArr:number[];

@@ -1,6 +1,6 @@
 import {AbstractPrimitive} from "@engine/renderer/webGl/primitives/abstractPrimitive";
 import {Int} from "@engine/core/declarations";
-import {DRAW_METHOD} from "@engine/renderer/webGl/base/bufferInfo";
+import {DRAW_METHOD} from "@engine/renderer/webGl/base/buffer/bufferInfo";
 
 export class Torus extends AbstractPrimitive {
 

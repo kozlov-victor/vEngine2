@@ -1,12 +1,12 @@
 import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstractGlFilter";
-import {FrameBuffer} from "@engine/renderer/webGl/base/frameBuffer";
 import {SimpleRectPainter} from "@engine/renderer/webGl/programs/impl/base/simpleRect/simpleRectPainter";
 import {Game} from "@engine/core/game";
 import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
 import {Blender} from "@engine/renderer/webGl/blender/blender";
 import {BLEND_MODE} from "@engine/renderable/abstract/renderableModel";
 import {Color} from "@engine/renderer/common/color";
-import {GL_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
+import {GL_TYPE} from "@engine/renderer/webGl/base/program/shaderProgramUtils";
+import {FrameBuffer} from "@engine/renderer/webGl/base/buffer/frameBuffer";
 
 
 export abstract class AbstractCompositionFilter extends AbstractGlFilter {

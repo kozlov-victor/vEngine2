@@ -1,15 +1,12 @@
-import {FrameBuffer} from "../../base/frameBuffer";
-import {DebugError} from "@engine/debug/debugError";
-import {Mat4} from "@engine/misc/math/mat4";
 import {SimpleRectPainter} from "@engine/renderer/webGl/programs/impl/base/simpleRect/simpleRectPainter";
 import {Game} from "@engine/core/game";
 import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
-import {AbstractRenderer} from "@engine/renderer/abstract/abstractRenderer";
-import {UNIFORM_VALUE_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
+import {UNIFORM_VALUE_TYPE} from "@engine/renderer/webGl/base/program/shaderProgramUtils";
 import {AbstractPainter} from "@engine/renderer/webGl/programs/abstract/abstractPainter";
 import {Color} from "@engine/renderer/common/color";
 import {FastMap} from "@engine/misc/collection/fastMap";
 import {IDestroyable} from "@engine/core/declarations";
+import {FrameBuffer} from "@engine/renderer/webGl/base/buffer/frameBuffer";
 
 export abstract class AbstractGlFilter implements IFilter,IDestroyable {
 

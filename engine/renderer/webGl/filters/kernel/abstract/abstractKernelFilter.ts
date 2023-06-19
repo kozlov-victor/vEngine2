@@ -1,9 +1,9 @@
 import {ShaderGenerator} from "@engine/renderer/webGl/shaderGenerator/shaderGenerator";
 import {Game} from "@engine/core/game";
-import {GL_TYPE} from "@engine/renderer/webGl/base/shaderProgramUtils";
-import {FrameBuffer} from "@engine/renderer/webGl/base/frameBuffer";
+import {GL_TYPE} from "@engine/renderer/webGl/base/program/shaderProgramUtils";
 import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstractGlFilter";
 import {Kernel3x3} from "@engine/renderer/webGl/filters/accumulative/abstract/abstractKernelAccumulativeFilter";
+import {FrameBuffer} from "@engine/renderer/webGl/base/buffer/frameBuffer";
 
 
 export abstract class AbstractKernelAccumulativeFilter extends AbstractGlFilter {

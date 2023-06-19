@@ -1,8 +1,8 @@
-import {ShaderProgram} from "../../../../base/shaderProgram";
+import {ShaderProgram} from "../../../../base/program/shaderProgram";
 import {AbstractPainter} from "../../../abstract/abstractPainter";
-import {BufferInfo, DRAW_METHOD, IBufferInfoDescription} from "../../../../base/bufferInfo";
+import {BufferInfo, DRAW_METHOD, IBufferInfoDescription} from "../../../../base/buffer/bufferInfo";
 import {Plane} from "../../../../primitives/plane";
-import {GL_TYPE} from "../../../../base/shaderProgramUtils";
+import {GL_TYPE} from "../../../../base/program/shaderProgramUtils";
 import {ShaderGenerator} from "../../../../shaderGenerator/shaderGenerator";
 import * as fragmentSource from "./shape.fragment.glsl";
 import * as fragmentStructuresSource from "./fragment-structures.glsl";

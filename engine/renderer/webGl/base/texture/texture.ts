@@ -1,10 +1,13 @@
 import {DebugError} from "@engine/debug/debugError";
 import {ISize, Size} from "@engine/geometry/size";
 import {AbstractTexture, INTERPOLATION_MODE} from "@engine/renderer/webGl/base/abstract/abstractTexture";
+import {ITexture} from "@engine/renderer/common/texture";
 
 
-export class Texture extends AbstractTexture{
+export class Texture extends AbstractTexture implements ITexture {
 
+    public type:string = 'Texture';
+    public readonly __kind__ = 'Texture';
 
     protected samplerType: GLenum = this.gl.TEXTURE_2D;
 

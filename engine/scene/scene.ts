@@ -18,7 +18,6 @@ import {TweenableDelegate} from "@engine/delegates/tweenableDelegate";
 import {TimerDelegate} from "@engine/delegates/timerDelegate";
 import {EventEmitterDelegate} from "@engine/delegates/eventDelegates/eventEmitterDelegate";
 import {Point2d} from "@engine/geometry/point2d";
-import {IStateStackPointer} from "@engine/renderer/webGl/base/frameBufferStack";
 import {IAnimation} from "@engine/animation/iAnimation";
 import {Mat4} from "@engine/misc/math/mat4";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
@@ -35,6 +34,7 @@ import {GamepadEventEmitterDelegate} from "@engine/delegates/eventDelegates/game
 import IDENTITY_HOLDER = Mat4.IDENTITY_HOLDER;
 import {ISceneMouseEvent} from "@engine/control/mouse/mousePoint";
 import {SpatialSpace} from "@engine/physics/common/spatialSpace";
+import {IStateStackPointer} from "@engine/renderer/webGl/base/buffer/frameBufferStack";
 
 export const enum SCENE_EVENTS {
     PRELOADING = 'PRELOADING',

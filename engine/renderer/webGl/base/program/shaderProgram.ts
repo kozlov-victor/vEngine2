@@ -9,8 +9,8 @@ import {
     extractUniformsFromShader, UNIFORM_VALUE_TYPE,
     IUniformsMap, IUniformWrapper, extractUniformsAndAttributesFromShaderSource
 } from "./shaderProgramUtils";
-import {VertexBuffer} from "./vertexBuffer";
 import {Optional} from "@engine/core/declarations";
+import {VertexBuffer} from "@engine/renderer/webGl/base/buffer/vertexBuffer";
 
 export class ShaderProgram {
 

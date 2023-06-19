@@ -1,9 +1,7 @@
-import {FrameBuffer} from "@engine/renderer/webGl/base/frameBuffer";
+
 import {ISize} from "@engine/geometry/size";
 import {IDestroyable} from "@engine/core/declarations";
-import {Texture} from "@engine/renderer/webGl/base/texture";
 import {Color} from "@engine/renderer/common/color";
-import {DoubleFrameBuffer} from "@engine/renderer/webGl/base/doubleFrameBuffer";
 import {BLEND_MODE} from "@engine/renderable/abstract/renderableModel";
 import {Blender} from "@engine/renderer/webGl/blender/blender";
 import {AbstractGlFilter} from "@engine/renderer/webGl/filters/abstract/abstractGlFilter";
@@ -14,6 +12,9 @@ import {INTERPOLATION_MODE} from "@engine/renderer/webGl/base/abstract/abstractT
 import {Device} from "@engine/misc/device";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Incrementer} from "@engine/resources/incrementer";
+import {FrameBuffer} from "@engine/renderer/webGl/base/buffer/frameBuffer";
+import {DoubleFrameBuffer} from "@engine/renderer/webGl/base/buffer/doubleFrameBuffer";
+import {Texture} from "@engine/renderer/webGl/base/texture/texture";
 
 interface IStackItem {
     frameBuffer:FrameBuffer;
