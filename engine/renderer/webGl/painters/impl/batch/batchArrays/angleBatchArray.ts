@@ -1,4 +1,4 @@
-import {AbstractBatchArray} from "@engine/renderer/webGl/programs/impl/batch/batchArrays/abstract/abstractBatchArray";
+import {AbstractBatchArray} from "@engine/renderer/webGl/painters/impl/batch/batchArrays/abstract/abstractBatchArray";
 
 export class AngleBatchArray extends AbstractBatchArray<number> {
 

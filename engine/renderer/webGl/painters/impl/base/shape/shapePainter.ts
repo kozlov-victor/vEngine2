@@ -9,7 +9,7 @@ import * as fragmentStructuresSource from "./fragment-structures.glsl";
 import {parametrizeString} from "@engine/misc/object";
 import {STRETCH_MODE} from "@engine/renderable/impl/general/image/image";
 import {AbstractGradient} from "@engine/renderable/impl/fill/abstract/abstractGradient";
-import {Z_To_W_MATRIX_SOURCE} from "@engine/renderer/webGl/programs/misc";
+import {Z_To_W_MATRIX_SOURCE} from "@engine/renderer/webGl/painters/misc";
 
 export const enum SHAPE_TYPE {
     ELLIPSE,RECT

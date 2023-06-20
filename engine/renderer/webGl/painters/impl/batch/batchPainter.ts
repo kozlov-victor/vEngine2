@@ -1,17 +1,18 @@
-import {AbstractPainter} from "@engine/renderer/webGl/programs/abstract/abstractPainter";
+import {AbstractPainter} from "@engine/renderer/webGl/painters/abstract/abstractPainter";
 import {ShaderGenerator} from "@engine/renderer/webGl/shaderGenerator/shaderGenerator";
 import {GL_TYPE} from "@engine/renderer/webGl/base/program/shaderProgramUtils";
 import {ShaderProgram} from "@engine/renderer/webGl/base/program/shaderProgram";
 
-import * as batchVertexSource from "@engine/renderer/webGl/programs/impl/batch/shaders/batch.vertex.glsl";
-import * as batchFragmentSource from "@engine/renderer/webGl/programs/impl/batch/shaders/batch.fragment.glsl";
+import * as batchVertexSource from "@engine/renderer/webGl/painters/impl/batch/shaders/batch.vertex.glsl";
+import * as batchFragmentSource from "@engine/renderer/webGl/painters/impl/batch/shaders/batch.fragment.glsl";
 import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
 import {BatchedImage} from "@engine/renderable/impl/general/image/batchedImage";
-import {ColorBatchArray} from "@engine/renderer/webGl/programs/impl/batch/batchArrays/colorBatchArray";
-import {AngleBatchArray} from "@engine/renderer/webGl/programs/impl/batch/batchArrays/angleBatchArray";
-import {PosBatchArray} from "@engine/renderer/webGl/programs/impl/batch/batchArrays/posBatchArray";
+import {ColorBatchArray} from "@engine/renderer/webGl/painters/impl/batch/batchArrays/colorBatchArray";
+import {AngleBatchArray} from "@engine/renderer/webGl/painters/impl/batch/batchArrays/angleBatchArray";
+import {PosBatchArray} from "@engine/renderer/webGl/painters/impl/batch/batchArrays/posBatchArray";
 import {BufferInfo, DRAW_METHOD, IBufferInfoDescription} from "@engine/renderer/webGl/base/buffer/bufferInfo";
 import {Texture} from "@engine/renderer/webGl/base/texture/texture";
+import {GlCachedAccessor} from "@engine/renderer/webGl/blender/glCachedAccessor";
 
 // http://tmtg.nl/glesjs/glesjs-demo/game.js
 

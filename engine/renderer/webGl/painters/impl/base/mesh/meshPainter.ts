@@ -9,7 +9,7 @@ import {Color} from "@engine/renderer/common/color";
 import type {Mesh3d} from "@engine/renderable/impl/3d/mesh3d";
 import MAT16 = Mat4.MAT16;
 import {parametrizeString} from "@engine/misc/object";
-import {Z_To_W_MATRIX_SOURCE} from "@engine/renderer/webGl/programs/misc";
+import {Z_To_W_MATRIX_SOURCE} from "@engine/renderer/webGl/painters/misc";
 import {BufferInfo, DRAW_METHOD, IBufferInfoDescription} from "@engine/renderer/webGl/base/buffer/bufferInfo";
 
 

@@ -1,4 +1,4 @@
-import {BatchPainter} from "@engine/renderer/webGl/programs/impl/batch/batchPainter";
+import {BatchPainter} from "@engine/renderer/webGl/painters/impl/batch/batchPainter";
 import {VertexBuffer} from "@engine/renderer/webGl/base/buffer/vertexBuffer";
 
 export const NUM_OF_VERTICES_IN_QUAD = 4;

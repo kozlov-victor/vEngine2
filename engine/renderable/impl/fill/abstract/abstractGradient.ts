@@ -1,6 +1,6 @@
 import {Color} from "@engine/renderer/common/color";
 import {Optional} from "@engine/core/declarations";
-import {ShapePainter} from "@engine/renderer/webGl/programs/impl/base/shape/shapePainter";
+import {ShapePainter} from "@engine/renderer/webGl/painters/impl/base/shape/shapePainter";
 import {DebugError} from "@engine/debug/debugError";
 
 export interface IGradientPoint {

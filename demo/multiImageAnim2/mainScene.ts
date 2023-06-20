@@ -69,8 +69,7 @@ export class MainScene extends Scene {
 
 
         this.mouseEventHandler.on(MOUSE_EVENTS.click,()=>{
-            animNum = animNum+1;
-            if (animNum===4) animNum = 1;
+            animNum = (++animNum)%all.length;
            all[animNum].play();
         });
 

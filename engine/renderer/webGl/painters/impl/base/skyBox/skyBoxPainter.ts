@@ -1,4 +1,4 @@
-import {AbstractPainter} from "@engine/renderer/webGl/programs/abstract/abstractPainter";
+import {AbstractPainter} from "@engine/renderer/webGl/painters/abstract/abstractPainter";
 import {ShaderGenerator} from "@engine/renderer/webGl/shaderGenerator/shaderGenerator";
 import {GL_TYPE} from "@engine/renderer/webGl/base/program/shaderProgramUtils";
     import {BufferInfo, DRAW_METHOD, IBufferInfoDescription} from "@engine/renderer/webGl/base/buffer/bufferInfo";

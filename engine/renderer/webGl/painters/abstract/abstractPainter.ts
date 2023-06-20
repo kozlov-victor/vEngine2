@@ -146,7 +146,7 @@ export class AbstractPainter implements IPainter, IDestroyable{
 
         for (let i:number=0,max:number = this.texturesToBind.length;i<max;i++) {
             const t:ITextureInfo = this.texturesToBind.texturesInfo[i];
-            t.texture.bind(t.uniformName,i,this.program as ShaderProgram);
+            t.texture.bind(t.uniformName,i,this.program);
         }
         this.texturesToBind.length = 0;
         this.drawElements();

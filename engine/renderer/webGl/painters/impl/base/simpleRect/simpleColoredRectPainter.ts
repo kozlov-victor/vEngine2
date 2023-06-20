@@ -4,8 +4,8 @@ import {DebugError} from "@engine/debug/debugError";
 import {Plane} from "@engine/renderer/webGl/primitives/plane";
 import {ShaderProgram} from "@engine/renderer/webGl/base/program/shaderProgram";
 import {BufferInfo, DRAW_METHOD, IBufferInfoDescription} from "@engine/renderer/webGl/base/buffer/bufferInfo";
-import {AbstractPainter} from "@engine/renderer/webGl/programs/abstract/abstractPainter";
-import {Z_To_W_MATRIX_SOURCE} from "@engine/renderer/webGl/programs/misc";
+import {AbstractPainter} from "@engine/renderer/webGl/painters/abstract/abstractPainter";
+import {Z_To_W_MATRIX_SOURCE} from "@engine/renderer/webGl/painters/misc";
 
 export class SimpleColoredRectPainter extends AbstractPainter {
 

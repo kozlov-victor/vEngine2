@@ -3,7 +3,7 @@
 
 import {AbstractGradient} from "@engine/renderable/impl/fill/abstract/abstractGradient";
 import {Point2d} from "@engine/geometry/point2d";
-import {ShapePainter} from "@engine/renderer/webGl/programs/impl/base/shape/shapePainter";
+import {ShapePainter} from "@engine/renderer/webGl/painters/impl/base/shape/shapePainter";
 
 export class RadialGradient extends AbstractGradient {
 

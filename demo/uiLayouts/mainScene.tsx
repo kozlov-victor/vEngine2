@@ -5,14 +5,14 @@ import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleG
 import {Assets} from "./assets";
 import {Reactive} from "@engine/renderable/tsx/genetic/reactive";
 import {AlignTextContentHorizontal, AlignTextContentVertical} from "@engine/renderable/impl/ui/textField/textAlign";
-import {DomRootComponent} from "@engine/renderable/tsx/dom/domRootComponent";
+import {VEngineRootComponent} from "@engine/renderable/tsx/vEngine/vEngineRootComponent";
 
-class SceneUI extends DomRootComponent {
+class SceneUI extends VEngineRootComponent {
 
     private result:string = 'text...';
 
-    constructor(private game: Game,private assets:Assets) {
-        super();
+    constructor(game: Game,private assets:Assets) {
+        super(game);
     }
 
     public override render(): JSX.Element {

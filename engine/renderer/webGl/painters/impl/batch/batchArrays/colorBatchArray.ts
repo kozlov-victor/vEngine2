@@ -1,7 +1,7 @@
 import {
     AbstractBatchArray,
     NUM_OF_VERTICES_IN_QUAD
-} from "@engine/renderer/webGl/programs/impl/batch/batchArrays/abstract/abstractBatchArray";
+} from "@engine/renderer/webGl/painters/impl/batch/batchArrays/abstract/abstractBatchArray";
 import {ColorEx} from "@engine/renderable/impl/general/image/batchedImage";
 
 export class ColorBatchArray extends AbstractBatchArray<ColorEx> {

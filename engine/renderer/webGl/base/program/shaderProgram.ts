@@ -23,8 +23,8 @@ export class ShaderProgram {
     private readonly _attributes:IAttributesMap;
 
     constructor(private readonly _gl:WebGLRenderingContext,vertexSource:string,fragmentSource:string) {
-        const vShader:WebGLShader = compileShader(_gl, vertexSource, _gl.VERTEX_SHADER) as WebGLShader;
-        const fShader:WebGLShader = compileShader(_gl, fragmentSource, _gl.FRAGMENT_SHADER) as WebGLShader;
+        const vShader = compileShader(_gl, vertexSource, _gl.VERTEX_SHADER) as WebGLShader;
+        const fShader = compileShader(_gl, fragmentSource, _gl.FRAGMENT_SHADER) as WebGLShader;
         this._program = createProgram(_gl, vShader, fShader);
         _gl.deleteShader(vShader);
         _gl.deleteShader(fShader);

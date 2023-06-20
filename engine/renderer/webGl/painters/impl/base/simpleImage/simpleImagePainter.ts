@@ -1,7 +1,7 @@
-import {AbstractPainter} from "@engine/renderer/webGl/programs/abstract/abstractPainter";
+import {AbstractPainter} from "@engine/renderer/webGl/painters/abstract/abstractPainter";
 import {ShaderGenerator} from "@engine/renderer/webGl/shaderGenerator/shaderGenerator";
 import {GL_TYPE} from "@engine/renderer/webGl/base/program/shaderProgramUtils";
-import {Z_To_W_MATRIX_SOURCE} from "@engine/renderer/webGl/programs/misc";
+import {Z_To_W_MATRIX_SOURCE} from "@engine/renderer/webGl/painters/misc";
 import {ShaderProgram} from "@engine/renderer/webGl/base/program/shaderProgram";
 import {Plane} from "@engine/renderer/webGl/primitives/plane";
 import {BufferInfo, DRAW_METHOD, IBufferInfoDescription} from "@engine/renderer/webGl/base/buffer/bufferInfo";
