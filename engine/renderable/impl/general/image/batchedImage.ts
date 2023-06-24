@@ -48,12 +48,12 @@ export class BatchedImage extends RenderableModel implements ICloneable<BatchedI
     public override render() {
         if (!this.visible) return;
         if (this.fillColor.a===0) return;
-        const delta: number = this.game.getDeltaTime();
+        const delta = this.game.getDeltaTime();
         const dSeconds = delta / 1000;
         if (this.velocity.x!==0) this.pos.x += this.velocity.x * dSeconds;
         if (this.velocity.y!==0) this.pos.y += this.velocity.y * dSeconds;
         if (this._angleVelocity3d.z!==0) this.angle3d.z += this._angleVelocity3d.z * dSeconds;
-        this.draw();
+        this.game.getRenderer().drawBatchedImage(this);
     }
 
     protected override setClonedProperties(cloned: BatchedImage) {
@@ -67,7 +67,5 @@ export class BatchedImage extends RenderableModel implements ICloneable<BatchedI
         return cloned;
     }
 
-    public override draw() {
-        this.game.getRenderer().drawBatchedImage(this);
-    }
+    public override draw() {}
 }
