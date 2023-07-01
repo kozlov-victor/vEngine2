@@ -26,11 +26,15 @@ import {SvgUtils} from "./svgUtils";
 import {AbstractGradient} from "@engine/renderable/impl/fill/abstract/abstractGradient";
 import {LinearGradient} from "@engine/renderable/impl/fill/linearGradient";
 import {RadialGradient} from "@engine/renderable/impl/fill/radialGradient";
+import {Font} from "@engine/renderable/impl/general/font/font";
+import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
+import {isNumber} from "@engine/misc/object";
 
 export class SvgElementRenderer {
 
     private elementStylesHolder = new ElementStylesHolder();
     private css = new CssParser();
+    private fontCache:Record<string, Font> = {};
 
     constructor(private game:Game, private document:XmlNode, private rootContainer:SvgImage, private preloadedResources:Record<string, ITexture>) {
         const cssRaw = document.getElementsByTagName('style').map(it=>it.getTextContent()).join('\n');
@@ -342,6 +346,44 @@ export class SvgElementRenderer {
         container.appendChild(circle);
     }
 
+    private renderText(parentView:RenderableModel,el:XmlNode):void {
+        const container:RenderableModel = this.createElementContainer(parentView,el);
+        const x:number = SvgUtils.getNumberWithMeasure(el.getAttribute('x'),this.rootContainer.size.width,0);
+        const y:number = SvgUtils.getNumberWithMeasure(el.getAttribute('y'),this.rootContainer.size.height,0);
+        let fontSize = +this.lookUpProperty(el,'font-size',false);
+        if (!isNumber(fontSize) || fontSize<=0) fontSize = 16; // it over-simplification, but acceptable for now
+        const fontFamily = this.lookUpProperty(el,'font-family',true) || 'arial';
+        const fillColor = this.getFillStrokeParams(el).fillColor;
+        const textAnchor = el.getAttribute('text-anchor');
+
+        const key = `${fontFamily}_${fontSize}`;
+        if (this.fontCache[key]===undefined) {
+            this.fontCache[key] = Font.fromCssDescription(this.game,{
+                fontSize,fontFamily,
+            });
+        }
+        const textField = new TextField(this.game,this.fontCache[key]);
+        textField.setText(el.getTextContent() || ' ');
+        textField.pos.setXY(x,y);
+        textField.setMargin(0);
+        textField.setPadding(0);
+        textField.setAutoSize(true);
+        textField.revalidate();
+
+        let anchorX = 0;
+        if (textAnchor==='middle') {
+            anchorX = textField.size.width/2;
+        }
+        else if (textAnchor==='end') {
+            anchorX = textField.size.width;
+        }
+        textField.anchorPoint.setXY(anchorX,textField.size.height);
+        textField.textColor.setFrom(fillColor);
+        this.setCommonProperties(textField,el);
+        container.appendChild(textField);
+
+    }
+
     private renderImage(parentView:RenderableModel,el:XmlNode):void {
         const container:RenderableModel = this.createElementContainer(parentView,el);
         const x:number = SvgUtils.getNumberWithMeasure(el.getAttribute('cx'),this.rootContainer.size.width,0);
@@ -521,6 +563,10 @@ export class SvgElementRenderer {
             }
             case 'circle': {
                 this.renderCircle(view,el);
+                return undefined;
+            }
+            case 'text': {
+                this.renderText(view,el);
                 return undefined;
             }
             case 'ellipse': {

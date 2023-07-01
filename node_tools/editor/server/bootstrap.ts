@@ -1,17 +1,18 @@
-import {IRegistryItem, Registry} from "./registry/registry";
+import {Registry} from "./registry/registry";
 import type {IncomingMessage, ServerResponse} from 'http';
+import {Static} from "./static/static";
 
 declare const __non_webpack_require__:any;
 
 const http = __non_webpack_require__('http');
 const urlModule = __non_webpack_require__('url');
 
-const writeResultToResponse = (result:any,registryItem:IRegistryItem, res:ServerResponse):void=>{
-    if (registryItem.contentType) res.setHeader('content-type',registryItem.contentType);
+const writeResultToResponse = (result:any, res:ServerResponse,contentType?:string):void=>{
+    if (contentType) res.setHeader('content-type',contentType);
     if (result.charAt!==undefined) {
         res.end(result);
     } else {
-        if (registryItem.contentType?.includes('json')) res.end(JSON.stringify(result));
+        if (contentType?.includes('json')) res.end(JSON.stringify(result));
         else res.end(result);
     }
 }
@@ -45,6 +46,13 @@ const requestListener = async (req:IncomingMessage, res:ServerResponse)=> {
     const parsedUrl = urlModule.parse(req.url, true);
     let url:string = parsedUrl.pathname;
     if (!url.endsWith('/')) url = url + '/';
+
+    if (Static.has(url)) {
+        const staticResp = Static.get(url);
+        writeResultToResponse(staticResp.result,res,staticResp.contentType);
+        return;
+    }
+
     const queryObject = parsedUrl.query;
     const bodyRaw = await getReqBody(req);
     let body:Record<string, any> = {};
@@ -63,7 +71,7 @@ const requestListener = async (req:IncomingMessage, res:ServerResponse)=> {
                     res.writeHead(203);
                     res.end();
                 }
-                writeResultToResponse(result,registryItem,res);
+                writeResultToResponse(result,res,registryItem.contentType);
                 return;
             } catch (e:any) {
                 writeErrorToResponse(e, res);

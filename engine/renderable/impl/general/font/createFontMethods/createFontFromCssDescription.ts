@@ -13,7 +13,7 @@ import ICssFontParameters = FontTypes.ICssFontParameters;
 export const createFontFromCssDescription = (game:Game,params:ICssFontParameters):Font=>{
 
     const fontFamily:string = params.fontFamily ?? DEFAULT_FONT_PARAMS.fontFamily;
-    const fontSize:number = params.fontSize ?? DEFAULT_FONT_PARAMS.fontSize;
+    const fontSize = params.fontSize ?? DEFAULT_FONT_PARAMS.fontSize;
 
     const cssFontDescription:string = fontAsCss(fontSize,fontFamily);
 
@@ -23,7 +23,7 @@ export const createFontFromCssDescription = (game:Game,params:ICssFontParameters
     return fontFactory.createFont(
         params.chars ?? (LAT_CHARS + STANDARD_SYMBOLS + CYR_CHARS).split(''),
         params.extraChars ?? [],
-        fontFamily, fontSize
+        fontFamily, +fontSize
     );
 
 };

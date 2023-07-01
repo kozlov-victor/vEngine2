@@ -15,11 +15,10 @@ export class SvgImage extends SimpleGameObjectContainer {
         super(game);
     }
 
-    private svgElementRenderer:SvgElementRenderer;
     private preloadedTextures:Record<string,ITexture> = {};
 
     public static async create(game:Game, taskQueue:TaskQueue, doc:XmlDocument, preferredSize?:ISize):Promise<SvgImage> {
-        const image:SvgImage = new SvgImage(game, doc, preferredSize);
+        const image = new SvgImage(game, doc, preferredSize);
         await image.preload(taskQueue);
         image.parse();
         return image;
@@ -56,7 +55,6 @@ export class SvgImage extends SimpleGameObjectContainer {
         drawingSurface.requestRedraw();
         this.appendChild(drawingSurface);
 
-        //this.appendChild(rootView);
     }
 
     private async preload(taskQueue:TaskQueue):Promise<void> {
@@ -65,12 +63,13 @@ export class SvgImage extends SimpleGameObjectContainer {
                 throw new DebugError(`current taskQueue is completed`);
             }
         }
-        const elements:XmlNode[] = this.doc.querySelectorAll('image');
-        for (const el of elements) {
+        const images = this.doc.querySelectorAll('image');
+        for (const el of images) {
             const url:string = el.getAttribute('xlink:href');
             if (!url) continue;
             this.preloadedTextures[url] = await taskQueue.getLoader().loadTexture(url);
         }
+
     }
 
 }
