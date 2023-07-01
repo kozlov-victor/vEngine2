@@ -9,6 +9,8 @@ import {Game} from "@engine/core/game";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {BitmapCacheHelper} from "@engine/renderable/bitmapCacheHelper";
 import {AlphaMaskFilter} from "@engine/renderer/webGl/filters/texture/alphaMaskFilter";
+import {XmlNode} from "@engine/misc/parsers/xml/xmlElements";
+import {isNumber} from "@engine/misc/object";
 
 export namespace SvgUtils {
 
@@ -57,6 +59,39 @@ export namespace SvgUtils {
                 throw new DebugError(`unknown measure: ` + measure);
         }
     };
+
+    export const resolveFontSize = (el:XmlNode,rootContainer:RenderableModel):number=> {
+        const fontSizeAttrVal = el.getAttribute('font-size');
+        const defaultSize = 16;
+        if (!fontSizeAttrVal) return defaultSize;
+        if (fontSizeAttrVal.trim().toLowerCase().endsWith('em')) {
+            let val = parseInt(fontSizeAttrVal)*defaultSize;
+            if (!isNumber(val) || val<=0) val = defaultSize;
+            return val;
+        }
+        switch (fontSizeAttrVal) {
+            case 'xx-small': return defaultSize-6;
+            case 'x-small': return defaultSize-4;
+            case 'small': return defaultSize-2;
+            case 'smaller': return defaultSize-1;
+            case 'medium': return defaultSize;
+            case 'large': return defaultSize+2;
+            case 'larger': return defaultSize+3;
+            case 'x-large': return defaultSize+4;
+            case 'xx-large': return defaultSize+6;
+            case 'xxx-large': return defaultSize+8;
+            case 'math':
+            case 'inherit':
+            case 'initial':
+            case 'revert':
+            case 'revert-layer':
+            case 'unset':
+                return defaultSize;
+        }
+        let val = getNumberWithMeasure(fontSizeAttrVal,rootContainer.size.width,16);
+        if (!isNumber(val) || val<=0) val = defaultSize;
+        return val;
+    }
 
     export const getNumberWithMeasure = (literal:string,containerSize:number,defaultValue:number):number=>{
         if (!literal) return defaultValue;

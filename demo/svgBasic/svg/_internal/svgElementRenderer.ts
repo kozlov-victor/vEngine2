@@ -350,8 +350,7 @@ export class SvgElementRenderer {
         const container:RenderableModel = this.createElementContainer(parentView,el);
         const x:number = SvgUtils.getNumberWithMeasure(el.getAttribute('x'),this.rootContainer.size.width,0);
         const y:number = SvgUtils.getNumberWithMeasure(el.getAttribute('y'),this.rootContainer.size.height,0);
-        let fontSize = +this.lookUpProperty(el,'font-size',false);
-        if (!isNumber(fontSize) || fontSize<=0) fontSize = 16; // it over-simplification, but acceptable for now
+        const fontSize = SvgUtils.resolveFontSize(el,this.rootContainer);
         const fontFamily = this.lookUpProperty(el,'font-family',true) || 'arial';
         const fillColor = this.getFillStrokeParams(el).fillColor;
         const textAnchor = el.getAttribute('text-anchor');
@@ -382,6 +381,9 @@ export class SvgElementRenderer {
         this.setCommonProperties(textField,el);
         container.appendChild(textField);
 
+        el.getChildNodes().forEach(c=>{
+            this.renderTag(container,c);
+        });
     }
 
     private renderImage(parentView:RenderableModel,el:XmlNode):void {
@@ -565,6 +567,7 @@ export class SvgElementRenderer {
                 this.renderCircle(view,el);
                 return undefined;
             }
+            case 'tspan':
             case 'text': {
                 this.renderText(view,el);
                 return undefined;
@@ -603,8 +606,11 @@ export class SvgElementRenderer {
                 return this.renderUse(view,el);
             }
             case 'defs':
+            case 'desc':
             case 'title':
             case 'style':
+            case 'radialGradient':
+            case 'linearGradient':
             case 'symbol': {
                 // ignore
                 return undefined;
