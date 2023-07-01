@@ -350,6 +350,8 @@ export class SvgElementRenderer {
         const container:RenderableModel = this.createElementContainer(parentView,el);
         const x:number = SvgUtils.getNumberWithMeasure(el.getAttribute('x'),this.rootContainer.size.width,0);
         const y:number = SvgUtils.getNumberWithMeasure(el.getAttribute('y'),this.rootContainer.size.height,0);
+        const dx = SvgUtils.getNumber(el.getAttribute('dx'),0);
+        const dy = SvgUtils.getNumber(el.getAttribute('dy'),0);
         const fontSize = SvgUtils.resolveFontSize(el,this.rootContainer);
         const fontFamily = this.lookUpProperty(el,'font-family',true) || 'arial';
         const fillColor = this.getFillStrokeParams(el).fillColor;
@@ -363,7 +365,7 @@ export class SvgElementRenderer {
         }
         const textField = new TextField(this.game,this.fontCache[key]);
         textField.setText(el.getTextContent() || ' ');
-        textField.pos.setXY(x,y);
+        textField.pos.setXY(x+dx,y+dy);
         textField.setMargin(0);
         textField.setPadding(0);
         textField.setAutoSize(true);

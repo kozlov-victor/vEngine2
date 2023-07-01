@@ -44,7 +44,7 @@ export namespace SvgUtils {
             case 'px':
                 return val;
             case 'mm':
-                // 1cm ≅ 37.795px or user units
+                // 1cm ≅ 37.795px
                 return val*0.01*37.795;
             case 'cm':
                 return val*37.795;

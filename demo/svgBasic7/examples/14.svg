@@ -1,0 +1,8 @@
+<svg width="570" height="100">
+    <g>
+        <text x="40" y="23" >Multiline Text: </text>
+        <text x="40" y="40" fill="rgb(121,0,121)">WWW.TutorialAndExample.COM
+            <tspan x="40" y="60" font-weight="bold"> This is Simple Easy learning. </tspan>
+        </text>
+    </g>
+</svg>
