@@ -1,10 +1,10 @@
 import {Optional} from "@engine/core/declarations";
 import {ShaderProgram} from "@engine/renderer/webGl/base/program/shaderProgram";
 import {DebugError} from "@engine/debug/debugError";
-import {ITexture} from "@engine/renderer/common/texture";
 import {Size} from "@engine/geometry/size";
 
 export const isPowerOf2 = (value:number):boolean=> {
+    if (!Number.isInteger(value)) return false;
     return (value & (value - 1)) === 0;
 };
 
@@ -143,8 +143,10 @@ export abstract class AbstractTexture  {
 
 
     protected setFilters():void{
-        const gl:WebGLRenderingContext = this.gl;
-        const isPowerOfTwo:boolean = isPowerOf2(this.size.width) && isPowerOf2(this.size.height);
+        const gl = this.gl;
+        const isPowerOfTwo =
+            this.size.width>1 && this.size.height>1 &&
+            isPowerOf2(this.size.width) && isPowerOf2(this.size.height);
         // Check if the image is a power of 2 in both dimensions.
         if (isPowerOfTwo) {
             gl.generateMipmap(gl.TEXTURE_2D);

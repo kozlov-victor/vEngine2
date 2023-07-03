@@ -5,7 +5,10 @@ import {TaskQueue} from "@engine/resources/taskQueue";
 import {ResourceLoader} from "@engine/resources/resourceLoader";
 import {XmlParser} from "@engine/misc/parsers/xml/xmlParser";
 
+// https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/
 const imageUrls:string[] = [
+    '18','22', '23',
+    '19', '20', '21', '15', '16', '17',
     '1', '2', '3', '4', '5', '6', '7', '8', '9', '10',
     '11', '12', '13', '14',
 ]

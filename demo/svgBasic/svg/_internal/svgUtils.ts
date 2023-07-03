@@ -16,10 +16,11 @@ export namespace SvgUtils {
 
     export const getColor = (literal:string)=>{
         if (literal.indexOf('url')===0) {
-            console.log(`urls is not supported: ${literal}`);
+            console.log(`urls is not supported for color: ${literal}`);
             return Color.NONE.clone();
         }
-        if (!literal || literal==='none') return Color.NONE.clone();
+        if (!literal) return Color.NONE.clone();
+        if (['inherit','none'].indexOf(literal)>-1) return Color.NONE.clone();
         return ColorFactory.fromCSS(literal);
     };
 
@@ -60,10 +61,10 @@ export namespace SvgUtils {
         }
     };
 
-    export const resolveFontSize = (el:XmlNode,rootContainer:RenderableModel):number=> {
-        const fontSizeAttrVal = el.getAttribute('font-size');
+    export const resolveFontMeasure = (el:XmlNode,attr:string,rootContainer:RenderableModel,defaultVal:number):number=> {
+        const fontSizeAttrVal = el.getAttribute(attr);
+        if (!fontSizeAttrVal) return defaultVal;
         const defaultSize = 16;
-        if (!fontSizeAttrVal) return defaultSize;
         if (fontSizeAttrVal.trim().toLowerCase().endsWith('em')) {
             let val = parseInt(fontSizeAttrVal)*defaultSize;
             if (!isNumber(val) || val<=0) val = defaultSize;
@@ -88,13 +89,14 @@ export namespace SvgUtils {
             case 'unset':
                 return defaultSize;
         }
-        let val = getNumberWithMeasure(fontSizeAttrVal,rootContainer.size.width,16);
-        if (!isNumber(val) || val<=0) val = defaultSize;
+        let val = getNumberWithMeasure(fontSizeAttrVal,rootContainer.size.width,defaultVal);
+        if (!isNumber(val) || val<=0) val = defaultVal;
         return val;
     }
 
     export const getNumberWithMeasure = (literal:string,containerSize:number,defaultValue:number):number=>{
         if (!literal) return defaultValue;
+        if (literal==='none') return defaultValue;
         const tokenizer = new BasicStringTokenizer(literal);
         const val:number = tokenizer.getNextNumber();
         const measure:string = !tokenizer.isEof()?tokenizer.getNextToken(tokenizer._CHAR+'%'):'';

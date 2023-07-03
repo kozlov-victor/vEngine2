@@ -71,11 +71,11 @@ export class FontContextCanvasFactory extends FontContextAbstractFactory<CanvasR
         (ctx as IPrefixedContext).oImageSmoothingEnabled = false;
         ctx.fillStyle = 'rgba(0,0,0,0)';
         ctx.fillRect(0,0,cnv.width,cnv.height);
-        ctx.fillStyle = '#fff';
         return ctx;
     }
 
     protected drawLetter(context: CanvasRenderingContext2D, letter: string, x: number, y: number): void {
+        context.fillStyle = '#fff';
         context.fillText(letter,x,y);
     }
 

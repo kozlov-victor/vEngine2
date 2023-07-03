@@ -67,3 +67,10 @@ if (!Float32Array.prototype.join) {
     (Float32Array as any).prototype.join = Array.prototype.join;
 }
 
+if (!Number.isInteger) {
+    Number.isInteger = value=>{
+        return typeof value === 'number' &&
+            isFinite(value) &&
+            Math.floor(value) === value;
+    }
+}

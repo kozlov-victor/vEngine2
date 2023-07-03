@@ -28,7 +28,6 @@ import {LinearGradient} from "@engine/renderable/impl/fill/linearGradient";
 import {RadialGradient} from "@engine/renderable/impl/fill/radialGradient";
 import {Font} from "@engine/renderable/impl/general/font/font";
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
-import {isNumber} from "@engine/misc/object";
 
 export class SvgElementRenderer {
 
@@ -346,13 +345,13 @@ export class SvgElementRenderer {
         container.appendChild(circle);
     }
 
-    private renderText(parentView:RenderableModel,el:XmlNode):void {
+    private renderText(parentView:RenderableModel,el:XmlNode,lineIndex:number):void {
         const container:RenderableModel = this.createElementContainer(parentView,el);
         const x:number = SvgUtils.getNumberWithMeasure(el.getAttribute('x'),this.rootContainer.size.width,0);
         const y:number = SvgUtils.getNumberWithMeasure(el.getAttribute('y'),this.rootContainer.size.height,0);
-        const dx = SvgUtils.getNumber(el.getAttribute('dx'),0);
-        const dy = SvgUtils.getNumber(el.getAttribute('dy'),0);
-        const fontSize = SvgUtils.resolveFontSize(el,this.rootContainer);
+        const dx = SvgUtils.resolveFontMeasure(el,'dx',this.rootContainer,0);
+        const dy = SvgUtils.resolveFontMeasure(el,'dy',this.rootContainer,0);
+        const fontSize = SvgUtils.resolveFontMeasure(el,'font-size',this.rootContainer,16);
         const fontFamily = this.lookUpProperty(el,'font-family',true) || 'arial';
         const fillColor = this.getFillStrokeParams(el).fillColor;
         const textAnchor = el.getAttribute('text-anchor');
@@ -365,11 +364,11 @@ export class SvgElementRenderer {
         }
         const textField = new TextField(this.game,this.fontCache[key]);
         textField.setText(el.getTextContent() || ' ');
-        textField.pos.setXY(x+dx,y+dy);
         textField.setMargin(0);
         textField.setPadding(0);
         textField.setAutoSize(true);
         textField.revalidate();
+        textField.pos.setXY(x+dx,y+lineIndex*textField.size.height+dy);
 
         let anchorX = 0;
         if (textAnchor==='middle') {
@@ -383,8 +382,8 @@ export class SvgElementRenderer {
         this.setCommonProperties(textField,el);
         container.appendChild(textField);
 
-        el.getChildNodes().forEach(c=>{
-            this.renderTag(container,c);
+        el.getChildNodes().forEach((c,index)=>{
+            if (c.tagName==='tspan') this.renderText(parentView,c,index+1);
         });
     }
 
@@ -521,7 +520,8 @@ export class SvgElementRenderer {
         const href:Optional<string> = el.getAttribute('href') || el.getAttribute('xlink:href');
         if (href) {
             this.rootContainer.mouseEventHandler.on(MOUSE_EVENTS.click,_=>{
-                window.open(href);
+                //window.open(href);
+                console.log(href);
             });
         }
         return container;
@@ -569,9 +569,8 @@ export class SvgElementRenderer {
                 this.renderCircle(view,el);
                 return undefined;
             }
-            case 'tspan':
             case 'text': {
-                this.renderText(view,el);
+                this.renderText(view,el,0);
                 return undefined;
             }
             case 'ellipse': {
@@ -607,12 +606,13 @@ export class SvgElementRenderer {
             case 'use': {
                 return this.renderUse(view,el);
             }
-            case 'defs':
+            case 'defs': // already processed
             case 'desc':
             case 'title':
             case 'style':
-            case 'radialGradient':
-            case 'linearGradient':
+            case 'script':
+            case 'radialGradient': // will be processed in "defs" section
+            case 'linearGradient': // will be processed in "defs" section
             case 'symbol': {
                 // ignore
                 return undefined;

@@ -8,6 +8,7 @@ import ITextureWithId = FontTypes.ITextureWithId;
 import IFontContext = FontTypes.IFontContext;
 import {ITexture} from "@engine/renderer/common/texture";
 import {Game} from "@engine/core/game";
+import {DebugError} from "@engine/debug/debugError";
 
 export abstract class FontContextAbstractFactory<T> {
 
@@ -81,6 +82,7 @@ export abstract class FontContextAbstractFactory<T> {
         fontFamily:string,
         fontSize:number
     ):Font {
+
         const lineHeight:number = this.getFontHeight();
         this.rowHeight = lineHeight + 2 * this.SYMBOL_PADDING;
         this.fontFamily = fontFamily;

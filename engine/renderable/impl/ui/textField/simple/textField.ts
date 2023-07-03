@@ -17,6 +17,7 @@ import {TextRow} from "@engine/renderable/impl/ui/textField/_internal/textRow";
 import {CharacterImage} from "@engine/renderable/impl/ui/textField/_internal/characterImage";
 import {Word} from "@engine/renderable/impl/ui/textField/_internal/word";
 import {StringEx} from "@engine/renderable/impl/ui/textField/_internal/stringEx";
+import {Size} from "@engine/geometry/size";
 
 
 export class TextField extends WidgetContainer {
@@ -109,15 +110,20 @@ export class TextField extends WidgetContainer {
         super.revalidate();
         let rectIsDirty:boolean = false;
         const clientRect:Readonly<IRectJSON> = this.getClientRect();
+        let {width,height} = clientRect;
+        width=width|0;
+        height=height|0;
+        if (width<1) width = 1;
+        if (height<1) height = 1;
         this.rowSetContainer.pos.setFrom(clientRect);
         this.rowSetContainer.size.setFrom(clientRect);
         if (this.cacheSurface===undefined) {
-            this.cacheSurface = new DrawingSurface(this.game,clientRect);
+            this.cacheSurface = new DrawingSurface(this.game,new Size(width,height));
             this.rowSetContainer.appendChild(this.cacheSurface);
         } else {
             if (!this.cacheSurface.size.equals(clientRect)) {
                 rectIsDirty = true;
-                const cacheSurface:DrawingSurface = new DrawingSurface(this.game,clientRect);
+                const cacheSurface:DrawingSurface = new DrawingSurface(this.game,new Size(width,height));
                 this.rowSetContainer.replaceChild(this.cacheSurface,cacheSurface);
                 this.cacheSurface.destroy();
                 cacheSurface.setPixelPerfect(this.pixelPerfect);
