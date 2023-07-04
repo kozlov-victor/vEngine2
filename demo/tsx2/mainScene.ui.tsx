@@ -1,6 +1,6 @@
-import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
+import {VEngineTsxFactory} from "@engine/renderable/tsx/_genetic/vEngineTsxFactory.h";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
-import {Reactive} from "@engine/renderable/tsx/genetic/reactive";
+import {Reactive} from "@engine/renderable/tsx/decorator/reactive";
 import {IObjectMouseEvent} from "@engine/control/mouse/mousePoint";
 import {VEngineRootComponent} from "@engine/renderable/tsx/vEngine/vEngineRootComponent";
 

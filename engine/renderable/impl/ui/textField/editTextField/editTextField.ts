@@ -11,7 +11,7 @@ import {ICharacterInfo} from "@engine/renderable/impl/ui/textField/_internal/str
 import {NEWLINE_CHAR, TypeHelper} from "@engine/renderable/impl/ui/textField/editTextField/typeHelper";
 import {Incrementer} from "@engine/resources/incrementer";
 import {IRect} from "@engine/geometry/rect";
-import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
+import {VirtualNode} from "@engine/renderable/tsx/_genetic/virtualNode";
 import {IKeyboardFocusable} from "@engine/renderable/impl/ui/textField/_internal/iKeyboardFocusable";
 import {EventEmitterDelegate} from "@engine/delegates/eventDelegates/eventEmitterDelegate";
 import {TOGGLE_BUTTON_EVENTS} from "@engine/renderable/impl/ui/toggleButton/_internal/toggleButtonEvents";

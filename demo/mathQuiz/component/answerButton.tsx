@@ -1,4 +1,4 @@
-import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
+import {VEngineTsxFactory} from "@engine/renderable/tsx/_genetic/vEngineTsxFactory.h";
 import {Assets} from "../asset/assets";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 

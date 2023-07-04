@@ -1,5 +1,5 @@
-import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
-import {Reactive} from "@engine/renderable/tsx/genetic/reactive";
+import {VEngineTsxFactory} from "@engine/renderable/tsx/_genetic/vEngineTsxFactory.h";
+import {Reactive} from "@engine/renderable/tsx/decorator/reactive";
 import {DomRootComponent} from "@engine/renderable/tsx/dom/domRootComponent";
 import {HTMLElementWrap} from "@engine/renderable/tsx/dom/internal/HTMLElementWrap";
 

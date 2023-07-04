@@ -1,8 +1,8 @@
-import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
+import {VEngineTsxFactory} from "@engine/renderable/tsx/_genetic/vEngineTsxFactory.h";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Game} from "@engine/core/game";
 import {VEngineRootComponent} from "@engine/renderable/tsx/vEngine/vEngineRootComponent";
-import {Reactive} from "@engine/renderable/tsx/genetic/reactive";
+import {Reactive} from "@engine/renderable/tsx/decorator/reactive";
 
 interface IState {
     ellipseRadiusX: number;

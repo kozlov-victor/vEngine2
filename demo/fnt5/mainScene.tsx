@@ -10,7 +10,7 @@ import {
     WordBrake
 } from "@engine/renderable/impl/ui/textField/textAlign";
 import {RichTextField} from "@engine/renderable/impl/ui/textField/rich/richTextField";
-import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
+import {VEngineTsxFactory} from "@engine/renderable/tsx/_genetic/vEngineTsxFactory.h";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 
 export class MainScene extends Scene {

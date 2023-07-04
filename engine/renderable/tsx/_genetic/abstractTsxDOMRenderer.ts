@@ -1,8 +1,8 @@
-import {VEngineTsxComponent} from "@engine/renderable/tsx/genetic/vEngineTsxComponent";
-import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
+import {VEngineTsxComponent} from "@engine/renderable/tsx/_genetic/vEngineTsxComponent";
+import {VirtualNode} from "@engine/renderable/tsx/_genetic/virtualNode";
 import {Optional} from "@engine/core/declarations";
-import {IRealNode} from "@engine/renderable/tsx/genetic/realNode";
-import {AbstractElementCreator} from "@engine/renderable/tsx/genetic/abstractElementCreator";
+import {IRealNode} from "@engine/renderable/tsx/_genetic/realNode";
+import {AbstractElementCreator} from "@engine/renderable/tsx/_genetic/abstractElementCreator";
 
 const debug = false;
 
@@ -14,7 +14,6 @@ export abstract class AbstractTsxDOMRenderer<T extends IRealNode> {
     }
 
     public render(component:VEngineTsxComponent, root:T):VirtualNode{
-        component.rootNativeElement = root;
         if (debug) console.log('before render');
         const newVirtualNode = component.render() as VirtualNode;
         const newVirtualNodeChildren:VirtualNode[] = [];

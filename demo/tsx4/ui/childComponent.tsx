@@ -1,4 +1,4 @@
-import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
+import {VEngineTsxFactory} from "@engine/renderable/tsx/_genetic/vEngineTsxFactory.h";
 
 
 export const ChildComponent = ({radius}:{radius:number,__id?:number})=>{

@@ -1,7 +1,7 @@
-import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
+import {VEngineTsxFactory} from "@engine/renderable/tsx/_genetic/vEngineTsxFactory.h";
 import {HttpClient} from "@engine/debug/httpClient";
 import {DomRootComponent} from "@engine/renderable/tsx/dom/domRootComponent";
-import {Reactive} from "@engine/renderable/tsx/genetic/reactive";
+import {Reactive} from "@engine/renderable/tsx/decorator/reactive";
 
 
 interface IItem {
@@ -27,7 +27,7 @@ export class Widget extends DomRootComponent {
                 item.names.forEach(name=>{
                     this.allItemNames.push(name);
                 });
-                this.triggerRendering();
+                this._triggerRendering();
             })
         });
 
@@ -35,13 +35,13 @@ export class Widget extends DomRootComponent {
             if (e.key==='ArrowRight') {
                 this.selectedIndex++;
                 if (this.selectedIndex>this.allItemNames.length-1) this.selectedIndex = 0;
-                this.triggerRendering();
+                this._triggerRendering();
                 document.querySelector('.active')?.scrollIntoView();
             }
             else if (e.key==='ArrowLeft') {
                 this.selectedIndex--;
                 if (this.selectedIndex<0) this.selectedIndex = this.allItemNames.length-1;
-                this.triggerRendering();
+                this._triggerRendering();
                 document.querySelector('.active')?.scrollIntoView();
             }
         });

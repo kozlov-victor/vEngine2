@@ -2,6 +2,7 @@ import {Controller, Get, Post} from "../decorator/decorator";
 import {Rectangle, TexturePacker} from "./utils/rectPacker";
 import {Bitmap} from "./utils/bitmap";
 import {ITextureAtlasJSON} from "@engine/animation/frameAnimation/atlas/texturePackerAtlas";
+import {uuid} from "./utils/uuid";
 
 declare const __non_webpack_require__:any;
 
@@ -10,20 +11,6 @@ const PSD = __non_webpack_require__('psd');
 const path = __non_webpack_require__('path');
 const storage = __non_webpack_require__('../../node_tools/common/storage');
 
-let cnt = 0;
-const rnd = ()=>{
-    return '0123456789abcdef'.split('').sort(it=>Math.random()>0.5?-1:1)[0];
-}
-
-const uuid = ()=>{
-    let res = '';
-    for (let i=0;i<16;i++) {
-        res+=rnd();
-    }
-    cnt++;
-    res+=cnt;
-    return res;
-}
 
 const getSafeName = (obj:Record<string, any>,name:string)=> {
     if (obj[name]===undefined) return name;
@@ -58,8 +45,8 @@ class RectangleEx extends Rectangle {
 
 const tmp = './__tmp';
 
-@Controller('main')
-export class MainController {
+@Controller('texture-pack')
+export class TexturePackController {
 
 
     @Get({url:'/getFiles',contentType:'application/json'})
@@ -154,7 +141,7 @@ export class MainController {
             fs.copyFileSync(r.image.fileName,`${params.saveLayerImagesTo}/${r.image.name}.png`);
             fs.unlinkSync(r.image.fileName);
         }
-        fs.writeFileSync(`${tmp}/${outFileUUID}.json`,JSON.stringify(descriptions,undefined,4));
+        fs.writeFileSync(`${tmp}/${outFileUUID}.json`,JSON.stringify(descriptions,undefined!,4));
         storage.set('saveLayerImagesTo',params.saveLayerImagesTo);
         return outFileUUID;
     }

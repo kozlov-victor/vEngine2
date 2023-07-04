@@ -1,6 +1,6 @@
-import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
+import {VEngineTsxFactory} from "@engine/renderable/tsx/_genetic/vEngineTsxFactory.h";
 import {DomRootComponent} from "@engine/renderable/tsx/dom/domRootComponent";
-import {Reactive} from "@engine/renderable/tsx/genetic/reactive";
+import {Reactive} from "@engine/renderable/tsx/decorator/reactive";
 
 
 export class Widget extends DomRootComponent {

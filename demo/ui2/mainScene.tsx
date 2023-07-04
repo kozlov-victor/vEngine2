@@ -15,7 +15,7 @@ import {
     WordBrake
 } from "@engine/renderable/impl/ui/textField/textAlign";
 import {RichTextField} from "@engine/renderable/impl/ui/textField/rich/richTextField";
-import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
+import {VEngineTsxFactory} from "@engine/renderable/tsx/_genetic/vEngineTsxFactory.h";
 import {ScrollView} from "@engine/renderable/impl/ui/scrollViews/scrollView";
 import {Size} from "@engine/geometry/size";
 import {SelectBox} from "@engine/renderable/impl/ui/selectBox/selectBox";

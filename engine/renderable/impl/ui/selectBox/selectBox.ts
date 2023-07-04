@@ -11,7 +11,7 @@ import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleG
 import {IParentChild} from "@engine/core/declarations";
 import {TOGGLE_BUTTON_EVENTS} from "@engine/renderable/impl/ui/toggleButton/_internal/toggleButtonEvents";
 import {EventEmitterDelegate} from "@engine/delegates/eventDelegates/eventEmitterDelegate";
-import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
+import {VirtualNode} from "@engine/renderable/tsx/_genetic/virtualNode";
 import {WidgetContainer} from "@engine/renderable/impl/ui/widgetContainer";
 import {LIST_VIEW_EVENTS} from "@engine/renderable/impl/ui/scrollViews/directional/directionalListEvents";
 import {IChangeSelectBoxEvent} from "@engine/renderable/impl/ui/selectBox/selectBoxEvents";

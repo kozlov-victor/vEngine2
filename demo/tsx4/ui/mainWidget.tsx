@@ -1,7 +1,7 @@
-import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
+import {VEngineTsxFactory} from "@engine/renderable/tsx/_genetic/vEngineTsxFactory.h";
 import {ChildComponent} from "./childComponent";
 import {MousePoint} from "@engine/control/mouse/mousePoint";
-import {Reactive} from "@engine/renderable/tsx/genetic/reactive";
+import {Reactive} from "@engine/renderable/tsx/decorator/reactive";
 import {VEngineRootComponent} from "@engine/renderable/tsx/vEngine/vEngineRootComponent";
 
 export class MainWidget extends VEngineRootComponent {

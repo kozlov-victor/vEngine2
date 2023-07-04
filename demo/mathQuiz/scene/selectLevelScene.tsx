@@ -1,7 +1,7 @@
 import {Scene} from "@engine/scene/scene";
 import {Game} from "@engine/core/game";
 import {Assets} from "../asset/assets";
-import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
+import {VEngineTsxFactory} from "@engine/renderable/tsx/_genetic/vEngineTsxFactory.h";
 import {BgMatrix} from "../component/bgMatrix";
 import {AnswerButton} from "../component/answerButton";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
@@ -14,7 +14,7 @@ import {Flip3dVerticalInTransition} from "@engine/scene/transition/flip/flip3dTr
 import {Resource} from "@engine/resources/resourceDecorators";
 import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 import {VEngineRootComponent} from "@engine/renderable/tsx/vEngine/vEngineRootComponent";
-import {Reactive} from "@engine/renderable/tsx/genetic/reactive";
+import {Reactive} from "@engine/renderable/tsx/decorator/reactive";
 
 class SelectLevelSceneUI extends VEngineRootComponent {
 

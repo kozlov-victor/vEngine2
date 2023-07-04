@@ -1,5 +1,5 @@
 import {Scene} from "@engine/scene/scene";
-import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
+import {VEngineTsxFactory} from "@engine/renderable/tsx/_genetic/vEngineTsxFactory.h";
 import {Assets} from "../asset/assets";
 import {waitFor} from "../helper";
 import {Game} from "@engine/core/game";

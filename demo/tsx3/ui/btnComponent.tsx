@@ -1,4 +1,4 @@
-import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
+import {VEngineTsxFactory} from "@engine/renderable/tsx/_genetic/vEngineTsxFactory.h";
 
 export const BtnComponent = (props:{x:number,y:number,height:number,onClick:()=>void,__id?:number})=>{
     return (

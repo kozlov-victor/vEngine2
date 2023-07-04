@@ -5,7 +5,7 @@ import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {EditTextField} from "@engine/renderable/impl/ui/textField/editTextField/editTextField";
 import * as fntXML from "xml/angelcode-loader!./font/pressStartToPlay.fnt";
-import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
+import {VEngineTsxFactory} from "@engine/renderable/tsx/_genetic/vEngineTsxFactory.h";
 import {
     AlignText,
     AlignTextContentHorizontal,

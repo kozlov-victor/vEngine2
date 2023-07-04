@@ -1,11 +1,11 @@
-import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
-import {Reactive} from "@engine/renderable/tsx/genetic/reactive";
+import {VEngineTsxFactory} from "@engine/renderable/tsx/_genetic/vEngineTsxFactory.h";
+import {Reactive} from "@engine/renderable/tsx/decorator/reactive";
 import {HttpClient} from "@engine/debug/httpClient";
-import {Frame} from "./components/frame";
-import {StatusBar} from "./components/statusBar";
-import {DomRootComponent} from "@engine/renderable/tsx/dom/domRootComponent";
+import {Frame} from "../components/frame";
+import {StatusBar} from "../components/statusBar";
+import {BaseTsxComponent} from "@engine/renderable/tsx/base/baseTsxComponent";
 
-export class Widget extends DomRootComponent {
+export class TexturePackerWidget extends BaseTsxComponent {
 
     private folder:string = '';
     private padding = 2;
@@ -14,6 +14,7 @@ export class Widget extends DomRootComponent {
     private saveToFileName:string = '';
     private files:string[] = [];
     private convertedImageUUID:string;
+
     private operationResult = {
         message: '',
         success: true,
@@ -21,31 +22,22 @@ export class Widget extends DomRootComponent {
 
     constructor() {
         super();
-        this.loadInitialData().
-        then(()=>{
-            return HttpClient.post('/main/cleanUp')
-        }).
-        then(()=>{
-            this.operationResult.message = 'Ok';
-            this.operationResult.success = true;
-        }).
-        catch(e=>{
-            console.error(e);
-            this.operationResult.message = e;
-            this.operationResult.success = false;
-            this.triggerRendering();
-        });
+        this.loadInitialData().then();
     }
 
     @Reactive.Method()
     private async loadInitialData() {
         try {
-            const payload:any = await HttpClient.get('/main/loadParams');
+            await HttpClient.post('/texture-pack/cleanUp');
+            const payload:any = await HttpClient.get('/texture-pack/loadParams');
             this.folder = payload.folder;
             this.saveTo = payload.saveTo;
             this.saveLayerImagesTo = payload.saveLayerImagesTo;
             this.saveToFileName = payload.saveToFileName;
+            this.operationResult.message = 'Ok';
+            this.operationResult.success = true;
         } catch (e:any) {
+            console.log(e);
             this.operationResult.message = e.toString();
             this.operationResult.success = false;
         }
@@ -56,7 +48,7 @@ export class Widget extends DomRootComponent {
         if (!this.folder) this.files = [];
         else {
             try {
-                this.files = await HttpClient.get('/main/getFiles',{folder:this.folder});
+                this.files = await HttpClient.get('/texture-pack/getFiles',{folder:this.folder});
                 this.operationResult.message = 'Loaded';
                 this.operationResult.success = true;
             } catch (e:any) {
@@ -70,7 +62,7 @@ export class Widget extends DomRootComponent {
     private async convert() {
         try {
             this.convertedImageUUID = await HttpClient.post(
-                '/main/convert',
+                '/texture-pack/convert',
                 {
                     files:this.files.join(','),
                     padding: this.padding,
@@ -87,7 +79,7 @@ export class Widget extends DomRootComponent {
     @Reactive.Method()
     private async save() {
         try {
-            await HttpClient.post('/main/save',
+            await HttpClient.post('/texture-pack/save',
                 {
                     uuid:this.convertedImageUUID,
                     saveTo:this.saveTo,
@@ -135,7 +127,7 @@ export class Widget extends DomRootComponent {
                     <Frame title={'Conversion'}>
                         <img
                             alt="converted image"
-                            src={`/main/getConvertedImage?uuid=${this.convertedImageUUID}`}
+                            src={`/texture-pack/getConvertedImage?uuid=${this.convertedImageUUID}`}
                             style={{
                                 maxWidth: '250px',
                                 border: '1px solid black',

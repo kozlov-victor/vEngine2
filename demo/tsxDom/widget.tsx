@@ -1,7 +1,7 @@
-import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
-import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
-import {Reactive} from "@engine/renderable/tsx/genetic/reactive";
-import {BaseTsxComponent} from "@engine/renderable/tsx/genetic/baseTsxComponent";
+import {VEngineTsxFactory} from "@engine/renderable/tsx/_genetic/vEngineTsxFactory.h";
+import {VirtualNode} from "@engine/renderable/tsx/_genetic/virtualNode";
+import {Reactive} from "@engine/renderable/tsx/decorator/reactive";
+import {BaseTsxComponent} from "@engine/renderable/tsx/base/baseTsxComponent";
 import {DomRootComponent} from "@engine/renderable/tsx/dom/domRootComponent";
 
 class Component1 extends BaseTsxComponent {
@@ -12,9 +12,9 @@ class Component1 extends BaseTsxComponent {
         super();
     }
 
+    @Reactive.Method()
     private inc():void {
         this.cnt++;
-        console.log(this);
     }
 
     override render(): JSX.Element {

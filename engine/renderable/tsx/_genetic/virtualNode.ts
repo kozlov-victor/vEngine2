@@ -1,4 +1,4 @@
-import {BaseTsxComponent} from "@engine/renderable/tsx/genetic/baseTsxComponent";
+import {BaseTsxComponent} from "@engine/renderable/tsx/base/baseTsxComponent";
 
 export interface IBaseProps {
     __id?:number;

@@ -1,5 +1,5 @@
 import {ResourceHolder} from "../../resource/resourceHolder";
-import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
+import {VEngineTsxFactory} from "@engine/renderable/tsx/_genetic/vEngineTsxFactory.h";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 
 

@@ -1,4 +1,4 @@
-import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
+import {VirtualNode} from "@engine/renderable/tsx/_genetic/virtualNode";
 import {ScrollableTextField} from "@engine/renderable/impl/ui/textField/scrollable/scrollableTextField";
 import {Optional} from "@engine/core/declarations";
 import {StringEx} from "@engine/renderable/impl/ui/textField/_internal/stringEx";

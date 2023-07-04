@@ -1,5 +1,5 @@
-import {IBaseProps} from "@engine/renderable/tsx/genetic/virtualNode";
-import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
+import {IBaseProps} from "@engine/renderable/tsx/_genetic/virtualNode";
+import {VEngineTsxFactory} from "@engine/renderable/tsx/_genetic/vEngineTsxFactory.h";
 
 export const StatusBar = (props:IBaseProps & {text?:string,success?:boolean})=> {
     return (

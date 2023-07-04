@@ -1,6 +1,6 @@
 import {Scene} from "@engine/scene/scene";
 import {Game} from "@engine/core/game";
-import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
+import {VEngineTsxFactory} from "@engine/renderable/tsx/_genetic/vEngineTsxFactory.h";
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 import {Assets} from "../asset/assets";
 import {

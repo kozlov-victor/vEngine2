@@ -1,9 +1,9 @@
 import {Scene} from "@engine/scene/scene";
 import {Game} from "@engine/core/game";
-import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
+import {VEngineTsxFactory} from "@engine/renderable/tsx/_genetic/vEngineTsxFactory.h";
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 import {Assets} from "./assets";
-import {Reactive} from "@engine/renderable/tsx/genetic/reactive";
+import {Reactive} from "@engine/renderable/tsx/decorator/reactive";
 import {AlignTextContentHorizontal, AlignTextContentVertical} from "@engine/renderable/impl/ui/textField/textAlign";
 import {VEngineRootComponent} from "@engine/renderable/tsx/vEngine/vEngineRootComponent";
 

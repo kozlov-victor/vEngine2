@@ -1,4 +1,4 @@
-import {IRealNode} from "@engine/renderable/tsx/genetic/realNode";
+import {IRealNode} from "@engine/renderable/tsx/_genetic/realNode";
 import {ElementFactory} from "@engine/renderable/tsx/dom/internal/domElementCreator";
 
 

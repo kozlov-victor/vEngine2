@@ -1,4 +1,4 @@
-import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
+import {VEngineTsxFactory} from "@engine/renderable/tsx/_genetic/vEngineTsxFactory.h";
 import {Game} from "@engine/core/game";
 import {ResourceHolder} from "../resource/resourceHolder";
 import {
@@ -13,7 +13,7 @@ import {RadioButtonGroup} from "@engine/renderable/impl/ui/toggleButton/radioBut
 import {IChangeNumericSliderEvent} from "@engine/renderable/impl/ui/numericSlider/_intrtnal/abstractNumericSlider";
 import {IChangeEditTextFieldEvent} from "@engine/renderable/impl/ui/textField/editTextField/editTextField";
 import {IChangeSelectBoxEvent} from "@engine/renderable/impl/ui/selectBox/selectBoxEvents";
-import {Reactive} from "@engine/renderable/tsx/genetic/reactive";
+import {Reactive} from "@engine/renderable/tsx/decorator/reactive";
 import {ColorFactory} from "@engine/renderer/common/colorFactory";
 import {VEngineRootComponent} from "@engine/renderable/tsx/vEngine/vEngineRootComponent";
 

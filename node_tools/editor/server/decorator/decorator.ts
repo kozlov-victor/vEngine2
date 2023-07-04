@@ -14,7 +14,7 @@ export const Controller = function(url:string) {
     }
 }
 
-export const Post = function(param:IMethodParam) {
+export const Post = function(param:IMethodParam = {}) {
     return function (
         originalMethod:any, context:ClassMethodDecoratorContext
     ) {

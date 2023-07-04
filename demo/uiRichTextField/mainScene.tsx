@@ -9,8 +9,8 @@ import {
     AlignTextContentVertical,
 } from "@engine/renderable/impl/ui/textField/textAlign";
 import {RichTextField} from "@engine/renderable/impl/ui/textField/rich/richTextField";
-import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
-import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
+import {VEngineTsxFactory} from "@engine/renderable/tsx/_genetic/vEngineTsxFactory.h";
+import {VirtualNode} from "@engine/renderable/tsx/_genetic/virtualNode";
 
 
 const createRichText = ()=>{

@@ -3,7 +3,7 @@ import {EventEmitterDelegate} from "@engine/delegates/eventDelegates/eventEmitte
 import {Game} from "@engine/core/game";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
+import {VirtualNode} from "@engine/renderable/tsx/_genetic/virtualNode";
 import {assignPos, assignSize, Direction, getSize} from "@engine/renderable/impl/ui/_internal/sideHelperFunctions";
 import {LIST_VIEW_EVENTS} from "@engine/renderable/impl/ui/scrollViews/directional/directionalListEvents";
 

@@ -1,4 +1,4 @@
-import {VEngineTsxComponent} from "@engine/renderable/tsx/genetic/vEngineTsxComponent";
+import {VEngineTsxComponent} from "@engine/renderable/tsx/_genetic/vEngineTsxComponent";
 import {Game} from "@engine/core/game";
 import {VEngineTsxDOMRenderer} from "@engine/renderable/tsx/vEngine/internal/vEngineTsxDOMRenderer";
 

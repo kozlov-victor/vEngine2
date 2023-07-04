@@ -1,4 +1,4 @@
-import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
+import {VirtualNode} from "@engine/renderable/tsx/_genetic/virtualNode";
 
 export class VirtualFragment implements JSX.Element{
 

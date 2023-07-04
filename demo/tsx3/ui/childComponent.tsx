@@ -1,4 +1,4 @@
-import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
+import {VEngineTsxFactory} from "@engine/renderable/tsx/_genetic/vEngineTsxFactory.h";
 
 export const ChildComponent = (props:{key:number,ind:number,radius:number,onClick:(i:number)=>void,__id?:number})=>{
     const onCircleClick = (e:MouseEvent):void=>{

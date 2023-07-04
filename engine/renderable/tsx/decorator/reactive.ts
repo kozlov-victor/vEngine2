@@ -1,4 +1,4 @@
-import {VEngineTsxComponent} from "@engine/renderable/tsx/genetic/vEngineTsxComponent";
+import {VEngineTsxComponent} from "@engine/renderable/tsx/_genetic/vEngineTsxComponent";
 
 export const Reactive = {
     Method: function() {
@@ -6,10 +6,10 @@ export const Reactive = {
             context.addInitializer(function(){
                 (this as any)[context.name] = ((...args: any[])=>{
                     const result = originalMethod.apply(this, args);
-                    (this as VEngineTsxComponent & {triggerRendering:()=>void}).triggerRendering();
+                    (this as VEngineTsxComponent)._triggerRendering();
                     if (result instanceof Promise) {
                         result.then(()=>{
-                            (this as VEngineTsxComponent & {triggerRendering:()=>void}).triggerRendering();
+                            (this as VEngineTsxComponent)._triggerRendering();
                         });
                     }
                     return result;
@@ -27,7 +27,7 @@ export const Reactive = {
                     },
                     set:val=>{
                         _val = val;
-                        (this as VEngineTsxComponent & {triggerRendering:()=>void}).triggerRendering();
+                        (this as VEngineTsxComponent)._triggerRendering();
                     }
                 });
             });

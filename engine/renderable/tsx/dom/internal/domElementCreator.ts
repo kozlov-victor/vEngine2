@@ -1,5 +1,5 @@
-import {AbstractElementCreator} from "@engine/renderable/tsx/genetic/abstractElementCreator";
-import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
+import {AbstractElementCreator} from "@engine/renderable/tsx/_genetic/abstractElementCreator";
+import {VirtualNode} from "@engine/renderable/tsx/_genetic/virtualNode";
 import {HTMLElementWrap} from "@engine/renderable/tsx/dom/internal/HTMLElementWrap";
 
 const ELEMENT_PROPERTIES = ['value','checked','selected','focus','disabled','readonly'];

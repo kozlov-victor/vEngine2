@@ -1,5 +1,5 @@
-import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
-import {BaseTsxComponent} from "@engine/renderable/tsx/genetic/baseTsxComponent";
+import {VEngineTsxFactory} from "@engine/renderable/tsx/_genetic/vEngineTsxFactory.h";
+import {BaseTsxComponent} from "@engine/renderable/tsx/base/baseTsxComponent";
 import {Game} from "@engine/core/game";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";

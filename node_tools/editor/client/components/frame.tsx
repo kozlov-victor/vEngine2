@@ -1,5 +1,5 @@
-import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
-import {IBaseProps} from "@engine/renderable/tsx/genetic/virtualNode";
+import {VEngineTsxFactory} from "@engine/renderable/tsx/_genetic/vEngineTsxFactory.h";
+import {IBaseProps} from "@engine/renderable/tsx/_genetic/virtualNode";
 
 
 export const Frame = (props:IBaseProps & {children?:any,title?:string})=> {

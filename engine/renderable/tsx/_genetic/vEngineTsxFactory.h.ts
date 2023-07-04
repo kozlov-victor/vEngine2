@@ -1,6 +1,6 @@
-import {VirtualNode} from "@engine/renderable/tsx/genetic/virtualNode";
-import {VirtualFragment} from "@engine/renderable/tsx/genetic/virtualFragment";
-import {BaseTsxComponent} from "@engine/renderable/tsx/genetic/baseTsxComponent";
+import {VirtualNode} from "@engine/renderable/tsx/_genetic/virtualNode";
+import {VirtualFragment} from "@engine/renderable/tsx/_genetic/virtualFragment";
+import {BaseTsxComponent} from "@engine/renderable/tsx/base/baseTsxComponent";
 
 const flattenDeep = (arr:(VirtualNode[]|VirtualNode)[]):VirtualNode[]=> {
     const res =  arr.reduce((acc, val) => {

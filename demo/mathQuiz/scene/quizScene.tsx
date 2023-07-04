@@ -1,5 +1,5 @@
 import {Scene} from "@engine/scene/scene";
-import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
+import {VEngineTsxFactory} from "@engine/renderable/tsx/_genetic/vEngineTsxFactory.h";
 import {Assets} from "../asset/assets";
 import {waitFor, waitForKey} from "../helper";
 import {Game} from "@engine/core/game";
@@ -23,7 +23,7 @@ import {ColorFactory} from "@engine/renderer/common/colorFactory";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 import {VEngineRootComponent} from "@engine/renderable/tsx/vEngine/vEngineRootComponent";
-import {Reactive} from "@engine/renderable/tsx/genetic/reactive";
+import {Reactive} from "@engine/renderable/tsx/decorator/reactive";
 
 
 class QuizSceneUI extends VEngineRootComponent {

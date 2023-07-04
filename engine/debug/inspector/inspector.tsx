@@ -1,7 +1,7 @@
-import {IBaseProps} from "@engine/renderable/tsx/genetic/virtualNode";
-import {VEngineTsxFactory} from "@engine/renderable/tsx/genetic/vEngineTsxFactory.h";
+import {IBaseProps} from "@engine/renderable/tsx/_genetic/virtualNode";
+import {VEngineTsxFactory} from "@engine/renderable/tsx/_genetic/vEngineTsxFactory.h";
 import {Game} from "@engine/core/game";
-import {Reactive} from "@engine/renderable/tsx/genetic/reactive";
+import {Reactive} from "@engine/renderable/tsx/decorator/reactive";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Layer} from "@engine/scene/layer";
 import {createDraggableElement, init} from "@engine/debug/inspector/helpers";
@@ -102,7 +102,7 @@ class InspectorWidget extends DomRootComponent{
         return (
             <>
                 <div className={'win-header'} >
-                    <div className={'reload-btn'} onclick={_=>this.triggerRendering()}>↻</div>
+                    <div className={'reload-btn'} onclick={_=>this._triggerRendering()}>↻</div>
                     <div className={'close-btn'} onclick={_=>this.hide()}>x</div>
                 </div>
                 <div className={'listWrap'}>
