@@ -13,6 +13,7 @@ export class TilePackerWidget extends BaseTsxComponent {
     };
 
     private pathToPsdFile:string;
+    private psdFileExists = false;
 
     public render(): JSX.Element {
         return (
@@ -23,13 +24,16 @@ export class TilePackerWidget extends BaseTsxComponent {
                         <button onclick={this.checkFile}>load</button>
                     </div>
                 </Frame>
-                <Frame title={'converting to sheet'}>
-                    <div>
-                        <input/>
-                        number of images in row
-                    </div>
-                    <button>convert</button>
-                </Frame>
+                {
+                    this.psdFileExists &&
+                    <Frame title={'converting to sheet'}>
+                        <div>
+                            <input/>
+                            number of images in row
+                        </div>
+                        <button>convert</button>
+                    </Frame>
+                }
                 <StatusBar
                     text={this.operationResult.message}
                     success={this.operationResult.success}/>
@@ -42,6 +46,7 @@ export class TilePackerWidget extends BaseTsxComponent {
         try {
             this.operationResult =
                 await HttpClient.post('/tile-pack/checkFile',{pathToPsdFile:this.pathToPsdFile});
+            this.psdFileExists = this.operationResult.success;
         } catch (e:any) {
             this.operationResult.message = e.toString();
             this.operationResult.success = false;

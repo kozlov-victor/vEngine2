@@ -23,10 +23,14 @@ export const Reactive = {
                 let _val:any = undefined;
                 Object.defineProperty(this, context.name,{
                     get: ()=>{
+                        // Promise.resolve().then(()=>{
+                        //     (this as VEngineTsxComponent)._triggerRendering();
+                        // });
                         return _val;
                     },
                     set:val=>{
                         _val = val;
+                        console.log('set',val);
                         (this as VEngineTsxComponent)._triggerRendering();
                     }
                 });
