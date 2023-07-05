@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.9" tiledversion="1.9.2" orientation="orthogonal" renderorder="right-down" width="60" height="16" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="66">
+<map version="1.9" tiledversion="1.9.1" orientation="orthogonal" renderorder="right-down" width="60" height="16" tilewidth="32" tileheight="32" infinite="0" nextlayerid="4" nextobjectid="66">
  <editorsettings>
   <export target="../../assets/levels/level1.json" format="json"/>
  </editorsettings>
- <tileset firstgid="1" name="tiles" tilewidth="32" tileheight="32" tilecount="15" columns="3">
-  <image source="../../assets/levels/tiles.png" width="96" height="160"/>
+ <tileset firstgid="1" name="tiles" tilewidth="32" tileheight="32" tilecount="18" columns="3">
+  <image source="../../assets/levels/tiles.png" width="96" height="192"/>
   <tile id="1">
    <animation>
     <frame tileid="1" duration="700"/>
@@ -27,8 +27,20 @@
     <object id="1" x="0.232948" y="14.1632" width="31.6343" height="0.605664"/>
    </objectgroup>
   </tile>
+  <tile id="12">
+   <animation>
+    <frame tileid="12" duration="700"/>
+    <frame tileid="13" duration="700"/>
+   </animation>
+  </tile>
+  <tile id="13">
+   <animation>
+    <frame tileid="13" duration="700"/>
+    <frame tileid="12" duration="700"/>
+   </animation>
+  </tile>
  </tileset>
- <tileset firstgid="16" name="sausage" tilewidth="32" tileheight="32" tilecount="1" columns="1">
+ <tileset firstgid="19" name="sausage" tilewidth="32" tileheight="32" tilecount="1" columns="1">
   <image source="../flattened/sausage_frame_1.png" width="32" height="34"/>
   <tile id="0">
    <objectgroup draworder="index" id="3">
@@ -36,16 +48,16 @@
    </objectgroup>
   </tile>
  </tileset>
- <tileset firstgid="17" name="key" tilewidth="32" tileheight="32" tilecount="1" columns="1">
+ <tileset firstgid="20" name="key" tilewidth="32" tileheight="32" tilecount="1" columns="1">
   <image source="../flattened/key_frame_1.png" width="32" height="35"/>
  </tileset>
- <tileset firstgid="18" name="candy" tilewidth="32" tileheight="32" tilecount="1" columns="1">
+ <tileset firstgid="21" name="candy" tilewidth="32" tileheight="32" tilecount="1" columns="1">
   <image source="../flattened/candy_frame_1.png" width="32" height="32"/>
  </tileset>
- <tileset firstgid="19" name="character" tilewidth="34" tileheight="35" tilecount="1" columns="1">
+ <tileset firstgid="22" name="character" tilewidth="34" tileheight="35" tilecount="1" columns="1">
   <image source="../flattened/character_climb_horizontal2.png" width="34" height="35"/>
  </tileset>
- <tileset firstgid="20" name="fire" tilewidth="32" tileheight="32" tilecount="1" columns="1">
+ <tileset firstgid="23" name="fire" tilewidth="32" tileheight="32" tilecount="1" columns="1">
   <image source="../flattened/fire_fire1.png" width="32" height="32"/>
   <tile id="0">
    <objectgroup draworder="index" id="2">
@@ -53,7 +65,7 @@
    </objectgroup>
   </tile>
  </tileset>
- <tileset firstgid="21" name="platform_moveable_frame_1" tilewidth="64" tileheight="16" tilecount="1" columns="1">
+ <tileset firstgid="24" name="platform_moveable_frame_1" tilewidth="64" tileheight="16" tilecount="1" columns="1">
   <image source="../flattened/platform_moveable_frame_1.png" width="64" height="16"/>
  </tileset>
  <layer id="1" name="Tile Layer 1" width="60" height="16">
@@ -72,38 +84,38 @@
 7,4,0,0,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,9,7,7,7,7,10,0,0,0,4,0,0,4,0,0,0,0,0,0,0,0,4,0,0,7,0,0,0,0,7,7,7,7,7,7,0,0,0,7,7,7,
 7,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,7,7,7,7,7,7,1,1,6,1,0,0,4,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,1,1,7,7,7,7,7,7,0,0,0,9,7,
 7,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,7,7,7,7,7,7,7,7,7,7,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,7,7,7,7,7,0,0,0,0,0,9,7,7,
-7,10,0,0,6,2,3,2,3,2,1,0,0,0,0,0,9,7,7,7,7,7,7,7,7,7,7,7,7,0,0,0,0,0,0,1,2,3,2,3,2,2,3,7,0,0,0,7,7,7,7,7,0,0,0,0,9,7,7,7,
+7,10,0,0,6,2,3,2,3,2,1,0,0,0,0,0,9,7,7,7,7,7,7,7,7,7,7,7,7,0,0,0,0,0,0,1,13,14,13,14,13,14,13,7,0,0,0,7,7,7,7,7,0,0,0,0,9,7,7,7,
 7,1,1,1,7,7,7,7,7,7,7,6,1,6,1,1,7,7,7,7,7,7,7,7,7,7,7,7,7,1,6,1,1,1,1,7,7,7,7,7,7,7,7,7,1,1,6,1,6,6,1,1,1,6,6,6,7,7,7,7
 </data>
  </layer>
  <objectgroup id="2" name="Object Layer 1">
-  <object id="15" name="overlap" class="OverlapRect" x="1523.34" y="420" width="142.667" height="50.6667">
+  <object id="15" name="overlap" class="OverlapRect" x="1513.34" y="424" width="132.667" height="46.6667">
    <properties>
     <property name="id" value="1"/>
    </properties>
   </object>
-  <object id="22" class="Sausage" gid="16" x="60" y="82.6667" width="32" height="32"/>
-  <object id="25" class="Sausage" gid="16" x="156" y="75.3333" width="32" height="32"/>
-  <object id="26" class="Sausage" gid="16" x="394" y="104" width="32" height="32"/>
-  <object id="27" class="Sausage" gid="16" x="528.667" y="245.333" width="32" height="32"/>
-  <object id="28" class="Sausage" gid="16" x="1123.33" y="324.667" width="32" height="32"/>
-  <object id="29" class="Sausage" gid="16" x="1744.67" y="464" width="32" height="32"/>
-  <object id="30" class="Candy" gid="18" x="512.667" y="71.3333" width="32" height="32"/>
-  <object id="41" class="Candy" gid="18" x="508.667" y="121.333" width="32" height="32"/>
-  <object id="42" class="Key" gid="17" x="1556.67" y="301.333" width="32" height="32">
+  <object id="22" class="Sausage" gid="19" x="60" y="82.6667" width="32" height="32"/>
+  <object id="25" class="Sausage" gid="19" x="156" y="75.3333" width="32" height="32"/>
+  <object id="26" class="Sausage" gid="19" x="394" y="104" width="32" height="32"/>
+  <object id="27" class="Sausage" gid="19" x="528.667" y="245.333" width="32" height="32"/>
+  <object id="28" class="Sausage" gid="19" x="1123.33" y="324.667" width="32" height="32"/>
+  <object id="29" class="Sausage" gid="19" x="1744.67" y="464" width="32" height="32"/>
+  <object id="30" class="Candy" gid="21" x="512.667" y="71.3333" width="32" height="32"/>
+  <object id="41" class="Candy" gid="21" x="508.667" y="121.333" width="32" height="32"/>
+  <object id="42" class="Key" gid="20" x="1556.67" y="301.333" width="32" height="32">
    <properties>
     <property name="rectId" value="1"/>
    </properties>
   </object>
-  <object id="46" class="Candy" gid="18" x="1699.33" y="236" width="32" height="32"/>
-  <object id="47" class="Candy" gid="18" x="1724" y="268.667" width="32" height="32"/>
-  <object id="48" class="Candy" gid="18" x="1698.67" y="309.333" width="32" height="32"/>
-  <object id="51" class="Fire" gid="20" x="708" y="320.333" width="32" height="32"/>
-  <object id="52" class="Fire" gid="20" x="1630" y="320.333" width="32" height="32"/>
-  <object id="54" class="Fire" gid="20" x="1378" y="256" width="32" height="32"/>
-  <object id="55" class="Character" gid="19" x="416.333" y="432.667" width="34" height="35"/>
-  <object id="57" class="PlatformMoveable" gid="21" x="1429.34" y="264" width="64" height="16"/>
-  <object id="58" class="PlatformMoveable" gid="21" x="245.333" y="390.667" width="64" height="16"/>
+  <object id="46" class="Candy" gid="21" x="1699.33" y="236" width="32" height="32"/>
+  <object id="47" class="Candy" gid="21" x="1724" y="268.667" width="32" height="32"/>
+  <object id="48" class="Candy" gid="21" x="1698.67" y="309.333" width="32" height="32"/>
+  <object id="51" class="Fire" gid="23" x="708" y="320.333" width="32" height="32"/>
+  <object id="52" class="Fire" gid="23" x="1630" y="320.333" width="32" height="32"/>
+  <object id="54" class="Fire" gid="23" x="1378" y="256" width="32" height="32"/>
+  <object id="55" class="Character" gid="22" x="416.333" y="432.667" width="34" height="35"/>
+  <object id="57" class="PlatformMoveable" gid="24" x="1429.34" y="264" width="64" height="16"/>
+  <object id="58" class="PlatformMoveable" gid="24" x="245.333" y="390.667" width="64" height="16"/>
   <object id="61" name="bump" class="BumpRect" x="210" y="86.6666" width="142.667" height="50.6667">
    <properties>
     <property name="id" value="1"/>

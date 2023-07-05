@@ -17,7 +17,7 @@
             7, 4, 0, 0, 0, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 7, 7, 7, 7, 10, 0, 0, 0, 4, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 7, 0, 0, 0, 0, 7, 7, 7, 7, 7, 7, 0, 0, 0, 7, 7, 7,
             7, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 7, 7, 7, 7, 7, 7, 1, 1, 6, 1, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 1, 1, 7, 7, 7, 7, 7, 7, 0, 0, 0, 9, 7,
             7, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 7, 0, 0, 0, 7, 7, 7, 7, 7, 0, 0, 0, 0, 0, 9, 7, 7,
-            7, 10, 0, 0, 6, 2, 3, 2, 3, 2, 1, 0, 0, 0, 0, 0, 9, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 0, 0, 0, 0, 0, 0, 1, 2, 3, 2, 3, 2, 2, 3, 7, 0, 0, 0, 7, 7, 7, 7, 7, 0, 0, 0, 0, 9, 7, 7, 7,
+            7, 10, 0, 0, 6, 2, 3, 2, 3, 2, 1, 0, 0, 0, 0, 0, 9, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 0, 0, 0, 0, 0, 0, 1, 13, 14, 13, 14, 13, 14, 13, 7, 0, 0, 0, 7, 7, 7, 7, 7, 0, 0, 0, 0, 9, 7, 7, 7,
             7, 1, 1, 1, 7, 7, 7, 7, 7, 7, 7, 6, 1, 6, 1, 1, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 1, 6, 1, 1, 1, 1, 7, 7, 7, 7, 7, 7, 7, 7, 7, 1, 1, 6, 1, 6, 6, 1, 1, 1, 6, 6, 6, 7, 7, 7, 7],
          "height":16,
          "id":1,
@@ -36,7 +36,7 @@
          "objects":[
                 {
                  "class":"OverlapRect",
-                 "height":50.6667,
+                 "height":46.6667,
                  "id":15,
                  "name":"overlap",
                  "properties":[
@@ -47,13 +47,13 @@
                         }],
                  "rotation":0,
                  "visible":true,
-                 "width":142.667,
-                 "x":1523.33666666667,
-                 "y":420
+                 "width":132.667,
+                 "x":1513.34,
+                 "y":424
                 }, 
                 {
                  "class":"Sausage",
-                 "gid":16,
+                 "gid":19,
                  "height":32,
                  "id":22,
                  "name":"",
@@ -65,7 +65,7 @@
                 }, 
                 {
                  "class":"Sausage",
-                 "gid":16,
+                 "gid":19,
                  "height":32,
                  "id":25,
                  "name":"",
@@ -77,7 +77,7 @@
                 }, 
                 {
                  "class":"Sausage",
-                 "gid":16,
+                 "gid":19,
                  "height":32,
                  "id":26,
                  "name":"",
@@ -89,7 +89,7 @@
                 }, 
                 {
                  "class":"Sausage",
-                 "gid":16,
+                 "gid":19,
                  "height":32,
                  "id":27,
                  "name":"",
@@ -101,7 +101,7 @@
                 }, 
                 {
                  "class":"Sausage",
-                 "gid":16,
+                 "gid":19,
                  "height":32,
                  "id":28,
                  "name":"",
@@ -113,7 +113,7 @@
                 }, 
                 {
                  "class":"Sausage",
-                 "gid":16,
+                 "gid":19,
                  "height":32,
                  "id":29,
                  "name":"",
@@ -125,7 +125,7 @@
                 }, 
                 {
                  "class":"Candy",
-                 "gid":18,
+                 "gid":21,
                  "height":32,
                  "id":30,
                  "name":"",
@@ -137,7 +137,7 @@
                 }, 
                 {
                  "class":"Candy",
-                 "gid":18,
+                 "gid":21,
                  "height":32,
                  "id":41,
                  "name":"",
@@ -149,7 +149,7 @@
                 }, 
                 {
                  "class":"Key",
-                 "gid":17,
+                 "gid":20,
                  "height":32,
                  "id":42,
                  "name":"",
@@ -167,7 +167,7 @@
                 }, 
                 {
                  "class":"Candy",
-                 "gid":18,
+                 "gid":21,
                  "height":32,
                  "id":46,
                  "name":"",
@@ -179,7 +179,7 @@
                 }, 
                 {
                  "class":"Candy",
-                 "gid":18,
+                 "gid":21,
                  "height":32,
                  "id":47,
                  "name":"",
@@ -191,7 +191,7 @@
                 }, 
                 {
                  "class":"Candy",
-                 "gid":18,
+                 "gid":21,
                  "height":32,
                  "id":48,
                  "name":"",
@@ -203,7 +203,7 @@
                 }, 
                 {
                  "class":"Fire",
-                 "gid":20,
+                 "gid":23,
                  "height":32,
                  "id":51,
                  "name":"",
@@ -215,7 +215,7 @@
                 }, 
                 {
                  "class":"Fire",
-                 "gid":20,
+                 "gid":23,
                  "height":32,
                  "id":52,
                  "name":"",
@@ -227,7 +227,7 @@
                 }, 
                 {
                  "class":"Fire",
-                 "gid":20,
+                 "gid":23,
                  "height":32,
                  "id":54,
                  "name":"",
@@ -239,7 +239,7 @@
                 }, 
                 {
                  "class":"Character",
-                 "gid":19,
+                 "gid":22,
                  "height":35,
                  "id":55,
                  "name":"",
@@ -251,27 +251,27 @@
                 }, 
                 {
                  "class":"PlatformMoveable",
-                 "gid":21,
+                 "gid":24,
                  "height":16,
                  "id":57,
                  "name":"",
                  "rotation":0,
                  "visible":true,
                  "width":64,
-                 "x":1429.33666666667,
-                 "y":263.999666666667
+                 "x":1429.34,
+                 "y":264
                 }, 
                 {
                  "class":"PlatformMoveable",
-                 "gid":21,
+                 "gid":24,
                  "height":16,
                  "id":58,
                  "name":"",
                  "rotation":0,
                  "visible":true,
                  "width":64,
-                 "x":245.333333333333,
-                 "y":390.666666666667
+                 "x":245.333,
+                 "y":390.667
                 }, 
                 {
                  "class":"BumpRect",
@@ -287,8 +287,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":142.667,
-                 "x":209.999833333333,
-                 "y":86.6666499999999
+                 "x":210,
+                 "y":86.6666
                 }, 
                 {
                  "class":"BumpRect",
@@ -304,8 +304,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":142.667,
-                 "x":209.999833333333,
-                 "y":425.333316666667
+                 "x":210,
+                 "y":425.333
                 }, 
                 {
                  "class":"BumpRect",
@@ -321,12 +321,12 @@
                  "rotation":0,
                  "visible":true,
                  "width":142.667,
-                 "x":1404.6665,
-                 "y":54.66665
+                 "x":1404.67,
+                 "y":54.6667
                 }, 
                 {
                  "class":"BumpRect",
-                 "height":44.0000333333333,
+                 "height":44,
                  "id":65,
                  "name":"bump",
                  "properties":[
@@ -338,8 +338,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":142.667,
-                 "x":1396.6665,
-                 "y":299.999983333333
+                 "x":1396.67,
+                 "y":300
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -351,19 +351,19 @@
  "nextobjectid":66,
  "orientation":"orthogonal",
  "renderorder":"right-down",
- "tiledversion":"1.9.2",
+ "tiledversion":"1.9.1",
  "tileheight":32,
  "tilesets":[
         {
          "columns":3,
          "firstgid":1,
          "image":"tiles.png",
-         "imageheight":160,
+         "imageheight":192,
          "imagewidth":96,
          "margin":0,
          "name":"tiles",
          "spacing":0,
-         "tilecount":15,
+         "tilecount":18,
          "tileheight":32,
          "tiles":[
                 {
@@ -441,12 +441,36 @@
                      "x":0,
                      "y":0
                     }
+                }, 
+                {
+                 "animation":[
+                        {
+                         "duration":700,
+                         "tileid":12
+                        }, 
+                        {
+                         "duration":700,
+                         "tileid":13
+                        }],
+                 "id":12
+                }, 
+                {
+                 "animation":[
+                        {
+                         "duration":700,
+                         "tileid":13
+                        }, 
+                        {
+                         "duration":700,
+                         "tileid":12
+                        }],
+                 "id":13
                 }],
          "tilewidth":32
         }, 
         {
          "columns":1,
-         "firstgid":16,
+         "firstgid":19,
          "image":"..\/..\/psd_sources\/flattened\/sausage_frame_1.png",
          "imageheight":34,
          "imagewidth":32,
@@ -486,7 +510,7 @@
         }, 
         {
          "columns":1,
-         "firstgid":17,
+         "firstgid":20,
          "image":"..\/..\/psd_sources\/flattened\/key_frame_1.png",
          "imageheight":35,
          "imagewidth":32,
@@ -499,7 +523,7 @@
         }, 
         {
          "columns":1,
-         "firstgid":18,
+         "firstgid":21,
          "image":"..\/..\/psd_sources\/flattened\/candy_frame_1.png",
          "imageheight":32,
          "imagewidth":32,
@@ -512,7 +536,7 @@
         }, 
         {
          "columns":1,
-         "firstgid":19,
+         "firstgid":22,
          "image":"..\/..\/psd_sources\/flattened\/character_climb_horizontal2.png",
          "imageheight":35,
          "imagewidth":34,
@@ -525,7 +549,7 @@
         }, 
         {
          "columns":1,
-         "firstgid":20,
+         "firstgid":23,
          "image":"..\/..\/psd_sources\/flattened\/fire_fire1.png",
          "imageheight":32,
          "imagewidth":32,
@@ -565,7 +589,7 @@
         }, 
         {
          "columns":1,
-         "firstgid":21,
+         "firstgid":24,
          "image":"..\/..\/psd_sources\/flattened\/platform_moveable_frame_1.png",
          "imageheight":16,
          "imagewidth":64,

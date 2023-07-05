@@ -71,7 +71,7 @@ export class Character implements Injectable {
             jumpVelocity: JUMP_VEL,
             verticalLadderTileIds: [3,7],
             horizontalLadderTileIds: [4],
-            waterTileIds: [1,2],
+            waterTileIds: [1,2,12,13],
             tileMap: this.tileMap,
             runAnimation: new AtlasFrameAnimation(this.scene.getGame(),{
                 frames: [

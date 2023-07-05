@@ -34,7 +34,7 @@ export class TilePackController {
         const psd = PSD.fromFile(params.pathToPsdFile);
         psd.parse();
         const layers = psd.tree().children().map((c:any)=>c.layer);
-        const imageFileNames:string[] = [];
+        const images:{fileName:string,left:number,top:number}[] = [];
         const frameWidth =  psd.header.cols;
         const frameHeight = psd.header.rows;
         for (const layer of layers) {
@@ -42,26 +42,30 @@ export class TilePackController {
             const id = uuid();
             const fileName = `${tmp}/${id}.png`;
             await layer.image.saveAsPng(fileName);
-            imageFileNames.push(fileName);
+            images.push({
+                fileName,
+                left: layer.left,
+                top: layer.top,
+            });
         }
-        if (params.numOfImagesInRow>imageFileNames.length) {
-            params.numOfImagesInRow = imageFileNames.length;
+        if (params.numOfImagesInRow>images.length) {
+            params.numOfImagesInRow = images.length;
         }
         const imgWidth = params.numOfImagesInRow*frameWidth;
-        let h = ~~(imageFileNames.length/params.numOfImagesInRow);
-        if (imageFileNames.length%params.numOfImagesInRow>0) h++;
+        let h = ~~(images.length/params.numOfImagesInRow);
+        if (images.length%params.numOfImagesInRow>0) h++;
         const imgHeight = h*frameHeight;
         const bitmap = new Bitmap(imgWidth,imgHeight);
         let x = 0, y = 0;
-        for (const imgFileName of imageFileNames) {
-            const bm = await Bitmap.fromPNG(imgFileName);
-            bitmap.drawImageAt(x,y,bm);
+        for (const img of images) {
+            const bm = await Bitmap.fromPNG(img.fileName);
+            bitmap.drawImageAt(x+img.left,y+img.top,bm);
             x+=frameWidth;
             if (x>=imgWidth) {
                 x = 0;
                 y+=frameHeight;
             }
-            fs.unlinkSync(imgFileName);
+            fs.unlinkSync(img.fileName);
         }
         const outFileUUID = uuid();
         await bitmap.toPng(`${tmp}/${outFileUUID}.png`);

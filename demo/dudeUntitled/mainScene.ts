@@ -56,7 +56,7 @@ export class MainScene extends Scene {
                 ceilUp: [10],
                 ceilDown: [11],
             },
-            exceptCollisionTiles: [1,2,3,4,7],
+            exceptCollisionTiles: [1,2,3,4,7,12,13],
             debug: false,
             restitution: 0.1,
         });
