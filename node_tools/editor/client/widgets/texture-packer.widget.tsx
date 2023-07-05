@@ -119,7 +119,7 @@ export class TexturePackerWidget extends BaseTsxComponent {
                         <input value={''+this.padding} onchange={e=>this.padding = +((e.target as HTMLInputElement).value || 0)}/>
                         padding
                         <div>
-                            <button onclick={e=>this.convert()}>convert</button>
+                            <button onclick={this.convert}>convert</button>
                         </div>
                     </Frame>
                 }
@@ -143,7 +143,7 @@ export class TexturePackerWidget extends BaseTsxComponent {
                         </div>
                         <div>
                             <input value={this.saveTo} onchange={e=>this.saveTo = (e.target as HTMLInputElement).value}/>
-                            <button onclick={e=>this.save()}>save</button>
+                            <button onclick={this.save}>save</button>
                         </div>
                     </Frame>
                 }

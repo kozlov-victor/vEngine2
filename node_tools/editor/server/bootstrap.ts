@@ -7,8 +7,15 @@ declare const __non_webpack_require__:any;
 const http = __non_webpack_require__('http');
 const urlModule = __non_webpack_require__('url');
 
+const guessContentType = (obj:any):string=>{
+    if (obj instanceof Buffer) return 'application/octet-stream';
+    if (Array.isArray(obj) || typeof obj ==='object') return 'application/json';
+    return 'text/plain';
+}
+
 const writeResultToResponse = (result:any, res:ServerResponse,contentType?:string):void=>{
-    if (contentType) res.setHeader('content-type',contentType);
+    if (!contentType) contentType = guessContentType(result);
+    res.setHeader('content-type',contentType);
     if (result.charAt!==undefined) {
         res.end(result);
     } else {

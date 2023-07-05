@@ -3,6 +3,8 @@ import {Rectangle, TexturePacker} from "./utils/rectPacker";
 import {Bitmap} from "./utils/bitmap";
 import {ITextureAtlasJSON} from "@engine/animation/frameAnimation/atlas/texturePackerAtlas";
 import {uuid} from "./utils/uuid";
+import {tmp} from "./utils/consts";
+import {cleanUp} from "./utils/cleanUp";
 
 declare const __non_webpack_require__:any;
 
@@ -43,13 +45,11 @@ class RectangleEx extends Rectangle {
     public image:IImage;
 }
 
-const tmp = './__tmp';
-
 @Controller('texture-pack')
 export class TexturePackController {
 
 
-    @Get({url:'/getFiles',contentType:'application/json'})
+    @Get()
     public async getFiles(params:{folder:string}) {
         const result:string[] = [];
         const folder = params.folder;
@@ -63,7 +63,7 @@ export class TexturePackController {
         return result;
     }
 
-    @Post({url:'/convert',contentType:'text/plain'})
+    @Post()
     public async convert(params:{files:string,padding:number,saveLayerImagesTo:string}) {
         if (!fs.existsSync(tmp)) fs.mkdirSync(tmp);
         if (!params.padding) params.padding = 0;
@@ -142,48 +142,41 @@ export class TexturePackController {
             fs.unlinkSync(r.image.fileName);
         }
         fs.writeFileSync(`${tmp}/${outFileUUID}.json`,JSON.stringify(descriptions,undefined!,4));
-        storage.set('saveLayerImagesTo',params.saveLayerImagesTo);
+        storage.set('texture-pack:saveLayerImagesTo',params.saveLayerImagesTo);
         return outFileUUID;
     }
 
-    @Get({url:'/getConvertedImage',contentType:'application/octet-stream'})
+    @Get()
     public async getConvertedImage(params:{uuid:string}) {
         return fs.readFileSync(`${tmp}/${params.uuid}.png`);
     }
 
-    @Get({url:'/loadParams',contentType:'application/json'})
+    @Get()
     public async loadParams() {
         return {
-            saveTo: storage.get('saveTo'),
-            saveToFileName: storage.get('saveToFileName'),
-            folder: storage.get('folder'),
-            saveLayerImagesTo: storage.get('saveLayerImagesTo'),
+            saveTo: storage.get('texture-pack:saveTo'),
+            saveToFileName: storage.get('texture-pack:saveToFileName'),
+            folder: storage.get('texture-pack:folder'),
+            saveLayerImagesTo: storage.get('texture-pack:saveLayerImagesTo'),
         };
     }
 
-    @Post({url:'/save',contentType:'application/json'})
+    @Post()
     public async save(params:{uuid:string,saveTo:string,saveToFileName:string,folder:string}) {
         fs.copyFileSync(`${tmp}/${params.uuid}.png`,`${params.saveTo}/${params.saveToFileName}.png`);
         fs.copyFileSync(`${tmp}/${params.uuid}.json`,`${params.saveTo}/${params.saveToFileName}.json`);
-        storage.set('saveTo',params.saveTo);
-        storage.set('saveToFileName',params.saveToFileName);
-        storage.set('folder',params.folder);
-        this._cleanUp();
+        storage.set('texture-pack:saveTo',params.saveTo);
+        storage.set('texture-pack:saveToFileName',params.saveToFileName);
+        storage.set('texture-pack:folder',params.folder);
+        cleanUp();
         return {};
     }
 
-    @Post({url:'/cleanUp',contentType:'application/json'})
+    @Post()
     public async cleanUp() {
-        this._cleanUp();
+        cleanUp();
         return {};
     }
 
-    private _cleanUp() {
-        if (fs.existsSync(tmp)) {
-            fs.readdirSync(tmp).forEach((f:string)=>{
-                fs.unlinkSync(`${tmp}/${f}`);
-            });
-        }
-    }
 
 }

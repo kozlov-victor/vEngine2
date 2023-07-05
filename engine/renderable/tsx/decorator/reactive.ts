@@ -30,7 +30,6 @@ export const Reactive = {
                     },
                     set:val=>{
                         _val = val;
-                        console.log('set',val);
                         (this as VEngineTsxComponent)._triggerRendering();
                     }
                 });
