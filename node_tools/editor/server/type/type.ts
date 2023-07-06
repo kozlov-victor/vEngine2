@@ -1,9 +1,5 @@
 import {isNumber} from "@engine/misc/object";
 
-interface IParams {
-    required?: boolean;
-}
-
 class SchemaValidator {
 
     public static readonly requiredFlag = 1;
@@ -58,26 +54,28 @@ export class ValidationError extends Error {
 
 export class Type {
 
-    private static getPropValue(params:IParams) {
-        if (params.required) return SchemaValidator.requiredFlag;
-        return 0;
-    }
 
     public static CreateModel<T extends Record<string, any>>(properties: T){
         const model = new Model(properties);
         return model as Model & T;
     }
-    public static Number(params:IParams = {}):number|undefined {
-        return this.getPropValue(params);
+    public static Number():number|undefined {
+        return 0;
     }
-    public static Boolean(params:IParams = {}):boolean|undefined {
-        return this.getPropValue(params)===1;
+    public static Boolean():boolean|undefined {
+        return false;
     }
-    public static String(params:IParams = {}):string|undefined {
-        return `${this.getPropValue(params)}`;
+    public static String():string|undefined {
+        return `0`;
     }
-    public static Required<T extends string|number|boolean|undefined>(val:T) {
-        return val!;
+    public static Required<T>(val:T|undefined):T {
+        const type = typeof val;
+        switch (type) {
+            case 'string': return '1' as T;
+            case 'number': return 1 as T;
+            case 'boolean': return true as T;
+        }
+        return val as T;
     }
 
 }
@@ -88,7 +86,7 @@ class Model {
     }
 
     public fromData(dataRecord:Record<string, any>,params:{ignoreUnknown?:boolean} = {}) {
-        Object.keys(dataRecord).forEach(k=> {
+        Object.keys(this.properties).forEach(k=> {
             const dataRawVal = dataRecord[k];
             const typeVal = this.properties[k];
             if (typeVal===undefined) {
@@ -118,14 +116,14 @@ class Model {
 
 const model =
     Type.CreateModel({
-        age: Type.Number({required: true}),
+        age: Type.Required(Type.Number()),
         salary: Type.Number(),
         name: Type.String(),
         login: Type.String(),
-        save: Type.Boolean({required:true}),
+        save: Type.Boolean(),
     }).
     fromData({
-        //age: 40,
+        age: 40,
         salary: 100,
         name: 100,
         login: 'test',
