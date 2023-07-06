@@ -4,19 +4,36 @@ import {uuid} from "./utils/uuid";
 import {Bitmap} from "./utils/bitmap";
 import {cleanUp} from "./utils/cleanUp";
 import * as fs from 'fs';
+import {Type} from "../type/type";
 
 
 const PSD = require('psd');
 const storage = require('../../../common/storage');
 
+const CheckFileDto = Type.Class({
+    pathToPsdFile: Type.Required.String(),
+});
+
+const ConvertFileDto = Type.Class({
+    pathToPsdFile:Type.Required.String(),
+    numOfImagesInRow:Type.Required.Integer({min:1}),
+});
+
+const SaveFileDto = Type.Class({
+    uuid:Type.Required.String(),
+    saveTo:Type.Required.String(),
+    saveToFileName:Type.Required.String(),
+});
+
 @Controller('tile-pack')
 export class TilePackController {
 
     @Post()
-    public async checkFile(params:{pathToPsdFile:string}) {
-        const success = fs.existsSync(params.pathToPsdFile);
+    public async checkFile(params:Record<string, any>) {
+        const model = CheckFileDto.createInstance(params);
+        const success = fs.existsSync(model.pathToPsdFile);
         if (success) {
-            storage.set('tile-pack:pathToPsdFile',params.pathToPsdFile);
+            storage.set('tile-pack:pathToPsdFile',model.pathToPsdFile);
             return {
                 success,
                 message: 'Ok'
@@ -29,9 +46,10 @@ export class TilePackController {
     }
 
     @Post()
-    public async convertFile(params:{pathToPsdFile:string,numOfImagesInRow:number}) {
+    public async convertFile(params:Record<string, any>) {
+        const model = ConvertFileDto.createInstance(params);
         if (!fs.existsSync(tmp)) fs.mkdirSync(tmp);
-        const psd = PSD.fromFile(params.pathToPsdFile);
+        const psd = PSD.fromFile(model.pathToPsdFile);
         psd.parse();
         const layers = psd.tree().children().map((c:any)=>c.layer);
         const images:{fileName:string,left:number,top:number}[] = [];
@@ -48,12 +66,12 @@ export class TilePackController {
                 top: layer.top,
             });
         }
-        if (params.numOfImagesInRow>images.length) {
-            params.numOfImagesInRow = images.length;
+        if (model.numOfImagesInRow>images.length) {
+            model.numOfImagesInRow = images.length;
         }
-        const imgWidth = params.numOfImagesInRow*frameWidth;
-        let h = ~~(images.length/params.numOfImagesInRow);
-        if (images.length%params.numOfImagesInRow>0) h++;
+        const imgWidth = model.numOfImagesInRow*frameWidth;
+        let h = ~~(images.length/model.numOfImagesInRow);
+        if (images.length%model.numOfImagesInRow>0) h++;
         const imgHeight = h*frameHeight;
         const bitmap = new Bitmap(imgWidth,imgHeight);
         let x = 0, y = 0;
@@ -69,15 +87,16 @@ export class TilePackController {
         }
         const outFileUUID = uuid();
         await bitmap.toPng(`${tmp}/${outFileUUID}.png`);
-        storage.set('tile-pack:numOfImagesInRow',params.numOfImagesInRow);
+        storage.set('tile-pack:numOfImagesInRow',model.numOfImagesInRow);
         return outFileUUID;
     }
 
     @Post()
-    public async save(params:{uuid:string,saveTo:string,saveToFileName:string,folder:string}) {
-        fs.copyFileSync(`${tmp}/${params.uuid}.png`,`${params.saveTo}/${params.saveToFileName}.png`);
-        storage.set('tile-pack:saveTo',params.saveTo);
-        storage.set('tile-pack:saveToFileName',params.saveToFileName);
+    public async save(params:Record<string, any>) {
+        const model = SaveFileDto.createInstance(params);
+        fs.copyFileSync(`${tmp}/${model.uuid}.png`,`${model.saveTo}/${model.saveToFileName}.png`);
+        storage.set('tile-pack:saveTo',model.saveTo);
+        storage.set('tile-pack:saveToFileName',model.saveToFileName);
         cleanUp();
         return {};
     }

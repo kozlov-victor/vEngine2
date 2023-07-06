@@ -1,6 +1,7 @@
 import {Registry} from "./registry/registry";
 import type {IncomingMessage, ServerResponse} from 'http';
 import {Static} from "./static/static";
+import {ValidationError} from "./type/type";
 
 declare const __non_webpack_require__:any;
 
@@ -24,8 +25,8 @@ const writeResultToResponse = (result:any, res:ServerResponse,contentType?:strin
     }
 }
 
-const writeErrorToResponse = (error:any,res:ServerResponse):void=>{
-    res.writeHead(500);
+const writeErrorToResponse = (error:any,status:number,res:ServerResponse):void=>{
+    res.writeHead(status);
     try {
         res.end(JSON.stringify(error));
     } catch (e) {
@@ -81,7 +82,8 @@ const requestListener = async (req:IncomingMessage, res:ServerResponse)=> {
                 writeResultToResponse(result,res,registryItem.contentType);
                 return;
             } catch (e:any) {
-                writeErrorToResponse(e, res);
+                const status = e.type==='ValidationError'?400:500;
+                writeErrorToResponse(e, status, res);
                 return;
             }
         }

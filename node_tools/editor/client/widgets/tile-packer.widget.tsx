@@ -4,6 +4,7 @@ import {Frame} from "../components/frame";
 import {StatusBar} from "../components/statusBar";
 import {Reactive} from "@engine/renderable/tsx/decorator/reactive";
 import {HttpClient} from "@engine/debug/httpClient";
+import {resolveError} from "../utils/resolveError";
 
 export class TilePackerWidget extends BaseTsxComponent {
 
@@ -13,7 +14,7 @@ export class TilePackerWidget extends BaseTsxComponent {
     };
 
     private pathToPsdFile:string;
-    private numOfImagesInRow = 3;
+    private numOfImagesInRow = '3';
     private psdFileExists = false;
     private convertedImageUUID:string;
     private saveToFileName:string = '';
@@ -30,13 +31,13 @@ export class TilePackerWidget extends BaseTsxComponent {
             const payload:any = await HttpClient.get('/tile-pack/loadParams');
             this.saveTo = payload.saveTo;
             this.saveToFileName = payload.saveToFileName;
-            this.numOfImagesInRow = payload.numOfImagesInRow || 3;
+            this.numOfImagesInRow = payload.numOfImagesInRow || '3';
             this.pathToPsdFile = payload.pathToPsdFile;
             this.operationResult.message = 'Ok';
             this.operationResult.success = true;
         } catch (e:any) {
             console.log(e);
-            this.operationResult.message = e.toString();
+            this.operationResult.message = resolveError(e);
             this.operationResult.success = false;
         }
     }
@@ -54,7 +55,7 @@ export class TilePackerWidget extends BaseTsxComponent {
                     this.psdFileExists &&
                         <Frame title={'converting to sheet'}>
                             <div>
-                                <input value={''+this.numOfImagesInRow} onchange={e=>this.numOfImagesInRow = +((e.target as HTMLInputElement).value || 0)}/>
+                                <input value={this.numOfImagesInRow} onchange={e=>this.numOfImagesInRow = (e.target as HTMLInputElement).value}/>
                                 number of images in row
                             </div>
                             <button onclick={this.convert}>convert</button>
@@ -102,7 +103,8 @@ export class TilePackerWidget extends BaseTsxComponent {
                 );
             this.psdFileExists = this.operationResult.success;
         } catch (e:any) {
-            this.operationResult.message = e.toString();
+            console.log(e);
+            this.operationResult.message = resolveError(e);
             this.operationResult.success = false;
         }
     }
@@ -120,7 +122,8 @@ export class TilePackerWidget extends BaseTsxComponent {
             this.operationResult.success = true;
             this.operationResult.message = 'Converted';
         } catch (e:any) {
-            this.operationResult.message = e.toString();
+            console.log(e);
+            this.operationResult.message = e.message || e.toString();
             this.operationResult.success = false;
         }
     }
@@ -138,7 +141,8 @@ export class TilePackerWidget extends BaseTsxComponent {
             this.operationResult.message = 'saved!';
             this.operationResult.success = true;
         } catch (e:any) {
-            this.operationResult.message = e.toString();
+            console.log(e);
+            this.operationResult.message = resolveError(e);
             this.operationResult.success = false;
         }
     }

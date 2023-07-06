@@ -25,7 +25,7 @@ interface IRequestData<T> {
     data?: string|number|FormData|IKeyVal<string|number|boolean>;
     url: string;
     success?: (arg:T)=>void;
-    error?: (opts:{status:number,error:string})=>void;
+    error?: (opts:{status:number,error:string,response:any})=>void;
     setup?: (xhr:XMLHttpRequest)=>void;
     requestType?: 'multipart/form-data'|'application/json'|'application/x-www-form-urlencoded'|string;
     timeout?: number;
@@ -67,8 +67,14 @@ export namespace HttpClient {
                     }
                     resolveFn(resp as unknown as T);
                 } else {
-                    if (data.error) data.error({status:xhr.status,error:xhr.statusText});
-                    rejectFn(xhr.statusText);
+                    let response:any;
+                    try{
+                        response = JSON.parse(xhr.response);
+                    } catch (e) {
+                        response = xhr.response;
+                    }
+                    if (data.error) data.error({status:xhr.status,error:xhr.statusText,response});
+                    rejectFn(response);
                 }
                 clearTimeout(abortTmr);
                 resolved = true;

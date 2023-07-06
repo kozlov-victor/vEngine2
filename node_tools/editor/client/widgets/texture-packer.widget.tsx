@@ -4,6 +4,7 @@ import {HttpClient} from "@engine/debug/httpClient";
 import {Frame} from "../components/frame";
 import {StatusBar} from "../components/statusBar";
 import {BaseTsxComponent} from "@engine/renderable/tsx/base/baseTsxComponent";
+import {resolveError} from "../utils/resolveError";
 
 export class TexturePackerWidget extends BaseTsxComponent {
 
@@ -38,7 +39,7 @@ export class TexturePackerWidget extends BaseTsxComponent {
             this.operationResult.success = true;
         } catch (e:any) {
             console.log(e);
-            this.operationResult.message = e.toString();
+            this.operationResult.message = resolveError(e);
             this.operationResult.success = false;
         }
     }
@@ -52,7 +53,7 @@ export class TexturePackerWidget extends BaseTsxComponent {
                 this.operationResult.message = 'Loaded';
                 this.operationResult.success = true;
             } catch (e:any) {
-                this.operationResult.message = e.toString();
+                this.operationResult.message = resolveError(e);
                 this.operationResult.success = false;
             }
         }
@@ -71,7 +72,7 @@ export class TexturePackerWidget extends BaseTsxComponent {
             this.operationResult.message = 'converted';
             this.operationResult.success = true;
         } catch (e:any) {
-            this.operationResult.message = e.toString();
+            this.operationResult.message = resolveError(e);
             this.operationResult.success = false;
         }
     }
@@ -91,7 +92,7 @@ export class TexturePackerWidget extends BaseTsxComponent {
             this.operationResult.message = 'saved!';
             this.operationResult.success = true;
         } catch (e:any) {
-            this.operationResult.message = e.toString();
+            this.operationResult.message = resolveError(e);
             this.operationResult.success = false;
         }
     }

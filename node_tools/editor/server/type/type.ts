@@ -2,43 +2,68 @@ import {isNumber} from "@engine/misc/object";
 
 class SchemaValidator {
 
-    public static readonly requiredFlag = 1;
-
-    public static isRequired(val:string|number|boolean):boolean {
-        if (typeof val ==='boolean') return val;
-        return `${val}`===`${this.requiredFlag}`;
-    }
-
-    private static checkNumber(val:any) {
-        return {
-            passed: val!==true && val!==false && isNumber(+val),
-            value: +val,
-            type: 'number',
+    private static checkNumber(key: string, val:any,type: tPrimitiveType,params:InternalTypeVal) {
+        if (val===true && val===false && !isNumber(+val)) {
+            throw new ValidationError(key,type);
         }
-    }
+        val = +val;
 
-    private static checkString(val:any) {
-        return {
-            passed: val!==true && val!==false,
-            value: `${val}`,
-            type: 'string'
+        if (params.min!==undefined) {
+            if (val<params.min) {
+                throw new ValidationError(key,'min');
+            }
         }
-    }
-
-    private static checkBoolean(val:any) {
-        return {
-            passed: val===true || val===false,
-            value: val,
-            type: 'boolean'
+        if (params.max!==undefined) {
+            if (val>params.max) {
+                throw new ValidationError(key,'max');
+            }
         }
+
+        return val;
     }
 
-    public static checkType(val:any,type:string|number|boolean) {
-        const t = typeof type;
+    private static checkInteger(key: string, val:any,type: tPrimitiveType,params:InternalTypeVal) {
+        if (!Number.isInteger(+val)) {
+            throw new ValidationError(key,type);
+        }
+        return this.checkNumber(key,val,type,params);
+    }
+
+
+    private static checkString(key: string,val:any,type: tPrimitiveType,params:InternalTypeVal) {
+        if (val==true && val==false) {
+            throw new ValidationError(key,type);
+        }
+        val = `${val}`;
+
+        if (params.minLength!==undefined) {
+            if (val.length<params.minLength) {
+                throw new ValidationError(key,'minLength');
+            }
+        }
+        if (params.maxLength!==undefined) {
+            if (val.length>params.maxLength) {
+                throw new ValidationError(key,'maxLength');
+            }
+        }
+
+        return val;
+    }
+
+    private static checkBoolean(key: string, val:any,type: tPrimitiveType, params:InternalTypeVal) {
+        if (val!==true && val!==false) {
+            throw new ValidationError(key,type);
+        }
+        return val;
+    }
+
+    public static validateTypeAndValueAnfGetMappedType(key:string, val:any, type: tPrimitiveType,params:InternalTypeVal) {
+        const t = params.type;
         switch (t) {
-            case 'string': return this.checkString(val);
-            case 'number': return this.checkNumber(val);
-            case 'boolean': return this.checkBoolean(val);
+            case 'string': return this.checkString(key, val, type, params);
+            case 'number': return this.checkNumber(key, val, type, params);
+            case 'integer': return this.checkInteger(key, val, type, params);
+            case 'boolean': return this.checkBoolean(key, val, type, params);
             default:
                 throw new Error(`unsupported type: ${t}`);
         }
@@ -47,84 +72,119 @@ class SchemaValidator {
 }
 
 export class ValidationError extends Error {
+    public readonly type = 'ValidationError';
+
     constructor(public field:string,public code:string) {
-        super(`validation error for field "${field}" with code "${code}"`);
+        super();
+        this.message = `validation error for field "${field}" with code "${code}"`;
+        if (Error.captureStackTrace) {
+            Error.captureStackTrace(this, this.constructor);
+        } else {
+            this.stack = (new Error()).stack;
+        }
     }
+}
+
+type tPrimitiveType = 'string'|'number'|'boolean'|'integer';
+
+interface InternalTypeVal {
+    type: tPrimitiveType;
+    min?:number;
+    max?:number;
+    minLength?:number;
+    maxLength?:number;
+    required?: boolean;
+}
+
+interface INumberParams {
+    min?:number;
+    max?:number;
+}
+
+interface IStringParams {
+    minLength?:number;
+    maxLength?:number;
 }
 
 export class Type {
 
+    public static Required = class {
+        public static Number(params:{min?:number,max?:number} = {}):number {
+            return Type.Number({...params,required:true} as INumberParams)!;
+        }
+        public static Integer(params:{min?:number,max?:number} = {}):number {
+            return Type.Integer({...params,required:true} as INumberParams)!;
+        }
+        public static Boolean():boolean {
+            return Type.Boolean({required:true} as any)!;
+        }
+        public static String(params:{minLength?:number,maxLength?:number} = {}):string {
+            return Type.String({...params,required:true} as IStringParams)!;
+        }
+    }
 
-    public static CreateModel<T extends Record<string, any>>(properties: T){
+    public static Class<T extends Record<string, any>>(properties: T){
         const model = new Model(properties);
         return model as Model & T;
     }
-    public static Number():number|undefined {
-        return 0;
+    public static Number(params:INumberParams = {}):number|undefined {
+        return {...params,type:'number'} as InternalTypeVal as unknown as number;
     }
-    public static Boolean():boolean|undefined {
-        return false;
+    public static Integer(params:INumberParams = {}):number|undefined {
+        return {...params,type:'integer'} as InternalTypeVal as unknown as number;
     }
-    public static String():string|undefined {
-        return `0`;
+    public static Boolean(params:Record<string, never> = {}):boolean|undefined {
+        return {...params,type:'boolean'} as InternalTypeVal as unknown as boolean;
     }
-    public static Required<T>(val:T|undefined):T {
-        const type = typeof val;
-        switch (type) {
-            case 'string': return '1' as T;
-            case 'number': return 1 as T;
-            case 'boolean': return true as T;
-        }
-        return val as T;
+    public static String(params:IStringParams = {}):string|undefined {
+        return {...params,type:'string'} as InternalTypeVal as unknown as string;
     }
 
 }
 
 class Model {
 
-    constructor(private properties:Record<string, string|number>) {
+    constructor(private properties:Record<string, string|number|boolean>) {
     }
 
-    public fromData(dataRecord:Record<string, any>,params:{ignoreUnknown?:boolean} = {}) {
+    public createInstance(dataRecord:Record<string, any>, params:{ignoreUnknown?:boolean} = {}) {
+        const modelCreated:Record<string, any> = {};
         Object.keys(this.properties).forEach(k=> {
             const dataRawVal = dataRecord[k];
-            const typeVal = this.properties[k];
+            const internalTypeVal = this.properties[k] as unknown as InternalTypeVal;
+            const typeVal = internalTypeVal.type;
             if (typeVal===undefined) {
                 if (!params.ignoreUnknown) {
                     throw new ValidationError(k,'unknown')
                 }
                 return; // ignore unknown property of data
             }
-            const isRequired = SchemaValidator.isRequired(typeVal);
             if (
-                isRequired &&
+                internalTypeVal.required &&
                 (dataRawVal===null || dataRawVal===undefined || dataRawVal==='' || dataRawVal===false)
             ) {
                 throw new ValidationError(k,'required');
             }
             if (dataRawVal===null || dataRawVal===undefined) return;
-            const check = SchemaValidator.checkType(dataRawVal,typeVal);
-            if (!check.passed) {
-                throw new ValidationError(k,check.type);
-            }
-            (this as any)[k] = check.value;
+            (modelCreated)[k] =
+                SchemaValidator.validateTypeAndValueAnfGetMappedType(k, dataRawVal, typeVal, internalTypeVal);
         });
-        return this;
+        return modelCreated as this;
     }
 
 }
 
 const model =
-    Type.CreateModel({
-        age: Type.Required(Type.Number()),
-        salary: Type.Number(),
+    Type.Class({
+        age: Type.Required.Integer(),
+        salary: Type.Integer({max:50}),
         name: Type.String(),
-        login: Type.String(),
-        save: Type.Boolean(),
+        login: Type.String({minLength: 1,maxLength: 20}),
+        save: Type.Required.Boolean(),
     }).
-    fromData({
+    createInstance({
         age: 40,
-        salary: 100,
+        salary: 50,
         name: 100,
         login: 'test',
         save: true,
