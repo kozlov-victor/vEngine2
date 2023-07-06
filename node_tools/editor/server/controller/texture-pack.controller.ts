@@ -5,14 +5,11 @@ import {ITextureAtlasJSON} from "@engine/animation/frameAnimation/atlas/textureP
 import {uuid} from "./utils/uuid";
 import {tmp} from "./utils/consts";
 import {cleanUp} from "./utils/cleanUp";
+import * as fs from 'fs';
+import * as path from 'path';
 
-declare const __non_webpack_require__:any;
-
-const fs = __non_webpack_require__('fs');
-const PSD = __non_webpack_require__('psd');
-const path = __non_webpack_require__('path');
-const storage = __non_webpack_require__('../../node_tools/common/storage');
-
+const PSD = require('psd');
+const storage = require('../../../common/storage');
 
 const getSafeName = (obj:Record<string, any>,name:string)=> {
     if (obj[name]===undefined) return name;

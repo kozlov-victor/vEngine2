@@ -1,4 +1,4 @@
-import {Controller, Get, Post} from "../decorator/decorator";
+import {Controller, Get} from "../decorator/decorator";
 
 @Controller('/base')
 export class TestController {

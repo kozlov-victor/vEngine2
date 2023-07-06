@@ -1,8 +1,5 @@
 import {Controller, Get} from "../decorator/decorator";
-
-declare const __non_webpack_require__:any;
-
-const fs = __non_webpack_require__('fs');
+import * as fs from 'fs';
 
 @Controller('/')
 export class IndexController {

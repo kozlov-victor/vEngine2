@@ -7,6 +7,7 @@ import {ArcadePhysicsSystem} from "@engine/physics/arcade/arcadePhysicsSystem";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {MouseControl} from "@engine/control/mouse/mouseControl";
 import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
+import {Type} from "../../node_tools/editor/server/type/type";
 
 // window.requestAnimationFrame =  (f:FrameRequestCallback):number=>{
 //     return setTimeout(f,1000/25);
@@ -55,7 +56,5 @@ game.getControl(KeyboardControl).reflectToSelf(
 
 const mainScene: Scene = new MainScene(game);
 game.runScene(mainScene);
-
-
-
+console.log(Type);
 

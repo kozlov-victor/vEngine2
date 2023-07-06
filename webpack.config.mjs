@@ -331,6 +331,11 @@ export default async (env = {})=>{
             minimize: !debug,
             emitOnErrors: false,
         },
+        externals: {
+            fs: "require('fs')",
+            path: "require('path')",
+            psd: "require('psd')",
+        }
     };
 
     config.module.rules = config.module.rules.filter(it=>!!it);

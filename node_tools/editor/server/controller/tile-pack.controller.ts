@@ -3,11 +3,11 @@ import {tmp} from "./utils/consts";
 import {uuid} from "./utils/uuid";
 import {Bitmap} from "./utils/bitmap";
 import {cleanUp} from "./utils/cleanUp";
-declare const __non_webpack_require__:any;
+import * as fs from 'fs';
 
-const fs = __non_webpack_require__('fs');
-const PSD = __non_webpack_require__('psd');
-const storage = __non_webpack_require__('../../node_tools/common/storage');
+
+const PSD = require('psd');
+const storage = require('../../../common/storage');
 
 @Controller('tile-pack')
 export class TilePackController {
