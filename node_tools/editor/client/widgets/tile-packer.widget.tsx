@@ -18,7 +18,6 @@ export class TilePackerWidget extends BaseTsxComponent {
     private psdFileExists = false;
     private convertedImageUUID:string;
     private saveToFileName:string = '';
-    private saveTo:string = '';
 
     constructor() {
         super();
@@ -29,7 +28,6 @@ export class TilePackerWidget extends BaseTsxComponent {
     private async loadInitialData() {
         try {
             const payload:any = await HttpClient.get('/tile-pack/loadParams');
-            this.saveTo = payload.saveTo;
             this.saveToFileName = payload.saveToFileName;
             this.numOfImagesInRow = payload.numOfImagesInRow || '3';
             this.pathToPsdFile = payload.pathToPsdFile;
@@ -80,7 +78,6 @@ export class TilePackerWidget extends BaseTsxComponent {
                             file name
                         </div>
                         <div>
-                            <input value={this.saveTo} onchange={e=>this.saveTo = (e.target as HTMLInputElement).value}/>
                             <button onclick={this.save}>save</button>
                         </div>
                     </Frame>
@@ -134,7 +131,6 @@ export class TilePackerWidget extends BaseTsxComponent {
             await HttpClient.post('/tile-pack/save',
                 {
                     uuid:this.convertedImageUUID,
-                    saveTo:this.saveTo,
                     saveToFileName:this.saveToFileName,
                 }
             );

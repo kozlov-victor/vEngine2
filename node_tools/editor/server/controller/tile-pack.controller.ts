@@ -21,7 +21,6 @@ const ConvertFileDto = Type.Class({
 
 const SaveFileDto = Type.Class({
     uuid:Type.Required.String(),
-    saveTo:Type.Required.String(),
     saveToFileName:Type.Required.String(),
 });
 
@@ -94,8 +93,7 @@ export class TilePackController {
     @Post()
     public async save(params:Record<string, any>) {
         const model = SaveFileDto.createInstance(params);
-        fs.copyFileSync(`${tmp}/${model.uuid}.png`,`${model.saveTo}/${model.saveToFileName}.png`);
-        storage.set('tile-pack:saveTo',model.saveTo);
+        fs.copyFileSync(`${tmp}/${model.uuid}.png`,model.saveToFileName);
         storage.set('tile-pack:saveToFileName',model.saveToFileName);
         cleanUp();
         return {};
@@ -104,7 +102,6 @@ export class TilePackController {
     @Get()
     public async loadParams() {
         return {
-            saveTo: storage.get('tile-pack:saveTo'),
             saveToFileName: storage.get('tile-pack:saveToFileName'),
             numOfImagesInRow: storage.get('tile-pack:numOfImagesInRow'),
             pathToPsdFile: storage.get('tile-pack:pathToPsdFile'),

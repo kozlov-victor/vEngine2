@@ -124,8 +124,7 @@ export class Type {
     }
 
     public static Class<T extends Record<string, any>>(properties: T){
-        const model = new Model(properties);
-        return model as Model & T;
+        return new Class(properties);
     }
     public static Number(params:INumberParams = {}):number|undefined {
         return {...params,type:'number'} as InternalTypeVal as unknown as number;
@@ -142,16 +141,16 @@ export class Type {
 
 }
 
-class Model {
+class Class<T> {
 
-    constructor(private properties:Record<string, string|number|boolean>) {
+    constructor(private properties:T) {
     }
 
     public createInstance(dataRecord:Record<string, any>, params:{ignoreUnknown?:boolean} = {}) {
         const modelCreated:Record<string, any> = {};
-        Object.keys(this.properties).forEach(k=> {
+        Object.keys(this.properties as Record<string, any>).forEach(k=> {
             const dataRawVal = dataRecord[k];
-            const internalTypeVal = this.properties[k] as unknown as InternalTypeVal;
+            const internalTypeVal = (this.properties as Record<string, any>)[k] as unknown as InternalTypeVal;
             const typeVal = internalTypeVal.type;
             if (typeVal===undefined) {
                 if (!params.ignoreUnknown) {
@@ -169,7 +168,7 @@ class Model {
             (modelCreated)[k] =
                 SchemaValidator.validateTypeAndValueAnfGetMappedType(k, dataRawVal, typeVal, internalTypeVal);
         });
-        return modelCreated as this;
+        return modelCreated as T;
     }
 
 }
