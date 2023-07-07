@@ -4,6 +4,7 @@ export interface ITextTableParams {
     border?: boolean;
     align?: AlignTextContentHorizontal;
     pad?:boolean;
+    separateRows?: boolean;
 }
 
 export class TextTable {
@@ -88,7 +89,7 @@ export class TextTable {
         return new TextTable(arr,params);
     }
 
-    private constructor(arr:string[][],params?:ITextTableParams) {
+    private constructor(arr:string[][],params:ITextTableParams = {}) {
         const align:AlignTextContentHorizontal = params?.align ?? AlignTextContentHorizontal.LEFT;
 
         const res:string[] = [];
@@ -97,7 +98,7 @@ export class TextTable {
         const numOfColumns:number = Math.max(...arr.map(it=>it.length));
         TextTable.normalize(arr,numOfColumns);
 
-        const padSymbol = params?.pad?' ':'';
+        const padSymbol = params.pad?' ':'';
         for (let j:number = 0; j < numOfColumns; j++) {
             const cols:string[] = [];
             for (let i:number = 0; i < numOfRows; i++) {
@@ -114,9 +115,18 @@ export class TextTable {
             for (let i:number = 0; i < alignedCols.length; i++) {
                 row.push(alignedCols[i][j]);
             }
-            res.push(row.join(params?.border?'|':' '));
+            res.push(row.join(params.border?'|':' '));
+
+            if (params.separateRows && j<numOfCellsToIterate-1) {
+                const underline:string[] = [];
+                for (let i:number = 0; i < alignedCols.length; i++) {
+                    underline.push(TextTable.getLine('-',alignedCols[i][j].length));
+                }
+                res.push(underline.join(params?.border?'+':' '));
+            }
         }
-        if (params?.border) this.result = TextTable.createFramedText(res);
+
+        if (params.border) this.result = TextTable.createFramedText(res);
         else this.result = res.join('\n');
 
     }

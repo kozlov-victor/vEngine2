@@ -19,6 +19,10 @@ export const isArray = (a:unknown):a is Float32Array|Int32Array|unknown[]=> {
     return isCommonArray(a) || isTypedArray(a);
 };
 
+export const isObject = (a:unknown):a is Record<any, any>=> {
+    return a!==null && !Array.isArray(a) && typeof a === 'object';
+}
+
 export const isNumber = (value:unknown):value is number=> {
     if (value===null || value===undefined) return false;
     if ((value as number).toFixed===undefined) return false;

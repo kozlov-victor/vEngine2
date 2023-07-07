@@ -1,9 +1,10 @@
-import {isNumber} from "@engine/misc/object";
+import {isNumber, isObject} from "@engine/misc/object";
+import {test} from "./type.test";
 
 class SchemaValidator {
 
     private static checkNumber(key: string, val:any,type: tPrimitiveType,params:InternalTypeVal) {
-        if (val===true && val===false && !isNumber(+val)) {
+        if (val===true || val===false || (typeof val==='string' && val[0]===' ') || !isNumber(+val)) {
             throw new ValidationError(key,type);
         }
         val = +val;
@@ -31,7 +32,7 @@ class SchemaValidator {
 
 
     private static checkString(key: string,val:any,type: tPrimitiveType,params:InternalTypeVal) {
-        if (val==true && val==false) {
+        if (val===true || val===false || isObject(val) || Array.isArray(val)) {
             throw new ValidationError(key,type);
         }
         val = `${val}`;
@@ -55,6 +56,12 @@ class SchemaValidator {
             throw new ValidationError(key,type);
         }
         return val;
+    }
+
+    public static checkObject(key: string, val:any) {
+        if (!isObject(val)) {
+            throw new ValidationError(key,'object');
+        }
     }
 
     public static validateTypeAndValueAnfGetMappedType(key:string, val:any, type: tPrimitiveType,params:InternalTypeVal) {
@@ -121,10 +128,15 @@ export class Type {
         public static String(params:{minLength?:number,maxLength?:number} = {}):string {
             return Type.String({...params,required:true} as IStringParams)!;
         }
+        public static Class<T extends Record<string, any>>(properties: T){
+            const cl = Type.Class(properties);
+            cl.required = true;
+            return cl;
+        }
     }
 
     public static Class<T extends Record<string, any>>(properties: T){
-        return new Class(properties);
+        return new Class<T>(properties) as Class<T> & T;
     }
     public static Number(params:INumberParams = {}):number|undefined {
         return {...params,type:'number'} as InternalTypeVal as unknown as number;
@@ -143,50 +155,55 @@ export class Type {
 
 class Class<T> {
 
+    public required:boolean;
+
     constructor(private properties:T) {
     }
 
-    public createInstance(dataRecord:Record<string, any>, params:{ignoreUnknown?:boolean} = {}) {
-        const modelCreated:Record<string, any> = {};
-        Object.keys(this.properties as Record<string, any>).forEach(k=> {
-            const dataRawVal = dataRecord[k];
-            const internalTypeVal = (this.properties as Record<string, any>)[k] as unknown as InternalTypeVal;
-            const typeVal = internalTypeVal.type;
-            if (typeVal===undefined) {
-                if (!params.ignoreUnknown) {
+    private _createInstance(dataRecord:Record<string,any>, cl:Class<any>,params:Record<string, any>) {
+        const properties = cl.properties as Record<string, any>;
+        // check for unknown properties
+        if (!params.ignoreUnknown) {
+            Object.keys(dataRecord).forEach(k=>{
+                if (properties[k]===undefined) {
                     throw new ValidationError(k,'unknown')
                 }
-                return; // ignore unknown property of data
-            }
+            });
+        }
+
+        // create model
+        const modelCreated:Record<string, any> = {};
+        Object.keys(properties).forEach(k=> {
+            const dataRawVal = dataRecord[k];
+            const internalTypeValOrClass = properties[k] as unknown as InternalTypeVal|Class<any>;
+            // check required field
             if (
-                internalTypeVal.required &&
+                internalTypeValOrClass.required &&
                 (dataRawVal===null || dataRawVal===undefined || dataRawVal==='' || dataRawVal===false)
             ) {
                 throw new ValidationError(k,'required');
             }
             if (dataRawVal===null || dataRawVal===undefined) return;
-            (modelCreated)[k] =
-                SchemaValidator.validateTypeAndValueAnfGetMappedType(k, dataRawVal, typeVal, internalTypeVal);
+
+            if (internalTypeValOrClass instanceof Class) {
+                SchemaValidator.checkObject(k,dataRawVal);
+                modelCreated[k] = this._createInstance(dataRawVal,internalTypeValOrClass, params); // recursively
+            } else {
+                const internalTypeVal = internalTypeValOrClass as InternalTypeVal;
+                if (!internalTypeVal.type) {
+                    throw new Error(`error type provided: ${JSON.stringify(internalTypeVal)}`)
+                }
+                (modelCreated)[k] =
+                    SchemaValidator.validateTypeAndValueAnfGetMappedType(k, dataRawVal, internalTypeVal.type, internalTypeVal);
+            }
         });
-        return modelCreated as T;
+        return modelCreated;
+    }
+
+    public createInstance(dataRecord:Record<string, any>, params:{ignoreUnknown?:boolean} = {}) {
+        return this._createInstance(dataRecord,this,params) as T;
     }
 
 }
 
-const model =
-    Type.Class({
-        age: Type.Required.Integer(),
-        salary: Type.Integer({max:50}),
-        name: Type.String(),
-        login: Type.String({minLength: 1,maxLength: 20}),
-        save: Type.Required.Boolean(),
-    }).
-    createInstance({
-        age: 40,
-        salary: 50,
-        name: 100,
-        login: 'test',
-        save: true,
-    },{ignoreUnknown:false});
-
-console.log(model);
+test();
