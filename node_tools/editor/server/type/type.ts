@@ -64,6 +64,22 @@ class SchemaValidator {
         }
     }
 
+    public static checkArray(key: string, val:any, params: InternalTypeVal) {
+        if (!Array.isArray(val)) {
+            throw new ValidationError(key,'array');
+        }
+        if (params.minLength!==undefined) {
+            if (val.length<params.minLength) {
+                throw new ValidationError(key,'minLength');
+            }
+        }
+        if (params.maxLength!==undefined) {
+            if (val.length>params.maxLength) {
+                throw new ValidationError(key,'maxLength');
+            }
+        }
+    }
+
     public static validateTypeAndValueAnfGetMappedType(key:string, val:any, type: tPrimitiveType,params:InternalTypeVal) {
         const t = params.type;
         switch (t) {
@@ -128,7 +144,12 @@ export class Type {
         public static String(params:{minLength?:number,maxLength?:number} = {}):string {
             return Type.String({...params,required:true} as IStringParams)!;
         }
-        public static Class<T extends Record<string, any>>(properties: T){
+        public static Array<T>(type:T,params:{minLength?:number,maxLength?:number} = {}) {
+            const ar = Type.Array(type,params);
+            ar.required = true;
+            return ar;
+        }
+        public static Class<T extends Record<string, any>>(properties: T) {
             const cl = Type.Class(properties);
             cl.required = true;
             return cl;
@@ -150,6 +171,15 @@ export class Type {
     public static String(params:IStringParams = {}):string|undefined {
         return {...params,type:'string'} as InternalTypeVal as unknown as string;
     }
+    public static Array<T>(type:T,params:{minLength?:number,maxLength?:number} = {}) {
+        let ret:ArrayClass<T>;
+        if (type instanceof Class) {
+            ret = new ArrayClass<T>({...(type as any).properties,...params});
+        } else {
+            ret = new ArrayClass<T>({...type,...params});
+        }
+        return ret as ArrayClass<T> & T[];
+    }
 
 }
 
@@ -160,8 +190,24 @@ class Class<T> {
     constructor(private properties:T) {
     }
 
-    private _createInstance(dataRecord:Record<string,any>, cl:Class<any>,params:Record<string, any>) {
+    private _canSkipOptionalType(internalTypeValOrClass:InternalTypeVal|Class<any>|ArrayClass<any>,dataRawVal:any,k:string):boolean {
+        if (
+            internalTypeValOrClass.required &&
+            (dataRawVal===null || dataRawVal===undefined || dataRawVal==='' || dataRawVal===false)
+        ) {
+            throw new ValidationError(k,'required');
+        }
+        return dataRawVal === null || dataRawVal === undefined;
+    }
+
+    private _createInstance(dataRecord:Record<string,any>, cl:Class<any>,arrayKey:string|undefined,params:Record<string, any>) {
         const properties = cl.properties as Record<string, any>;
+
+        // if properties already is primitive type
+        if ((properties as InternalTypeVal).type) {
+            return SchemaValidator.validateTypeAndValueAnfGetMappedType(arrayKey!, dataRecord, properties.type, properties as InternalTypeVal);
+        }
+
         // check for unknown properties
         if (!params.ignoreUnknown) {
             Object.keys(dataRecord).forEach(k=>{
@@ -171,24 +217,33 @@ class Class<T> {
             });
         }
 
-        // create model
+        // resolve model
         const modelCreated:Record<string, any> = {};
         Object.keys(properties).forEach(k=> {
             const dataRawVal = dataRecord[k];
-            const internalTypeValOrClass = properties[k] as unknown as InternalTypeVal|Class<any>;
+            const internalTypeValOrClass =
+                properties[k] as unknown as InternalTypeVal|Class<any>|ArrayClass<any>;
             // check required field
-            if (
-                internalTypeValOrClass.required &&
-                (dataRawVal===null || dataRawVal===undefined || dataRawVal==='' || dataRawVal===false)
-            ) {
-                throw new ValidationError(k,'required');
-            }
-            if (dataRawVal===null || dataRawVal===undefined) return;
+            if (this._canSkipOptionalType(internalTypeValOrClass,dataRawVal,k)) return;
 
-            if (internalTypeValOrClass instanceof Class) {
+            if (internalTypeValOrClass instanceof ArrayClass) {
+                SchemaValidator.checkArray(k,dataRawVal,internalTypeValOrClass.properties);
+                modelCreated[k] = [];
+                (dataRawVal as any[]).forEach((dataRawItem,i)=>{ // instantiate each array element recursively
+                    // check required field
+                    const arrKey = `${k}[${i}]`;
+                    if (this._canSkipOptionalType(internalTypeValOrClass.properties,dataRawItem,arrKey)){
+                        modelCreated[k].push(undefined);
+                    } else {
+                        modelCreated[k].push(this._createInstance(dataRawItem,internalTypeValOrClass, arrKey,params));
+                    }
+                });
+            }
+            else if (internalTypeValOrClass instanceof Class) {
                 SchemaValidator.checkObject(k,dataRawVal);
-                modelCreated[k] = this._createInstance(dataRawVal,internalTypeValOrClass, params); // recursively
-            } else {
+                modelCreated[k] = this._createInstance(dataRawVal,internalTypeValOrClass, undefined, params); // recursively
+            }
+            else {
                 const internalTypeVal = internalTypeValOrClass as InternalTypeVal;
                 if (!internalTypeVal.type) {
                     throw new Error(`error type provided: ${JSON.stringify(internalTypeVal)}`)
@@ -201,9 +256,19 @@ class Class<T> {
     }
 
     public createInstance(dataRecord:Record<string, any>, params:{ignoreUnknown?:boolean} = {}) {
-        return this._createInstance(dataRecord,this,params) as T;
+        if (this instanceof ArrayClass) {
+            throw new Error(`root instance can not be an array`)
+        }
+        return this._createInstance(dataRecord,this,undefined,params) as T;
     }
 
 }
 
-test();
+class ArrayClass<T> extends Class<T> {
+    constructor(itemProperties: T) {
+        super(itemProperties);
+    }
+}
+
+
+// test();

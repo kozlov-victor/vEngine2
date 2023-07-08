@@ -20,7 +20,8 @@ const perform = (params:ITestCase)=>{
         params.testFn();
     } catch (e) {
         resp = e;
-        params.onError?.(resp);
+        if (params.onError) params.onError(resp);
+        else console.error(e);
     }
     if (!expectInvoked) {
         currentLogRow.push('<NOT PERFORMED>');

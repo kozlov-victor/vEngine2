@@ -6,6 +6,7 @@ import {typeTestString} from "./testcases/type.test.string";
 import {typeTestBoolean} from "./testcases/type.test.boolean";
 import {typeTestObject} from "./testcases/type.test.object";
 import {typeTestCommon} from "./testcases/type.test.common";
+import {typeTestArray} from "./testcases/type.test.array";
 
 export const test = ()=>{
     run([
@@ -15,5 +16,6 @@ export const test = ()=>{
         ...typeTestString,
         ...typeTestBoolean,
         ...typeTestObject,
+        ...typeTestArray,
     ]);
 }
