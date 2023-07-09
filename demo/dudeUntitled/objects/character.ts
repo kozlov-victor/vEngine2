@@ -1,6 +1,6 @@
 import {AnimatedImage} from "@engine/renderable/impl/general/image/animatedImage";
 import {ArcadePhysicsSystem} from "@engine/physics/arcade/arcadePhysicsSystem";
-import {ARCADE_RIGID_BODY_TYPE, ArcadeRigidBody} from "@engine/physics/arcade/arcadeRigidBody";
+import {ARCADE_COLLISION_EVENT, ARCADE_RIGID_BODY_TYPE, ArcadeRigidBody} from "@engine/physics/arcade/arcadeRigidBody";
 import {Rect} from "@engine/geometry/rect";
 import {TexturePackerAtlas} from "@engine/animation/frameAnimation/atlas/texturePackerAtlas";
 import {AtlasFrameAnimation} from "@engine/animation/frameAnimation/atlas/atlasFrameAnimation";
@@ -54,11 +54,8 @@ export class Character implements Injectable {
 
     public postConstruct(): void {
         this.initBh();
+        this.listenToKeys();
         this.initCollisions();
-    }
-
-    public acceptDamage() {
-
     }
 
 
@@ -130,9 +127,13 @@ export class Character implements Injectable {
                 this.groundDust.emit(body.getMidX(),body.getBottom());
             }
         });
-        const characterImage = this.image;
-        characterImage.addBehaviour(this.bh);
+        this.image.addBehaviour(this.bh);
 
+    }
+
+    private listenToKeys() {
+        const characterImage = this.image;
+        const texturePackerAtlas = new TexturePackerAtlas(this.scene.assets.spritesAtlas);
         this.scene.keyboardEventHandler.onKeyPressed(KEYBOARD_KEY.CONTROL, e=>{
             this.bh.fire();
             const bullet = new CharacterBullet(this.scene.getGame());
@@ -170,6 +171,20 @@ export class Character implements Injectable {
         });
     }
 
+    private acceptDamage():boolean {
+        if (this.blinking) return false;
+        this.blinking = true;
+        const blinkInterval = this.image.setInterval(()=>{
+            this.image.visible=!this.image.visible;
+        },150);
+        this.image.setTimeout(()=>{
+            blinkInterval.kill();
+            this.image.visible = true;
+            this.blinking = false;
+        },3000);
+        return true;
+    }
+
     private initCollisions():void {
         this.body.onOverlappedWithGroup('collectable',e =>{
             e.getHostModel().removeSelf();
@@ -188,24 +203,17 @@ export class Character implements Injectable {
             }
         });
         this.body.onOverlappedWithGroup('damageable',e =>{
+            if (this.acceptDamage()) return;
             const host = e.addInfo.host;
             const hostType = host.constructor.name;
             switch (hostType) {
                 case Fire.name:
-                    if (!this.blinking) {
-                        this.blinking = true;
-                        const blinkInterval = this.image.setInterval(()=>{
-                            this.image.visible=!this.image.visible;
-                        },150);
-                        this.image.setTimeout(()=>{
-                            blinkInterval.kill();
-                            this.image.visible = true;
-                            this.blinking = false;
-                        },3000);
-                        this.script.onHeroCollidedWithFile(this);
-                    }
+                    this.script.onHeroCollidedWithFire(this);
                     break;
             }
+        });
+        this.body.collisionEventHandler.on(ARCADE_COLLISION_EVENT.OVERLAPPED, e=>{
+            if ([12,13].includes(e.addInfo.tileId)) this.acceptDamage();
         });
     }
 

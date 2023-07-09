@@ -45,7 +45,7 @@ export class Script implements Injectable {
         );
     }
 
-    public onHeroCollidedWithFile(hero:Character) {
+    public onHeroCollidedWithFire(hero:Character) {
 
     }
 
