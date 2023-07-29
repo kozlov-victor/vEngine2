@@ -2,8 +2,7 @@ import {ISize, Size} from "@engine/geometry/size";
 import {FontContextAbstractFactory} from "@engine/renderable/impl/general/font/factory/fontContextAbstractFactory";
 import {Game} from "@engine/core/game";
 import {ITexture} from "@engine/renderer/common/texture";
-
-declare const OffscreenCanvas: any;
+import {DebugError} from "@engine/debug/debugError";
 
 interface IPrefixedContext {
     mozImageSmoothingEnabled?: boolean;
@@ -13,14 +12,10 @@ interface IPrefixedContext {
 }
 
 const createCanvas = (size:ISize):HTMLCanvasElement=>{
-    if (typeof OffscreenCanvas!=='undefined') {
-        return new OffscreenCanvas(size.width, size.height);
-    } else {
-        const c = document.createElement('canvas');
-        c.width = size.width;
-        c.height = size.height;
-        return c;
-    }
+    const c = document.createElement('canvas');
+    c.width = size.width;
+    c.height = size.height;
+    return c;
 }
 
 export class FontContextCanvasFactory extends FontContextAbstractFactory<CanvasRenderingContext2D> {
@@ -62,6 +57,9 @@ export class FontContextCanvasFactory extends FontContextAbstractFactory<CanvasR
     protected override createTexturePage(size: ISize): CanvasRenderingContext2D {
         const cnv = createCanvas(size);
         const ctx = cnv.getContext('2d')!;
+        if (DEBUG && !ctx) {
+            throw new DebugError(`can not get context 2d`);
+        }
         ctx.font = this.strFont;
         ctx.textBaseline = 'top';
         ctx.imageSmoothingEnabled = false;

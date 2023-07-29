@@ -33,7 +33,7 @@ export class HtmlAudioContext extends BasicAudioContext implements ICloneable<Ht
         return !!(window && (window as unknown as IWindow).Audio);
     }
     public override async uploadBufferToContext(url: string, buffer: ArrayBuffer):Promise<UploadedSoundLink> {
-        if (typeof URL !== undefined && typeof Blob !== "undefined") {
+        if (typeof URL !== 'undefined' && typeof Blob !== "undefined") {
             const blob: Blob = new Blob([buffer]);
             AudioPlayer.cache[url] = URL.createObjectURL(blob);
         } else {

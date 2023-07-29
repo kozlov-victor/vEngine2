@@ -6,7 +6,7 @@ import {ITexture} from "@engine/renderer/common/texture";
 
 export class Texture extends AbstractTexture implements ITexture {
 
-    public type:string = 'Texture';
+    public type = 'Texture';
     public readonly __kind__ = 'Texture';
 
     protected samplerType: GLenum = this.gl.TEXTURE_2D;
@@ -33,7 +33,7 @@ export class Texture extends AbstractTexture implements ITexture {
 
         if (DEBUG) {
             if (!(img || size.width || size.height))
-                throw new DebugError("texture.setImage: if image is undefined, width and height must be specified: tex.setImage(null,w,h)");
+                throw new DebugError("texture.setImage: if image is undefined, width and height must be specified: tex.setImage(undefined,w,h)");
 
             if (img!==undefined) {
                 if (!img.width || !img.height) {
@@ -53,7 +53,7 @@ export class Texture extends AbstractTexture implements ITexture {
 
         this.beforeOperation();
 
-        if (img) {
+        if (img!==undefined) {
             gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
         } else {
             gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, size.width, size.height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
@@ -104,11 +104,9 @@ export class Texture extends AbstractTexture implements ITexture {
             }
         }
         const gl:WebGLRenderingContext = this.gl;
-
-        this.beforeOperation();
-
         this.size.setWH(width,height);
 
+        this.beforeOperation();
         // target: number,
         // level: number,
         // internalformat: number,

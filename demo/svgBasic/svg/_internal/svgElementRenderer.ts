@@ -383,7 +383,7 @@ export class SvgElementRenderer {
         container.appendChild(textField);
 
         el.getChildNodes().forEach((c,index)=>{
-            if (c.tagName==='tspan') this.renderText(parentView,c,index+1);
+            if (c.tagName==='tspan') this.renderText(container,c,index+1);
         });
     }
 

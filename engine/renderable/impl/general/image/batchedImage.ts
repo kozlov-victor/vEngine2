@@ -53,7 +53,7 @@ export class BatchedImage extends RenderableModel implements ICloneable<BatchedI
         if (this.velocity.x!==0) this.pos.x += this.velocity.x * dSeconds;
         if (this.velocity.y!==0) this.pos.y += this.velocity.y * dSeconds;
         if (this._angleVelocity3d.z!==0) this.angle3d.z += this._angleVelocity3d.z * dSeconds;
-        this.game.getRenderer().drawBatchedImage(this);
+        this.draw();
     }
 
     protected override setClonedProperties(cloned: BatchedImage) {
@@ -67,5 +67,7 @@ export class BatchedImage extends RenderableModel implements ICloneable<BatchedI
         return cloned;
     }
 
-    public override draw() {}
+    public override draw() {
+        this.game.getRenderer().drawBatchedImage(this);
+    }
 }
