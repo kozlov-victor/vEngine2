@@ -8,8 +8,7 @@ export interface IMethodParam {
 export const Controller = function(url:string) {
     return function<Value>(value:Value, context:ClassDecoratorContext) {
         context.addInitializer(function(){
-            (this as any).meta ??={};
-            (this as any).meta.baseUrl = url;
+            context.metadata!.baseUrl = url;
         });
     }
 }
@@ -19,10 +18,8 @@ export const Post = function(param:IMethodParam = {}) {
         originalMethod:any, context:ClassMethodDecoratorContext
     ) {
         context.addInitializer(function(){
-            const ctor = (this as any).constructor as any;
-            ctor.meta ??= {};
-            ctor.meta.methods ??=[];
-            ctor.meta.methods.push({
+            context.metadata!.methods ??=[];
+            (context.metadata!.methods as any).push({
                     method: 'POST',
                     url: param.url ?? context.name,
                     controllerMethodName: context.name,
@@ -39,14 +36,12 @@ export const Get = function(param:IMethodParam = {}) {
         originalMethod:any, context:ClassMethodDecoratorContext
     ) {
         context.addInitializer(function(){
-            const ctor = (this as any).constructor as any;
-            ctor.meta ??= {};
-            ctor.meta.methods ??=[];
-            ctor.meta.methods.push({
+            context.metadata!.methods ??=[];
+            (context.metadata!.methods as any).push({
                     method: 'GET',
                     url: param.url ?? context.name,
                     controllerMethodName: context.name,
-                    controllerInstance: ctor,
+                    controllerInstance: this,
                     contentType: param.contentType,
                 } as IRegistryItem
             );

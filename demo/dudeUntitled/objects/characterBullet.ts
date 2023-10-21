@@ -10,7 +10,7 @@ const COLLIDED_COLOR = ColorFactory.fromCSS(`rgba(114, 114, 114, 0.57)`);
 
 export class CharacterBullet {
 
-    private readonly container:Rectangle;
+    public readonly container:Rectangle;
 
     constructor(game:Game) {
         this.container = new Rectangle(game);
@@ -31,7 +31,9 @@ export class CharacterBullet {
             },600);
         })
         this.container.setTimeout(()=>{
-            if (!this.container.isDetached()) this.container.removeSelf();
+            if (!this.container.isDetached()) {
+                this.container.removeSelf();
+            }
         },3000);
     }
 

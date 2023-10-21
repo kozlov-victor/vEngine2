@@ -340,6 +340,42 @@
                  "width":142.667,
                  "x":1396.67,
                  "y":300
+                }, 
+                {
+                 "class":"FirePowerup",
+                 "gid":25,
+                 "height":29,
+                 "id":67,
+                 "name":"",
+                 "rotation":0,
+                 "visible":true,
+                 "width":24,
+                 "x":1538,
+                 "y":156
+                }, 
+                {
+                 "class":"FirePowerup",
+                 "gid":25,
+                 "height":29,
+                 "id":69,
+                 "name":"",
+                 "rotation":0,
+                 "visible":true,
+                 "width":24,
+                 "x":1669,
+                 "y":472
+                }, 
+                {
+                 "class":"FirePowerup",
+                 "gid":25,
+                 "height":29,
+                 "id":70,
+                 "name":"",
+                 "rotation":0,
+                 "visible":true,
+                 "width":24,
+                 "x":1609,
+                 "y":156
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -348,7 +384,7 @@
          "y":0
         }],
  "nextlayerid":4,
- "nextobjectid":66,
+ "nextobjectid":71,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.9.1",
@@ -599,6 +635,19 @@
          "tilecount":1,
          "tileheight":16,
          "tilewidth":64
+        }, 
+        {
+         "columns":1,
+         "firstgid":25,
+         "image":"..\/..\/psd_sources\/flattened\/fire_powerup_frame1.png",
+         "imageheight":29,
+         "imagewidth":24,
+         "margin":0,
+         "name":"fire_powerup",
+         "spacing":0,
+         "tilecount":1,
+         "tileheight":29,
+         "tilewidth":24
         }],
  "tilewidth":32,
  "type":"map",

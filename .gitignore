@@ -11,3 +11,4 @@ demo/**.exe
 demo/index.json
 node_tools/build/*
 __tmp/*
+/demo/dudeUntitled/psd_sources/flattened/

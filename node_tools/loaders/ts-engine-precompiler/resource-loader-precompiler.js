@@ -102,7 +102,7 @@ module.exports = function(content) {
             f.modifiers = newModifiers;
         });
 
-        preloadingMethod.body.statements = [...preloadingMethod.body.statements, ...statements];
+        preloadingMethod.body.statements = [...statements, ...preloadingMethod.body.statements];
 
     });
 

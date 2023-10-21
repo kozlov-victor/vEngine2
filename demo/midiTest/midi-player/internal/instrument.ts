@@ -479,7 +479,6 @@ export class Instrument {
             waveForms: [
                 {
                     amplitude: 1, form: WaveForms.dirtyWaveNoise(80,2, WaveForms.triangle, WaveForms.pinkNoise, 0.6),
-                    fm: ()=>new ConstantDecayFrequencyModulator(600,50),
                 }
             ],
             name: 'cymbalDrum',
@@ -488,15 +487,7 @@ export class Instrument {
             adsr: {a: 0.001, d: 0.03, s: 1, r: 0.2, base: 0.5},
             waveForms: [
                 {
-                    amplitude: 0.4, form: WaveForms.dirtyWave(22,1, WaveForms.triangle),
-                    fm: ()=>new ConstantDecayFrequencyModulator(600,-15),
-                },
-                {
-                    amplitude: 0.5, form: WaveForms.dirtyWave(22,1, WaveForms.triangle),
-                    fm: ()=>new ConstantDecayFrequencyModulator(440,-15),
-                },
-                {
-                    amplitude: 0.1, form: WaveForms.brownNoise,
+                    amplitude: 1, form: WaveForms.dirtyWaveNoise(100,2, WaveForms.triangle, WaveForms.pinkNoise, 0.6),
                 }
             ],
             name: 'crashCymbal1',
@@ -505,47 +496,23 @@ export class Instrument {
             adsr: {a: 0.001, d: 0.03, s: 1, r: 0.2, base: 0.5},
             waveForms: [
                 {
-                    amplitude: 0.4, form: WaveForms.dirtyWave(20,1, WaveForms.triangle),
-                    fm: ()=>new ConstantDecayFrequencyModulator(570,-15),
-                },
-                {
-                    amplitude: 0.5, form: WaveForms.dirtyWave(22,1, WaveForms.triangle),
-                    fm: ()=>new ConstantDecayFrequencyModulator(440,-15),
-                },
-                {
                     amplitude: 0.1, form: WaveForms.brownNoise,
                 }
             ],
             name: 'crashCymbal2',
         } as InstrumentSettings,
         rideCymbal1: {
-            adsr: {a: 0.001, d: 0.03, s: 1, r: 0.2, base: 0.5},
+            adsr: {a: 0.001, d: 0.03, s: 1, r: 0.02, base: 1},
             waveForms: [
                 {
-                    amplitude: 0.4, form: WaveForms.dirtyWave(20,1, WaveForms.triangle),
-                    fm: ()=>new ConstantDecayFrequencyModulator(500,-15),
-                },
-                {
-                    amplitude: 0.5, form: WaveForms.dirtyWave(20,1, WaveForms.triangle),
-                    fm: ()=>new ConstantDecayFrequencyModulator(440,-15),
-                },
-                {
-                    amplitude: 0.1, form: WaveForms.brownNoise,
+                    amplitude: 0.7, form: WaveForms.pinkNoise,
                 }
             ],
             name: 'rideCymbal1',
         } as InstrumentSettings,
         rideCymbal2: {
-            adsr: {a: 0.001, d: 0.03, s: 1, r: 0.2, base: 0.5},
+            adsr: {a: 0.001, d: 0.03, s: 1, r: 0.1, base: 0.5},
             waveForms: [
-                {
-                    amplitude: 0.4, form: WaveForms.dirtyWave(20,1, WaveForms.triangle),
-                    fm: ()=>new ConstantDecayFrequencyModulator(400,-15),
-                },
-                {
-                    amplitude: 0.5, form: WaveForms.dirtyWave(20,1, WaveForms.triangle),
-                    fm: ()=>new ConstantDecayFrequencyModulator(440,-15),
-                },
                 {
                     amplitude: 0.1, form: WaveForms.brownNoise,
                 }
@@ -557,14 +524,6 @@ export class Instrument {
             waveForms: [
                 {
                     amplitude: 0.4, form: WaveForms.dirtyWave(25,1, WaveForms.triangle),
-                    fm: ()=>new ConstantDecayFrequencyModulator(500,-22),
-                },
-                {
-                    amplitude: 0.5, form: WaveForms.dirtyWave(25,1, WaveForms.triangle),
-                    fm: ()=>new ConstantDecayFrequencyModulator(400,-22),
-                },
-                {
-                    amplitude: 0.05, form: WaveForms.brownNoise,
                 }
             ],
             name: 'splashCymbal',
@@ -967,6 +926,7 @@ export class Instrument {
         let result:InstrumentSettings;
 
         //percussion = true; // todo for debug
+
         if (percussion) {
             //note = 57; // todo for debug
             switch (note) {

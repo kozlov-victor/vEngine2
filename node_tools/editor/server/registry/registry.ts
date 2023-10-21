@@ -1,4 +1,6 @@
 
+(Symbol as any).metadata = 'metadata';
+
 export interface IRegistryItem {
     method: string;
     url: string;
@@ -21,9 +23,9 @@ export class Registry {
 
     public registerController(c:any) {
         const instance = new c();
-        const meta:{baseUrl:string,methods:IRegistryItem[]} = c.meta;
-        const baseUrl = meta?.baseUrl ?? '/';
-        (meta.methods ?? []).forEach(m=>{
+        const metadata:{baseUrl:string,methods:IRegistryItem[]} = c.metadata;
+        const baseUrl = metadata?.baseUrl ?? '/';
+        (metadata.methods ?? []).forEach(m=>{
             let url = `/`+(`${baseUrl}/${m.url}`).split('/').filter(it=>!!it).join('/');
             if (!url.endsWith('/')) url = url + '/';
             m.url = url;
@@ -31,7 +33,5 @@ export class Registry {
             this.registry.push(m);
         });
     }
-
-
 
 }

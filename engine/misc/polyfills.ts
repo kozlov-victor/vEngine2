@@ -74,3 +74,5 @@ if (!Number.isInteger) {
             Math.floor(value) === value;
     }
 }
+
+(Symbol as any).metadata = 'metadata';

@@ -18,7 +18,7 @@ export namespace DiContainer {
         completed = true;
         Object.keys(ctx).forEach(key=>{
             ctx[key].postConstruct?.();
-            const injectedTokens:string[] = ctx[key]?.__injected;
+            const injectedTokens:string[] = ctx[key].constructor.metadata?.__injected;
             if (!injectedTokens) return;
             injectedTokens.forEach(tkn=>{
                 if (!ctx[tkn]) {
@@ -28,7 +28,6 @@ export namespace DiContainer {
                     );
                 }
             });
-            delete ctx[key]?.__injected;
         });
     }
 
@@ -40,10 +39,8 @@ export namespace DiContainer {
         return <This,Value>(value: undefined, context: ClassFieldDecoratorContext<This,Value>):void => {
             context.addInitializer(function(){
                 const tkn = clazz.name;
-                console.log({tkn,tt:(this as any).constructor.name});
-                (this as any).__injected ??=[];
-                (this as any).__injected.push(tkn);
-
+                context.metadata!.__injected ??=[];
+                (context.metadata!.__injected as string[]).push(tkn);
                 Object.defineProperty(this, context.name,{
                     get: ()=>{
                         if (DEBUG && !completed) {

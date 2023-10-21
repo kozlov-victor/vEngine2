@@ -7,7 +7,6 @@ import {AtlasFrameAnimation} from "@engine/animation/frameAnimation/atlas/atlasF
 import {ArcadeSideScrollControl} from "@engine/behaviour/impl/arcadeSideScroll/arcadeSideScrollControl";
 import {ITiledJSON} from "@engine/renderable/impl/general/tileMap/tileMap";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
-import {CharacterBullet} from "./characterBullet";
 import {DiContainer, Injectable} from "../ioc";
 import {MainScene} from "../mainScene";
 import {GroundDustEmitter} from "../particles/groundDustEmitter";
@@ -16,15 +15,16 @@ import {Key} from "./key";
 import {AnimatedTileMap} from "@engine/renderable/impl/general/tileMap/animatedTileMap";
 import {Sausage} from "./sausage";
 import {Candy} from "./candy";
-import Inject = DiContainer.Inject;
 import {Fire} from "./fire";
+import {FirePowerup} from "./firePowerup";
+import Inject = DiContainer.Inject;
 
 const JUMP_VEL = 200;
 
 export class Character implements Injectable {
 
-    private readonly image:AnimatedImage;
-    private body:ArcadeRigidBody;
+    public readonly image:AnimatedImage;
+    public body:ArcadeRigidBody;
 
     private blinking = false;
 
@@ -32,7 +32,8 @@ export class Character implements Injectable {
     @Inject(AnimatedTileMap) private readonly tileMap:AnimatedTileMap;
     @Inject(Script) private script:Script;
 
-    private bh:ArcadeSideScrollControl;
+    public bh:ArcadeSideScrollControl;
+    public firePower:0|1|2|3 = 0;
 
     constructor(private scene:MainScene, tiledObject:ITiledJSON['layers'][0]['objects'][0]) {
         const characterImage = new AnimatedImage(scene.getGame(),scene.assets.spritesTexture);
@@ -46,6 +47,8 @@ export class Character implements Injectable {
             groupNames:['character'],
             ignoreOverlapWithGroupNames: ['bump'],
         }));
+
+        this.body = this.image.getRigidBody<ArcadeRigidBody>();
 
         characterImage.appendTo(scene);
         scene.camera.followTo(characterImage);
@@ -61,8 +64,6 @@ export class Character implements Injectable {
 
     private initBh():void {
         const texturePackerAtlas = new TexturePackerAtlas(this.scene.assets.spritesAtlas);
-        const body = this.image.getRigidBody<ArcadeRigidBody>();
-        this.body = body;
         this.bh = new ArcadeSideScrollControl(this.scene.getGame(),{
             velocity: 100,
             jumpVelocity: JUMP_VEL,
@@ -119,12 +120,12 @@ export class Character implements Injectable {
                 durationOfOneFrame: 200,
             }),
             onLanded:()=>{
-                if(body.velocity.y<-30) {
-                    this.groundDust.emit(body.getMidX(),body.getBottom());
+                if(this.body.velocity.y<-30) {
+                    this.groundDust.emit(this.body.getMidX(),this.body.getBottom());
                 }
             },
             onJumped:()=>{
-                this.groundDust.emit(body.getMidX(),body.getBottom());
+                this.groundDust.emit(this.body.getMidX(),this.body.getBottom());
             }
         });
         this.image.addBehaviour(this.bh);
@@ -136,38 +137,7 @@ export class Character implements Injectable {
         const texturePackerAtlas = new TexturePackerAtlas(this.scene.assets.spritesAtlas);
         this.scene.keyboardEventHandler.onKeyPressed(KEYBOARD_KEY.CONTROL, e=>{
             this.bh.fire();
-            const bullet = new CharacterBullet(this.scene.getGame());
-            bullet.getContainer().getRigidBody().velocity.x = 300*characterImage.scale.x;
-            bullet.getContainer().pos.setXY(
-                characterImage.pos.x + characterImage.size.width  / 2 + (characterImage.size.width/2)*characterImage.scale.x,
-                characterImage.pos.y + characterImage.size.height / 2
-            );
-            bullet.getContainer().appendTo(this.scene.getLayerAtIndex(0));
-        });
-
-        this.scene.keyboardEventHandler.onKeyPressed(KEYBOARD_KEY.DIGIT_1, e=>{
-            this.bh.setFireAnimation(
-                new AtlasFrameAnimation(this.scene.getGame(),{
-                    frames: [
-                        texturePackerAtlas.getFrameByKey('character_shoot1'),
-                        texturePackerAtlas.getFrameByKey('character_shoot2'),
-                    ],
-                    isRepeating: false,
-                    durationOfOneFrame: 200,
-                })
-            )
-        });
-        this.scene.keyboardEventHandler.onKeyPressed(KEYBOARD_KEY.DIGIT_2, e=>{
-            this.bh.setFireAnimation(
-                new AtlasFrameAnimation(this.scene.getGame(),{
-                    frames: [
-                        texturePackerAtlas.getFrameByKey('character_gun1'),
-                        texturePackerAtlas.getFrameByKey('character_gun2'),
-                    ],
-                    isRepeating: false,
-                    durationOfOneFrame: 200,
-                })
-            )
+            this.script.heroWillShoot(this);
         });
     }
 
@@ -199,6 +169,9 @@ export class Character implements Injectable {
                     break;
                 case Candy.name:
                     this.script.onHeroCollectedCandy(host as Candy);
+                    break;
+                case FirePowerup.name:
+                    this.script.onHeroCollidedWithFirePowerup(this);
                     break;
             }
         });
