@@ -26,7 +26,6 @@ export class TrackFromJsonSetter implements ISetter {
 
             //if ([27,28,29,30,31].includes(instrumentNumber)) {
 
-            const instrumentNumber = t.instrumentNumber ?? t.instrument?.number ?? 1;
             const percussion = t.isPercussion===true || t.instrument?.family === 'drums';
             const channelNumber = t.channelNumber ?? t.channel ?? 0;
 
@@ -36,9 +35,7 @@ export class TrackFromJsonSetter implements ISetter {
             this.sampleToCommandsMap[noteOnSampleNum].push({
                 opCode: 'noteOn',
                 channel: {
-                    channelNumber,
-                    percussion,
-                    instrumentNumber
+                    channelNumber
                 },
                 payload: {
                     note: n.midi,

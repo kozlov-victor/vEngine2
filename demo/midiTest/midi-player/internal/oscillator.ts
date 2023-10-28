@@ -1,8 +1,6 @@
 import {CHANNEL_PRESET, IWaveFormItem, SAMPLE, WAVE_FORM} from "./types";
 import {AdsrForm} from "./adsrForm";
-import {AbstractModulator} from "./modulators";
 import type {MidiTracker} from "../midiTracker";
-import {node} from "webpack";
 import {CalcUtils} from "./calcUtils";
 import {MIDI_NOTE_TO_FREQUENCY_TABLE} from "./consts";
 
@@ -36,9 +34,8 @@ export class Oscillator {
         let frequency:number;
         if (this.channel.pitchBend===0) frequency = MIDI_NOTE_TO_FREQUENCY_TABLE[this.note];
         else {
-            frequency = CalcUtils.midiNumberToFr(this.note + this.channel.pitchBend);
+            frequency = CalcUtils.midiNumberToFr(this.note,this.channel.pitchBend);
         }
-
         let currSample = 0;
         for (const w of this.waveForms) {
             let modulatedFrequency = frequency;

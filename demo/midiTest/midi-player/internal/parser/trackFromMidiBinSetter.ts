@@ -37,8 +37,6 @@ export class TrackFromMidiBinSetter implements ISetter{
                             opCode: 'noteOn',
                             channel: {
                                 channelNumber: ev.channel!,
-                                instrumentNumber: ev.programNumber!,
-                                percussion: ev.channel===9,
                             },
                             payload: {
                                 note: ev.noteNumber!,
@@ -46,6 +44,18 @@ export class TrackFromMidiBinSetter implements ISetter{
                             }
                         });
                         noteFound = true;
+                        break;
+                    }
+                    case 'programChange': {
+                        this.sampleToCommandsMap[sampleNum].push({
+                            opCode: ev.type,
+                            channel: {
+                                channelNumber: ev.channel!,
+                            },
+                            payload: {
+                                instrumentNumber: ev.programNumber!
+                            }
+                        });
                         break;
                     }
                     case 'noteOff': {
@@ -69,8 +79,7 @@ export class TrackFromMidiBinSetter implements ISetter{
                                 channelNumber: ev.channel!,
                             },
                             payload: {
-                                // Scale the value between -2^13 to 2^13 to -2 to 2.
-                                pitchBend: ev.value! / Math.pow(2, 13),
+                                pitchBend: ev.value!,
                             }
                         });
                         break;

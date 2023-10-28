@@ -29,12 +29,20 @@ export interface CHANNEL_PRESET {
     pedalOn:boolean;
 }
 
+export interface INTERNAL_SET_INSTRUMENT_COMMAND {
+    opCode: 'programChange',
+    channel: {
+        channelNumber: number;
+    },
+    payload: {
+        instrumentNumber: number;
+    }
+}
+
 export interface INTERNAL_MIDI_NOTE_ON_COMMAND {
     opCode: 'noteOn';
     channel: {
         channelNumber: number;
-        instrumentNumber: number;
-        percussion: boolean;
     },
     payload: {
         note: number;
@@ -117,6 +125,7 @@ export interface INTERNAL_MIDI_ALL_NOTES_OFF_COMMAND {
 
 export type INTERNAL_MIDI_COMMAND =
     INTERNAL_MIDI_NOTE_ON_COMMAND                   |
+    INTERNAL_SET_INSTRUMENT_COMMAND                 |
     INTERNAL_MIDI_NOTE_OFF_COMMAND                  |
     INTERNAL_MIDI_PITCH_BEND_COMMAND                |
     INTERNAL_MIDI_PEDAL_ON_COMMAND                  |

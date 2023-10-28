@@ -1,5 +1,12 @@
 import {Wave} from "../../pix32/ym-player/internal/wav";
-import {CHANNEL_PRESET, IMidiJson, INTERNAL_MIDI_COMMAND, IWaveFormItem, SAMPLE} from "./internal/types";
+import {
+    CHANNEL_PRESET,
+    IMidiJson,
+    INTERNAL_MIDI_COMMAND,
+    INTERNAL_SET_INSTRUMENT_COMMAND,
+    IWaveFormItem,
+    SAMPLE
+} from "./internal/types";
 import {Instrument} from "./internal/instrument";
 import {Oscillator} from "./internal/oscillator";
 import {wait} from "./internal/consts";
@@ -99,10 +106,17 @@ export class MidiTracker {
     }
 
     private execCommand(command: INTERNAL_MIDI_COMMAND):void {
+
         switch (command.opCode) {
             case 'noteOn': {
+                // to debug separate channel
+                //if (command.channel.channelNumber as any!==2) break;
                 const instrumentSettings =
-                    this.instrument.getOscillatorSettingsByMidiInstrumentNumber(command.channel.instrumentNumber, command.payload.note, command.channel.percussion);
+                    this.instrument.getOscillatorSettingsByMidiInstrumentNumber(
+                        this.channelPresets[command.channel.channelNumber].instrumentNumber,
+                        command.payload.note,
+                        command.channel.channelNumber===9
+                    );
                 const oscillator = new Oscillator(this);
                 oscillator.note = command.payload.note;
                 oscillator.velocity = command.payload.velocity;
@@ -120,6 +134,12 @@ export class MidiTracker {
                 oscillator.adsrForm = new AdsrForm(instrumentSettings.adsr);
                 oscillator.channel = this.channelPresets[command.channel.channelNumber];
                 this._oscillators.push(oscillator);
+                break;
+            }
+            case 'programChange': {
+                const cmd = command as INTERNAL_SET_INSTRUMENT_COMMAND;
+                console.log(`programChange: ${cmd.payload.instrumentNumber} channel ${command.channel.channelNumber}`);
+                this.channelPresets[cmd.channel.channelNumber].instrumentNumber = cmd.payload.instrumentNumber;
                 break;
             }
             case 'noteOff': {
@@ -149,6 +169,7 @@ export class MidiTracker {
                 break;
             }
             case 'pitchBend': {
+                console.log(`pitchBend: ${command.payload.pitchBend} channel ${command.channel.channelNumber}`);
                 const currentChannel:CHANNEL_PRESET = this.channelPresets[command.channel.channelNumber];
                 currentChannel.pitchBend = command.payload.pitchBend;
                 break;

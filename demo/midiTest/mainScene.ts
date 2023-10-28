@@ -79,6 +79,10 @@ export class MainScene extends Scene {
             'Metallica_-_The_Four_Horsemen',
             'Metallica_-_Phantom_Lord',
             'Battery',
+            '05BLACKC',
+            '1-11-SecretOfTheForest',
+            'jazz'
+
         ]
 
         const trackType:string = 'midi';

@@ -100,6 +100,10 @@ export namespace WaveForms {
         );
     }
 
+    export const noop: WAVE_FORM = (fr: number, t: number): number => {
+        return 0;
+    }
+
     export const tremolo: WAVE_FORM = (fr: number, t: number): number => {
         const semiPeriod = ~~(t * 100) % 6;
         if (semiPeriod > 3) fr *= 3/2;

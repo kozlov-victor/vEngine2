@@ -16,8 +16,11 @@ export class CalcUtils {
         {name: "B", sharp: false}
     ];
 
-    public static midiNumberToFr(x: number): number {
-        return (440 / 32) * Math.pow(2, ((x - 9) / 12)); //  let a = 440; // a is 440 hz...
+    public static midiNumberToFr(note: number, pitchBand = 0): number {
+        const pitchScaling =
+            pitchBand===0?1:
+            2**(pitchBand/12);
+        return pitchScaling * (440 / 32) * (2 ** ((note - 9) / 12))
     }
 
     public static letterToNoteNum(str: string): number {

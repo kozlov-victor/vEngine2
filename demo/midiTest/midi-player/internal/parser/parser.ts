@@ -48,8 +48,6 @@ interface IEvent {
 }
 
 interface ITrack {
-    percussion: boolean;
-    channel: number;
     name: string;
     events: IEvent[];
 }
@@ -289,7 +287,7 @@ const readEvent =(header:IHeader,p:BinBuffer)=> {
                 return event;
             case 0x0e:
                 event.type = 'pitchBend';
-                event.value = (param1 + (p.readUInt8() << 7)) - 0x2000;
+                event.value = ((param1 | (p.readUInt8() << 7)) - 0x2000)/Math.pow(2, 13)*2;
                 return event;
             default:
                 throw "Unrecognised MIDI event type: " + eventType;
@@ -301,16 +299,11 @@ const parseTrack =(header:IHeader,data:Int8[]):IEvent[]=> {
     const p = new BinBuffer(data);
 
     const events:IEvent[] = [];
-    let currentInstrumentNumber = 1;
     let absoluteTimeTicks = 0;
     let microSecondsPerBeat = 500_000;
     while (!p.isEOF()) {
         const event = readEvent(header,p);
         if (event.type==='setTempo') microSecondsPerBeat = event.microsecondsPerBeat!;
-        if (event.type==='programChange') {
-            currentInstrumentNumber = event.programNumber!;
-        }
-        if (event.type==='noteOn') event.programNumber = currentInstrumentNumber;
         absoluteTimeTicks+=event.deltaTimeTicks;
         event.absoluteTimeTicks = absoluteTimeTicks;
         events.push(event);
@@ -399,14 +392,10 @@ export const parse_midi = (data:ArrayBuffer):ITrack[]=>{
         });
 
         const track:ITrack = {
-            percussion: false,
-            channel: 0,
             name: undefined! as string,
             events: events,
         }
 
-        track.channel = events.find(e=>e.type==='noteOn')?.channel ?? 0;
-        track.percussion = track.channel===9;
         track.name = events.find(e=>e.type==='trackName')?.text ?? undefined!;
 
         mappedTracks.push(track);

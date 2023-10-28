@@ -95,7 +95,7 @@ export class Instrument {
         } as InstrumentSettings,
         bass: {
             adsr: {a: 0.02, d: 0.01, s: 0.8, r: 0.7, base: 0.6},
-            waveForms: [{amplitude: 0.9, form: WaveForms.sawTooth},{amplitude:0.1, form: WaveForms.sinHarmonics}],
+            waveForms: [{amplitude: 0.8, form: WaveForms.trapezia},{amplitude:0.2, form: WaveForms.sinHarmonics}],
             name: 'bass'
         } as InstrumentSettings,
         pizzicatto: {
@@ -717,13 +717,22 @@ export class Instrument {
             name: 'flute',
         } as InstrumentSettings,
         saxophone: {
-            adsr: {a: 0.05, d: 0.1, s: 4, r: 0.1, base: 0.5},
+            adsr: {a: 0.05, d: 0.1, s: 4, r: 0.8, base: 0.5},
             waveForms: [
                 {
-                    amplitude:0.8, form:WaveForms.sinHarmonics,
+                    amplitude:0.8, form:WaveForms.harmonic,
                     am: ()=>new WaveAdditiveModulator2(2.2,0.2),
                 },
-                {amplitude:0.2,form:WaveForms.square}
+                {amplitude:0.2,form:WaveForms.triangle}
+            ],
+            name: 'saxophone',
+        } as InstrumentSettings,
+        noop: {
+            adsr: {a: 0, d: 0, s: 0, r: 0, base: 0},
+            waveForms: [
+                {
+                    amplitude:0, form:WaveForms.noop,
+                }
             ],
             name: 'saxophone',
         } as InstrumentSettings,
@@ -919,7 +928,7 @@ export class Instrument {
      */
     private cachedRequest:Record<number, InstrumentSettings> = {};
 
-    public getOscillatorSettingsByMidiInstrumentNumber(num:number,note:number,percussion:boolean):InstrumentSettings {
+    public getOscillatorSettingsByMidiInstrumentNumber(num:number = 1,note:number,percussion:boolean):InstrumentSettings {
         if (!percussion && this.cachedRequest[num]) return this.cachedRequest[num];
         if (percussion && this.cachedRequest[note]) return this.cachedRequest[note];
 
@@ -1059,7 +1068,8 @@ export class Instrument {
                     break;
             }
             this.cachedRequest[note] = result;
-        } else {
+        }
+        else {
             switch (num) {
                 // *Piano*
                 case 1: // Acoustic Grand Piano
