@@ -17,7 +17,7 @@ export class CalcUtils {
     ];
 
     public static midiNumberToFr(note: number, pitchBand = 0): number {
-        const pitchScaling =
+        const pitchScaling = // https://sites.uci.edu/camp2014/2014/04/30/managing-midi-pitchbend-messages/
             pitchBand===0?1:
             2**(pitchBand/12);
         return pitchScaling * (440 / 32) * (2 ** ((note - 9) / 12))

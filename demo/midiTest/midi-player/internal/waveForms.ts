@@ -4,11 +4,11 @@ import {NoiseGenerator} from "./noiseGenerator";
 
 export namespace WaveForms {
 
-    export const sin: WAVE_FORM = (fr: number, t: number): number => {
+    export const sin = (fr: number, t: number): number => {
         return Math.sin( 2*Math.PI * t * fr);
     }
 
-    export const sin2: WAVE_FORM = (fr: number, t: number): number => {
+    export const sin2 = (fr: number, t: number): number => {
         return (
             0.6 * sin(fr, t) +
             0.2 * sin(2/1 * fr, t) +
@@ -16,7 +16,7 @@ export namespace WaveForms {
         );
     }
 
-    export const chorus: WAVE_FORM = (fr: number, t: number): number => {
+    export const chorus = (fr: number, t: number): number => {
         const numOfVoices = 4;
         const harmonics = [1,2,3/2,3];
         let offset = 0;
@@ -35,7 +35,7 @@ export namespace WaveForms {
         return result / numOfVoices;
     }
 
-    export const sinHarmonics: WAVE_FORM = (fr: number, t: number): number => {
+    export const sinHarmonics = (fr: number, t: number): number => {
         return (
             1/3 * sin(fr, t) +
             1/3 * sin(2 * fr, t) +
@@ -43,18 +43,18 @@ export namespace WaveForms {
         );
     }
 
-    export const triangle: WAVE_FORM = (fr: number, t: number): number => {
+    export const triangle = (fr: number, t: number): number => {
         return Math.asin(sin(fr, t));
     }
 
-    export const triangleNoise: WAVE_FORM = (fr: number, t: number): number => {
+    export const triangleNoise = (fr: number, t: number): number => {
         return (
             1/2 * triangle(fr, t) +
             1/2 * whiteNoise(fr, t)
         );
     }
 
-    export const sawTooth: WAVE_FORM = (fr: number, t: number): number => {
+    export const sawTooth = (fr: number, t: number): number => {
         return (
             sin(       fr,   t)   -
             1/2  * sin(2 * fr,   t)   +
@@ -65,28 +65,28 @@ export namespace WaveForms {
         );
     }
 
-    export const whiteNoise: WAVE_FORM = (fr: number, t: number): number => {
+    export const whiteNoise = (fr: number, t: number): number => {
         return NoiseGenerator.getNextWhiteNoiseSample();
     }
 
-    export const pinkNoise: WAVE_FORM = (fr: number, t: number): number => {
+    export const pinkNoise = (fr: number, t: number): number => {
         return NoiseGenerator.getNextPinkNoiseSample();
     }
 
-    export const brownNoise: WAVE_FORM = (fr: number, t: number): number => {
+    export const brownNoise = (fr: number, t: number): number => {
         return NoiseGenerator.getNextBrownNoiseSample();
     }
 
-    export const square: WAVE_FORM = (fr: number, t: number): number => {
+    export const square = (fr: number, t: number): number => {
         const sample = sin(fr, t);
         return sample < 0 ? -1 : 1;
     }
 
-    export const trapezia: WAVE_FORM = (fr: number, t: number): number => {
+    export const trapezia = (fr: number, t: number): number => {
         return MathEx.clamp(2*triangle(fr, t),-1,1);
     }
 
-    export const harmonic: WAVE_FORM = (fr: number, t: number): number => {
+    export const harmonic = (fr: number, t: number): number => {
         return (
             0.54 * sin2(        fr,   t)    +
             0.1  * sin2(2/1 * fr,   t)    +
@@ -100,17 +100,17 @@ export namespace WaveForms {
         );
     }
 
-    export const noop: WAVE_FORM = (fr: number, t: number): number => {
+    export const noop = (fr: number, t: number): number => {
         return 0;
     }
 
-    export const tremolo: WAVE_FORM = (fr: number, t: number): number => {
+    export const tremolo = (fr: number, t: number): number => {
         const semiPeriod = ~~(t * 100) % 6;
         if (semiPeriod > 3) fr *= 3/2;
         return sin(fr, t);
     }
 
-    export const tremolo2: WAVE_FORM = (fr: number, t: number): number => {
+    export const tremolo2 = (fr: number, t: number): number => {
         const semiPeriod = ~~(t * 100) % 6;
         if (semiPeriod > 4) fr *= 3;
         else if (semiPeriod > 2) fr *= 2;
@@ -118,7 +118,7 @@ export namespace WaveForms {
     }
 
 
-    export const dirtyWave = (deviation:number, step:number, wave:WAVE_FORM):WAVE_FORM=>{
+    export const dirtyWave = (deviation:number, step:number, wave:WAVE_FORM)=>{
         return (fr:number,t:number):number=>{
             let out = 0;
             let from = fr - deviation;

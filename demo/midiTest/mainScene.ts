@@ -81,8 +81,8 @@ export class MainScene extends Scene {
             'Battery',
             '05BLACKC',
             '1-11-SecretOfTheForest',
-            'jazz'
-
+            'jazz',
+            'wst30xgb'
         ]
 
         const trackType:string = 'midi';
