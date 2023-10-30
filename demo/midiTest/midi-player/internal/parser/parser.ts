@@ -287,7 +287,7 @@ const readEvent =(header:IHeader,p:BinBuffer)=> {
                 return event;
             case 0x0e:
                 event.type = 'pitchBend';
-                event.value = ((param1 | (p.readUInt8() << 7)) - 0x2000)/Math.pow(2, 13)*2;
+                event.value = ((p.readUInt8() << 7 | param1) - 0x2000)/0x2000*2;
                 return event;
             default:
                 throw "Unrecognised MIDI event type: " + eventType;

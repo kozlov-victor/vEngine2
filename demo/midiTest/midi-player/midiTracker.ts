@@ -223,23 +223,6 @@ export class MidiTracker {
         mixed.L = sumAll.L/this.numOfTracks;
         mixed.R = sumAll.R/this.numOfTracks;
         return mixed;
-
-        // mix by formula: out = (s1 + s2) - (s1 * s2);
-        // const A = 100;
-        // if (!this._oscillators.length) return {L:0,R:0};
-        // const res:SAMPLE = this._oscillators[0].generateSample(currentSampleNum);
-        // res.L*=A;
-        // res.R*=A;
-        // for (let i: number = 1; i < this._oscillators.length; i++) {
-        //     const sample = this._oscillators[i].generateSample(currentSampleNum);
-        //     sample.L*=A;
-        //     sample.R*=A;
-        //     res.L = (res.L+sample.L) - (res.L*sample.L);
-        //     res.R = (res.R+sample.R) - (res.R*sample.R);
-        // }
-        // res.L/=A;
-        // res.R/=A;
-        // return res;
     }
 
 }
