@@ -1,4 +1,5 @@
 import {AbstractModulator, SimpleWheelChannelModulator} from "./modulators";
+import {PitchBandInterpolator} from "./pitchBandInterpolator";
 
 export interface ADSRPoint {
     from: { time: number, val: number },
@@ -25,7 +26,7 @@ export interface CHANNEL_PRESET {
     velocity:number;
     am:SimpleWheelChannelModulator;
     instrumentNumber:number;
-    pitchBend:number;
+    pitchBend:PitchBandInterpolator;
     pedalOn:boolean;
 }
 

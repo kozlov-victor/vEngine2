@@ -15,6 +15,7 @@ import {AdsrForm} from "./internal/adsrForm";
 import {TrackFromJsonSetter} from "./internal/parser/trackFromJsonSetter";
 import {TrackFromMidiBinSetter} from "./internal/parser/trackFromMidiBinSetter";
 import {SimpleWheelChannelModulator} from "./internal/modulators";
+import {PitchBandInterpolator} from "./internal/pitchBandInterpolator";
 
 export class MidiTracker {
 
@@ -40,7 +41,7 @@ export class MidiTracker {
                 velocity: 1,
                 am: new SimpleWheelChannelModulator(0),
                 instrumentNumber: 0,
-                pitchBend: 0,
+                pitchBend: new PitchBandInterpolator(),
                 pedalOn: false,
             };
         }
@@ -171,7 +172,7 @@ export class MidiTracker {
             case 'pitchBend': {
                 console.log(`pitchBend: ${command.payload.pitchBend} channel ${command.channel.channelNumber}`);
                 const currentChannel:CHANNEL_PRESET = this.channelPresets[command.channel.channelNumber];
-                currentChannel.pitchBend = command.payload.pitchBend;
+                currentChannel.pitchBend.setValue(command.payload.pitchBend);
                 break;
             }
             case 'modulationWheel': {

@@ -32,9 +32,11 @@ export class Oscillator {
         if (this.startedAt === undefined) this.startedAt = t;
         const dTime = t - this.startedAt;
         let frequency:number;
-        if (this.channel.pitchBend===0) frequency = MIDI_NOTE_TO_FREQUENCY_TABLE[this.note];
+        this.channel.pitchBend.update(t);
+        const pitchBend = this.channel.pitchBend.getValue();
+        if (pitchBend===0) frequency = MIDI_NOTE_TO_FREQUENCY_TABLE[this.note];
         else {
-            frequency = CalcUtils.midiNumberToFr(this.note,this.channel.pitchBend);
+            frequency = CalcUtils.midiNumberToFr(this.note,pitchBend);
         }
         let currSample = 0;
         for (const w of this.waveForms) {

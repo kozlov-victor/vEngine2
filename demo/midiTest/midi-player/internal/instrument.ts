@@ -96,7 +96,7 @@ export class Instrument {
         } ,
         bass: {
             adsr: {a: 0.02, d: 0.01, s: 0.8, r: 0.7, base: 0.6},
-            waveForms: [{amplitude: 0.8, form: WaveForms.trapezia},{amplitude:0.2, form: WaveForms.sinHarmonics}],
+            waveForms: [{amplitude: 0.8, form: WaveForms.trapezia},{amplitude:0.2, form: WaveForms.triangle}],
             name: 'bass'
         },
         pizzicatto: {
