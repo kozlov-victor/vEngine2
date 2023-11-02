@@ -47,13 +47,6 @@ export namespace WaveForms {
         return Math.asin(sin(fr, t));
     }
 
-    export const triangleNoise = (fr: number, t: number): number => {
-        return (
-            1/2 * triangle(fr, t) +
-            1/2 * whiteNoise(fr, t)
-        );
-    }
-
     export const sawTooth = (fr: number, t: number): number => {
         return (
             sin(       fr,   t)   -

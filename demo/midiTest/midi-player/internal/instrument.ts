@@ -6,28 +6,29 @@ import {
 } from "./modulators";
 
 export class Instrument {
+
     // https://virtualpiano.eu/
     public readonly defaultInstrumentSettings = {
         grandPiano: {
             adsr: {a: 0.001, d: 0.07, s: 0.6, r: 1, base: 0.6},
             waveForms: [{amplitude: 0.9, form: WaveForms.harmonic},{amplitude:0.1, form: WaveForms.triangle}] ,
             name: 'grandPiano',
-        } as InstrumentSettings,
+        },
         brightPiano: {
             adsr: {a: 0.003, d: 0.08, s: 0.4, r: 0.9, base: 0.5},
             waveForms: [{amplitude: 0.9, form: WaveForms.harmonic},{amplitude:0.1, form: WaveForms.triangle}],
             name: 'brightPiano',
-        } as InstrumentSettings,
+        },
         syntPiano: {
             adsr: {a: 0.001, d: 0.07, s: 0.5, r: 0.9, base: 0.6},
             waveForms: [{amplitude: 0.9, form: WaveForms.triangle},{amplitude:0.1, form: WaveForms.sawTooth}],
             name: 'syntPiano',
-        } as InstrumentSettings,
+        },
         clavier: {
             adsr: {a: 0.001, d: 0.1, s: 0.4, r: 0.8, base: 0.5},
             waveForms: [{amplitude: 0.9, form: WaveForms.triangle},{amplitude:0.1, form: WaveForms.sawTooth}],
             name: 'clavier',
-        } as InstrumentSettings,
+        },
         xylophone: {
             adsr: {a: 0.001, d: 0.1, s: 0.8, r: 2, base: 0.5},
             waveForms: [
@@ -38,7 +39,7 @@ export class Instrument {
                 {amplitude:0.1, form: WaveForms.sin}
             ],
             name: 'xylophone',
-        } as InstrumentSettings,
+        },
         musicBox: {
             adsr: {a: 0.02, d: 0.1, s: 0.8, r: 2, base: 0.5},
             waveForms: [
@@ -49,7 +50,7 @@ export class Instrument {
                 {amplitude:0.1, form: WaveForms.sin}
             ],
             name: 'musicBox',
-        } as InstrumentSettings,
+        },
         marimba: {
             adsr: {a: 0.001, d: 0.1, s: 0.8, r: 1, base: 0.5},
             waveForms: [
@@ -59,7 +60,7 @@ export class Instrument {
                 }
             ],
             name: 'marimba',
-        } as InstrumentSettings,
+        },
         tubularBells: {
             adsr: {a: 0.001, d: 0.1, s: 0.9, r: 2, base: 0.5},
             waveForms: [
@@ -69,7 +70,7 @@ export class Instrument {
                 }
             ],
             name: 'tubularBells',
-        } as InstrumentSettings,
+        },
         violin: {
             adsr: {a: 0.04, d: 0.1, s: 5, r: 0.8, base: 0.8},
             waveForms: [
@@ -80,7 +81,7 @@ export class Instrument {
                 {amplitude:0.1, form: WaveForms.triangle}
             ],
             name: 'violin',
-        } as InstrumentSettings,
+        },
         violinTremolo: {
             adsr: {a: 0.04, d: 0.1, s: 5, r: 0.8, base: 0.8},
             waveForms: [
@@ -92,17 +93,17 @@ export class Instrument {
                 {amplitude:0.1, form: WaveForms.triangle}
             ],
             name: 'violinTremolo',
-        } as InstrumentSettings,
+        } ,
         bass: {
             adsr: {a: 0.02, d: 0.01, s: 0.8, r: 0.7, base: 0.6},
             waveForms: [{amplitude: 0.8, form: WaveForms.trapezia},{amplitude:0.2, form: WaveForms.sinHarmonics}],
             name: 'bass'
-        } as InstrumentSettings,
+        },
         pizzicatto: {
             adsr: {a: 0.01, d: 0.07, s: 0.3, r: 0.4, base: 0.5},
             waveForms: [{amplitude: 0.9, form: WaveForms.sawTooth},{amplitude:0.1, form: WaveForms.sinHarmonics}],
             name: 'pizzicatto'
-        } as InstrumentSettings,
+        },
         electroGuitarClean: {
             adsr: {a: 0.01, d: 0.01, s: 1.1, r: 0.4, base: 0.5},
             waveForms: [
@@ -111,12 +112,12 @@ export class Instrument {
                 {amplitude:0.2, form: WaveForms.square}
             ],
             name: 'electroGuitarClean',
-        } as InstrumentSettings,
+        },
         electroGuitarOverdriven: {
             adsr: {a: 0.01, d: 0.01, s: 1.1, r: 0.4, base: 0.5},
             waveForms: [{amplitude: 0.8, form: WaveForms.square},{amplitude:0.2, form: WaveForms.sawTooth}],
             name: 'electroGuitarOverdriven',
-        } as InstrumentSettings,
+        },
         electroGuitarDistortion: {
             adsr: {a: 0.01, d: 0.01, s: 1.1, r: 0.4, base: 0.5},
             waveForms: [
@@ -133,7 +134,7 @@ export class Instrument {
                 }
             ],
             name: 'distortion',
-        } as InstrumentSettings,
+        },
         acousticBassDrum: {
             adsr: {a: 0.01, d: 0.05, s: 0.1, r: 0.2, base: 0.5},
             waveForms: [
@@ -143,7 +144,7 @@ export class Instrument {
                 }
             ],
             name: 'acousticBassDrum',
-        } as InstrumentSettings,
+        },
         bassDrum: {
             adsr: {a: 0.01, d: 0.05, s: 0.1, r: 0.2, base: 0.5},
             waveForms: [
@@ -153,7 +154,7 @@ export class Instrument {
                 }
             ],
             name: 'bassDrum',
-        } as InstrumentSettings,
+        },
         snareDrum: {
             adsr: {a: 0.001, d: 0.01, s: 0.06, r: 0.1, base: 0.5},
             waveForms: [
@@ -163,7 +164,7 @@ export class Instrument {
                 }
             ],
             name: 'snareDrum',
-        } as InstrumentSettings,
+        },
         electricSnareDrum: {
             adsr: {a: 0.001, d: 0.01, s: 0.09, r: 0.15, base: 0.5},
             waveForms: [
@@ -173,7 +174,7 @@ export class Instrument {
                 }
             ],
             name: 'electricSnareDrum',
-        } as InstrumentSettings,
+        },
         electricDynamicDrum: {
             adsr: {a: 0.001, d: 0.01, s: 0.09, r: 0.15, base: 0.5},
             waveForms: [
@@ -183,7 +184,7 @@ export class Instrument {
                 }
             ],
             name: 'electricDynamicDrum',
-        } as InstrumentSettings,
+        },
         snareDrumClosed: {
             adsr: {a: 0.001, d: 0.01, s: 0.06, r: 0.01, base: 0.5},
             waveForms: [
@@ -193,7 +194,7 @@ export class Instrument {
                 }
             ],
             name: 'snareDrumClosed',
-        } as InstrumentSettings,
+        },
         lowFloorTomDrum: {
             adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.1, base: 0.5},
             waveForms: [
@@ -203,7 +204,7 @@ export class Instrument {
                 }
             ],
             name: 'lowFloorTomDrum',
-        } as InstrumentSettings,
+        },
         timpani: {
             adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.1, base: 0.5},
             waveForms: [
@@ -213,7 +214,7 @@ export class Instrument {
                 }
             ],
             name: 'timpani',
-        } as InstrumentSettings,
+        },
         steelDrums: {
             adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.1, base: 0.5},
             waveForms: [
@@ -223,7 +224,7 @@ export class Instrument {
                 }
             ],
             name: 'steelDrums',
-        } as InstrumentSettings,
+        },
         woodDrums: {
             adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.1, base: 0.5},
             waveForms: [
@@ -233,7 +234,7 @@ export class Instrument {
                 }
             ],
             name: 'woodDrums',
-        } as InstrumentSettings,
+        },
         highFloorTomDrum: {
             adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.12, base: 0.5},
             waveForms: [
@@ -243,17 +244,17 @@ export class Instrument {
                 }
             ],
             name: 'highFloorTomDrum',
-        } as InstrumentSettings,
+        },
         lowTomDrum: {
             adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.15, base: 0.5},
             waveForms: [
                 {
-                    amplitude: 1, form: WaveForms.dirtyWave(10,2, WaveForms.triangle),
+                    amplitude: 1, form: WaveForms.dirtyWave(10, 2, WaveForms.triangle),
                     fm: () => new ConstantDecayFrequencyModulator(165, 310),
                 }
             ],
             name: 'lowTomDrum',
-        } as InstrumentSettings,
+        },
         lowMidTomDrum: {
             adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.15, base: 0.5},
             waveForms: [
@@ -263,7 +264,7 @@ export class Instrument {
                 }
             ],
             name: 'lowMidTomDrum',
-        } as InstrumentSettings,
+        },
         highMidTomDrum: {
             adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.2, base: 0.5},
             waveForms: [
@@ -273,7 +274,7 @@ export class Instrument {
                 }
             ],
             name: 'highMidTomDrum',
-        } as InstrumentSettings,
+        },
         highWoodBlock: {
             adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.2, base: 0.5},
             waveForms: [
@@ -283,7 +284,7 @@ export class Instrument {
                 }
             ],
             name: 'highWoodBlock',
-        } as InstrumentSettings,
+        },
         lowWoodBlock: {
             adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.2, base: 0.5},
             waveForms: [
@@ -293,7 +294,7 @@ export class Instrument {
                 }
             ],
             name: 'lowWoodBlock',
-        } as InstrumentSettings,
+        },
         highBongo: {
             adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.2, base: 0.5},
             waveForms: [
@@ -303,7 +304,7 @@ export class Instrument {
                 }
             ],
             name: 'highBongo',
-        } as InstrumentSettings,
+        },
         lowBongo: {
             adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.2, base: 0.5},
             waveForms: [
@@ -313,7 +314,7 @@ export class Instrument {
                 }
             ],
             name: 'lowBongo',
-        } as InstrumentSettings,
+        },
         muteHighConga: {
             adsr: {a: 0.001, d: 0.01, s: 0.05, r: 0.1, base: 0.5},
             waveForms: [
@@ -323,7 +324,7 @@ export class Instrument {
                 }
             ],
             name: 'muteHighConga',
-        } as InstrumentSettings,
+        },
         openHighConga: {
             adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.2, base: 0.5},
             waveForms: [
@@ -333,7 +334,7 @@ export class Instrument {
                 }
             ],
             name: 'muteHighConga',
-        } as InstrumentSettings,
+        },
         lowConga: {
             adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.2, base: 0.5},
             waveForms: [
@@ -343,7 +344,7 @@ export class Instrument {
                 }
             ],
             name: 'lowConga',
-        } as InstrumentSettings,
+        },
         highTimbale: {
             adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.2, base: 0.5},
             waveForms: [
@@ -353,7 +354,7 @@ export class Instrument {
                 }
             ],
             name: 'highTimbale',
-        } as InstrumentSettings,
+        },
         lowTimbale: {
             adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.2, base: 0.5},
             waveForms: [
@@ -363,7 +364,7 @@ export class Instrument {
                 }
             ],
             name: 'lowTimbale',
-        } as InstrumentSettings,
+        },
         highAgogo: {
             adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.2, base: 0.5},
             waveForms: [
@@ -373,7 +374,7 @@ export class Instrument {
                 }
             ],
             name: 'highAgogo',
-        } as InstrumentSettings,
+        },
         lowAgogo: {
             adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.2, base: 0.5},
             waveForms: [
@@ -383,7 +384,7 @@ export class Instrument {
                 }
             ],
             name: 'lowAgogo',
-        } as InstrumentSettings,
+        },
         highTomDrum: {
             adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.15, base: 0.5},
             waveForms: [
@@ -393,7 +394,7 @@ export class Instrument {
                 }
             ],
             name: 'highTomDrum',
-        } as InstrumentSettings,
+        },
         hiHatOpenedDrum: {
             adsr: {a: 0.001, d: 0.02, s: 0.1, r: 0.2, base: 0.5},
             waveForms: [
@@ -403,7 +404,7 @@ export class Instrument {
                 }
             ],
             name: 'hiHatOpenedDrum',
-        } as InstrumentSettings,
+        },
         hiHatClosedDrum: {
             adsr: {a: 0.001, d: 0.01, s: 0.05, r: 0.05, base: 0.5},
             waveForms: [
@@ -413,7 +414,7 @@ export class Instrument {
                 }
             ],
             name: 'hiHatClosedDrum',
-        } as InstrumentSettings,
+        },
         pedalHiHat: {
             adsr: {a: 0.001, d: 0.015, s: 0.01, r: 0.05, base: 0.5},
             waveForms: [
@@ -423,7 +424,7 @@ export class Instrument {
                 }
             ],
             name: 'hiHatClosedDrum',
-        } as InstrumentSettings,
+        },
         clap: {
             adsr: {a: 0.001, d: 0.025, s: 0.02, r: 0.02, base: 0.5},
             waveForms: [
@@ -433,7 +434,7 @@ export class Instrument {
                 }
             ],
             name: 'clap',
-        } as InstrumentSettings,
+        },
         fxHelicopter: {
             adsr: {a: 0.001, d: 0.025, s: 5, r: 0.1, base: 0.5},
             waveForms: [
@@ -443,17 +444,17 @@ export class Instrument {
                 }
             ],
             name: 'fxHelicopter',
-        } as InstrumentSettings,
+        },
         fxTremolo: {
             adsr: {a: 0.001, d: 0.025, s: 5, r: 0.1, base: 0.5},
             waveForms: [{amplitude: 1, form: WaveForms.tremolo}],
             name: 'fxTremolo',
-        } as InstrumentSettings,
+        },
         fxTremolo2: {
             adsr: {a: 0.001, d: 0.025, s: 5, r: 0.1, base: 0.5},
             waveForms: [{amplitude: 1, form: WaveForms.tremolo2}],
             name: 'fxTremolo2',
-        } as InstrumentSettings,
+        },
         fxApplause: {
             adsr: {a: 0.001, d: 0.025, s: 5, r: 0.1, base: 0.5},
             waveForms: [
@@ -463,7 +464,7 @@ export class Instrument {
                 }
             ],
             name: 'fxApplause',
-        } as InstrumentSettings,
+        },
         sideStick: {
             adsr: {a: 0.001, d: 0.025, s: 0.02, r: 0.02, base: 0.5},
             waveForms: [
@@ -473,7 +474,7 @@ export class Instrument {
                 }
             ],
             name: 'sideStick',
-        } as InstrumentSettings,
+        },
         cymbalDrum: {
             adsr: {a: 0.001, d: 0.025, s: 0.8, r: 0.02, base: 0.5},
             waveForms: [
@@ -482,7 +483,7 @@ export class Instrument {
                 }
             ],
             name: 'cymbalDrum',
-        } as InstrumentSettings,
+        },
         crashCymbal1: {
             adsr: {a: 0.001, d: 0.03, s: 1, r: 0.2, base: 0.5},
             waveForms: [
@@ -491,7 +492,7 @@ export class Instrument {
                 }
             ],
             name: 'crashCymbal1',
-        } as InstrumentSettings,
+        },
         crashCymbal2: {
             adsr: {a: 0.001, d: 0.03, s: 1, r: 0.2, base: 0.5},
             waveForms: [
@@ -500,7 +501,7 @@ export class Instrument {
                 }
             ],
             name: 'crashCymbal2',
-        } as InstrumentSettings,
+        },
         rideCymbal1: {
             adsr: {a: 0.001, d: 0.03, s: 1, r: 0.02, base: 1},
             waveForms: [
@@ -509,7 +510,7 @@ export class Instrument {
                 }
             ],
             name: 'rideCymbal1',
-        } as InstrumentSettings,
+        },
         rideCymbal2: {
             adsr: {a: 0.001, d: 0.03, s: 1, r: 0.1, base: 0.5},
             waveForms: [
@@ -518,7 +519,7 @@ export class Instrument {
                 }
             ],
             name: 'rideCymbal2',
-        } as InstrumentSettings,
+        },
         splashCymbal: {
             adsr: {a: 0.001, d: 0.03, s: 0.5, r: 0.4, base: 0.5},
             waveForms: [
@@ -527,7 +528,7 @@ export class Instrument {
                 }
             ],
             name: 'splashCymbal',
-        } as InstrumentSettings,
+        },
         vibraslap: {
             adsr: {a: 0.001, d: 0.02, s: 0.22, r: 0.6, base: 0.5},
             waveForms: [
@@ -538,7 +539,7 @@ export class Instrument {
                 }
             ],
             name: 'vibraslap',
-        } as InstrumentSettings,
+        },
         rideBellDrum: {
             adsr: {a: 0.01, d: 0.07, s: 0.3, r: 0.4, base: 0.5},
             waveForms: [
@@ -548,7 +549,7 @@ export class Instrument {
                 }
             ],
             name: 'rideBellDrum',
-        } as InstrumentSettings,
+        },
         cowBellDrum: {
             adsr: {a: 0.01, d: 0.07, s: 0.1, r: 0.2, base: 0.5},
             waveForms: [
@@ -558,7 +559,7 @@ export class Instrument {
                 }
             ],
             name: 'rideBellDrum',
-        } as InstrumentSettings,
+        },
         organ: {
             adsr: {a: 0.01, d: 0.001, s: 10, r: 1, base: 0.5},
             waveForms: [
@@ -566,7 +567,7 @@ export class Instrument {
                 {amplitude:0.1, form: WaveForms.triangle}
             ],
             name: 'organ'
-        } as InstrumentSettings,
+        },
         syntesatorTriangle: {
             adsr: {a: 0.01, d: 0.01, s: 10, r: 0.6, base: 0.5},
             waveForms: [
@@ -576,7 +577,7 @@ export class Instrument {
                 }
             ],
             name: 'syntesatorTriangle'
-        } as InstrumentSettings,
+        },
         syntesatorSquare: {
             adsr: {a: 0.01, d: 0.01, s: 10, r: 0.6, base: 0.5},
             waveForms: [
@@ -586,7 +587,7 @@ export class Instrument {
                 },
             ],
             name: 'syntesatorSquare'
-        } as InstrumentSettings,
+        },
         syntesatorSawtooth: {
             adsr: {a: 0.01, d: 0.01, s: 10, r: 0.6, base: 0.5},
             waveForms: [
@@ -596,29 +597,29 @@ export class Instrument {
                 }
             ],
             name: 'syntesatorSawtooth'
-        } as InstrumentSettings,
+        },
         acoustic: {
             adsr: {a: 0.02, d: 0.1, s: 0.9, r: 0.4, base: 0.5},
             waveForms: [
                 {amplitude: 0.9, form: WaveForms.sinHarmonics},{amplitude:0.1, form: WaveForms.triangle}
             ],
             name: 'acoustic'
-        } as InstrumentSettings,
+        },
         acousticSteel: {
             adsr: {a: 0.02, d: 0.1, s: 0.9, r: 0.4, base: 0.5},
             waveForms: [{amplitude: 0.8, form: WaveForms.sawTooth},{amplitude:0.2,form:WaveForms.triangle}],
             name: 'acousticSteel'
-        } as InstrumentSettings,
+        },
         harp: {
             adsr: {a: 0.02, d: 0.1, s: 0.9, r: 2, base: 0.5},
             waveForms: [{amplitude: 0.9, form: WaveForms.triangle},{amplitude:0.1,form:WaveForms.sawTooth}],
             name: 'harp'
-        } as InstrumentSettings,
+        },
         acousticSteelMuted: {
             adsr: {a: 0.02, d: 0.1, s: 0.3, r: 0.3, base: 0.5},
             waveForms: [{amplitude: 0.8, form: WaveForms.sawTooth},{amplitude:0.2,form:WaveForms.triangle}],
             name: 'acousticSteelMuted'
-        } as InstrumentSettings,
+        },
         chorus: {
             adsr: {a: 0.02, d: 0.1, s: 2, r: 0.4, base: 0.5},
             waveForms: [
@@ -632,7 +633,7 @@ export class Instrument {
                 }
             ],
             name: 'chorus'
-        } as InstrumentSettings,
+        },
         orchestra: {
             adsr: {a: 0.01, d: 0.1, s: 3, r: 0.4, base: 0.5},
             waveForms: [
@@ -642,12 +643,12 @@ export class Instrument {
                 }
             ],
             name: 'orchestra'
-        } as InstrumentSettings,
+        },
         acousticHarmonics: {
             adsr: {a: 0.02, d: 0.1, s: 0.8, r: 0.4, base: 0.5},
             waveForms: [{amplitude: 0.9, form: WaveForms.sinHarmonics},{amplitude:0.1,form:WaveForms.triangle}],
             name: 'acousticHarmonics'
-        } as InstrumentSettings,
+        },
         rockOrgan: {
             adsr: {a: 0.01, d: 0.001, s: 10, r: 0.6, base: 0.5},
             waveForms: [
@@ -658,7 +659,7 @@ export class Instrument {
                 {amplitude:0.1,form:WaveForms.sawTooth}
             ],
             name: 'rockOrgan'
-        } as InstrumentSettings,
+        },
         accordion: {
             adsr: {a: 0.02, d: 0.001, s: 10, r: 0.4, base: 0.5},
             waveForms: [
@@ -669,7 +670,7 @@ export class Instrument {
                 {amplitude:0.1,form:WaveForms.triangle}
             ],
             name: 'accordion'
-        } as InstrumentSettings,
+        },
         pipe: {
             adsr: {a: 0.06, d: 0.3, s: 4, r: 0.2, base: 0.5},
             waveForms: [
@@ -683,7 +684,7 @@ export class Instrument {
                 }
             ],
             name: 'pipe',
-        } as InstrumentSettings,
+        },
         pipeMuted: {
             adsr: {a: 0.06, d: 0.3, s: 4, r: 0.2, base: 0.5},
             waveForms: [
@@ -694,7 +695,7 @@ export class Instrument {
                 {amplitude:0.1,form:WaveForms.triangle}
             ],
             name: 'pipe',
-        } as InstrumentSettings,
+        },
         blownBottle: {
             adsr: {a: 0.05, d: 0.3, s: 4, r: 0.2, base: 0.5},
             waveForms: [
@@ -704,7 +705,7 @@ export class Instrument {
                 }
             ],
             name: 'blownBottle',
-        } as InstrumentSettings,
+        },
         flute: {
             adsr: {a: 0.03, d: 0.2, s: 4, r: 0.2, base: 0.5},
             waveForms: [
@@ -715,7 +716,7 @@ export class Instrument {
                 },
                 {amplitude:0.1,form:WaveForms.triangle}],
             name: 'flute',
-        } as InstrumentSettings,
+        },
         saxophone: {
             adsr: {a: 0.05, d: 0.1, s: 4, r: 0.8, base: 0.5},
             waveForms: [
@@ -726,7 +727,7 @@ export class Instrument {
                 {amplitude:0.2,form:WaveForms.triangle}
             ],
             name: 'saxophone',
-        } as InstrumentSettings,
+        },
         noop: {
             adsr: {a: 0, d: 0, s: 0, r: 0, base: 0},
             waveForms: [
@@ -735,8 +736,8 @@ export class Instrument {
                 }
             ],
             name: 'saxophone',
-        } as InstrumentSettings,
-    } as const;
+        },
+    } satisfies Record<string, InstrumentSettings>;
 
     /*
         Piano:

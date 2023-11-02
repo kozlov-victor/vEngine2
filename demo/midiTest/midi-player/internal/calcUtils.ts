@@ -17,7 +17,7 @@ export class CalcUtils {
     ];
 
     public static midiNumberToFr(note: number, pitchBand = 0): number {
-        return (440 / 32) * (2 ** ((note + pitchBand - 9) / 12))
+        return (440 / 32) * (2 ** (((note + pitchBand - 9) / 12)));
     }
 
     public static letterToNoteNum(str: string): number {
