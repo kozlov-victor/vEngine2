@@ -15,7 +15,6 @@ import {AdsrForm} from "./internal/adsrForm";
 import {TrackFromJsonSetter} from "./internal/parser/trackFromJsonSetter";
 import {TrackFromMidiBinSetter} from "./internal/parser/trackFromMidiBinSetter";
 import {SimpleWheelChannelModulator} from "./internal/modulators";
-import {PitchBandInterpolator} from "./internal/pitchBandInterpolator";
 
 export class MidiTracker {
 
@@ -41,7 +40,7 @@ export class MidiTracker {
                 velocity: 1,
                 am: new SimpleWheelChannelModulator(0),
                 instrumentNumber: 0,
-                pitchBend: new PitchBandInterpolator(),
+                pitchBend: 0,
                 pedalOn: false,
             };
         }
@@ -125,6 +124,7 @@ export class MidiTracker {
                 instrumentSettings.waveForms.forEach(wf=>{
                     const wfCopy:IWaveFormItem = {
                         ...wf,
+                        adsrInstance: new AdsrForm(wf.adsr),
                         amInstance:wf.am?.(),
                         fmInstance:wf.fm?.(),
                     };
@@ -132,7 +132,6 @@ export class MidiTracker {
                 });
                 oscillator.waveForms = waveForms;
                 oscillator.currentNoteNumber = command.payload.note;
-                oscillator.adsrForm = new AdsrForm(instrumentSettings.adsr);
                 oscillator.channel = this.channelPresets[command.channel.channelNumber];
                 this._oscillators.push(oscillator);
                 break;
@@ -149,30 +148,30 @@ export class MidiTracker {
                         this._oscillators[i].channel === this.channelPresets[command.channel.channelNumber] &&
                         this._oscillators[i].currentNoteNumber === command.payload.note
                     ) {
-                        this._oscillators[i].adsrForm.forceRelease = true;
+                        this._oscillators[i].forceRelease();
                     }
                 }
                 break;
             }
             case 'pedalOn': {
-                const currentChannel:CHANNEL_PRESET = this.channelPresets[command.channel.channelNumber];
+                const currentChannel = this.channelPresets[command.channel.channelNumber];
                 currentChannel.pedalOn = true;
                 break;
             }
             case 'pedalOff': {
-                const currentChannel:CHANNEL_PRESET = this.channelPresets[command.channel.channelNumber];
+                const currentChannel = this.channelPresets[command.channel.channelNumber];
                 currentChannel.pedalOn = false;
                 break;
             }
             case 'channelVelocity': {
-                const currentChannel:CHANNEL_PRESET = this.channelPresets[command.channel.channelNumber];
-                currentChannel.velocity = command.payload.velocity;
+                const currentChannel = this.channelPresets[command.channel.channelNumber];
+                currentChannel.velocity =command.payload.velocity;
                 break;
             }
             case 'pitchBend': {
-                console.log(`pitchBend: ${command.payload.pitchBend} channel ${command.channel.channelNumber}`);
+                //console.log(`pitchBend: ${command.payload.pitchBend} channel ${command.channel.channelNumber}`);
                 const currentChannel:CHANNEL_PRESET = this.channelPresets[command.channel.channelNumber];
-                currentChannel.pitchBend.setValue(command.payload.pitchBend);
+                currentChannel.pitchBend = command.payload.pitchBend;
                 break;
             }
             case 'modulationWheel': {
@@ -193,7 +192,7 @@ export class MidiTracker {
             }
             case 'allNotesOff': {
                 this._oscillators.forEach(o=>{
-                    o.adsrForm.forceRelease = true;
+                    o.forceRelease();
                 });
                 this.channelPresets.forEach(p=>{
                    p.pedalOn = false;

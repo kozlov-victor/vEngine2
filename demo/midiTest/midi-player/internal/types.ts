@@ -1,5 +1,5 @@
 import {AbstractModulator, SimpleWheelChannelModulator} from "./modulators";
-import {PitchBandInterpolator} from "./pitchBandInterpolator";
+import {AdsrForm} from "./adsrForm";
 
 export interface ADSRPoint {
     from: { time: number, val: number },
@@ -26,7 +26,7 @@ export interface CHANNEL_PRESET {
     velocity:number;
     am:SimpleWheelChannelModulator;
     instrumentNumber:number;
-    pitchBend:PitchBandInterpolator;
+    pitchBend:number;
     pedalOn:boolean;
 }
 
@@ -188,10 +188,11 @@ export interface IWaveFormItem {
     am?:()=>AbstractModulator;
     fmInstance?:AbstractModulator;
     amInstance?:AbstractModulator;
+    adsrInstance?: AdsrForm;
+    adsr: IASDR;
 }
 
 export interface InstrumentSettings {
-    adsr: IASDR;
     waveForms: IWaveFormItem[];
     name: string;
 }

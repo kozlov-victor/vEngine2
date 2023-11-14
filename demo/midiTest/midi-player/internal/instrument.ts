@@ -10,729 +10,763 @@ export class Instrument {
     // https://virtualpiano.eu/
     public readonly defaultInstrumentSettings = {
         grandPiano: {
-            adsr: {a: 0.001, d: 0.07, s: 0.6, r: 1, base: 0.6},
-            waveForms: [{amplitude: 0.9, form: WaveForms.harmonic},{amplitude:0.1, form: WaveForms.triangle}] ,
+            waveForms: [
+                {amplitude: 0.9, form: WaveForms.harmonic, adsr: {a: 0.001, d: 0.07, s: 0.6, r: 1, base: 0.6},},
+                {amplitude: 0.1, form: WaveForms.triangle, adsr: {a: 0.01, d: 0.08, s: 0.7, r: 1.3, base: 0.6},}
+            ] ,
             name: 'grandPiano',
         },
         brightPiano: {
-            adsr: {a: 0.003, d: 0.08, s: 0.4, r: 0.9, base: 0.5},
-            waveForms: [{amplitude: 0.9, form: WaveForms.harmonic},{amplitude:0.1, form: WaveForms.triangle}],
+            waveForms: [
+                {amplitude: 0.9, form: WaveForms.harmonic, adsr: {a: 0.003, d: 0.08, s: 0.4, r: 0.9, base: 0.5},},
+                {amplitude: 0.1, form: WaveForms.triangle, adsr: {a: 0.004, d: 0.09, s: 0.5, r: 0.9, base: 0.5},}
+            ],
             name: 'brightPiano',
         },
         syntPiano: {
-            adsr: {a: 0.001, d: 0.07, s: 0.5, r: 0.9, base: 0.6},
-            waveForms: [{amplitude: 0.9, form: WaveForms.triangle},{amplitude:0.1, form: WaveForms.sawTooth}],
+            waveForms: [
+                {amplitude: 0.9, form: WaveForms.triangle,adsr: {a: 0.001, d: 0.07, s: 0.5, r: 0.9, base: 0.6}},
+                {amplitude: 0.1, form: WaveForms.sawTooth,adsr: {a: 0.002, d: 0.08, s: 0.5, r: 0.9, base: 0.6},}
+            ],
             name: 'syntPiano',
         },
         clavier: {
-            adsr: {a: 0.001, d: 0.1, s: 0.4, r: 0.8, base: 0.5},
-            waveForms: [{amplitude: 0.9, form: WaveForms.triangle},{amplitude:0.1, form: WaveForms.sawTooth}],
+            waveForms: [
+                {amplitude: 0.9, form: WaveForms.triangle,adsr: {a: 0.001, d: 0.1, s: 0.4, r: 0.8, base: 0.5}},
+                {amplitude: 0.1, form: WaveForms.sawTooth,adsr: {a: 0.002, d: 0.15, s: 0.4, r: 0.8, base: 0.5}}
+            ],
             name: 'clavier',
         },
         xylophone: {
-            adsr: {a: 0.001, d: 0.1, s: 0.8, r: 2, base: 0.5},
             waveForms: [
                 {
                     amplitude: 0.9, form: WaveForms.triangle,
                     am: ()=>new WaveAdditiveModulator2(8, 0.15),
+                    adsr: {a: 0.002, d: 0.1, s: 0.8, r: 2, base: 0.5},
                 },
-                {amplitude:0.1, form: WaveForms.sin}
+                {amplitude:0.1, form: WaveForms.sin, adsr: {a: 0.001, d: 0.1, s: 0.9, r: 2, base: 0.5}}
             ],
             name: 'xylophone',
         },
         musicBox: {
-            adsr: {a: 0.02, d: 0.1, s: 0.8, r: 2, base: 0.5},
             waveForms: [
                 {
                     amplitude: 0.9, form: WaveForms.triangle,
                     am: ()=>new WaveAdditiveModulator2(8, 0.15),
+                    adsr: {a: 0.02, d: 0.1, s: 0.8, r: 2, base: 0.5},
                 },
-                {amplitude:0.1, form: WaveForms.sin}
+                {
+                    amplitude:0.1, form: WaveForms.sin,
+                    adsr: {a: 0.03, d: 0.1, s: 0.8, r: 2, base: 0.5},
+                }
             ],
             name: 'musicBox',
         },
         marimba: {
-            adsr: {a: 0.001, d: 0.1, s: 0.8, r: 1, base: 0.5},
             waveForms: [
                 {
                     amplitude:1,form: WaveForms.dirtyWave(5,1, WaveForms.triangle),
                     am: ()=>new WaveAdditiveModulator2(8, 0.15),
+                    adsr: {a: 0.001, d: 0.1, s: 0.8, r: 1, base: 0.5},
                 }
             ],
             name: 'marimba',
         },
         tubularBells: {
-            adsr: {a: 0.001, d: 0.1, s: 0.9, r: 2, base: 0.5},
             waveForms: [
                 {
                     amplitude:1, form: WaveForms.dirtyWave(7,1, WaveForms.triangle),
                     am: ()=>new WaveAdditiveModulator2(8, 0.3),
+                    adsr: {a: 0.001, d: 0.1, s: 0.9, r: 2, base: 0.5},
                 }
             ],
             name: 'tubularBells',
         },
         violin: {
-            adsr: {a: 0.04, d: 0.1, s: 5, r: 0.8, base: 0.8},
             waveForms: [
                 {
                     amplitude: 0.9, form: WaveForms.sinHarmonics,
                     fm: ()=>new WaveAdditiveModulator(2,0.01),
+                    adsr: {a: 0.04, d: 0.1, s: 5, r: 0.8, base: 0.8},
                 },
-                {amplitude:0.1, form: WaveForms.triangle}
+                {amplitude:0.1, form: WaveForms.triangle,adsr: {a: 0.05, d: 0.1, s: 5, r: 0.8, base: 0.8},}
             ],
             name: 'violin',
         },
         violinTremolo: {
-            adsr: {a: 0.04, d: 0.1, s: 5, r: 0.8, base: 0.8},
             waveForms: [
                 {
                     amplitude: 0.9, form: WaveForms.sinHarmonics,
                     am: ()=>new WaveAdditiveModulator2(3, 0.5),
                     fm: ()=>new WaveAdditiveModulator(2,0.01),
+                    adsr: {a: 0.04, d: 0.1, s: 5, r: 0.8, base: 0.8},
                 },
-                {amplitude:0.1, form: WaveForms.triangle}
+                {amplitude:0.1, form: WaveForms.triangle,adsr: {a: 0.05, d: 0.1, s: 5, r: 0.8, base: 0.8},}
             ],
             name: 'violinTremolo',
         } ,
         bass: {
-            adsr: {a: 0.02, d: 0.01, s: 0.8, r: 0.7, base: 0.6},
-            waveForms: [{amplitude: 0.8, form: WaveForms.trapezia},{amplitude:0.2, form: WaveForms.triangle}],
+            waveForms: [
+                {amplitude: 0.8, form: WaveForms.trapezia,adsr: {a: 0.02, d: 0.02, s: 0.8, r: 0.7, base: 0.6},},
+                {amplitude: 0.2, form: WaveForms.triangle,adsr: {a: 0.03, d: 0.01, s: 0.8, r: 0.7, base: 0.6},}
+            ],
             name: 'bass'
         },
         pizzicatto: {
-            adsr: {a: 0.01, d: 0.07, s: 0.3, r: 0.4, base: 0.5},
-            waveForms: [{amplitude: 0.9, form: WaveForms.sawTooth},{amplitude:0.1, form: WaveForms.sinHarmonics}],
+            waveForms: [
+                {amplitude: 0.9, form: WaveForms.sawTooth,adsr: {a: 0.01, d: 0.07, s: 0.3, r: 0.2, base: 0.5},},
+                {amplitude: 0.1, form: WaveForms.sinHarmonics,adsr: {a: 0.02, d: 0.08, s: 0.3, r: 0.2, base: 0.5},}
+            ],
             name: 'pizzicatto'
         },
         electroGuitarClean: {
-            adsr: {a: 0.01, d: 0.01, s: 1.1, r: 0.4, base: 0.5},
             waveForms: [
-                {amplitude:0.4, form: WaveForms.triangle},
-                {amplitude:0.4, form: WaveForms.sawTooth},
-                {amplitude:0.2, form: WaveForms.square}
+                {amplitude:0.4, form: WaveForms.triangle,adsr: {a: 0.01, d: 0.01, s: 1.1, r: 0.4, base: 0.5},},
+                {amplitude:0.4, form: WaveForms.sawTooth,adsr: {a: 0.01, d: 0.01, s: 1.1, r: 0.4, base: 0.5},},
+                {amplitude:0.2, form: WaveForms.square,adsr: {a: 0.02, d: 0.01, s: 1.1, r: 0.4, base: 0.5},}
             ],
             name: 'electroGuitarClean',
         },
         electroGuitarOverdriven: {
-            adsr: {a: 0.01, d: 0.01, s: 1.1, r: 0.4, base: 0.5},
-            waveForms: [{amplitude: 0.8, form: WaveForms.square},{amplitude:0.2, form: WaveForms.sawTooth}],
+            waveForms: [
+                {amplitude: 0.8, form: WaveForms.square,adsr: {a: 0.01, d: 0.01, s: 1.1, r: 0.4, base: 0.5},},
+                {amplitude:0.2, form: WaveForms.sawTooth,adsr: {a: 0.02, d: 0.01, s: 1.1, r: 0.4, base: 0.5},}
+            ],
             name: 'electroGuitarOverdriven',
         },
         electroGuitarDistortion: {
-            adsr: {a: 0.01, d: 0.01, s: 1.1, r: 0.4, base: 0.5},
             waveForms: [
                 {
-                    amplitude: 0.7, form: WaveForms.trapezia
+                    amplitude: 0.7, form: WaveForms.trapezia,
+                    adsr: {a: 0.01, d: 0.01, s: 1.1, r: 0.4, base: 0.5},
                 },
                 {
                     amplitude: 0.2, form: WaveForms.sawTooth,
                     am: ()=>new WaveAdditiveModulator2(5, 0.5),
+                    adsr: {a: 0.02, d: 0.02, s: 1.2, r: 0.45, base: 0.5},
                 },
                 {
                     amplitude: 0.1, form: WaveForms.square,
                     am: ()=>new WaveAdditiveModulator2(3, 0.5),
+                    adsr: {a: 0.03, d: 0.04, s: 1.3, r: 0.3, base: 0.5},
                 }
             ],
             name: 'distortion',
         },
         acousticBassDrum: {
-            adsr: {a: 0.01, d: 0.05, s: 0.1, r: 0.2, base: 0.5},
             waveForms: [
                 {
                     amplitude: 1, form: WaveForms.dirtyWave(5,2, WaveForms.sin),
                     fm: ()=>new ConstantDecayFrequencyModulator(110,160),
+                    adsr: {a: 0.01, d: 0.05, s: 0.1, r: 0.2, base: 0.5},
                 }
             ],
             name: 'acousticBassDrum',
         },
         bassDrum: {
-            adsr: {a: 0.01, d: 0.05, s: 0.1, r: 0.2, base: 0.5},
             waveForms: [
                 {
                     amplitude: 1, form: WaveForms.dirtyWave(10,2, WaveForms.sin),
                     fm: ()=>new ConstantDecayFrequencyModulator(110,165),
+                    adsr: {a: 0.01, d: 0.05, s: 0.1, r: 0.2, base: 0.5},
                 }
             ],
             name: 'bassDrum',
         },
         snareDrum: {
-            adsr: {a: 0.001, d: 0.01, s: 0.06, r: 0.1, base: 0.5},
             waveForms: [
                 {
                     amplitude: 1, form: WaveForms.dirtyWave(10,2, WaveForms.triangle),
                     fm: ()=>new ConstantDecayFrequencyModulator(190,320),
+                    adsr: {a: 0.001, d: 0.01, s: 0.06, r: 0.1, base: 0.5},
                 }
             ],
             name: 'snareDrum',
         },
         electricSnareDrum: {
-            adsr: {a: 0.001, d: 0.01, s: 0.09, r: 0.15, base: 0.5},
             waveForms: [
                 {
                     amplitude: 1, form: WaveForms.dirtyWave(8,2, WaveForms.triangle),
                     fm: ()=>new ConstantDecayFrequencyModulator(195,325),
+                    adsr: {a: 0.001, d: 0.01, s: 0.09, r: 0.15, base: 0.5},
                 }
             ],
             name: 'electricSnareDrum',
         },
         electricDynamicDrum: {
-            adsr: {a: 0.001, d: 0.01, s: 0.09, r: 0.15, base: 0.5},
             waveForms: [
                 {
                     amplitude: 1, form: WaveForms.dirtyWave(5,2, WaveForms.triangle),
                     fm: ()=>new DynamicDecayFrequencyModulator(325),
+                    adsr: {a: 0.001, d: 0.01, s: 0.09, r: 0.15, base: 0.5},
                 }
             ],
             name: 'electricDynamicDrum',
         },
         snareDrumClosed: {
-            adsr: {a: 0.001, d: 0.01, s: 0.06, r: 0.01, base: 0.5},
             waveForms: [
                 {
                     amplitude: 1, form: WaveForms.dirtyWave(10,2, WaveForms.triangle),
                     fm: ()=>new ConstantDecayFrequencyModulator(185,340),
+                    adsr: {a: 0.001, d: 0.01, s: 0.06, r: 0.01, base: 0.5},
                 }
             ],
             name: 'snareDrumClosed',
         },
         lowFloorTomDrum: {
-            adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.1, base: 0.5},
             waveForms: [
                 {
                     amplitude: 1, form: WaveForms.dirtyWave(10,2, WaveForms.triangle),
                     fm: ()=>new ConstantDecayFrequencyModulator(160,320),
+                    adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.1, base: 0.5},
                 }
             ],
             name: 'lowFloorTomDrum',
         },
         timpani: {
-            adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.1, base: 0.5},
             waveForms: [
                 {
                     amplitude: 1, form: WaveForms.dirtyWave(10,2, WaveForms.triangle),
                     fm: ()=>new DynamicDecayFrequencyModulator(330),
+                    adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.1, base: 0.5},
                 }
             ],
             name: 'timpani',
         },
         steelDrums: {
-            adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.1, base: 0.5},
             waveForms: [
                 {
                     amplitude: 1, form: WaveForms.dirtyWave(5,1, WaveForms.triangle),
                     fm: ()=>new DynamicDecayFrequencyModulator(190),
+                    adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.1, base: 0.5},
                 }
             ],
             name: 'steelDrums',
         },
         woodDrums: {
-            adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.1, base: 0.5},
             waveForms: [
                 {
                     amplitude: 1, form: WaveForms.dirtyWaveNoise(10,2, WaveForms.triangle, WaveForms.whiteNoise, 0.4),
                     fm: ()=>new DynamicDecayFrequencyModulator(210),
+                    adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.1, base: 0.5},
                 }
             ],
             name: 'woodDrums',
         },
         highFloorTomDrum: {
-            adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.12, base: 0.5},
             waveForms: [
                 {
                     amplitude: 1, form: WaveForms.dirtyWave(10,2, WaveForms.triangle),
                     fm: ()=>new ConstantDecayFrequencyModulator(170,320),
+                    adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.12, base: 0.5},
                 }
             ],
             name: 'highFloorTomDrum',
         },
         lowTomDrum: {
-            adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.15, base: 0.5},
             waveForms: [
                 {
                     amplitude: 1, form: WaveForms.dirtyWave(10, 2, WaveForms.triangle),
                     fm: () => new ConstantDecayFrequencyModulator(165, 310),
+                    adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.15, base: 0.5},
                 }
             ],
             name: 'lowTomDrum',
         },
         lowMidTomDrum: {
-            adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.15, base: 0.5},
             waveForms: [
                 {
                     amplitude: 1, form: WaveForms.dirtyWave(10,2, WaveForms.triangle),
                     fm: ()=>new ConstantDecayFrequencyModulator(175,320),
+                    adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.15, base: 0.5},
                 }
             ],
             name: 'lowMidTomDrum',
         },
         highMidTomDrum: {
-            adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.2, base: 0.5},
             waveForms: [
                 {
                     amplitude: 1, form: WaveForms.dirtyWave(10,2, WaveForms.triangle),
                     fm: () => new ConstantDecayFrequencyModulator(180, 320),
+                    adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.2, base: 0.5},
                 }
             ],
             name: 'highMidTomDrum',
         },
         highWoodBlock: {
-            adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.2, base: 0.5},
             waveForms: [
                 {
                     amplitude: 1, form: WaveForms.dirtyWave(10,2, WaveForms.triangle),
                     fm: ()=>new ConstantDecayFrequencyModulator(190,1),
+                    adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.2, base: 0.5},
                 }
             ],
             name: 'highWoodBlock',
         },
         lowWoodBlock: {
-            adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.2, base: 0.5},
             waveForms: [
                 {
                     amplitude: 1, form: WaveForms.dirtyWave(10,2, WaveForms.triangle),
                     fm: ()=>new ConstantDecayFrequencyModulator(150,1),
+                    adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.2, base: 0.5},
                 }
             ],
             name: 'lowWoodBlock',
         },
         highBongo: {
-            adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.2, base: 0.5},
             waveForms: [
                 {
                     amplitude: 1, form: WaveForms.dirtyWave(5,1, WaveForms.triangle),
                     fm: ()=>new ConstantDecayFrequencyModulator(200,1),
+                    adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.2, base: 0.5},
                 }
             ],
             name: 'highBongo',
         },
         lowBongo: {
-            adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.2, base: 0.5},
             waveForms: [
                 {
                     amplitude: 1, form: WaveForms.dirtyWave(5,2, WaveForms.triangle),
                     fm: ()=>new ConstantDecayFrequencyModulator(150,1),
+                    adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.2, base: 0.5},
                 }
             ],
             name: 'lowBongo',
         },
         muteHighConga: {
-            adsr: {a: 0.001, d: 0.01, s: 0.05, r: 0.1, base: 0.5},
             waveForms: [
                 {
                     amplitude: 1, form: WaveForms.dirtyWave(5,2, WaveForms.sinHarmonics),
                     fm: ()=>new ConstantDecayFrequencyModulator(300,1),
+                    adsr: {a: 0.001, d: 0.01, s: 0.05, r: 0.1, base: 0.5},
                 }
             ],
             name: 'muteHighConga',
         },
         openHighConga: {
-            adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.2, base: 0.5},
             waveForms: [
                 {
                     amplitude: 1, form: WaveForms.dirtyWave(5,2, WaveForms.sinHarmonics),
                     fm: ()=>new ConstantDecayFrequencyModulator(300,1),
+                    adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.2, base: 0.5},
                 }
             ],
             name: 'muteHighConga',
         },
         lowConga: {
-            adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.2, base: 0.5},
             waveForms: [
                 {
                     amplitude: 1, form: WaveForms.dirtyWave(5,2, WaveForms.sinHarmonics),
                     fm: ()=>new ConstantDecayFrequencyModulator(250,1),
+                    adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.2, base: 0.5},
                 }
             ],
             name: 'lowConga',
         },
         highTimbale: {
-            adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.2, base: 0.5},
             waveForms: [
                 {
                     amplitude: 1, form: WaveForms.dirtyWave(3,2, WaveForms.square),
                     fm: ()=>new ConstantDecayFrequencyModulator(300,1),
+                    adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.2, base: 0.5},
                 }
             ],
             name: 'highTimbale',
         },
         lowTimbale: {
-            adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.2, base: 0.5},
             waveForms: [
                 {
                     amplitude: 1, form: WaveForms.dirtyWave(3,2, WaveForms.square),
                     fm: ()=>new ConstantDecayFrequencyModulator(260,1),
+                    adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.2, base: 0.5},
                 }
             ],
             name: 'lowTimbale',
         },
         highAgogo: {
-            adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.2, base: 0.5},
             waveForms: [
                 {
                     amplitude: 1, form: WaveForms.dirtyWave(3,2, WaveForms.triangle),
                     fm: ()=>new ConstantDecayFrequencyModulator(850,1),
+                    adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.2, base: 0.5},
                 }
             ],
             name: 'highAgogo',
         },
         lowAgogo: {
-            adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.2, base: 0.5},
             waveForms: [
                 {
                     amplitude: 1, form: WaveForms.dirtyWave(3,2, WaveForms.triangle),
                     fm: ()=>new ConstantDecayFrequencyModulator(790,1),
+                    adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.2, base: 0.5},
                 }
             ],
             name: 'lowAgogo',
         },
         highTomDrum: {
-            adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.15, base: 0.5},
             waveForms: [
                 {
                     amplitude: 1, form: WaveForms.dirtyWave(10,2, WaveForms.triangle),
                     fm: ()=>new ConstantDecayFrequencyModulator(185,325),
+                    adsr: {a: 0.001, d: 0.01, s: 0.08, r: 0.15, base: 0.5},
                 }
             ],
             name: 'highTomDrum',
         },
         hiHatOpenedDrum: {
-            adsr: {a: 0.001, d: 0.02, s: 0.1, r: 0.2, base: 0.5},
             waveForms: [
                 {
                     amplitude: 1, form: WaveForms.dirtyWaveNoise(90,2, WaveForms.triangle, WaveForms.pinkNoise, 0.65),
                     fm: ()=>new ConstantDecayFrequencyModulator(705,50),
+                    adsr: {a: 0.001, d: 0.02, s: 0.1, r: 0.2, base: 0.5},
                 }
             ],
             name: 'hiHatOpenedDrum',
         },
         hiHatClosedDrum: {
-            adsr: {a: 0.001, d: 0.01, s: 0.05, r: 0.05, base: 0.5},
             waveForms: [
                 {
                     amplitude: 1, form: WaveForms.dirtyWaveNoise(90,2, WaveForms.triangle, WaveForms.pinkNoise, 0.6),
                     fm: ()=>new ConstantDecayFrequencyModulator(700,50),
+                    adsr: {a: 0.001, d: 0.01, s: 0.05, r: 0.05, base: 0.5},
                 }
             ],
             name: 'hiHatClosedDrum',
         },
         pedalHiHat: {
-            adsr: {a: 0.001, d: 0.015, s: 0.01, r: 0.05, base: 0.5},
             waveForms: [
                 {
                     amplitude: 1, form: WaveForms.dirtyWaveNoise(90,2, WaveForms.triangle, WaveForms.pinkNoise, 0.6),
                     fm: ()=>new ConstantDecayFrequencyModulator(710,50),
+                    adsr: {a: 0.001, d: 0.015, s: 0.01, r: 0.05, base: 0.5},
                 }
             ],
             name: 'hiHatClosedDrum',
         },
         clap: {
-            adsr: {a: 0.001, d: 0.025, s: 0.02, r: 0.02, base: 0.5},
             waveForms: [
                 {
                     amplitude: 1, form: WaveForms.dirtyWaveNoise(80,2, WaveForms.triangle, WaveForms.whiteNoise, 0.5),
                     fm: ()=>new ConstantDecayFrequencyModulator(610,50),
+                    adsr: {a: 0.001, d: 0.025, s: 0.02, r: 0.02, base: 0.5},
                 }
             ],
             name: 'clap',
         },
+        guitarFret: {
+            waveForms: [
+                {
+                    amplitude: 0.2, form: WaveForms.dirtyWaveNoise(80,2, WaveForms.triangle, WaveForms.whiteNoise, 0.5),
+                    fm: ()=>new ConstantDecayFrequencyModulator(610,50),
+                    adsr: {a: 0.001, d: 0.025, s: 0.02, r: 0.02, base: 0.5},
+                }
+            ],
+            name: 'guitarFret',
+        },
         fxHelicopter: {
-            adsr: {a: 0.001, d: 0.025, s: 5, r: 0.1, base: 0.5},
             waveForms: [
                 {
                     amplitude: 1, form: WaveForms.brownNoise,
                     am: ()=>new WaveMultiplicativeModulator(10),
+                    adsr: {a: 0.001, d: 0.025, s: 5, r: 0.1, base: 0.5},
                 }
             ],
             name: 'fxHelicopter',
         },
         fxTremolo: {
-            adsr: {a: 0.001, d: 0.025, s: 5, r: 0.1, base: 0.5},
-            waveForms: [{amplitude: 1, form: WaveForms.tremolo}],
+            waveForms: [{amplitude: 1, form: WaveForms.tremolo,adsr: {a: 0.001, d: 0.025, s: 5, r: 0.1, base: 0.5},}],
             name: 'fxTremolo',
         },
         fxTremolo2: {
-            adsr: {a: 0.001, d: 0.025, s: 5, r: 0.1, base: 0.5},
-            waveForms: [{amplitude: 1, form: WaveForms.tremolo2}],
+            waveForms: [{amplitude: 1, form: WaveForms.tremolo2,adsr: {a: 0.002, d: 0.025, s: 5.1, r: 0.1, base: 0.5},}],
             name: 'fxTremolo2',
         },
         fxApplause: {
-            adsr: {a: 0.001, d: 0.025, s: 5, r: 0.1, base: 0.5},
             waveForms: [
                 {
                     amplitude: 1, form: WaveForms.whiteNoise,
                     am: ()=>new WaveMultiplicativeModulator(4),
+                    adsr: {a: 0.001, d: 0.025, s: 5, r: 0.1, base: 0.5},
                 }
             ],
             name: 'fxApplause',
         },
         sideStick: {
-            adsr: {a: 0.001, d: 0.025, s: 0.02, r: 0.02, base: 0.5},
             waveForms: [
                 {
                     amplitude: 1, form: WaveForms.dirtyWave(400,10, WaveForms.triangle),
                     fm: ()=>new ConstantDecayFrequencyModulator(1000,1),
+                    adsr: {a: 0.001, d: 0.025, s: 0.02, r: 0.02, base: 0.5},
                 }
             ],
             name: 'sideStick',
         },
         cymbalDrum: {
-            adsr: {a: 0.001, d: 0.025, s: 0.8, r: 0.02, base: 0.5},
             waveForms: [
                 {
                     amplitude: 1, form: WaveForms.dirtyWaveNoise(80,2, WaveForms.triangle, WaveForms.pinkNoise, 0.6),
+                    adsr: {a: 0.001, d: 0.025, s: 0.8, r: 0.02, base: 0.5},
                 }
             ],
             name: 'cymbalDrum',
         },
         crashCymbal1: {
-            adsr: {a: 0.001, d: 0.03, s: 1, r: 0.2, base: 0.5},
             waveForms: [
                 {
                     amplitude: 1, form: WaveForms.dirtyWaveNoise(100,2, WaveForms.triangle, WaveForms.pinkNoise, 0.6),
+                    adsr: {a: 0.001, d: 0.03, s: 1, r: 0.2, base: 0.5},
                 }
             ],
             name: 'crashCymbal1',
         },
         crashCymbal2: {
-            adsr: {a: 0.001, d: 0.03, s: 1, r: 0.2, base: 0.5},
             waveForms: [
                 {
                     amplitude: 0.1, form: WaveForms.brownNoise,
+                    adsr: {a: 0.001, d: 0.03, s: 1, r: 0.2, base: 0.5},
                 }
             ],
             name: 'crashCymbal2',
         },
         rideCymbal1: {
-            adsr: {a: 0.001, d: 0.03, s: 1, r: 0.02, base: 1},
             waveForms: [
                 {
                     amplitude: 0.7, form: WaveForms.pinkNoise,
+                    adsr: {a: 0.001, d: 0.03, s: 1, r: 0.02, base: 1},
                 }
             ],
             name: 'rideCymbal1',
         },
         rideCymbal2: {
-            adsr: {a: 0.001, d: 0.03, s: 1, r: 0.1, base: 0.5},
             waveForms: [
                 {
                     amplitude: 0.1, form: WaveForms.brownNoise,
+                    adsr: {a: 0.001, d: 0.03, s: 1, r: 0.1, base: 0.5},
                 }
             ],
             name: 'rideCymbal2',
         },
         splashCymbal: {
-            adsr: {a: 0.001, d: 0.03, s: 0.5, r: 0.4, base: 0.5},
             waveForms: [
                 {
                     amplitude: 0.4, form: WaveForms.dirtyWave(25,1, WaveForms.triangle),
+                    adsr: {a: 0.001, d: 0.03, s: 0.5, r: 0.4, base: 0.5},
                 }
             ],
             name: 'splashCymbal',
         },
         vibraslap: {
-            adsr: {a: 0.001, d: 0.02, s: 0.22, r: 0.6, base: 0.5},
             waveForms: [
                 {
                     amplitude: 1, form: WaveForms.dirtyWaveNoise(80,2, WaveForms.triangle, WaveForms.pinkNoise, 0.4),
                     fm: ()=>new ConstantDecayFrequencyModulator(700,50),
                     am: ()=>new WaveMultiplicativeModulator(8),
+                    adsr: {a: 0.001, d: 0.02, s: 0.22, r: 0.6, base: 0.5},
                 }
             ],
             name: 'vibraslap',
         },
         rideBellDrum: {
-            adsr: {a: 0.01, d: 0.07, s: 0.3, r: 0.4, base: 0.5},
             waveForms: [
                 {
                     amplitude: 1, form: WaveForms.sinHarmonics,
                     fm: ()=>new ConstantDecayFrequencyModulator(155,0),
+                    adsr: {a: 0.01, d: 0.07, s: 0.3, r: 0.4, base: 0.5},
                 }
             ],
             name: 'rideBellDrum',
         },
         cowBellDrum: {
-            adsr: {a: 0.01, d: 0.07, s: 0.1, r: 0.2, base: 0.5},
             waveForms: [
                 {
                     amplitude: 1, form: WaveForms.sinHarmonics,
                     fm: ()=>new ConstantDecayFrequencyModulator(800,0),
+                    adsr: {a: 0.01, d: 0.07, s: 0.1, r: 0.2, base: 0.5},
                 }
             ],
             name: 'rideBellDrum',
         },
         organ: {
-            adsr: {a: 0.01, d: 0.001, s: 10, r: 1, base: 0.5},
             waveForms: [
-                {amplitude: 0.9, form: WaveForms.harmonic},
-                {amplitude:0.1, form: WaveForms.triangle}
+                {amplitude: 0.9, form: WaveForms.harmonic,adsr: {a: 0.01, d: 0.001, s: 10, r: 1, base: 0.5},},
+                {amplitude:0.1, form: WaveForms.triangle,adsr: {a: 0.02, d: 0.003, s: 10, r: 1.2, base: 0.5},}
             ],
             name: 'organ'
         },
         syntesatorTriangle: {
-            adsr: {a: 0.01, d: 0.01, s: 10, r: 0.6, base: 0.5},
             waveForms: [
                 {
                     amplitude: 1, form: WaveForms.triangle,
                     am: ()=>new WaveAdditiveModulator2(12, 0.3),
+                    adsr: {a: 0.01, d: 0.01, s: 10, r: 0.6, base: 0.5},
                 }
             ],
             name: 'syntesatorTriangle'
         },
         syntesatorSquare: {
-            adsr: {a: 0.01, d: 0.01, s: 10, r: 0.6, base: 0.5},
             waveForms: [
                 {
                     amplitude: 1, form: WaveForms.square,
                     am: ()=>new WaveAdditiveModulator2(12, 0.3),
+                    adsr: {a: 0.01, d: 0.01, s: 10, r: 0.6, base: 0.5},
                 },
             ],
             name: 'syntesatorSquare'
         },
         syntesatorSawtooth: {
-            adsr: {a: 0.01, d: 0.01, s: 10, r: 0.6, base: 0.5},
             waveForms: [
                 {
                     amplitude: 1, form: WaveForms.sawTooth,
                     am: ()=>new WaveAdditiveModulator2(12, 0.3),
+                    adsr: {a: 0.01, d: 0.01, s: 10, r: 0.6, base: 0.5},
                 }
             ],
             name: 'syntesatorSawtooth'
         },
         acoustic: {
-            adsr: {a: 0.02, d: 0.1, s: 0.9, r: 0.4, base: 0.5},
             waveForms: [
-                {amplitude: 0.9, form: WaveForms.sinHarmonics},{amplitude:0.1, form: WaveForms.triangle}
+                {amplitude: 0.8, form: WaveForms.sinHarmonics,adsr: {a: 0.01, d: 0.02, s: 0.6, r: 0.4, base: 0.15},},
+                {amplitude:0.2, form: WaveForms.triangle,adsr: {a: 0.01, d: 0.025, s: 0.65, r: 0.35, base: 0.2},}
             ],
             name: 'acoustic'
         },
         acousticSteel: {
-            adsr: {a: 0.02, d: 0.1, s: 0.9, r: 0.4, base: 0.5},
-            waveForms: [{amplitude: 0.8, form: WaveForms.sawTooth},{amplitude:0.2,form:WaveForms.triangle}],
+            waveForms: [
+                {amplitude: 0.8, form: WaveForms.sawTooth,adsr: {a: 0.01, d: 0.02, s: 0.8, r: 0.6, base: 0.35},},
+                {amplitude:0.2, form: WaveForms.triangle,adsr: {a: 0.01, d: 0.025, s: 0.85, r: 0.65, base: 0.2},}
+            ],
             name: 'acousticSteel'
         },
         harp: {
-            adsr: {a: 0.02, d: 0.1, s: 0.9, r: 2, base: 0.5},
-            waveForms: [{amplitude: 0.9, form: WaveForms.triangle},{amplitude:0.1,form:WaveForms.sawTooth}],
+            waveForms: [
+                {amplitude: 0.9, form: WaveForms.triangle,adsr: {a: 0.02, d: 0.1, s: 0.9, r: 2, base: 0.5},},
+                {amplitude:0.1,form:WaveForms.sawTooth,adsr: {a: 0.025, d: 0.1, s: 0.8, r: 2, base: 0.5},}
+            ],
             name: 'harp'
         },
         acousticSteelMuted: {
-            adsr: {a: 0.02, d: 0.1, s: 0.3, r: 0.3, base: 0.5},
-            waveForms: [{amplitude: 0.8, form: WaveForms.sawTooth},{amplitude:0.2,form:WaveForms.triangle}],
+            waveForms: [
+                {amplitude: 0.8, form: WaveForms.sawTooth,adsr: {a: 0.02, d: 0.1, s: 0.3, r: 0.3, base: 0.5},},
+                {amplitude:0.2,form:WaveForms.triangle,adsr: {a: 0.03, d: 0.1, s: 0.4, r: 0.3, base: 0.5},}
+            ],
             name: 'acousticSteelMuted'
         },
         chorus: {
-            adsr: {a: 0.02, d: 0.1, s: 2, r: 0.4, base: 0.5},
             waveForms: [
                 {
                     amplitude: 0.9, form: WaveForms.chorus,
                     am: ()=>new WaveAdditiveModulator2(10, 0.13),
+                    adsr: {a: 0.02, d: 0.1, s: 2, r: 0.4, base: 0.5},
                 },
                 {
                     amplitude:0.1,form:WaveForms.sawTooth,
                     am: ()=>new WaveAdditiveModulator2(8, 0.2),
+                    adsr: {a: 0.03, d: 0.1, s: 2.1, r: 0.5, base: 0.5},
                 }
             ],
             name: 'chorus'
         },
         orchestra: {
-            adsr: {a: 0.01, d: 0.1, s: 3, r: 0.4, base: 0.5},
             waveForms: [
-                {
-                    amplitude: 0.9, form: WaveForms.chorus},{amplitude:0.1,form:WaveForms.sawTooth,
+                {amplitude: 0.9, form: WaveForms.chorus,adsr: {a: 0.01, d: 0.1, s: 3, r: 0.4, base: 0.5},},
+                {amplitude:0.1,form:WaveForms.sawTooth,
                     am: ()=>new WaveAdditiveModulator2(9, 0.15),
+                    adsr: {a: 0.02, d: 0.1, s: 3, r: 0.5, base: 0.5},
                 }
             ],
             name: 'orchestra'
         },
         acousticHarmonics: {
-            adsr: {a: 0.02, d: 0.1, s: 0.8, r: 0.4, base: 0.5},
-            waveForms: [{amplitude: 0.9, form: WaveForms.sinHarmonics},{amplitude:0.1,form:WaveForms.triangle}],
+            waveForms: [
+                {amplitude: 0.9, form: WaveForms.sinHarmonics,adsr: {a: 0.02, d: 0.1, s: 0.8, r: 0.4, base: 0.5},},
+                {amplitude:0.1,form:WaveForms.triangle,adsr: {a: 0.03, d: 0.1, s: 0.7, r: 0.5, base: 0.5},}
+            ],
             name: 'acousticHarmonics'
         },
         rockOrgan: {
-            adsr: {a: 0.01, d: 0.001, s: 10, r: 0.6, base: 0.5},
             waveForms: [
                 {
                     amplitude: 0.9, form: WaveForms.triangle,
                     am: ()=>new WaveAdditiveModulator2(5, 0.05),
+                    adsr: {a: 0.01, d: 0.001, s: 10, r: 0.6, base: 0.5},
                 },
-                {amplitude:0.1,form:WaveForms.sawTooth}
+                {amplitude:0.1,form:WaveForms.sawTooth,adsr: {a: 0.02, d: 0.002, s: 10, r: 0.6, base: 0.5},}
             ],
             name: 'rockOrgan'
         },
         accordion: {
-            adsr: {a: 0.02, d: 0.001, s: 10, r: 0.4, base: 0.5},
             waveForms: [
                 {
                     amplitude: 0.9, form: WaveForms.harmonic,
                     am: ()=>new WaveAdditiveModulator2(4,0.4),
+                    adsr: {a: 0.02, d: 0.001, s: 10, r: 0.4, base: 0.5},
                 },
-                {amplitude:0.1,form:WaveForms.triangle}
+                {amplitude:0.1,form:WaveForms.triangle,adsr: {a: 0.01, d: 0.001, s: 10, r: 0.4, base: 0.5},}
             ],
             name: 'accordion'
         },
         pipe: {
-            adsr: {a: 0.06, d: 0.3, s: 4, r: 0.2, base: 0.5},
             waveForms: [
                 {
                     amplitude: 0.9, form: WaveForms.harmonic,
                     am: ()=>new WaveAdditiveModulator2(1.8,0.1),
+                    adsr: {a: 0.06, d: 0.3, s: 4, r: 0.2, base: 0.5},
                 },
                 {
                     amplitude:0.1,form:WaveForms.triangle,
                     am: ()=>new WaveAdditiveModulator2(0.5,0.1),
+                    adsr: {a: 0.07, d: 0.3, s: 4, r: 0.25, base: 0.5},
                 }
             ],
             name: 'pipe',
         },
         pipeMuted: {
-            adsr: {a: 0.06, d: 0.3, s: 4, r: 0.2, base: 0.5},
             waveForms: [
                 {
                     amplitude: 0.9, form: WaveForms.sinHarmonics,
                     am: ()=>new WaveAdditiveModulator2(2,0.1),
+                    adsr: {a: 0.06, d: 0.3, s: 4, r: 0.2, base: 0.5},
                 },
-                {amplitude:0.1,form:WaveForms.triangle}
+                {amplitude:0.1,form:WaveForms.triangle,adsr: {a: 0.07, d: 0.3, s: 4, r: 0.2, base: 0.5},}
             ],
             name: 'pipe',
         },
         blownBottle: {
-            adsr: {a: 0.05, d: 0.3, s: 4, r: 0.2, base: 0.5},
             waveForms: [
                 {
                     amplitude:1, form:WaveForms.dirtyWave(2,1, WaveForms.triangle),
                     am: ()=>new WaveAdditiveModulator2(2,0.1),
+                    adsr: {a: 0.05, d: 0.3, s: 4, r: 0.2, base: 0.5},
                 }
             ],
             name: 'blownBottle',
         },
         flute: {
-            adsr: {a: 0.03, d: 0.2, s: 4, r: 0.2, base: 0.5},
             waveForms: [
                 {
                     amplitude:0.9, form:WaveForms.harmonic,
                     am: ()=>new WaveAdditiveModulator2(2.1,0.15),
                     fm: ()=>new WaveAdditiveModulator(1.9, 0.2),
+                    adsr: {a: 0.03, d: 0.2, s: 4, r: 0.2, base: 0.5},
                 },
-                {amplitude:0.1,form:WaveForms.triangle}],
+                {amplitude:0.1,form:WaveForms.triangle,adsr: {a: 0.035, d: 0.2, s: 4, r: 0.3, base: 0.5},}],
             name: 'flute',
         },
         saxophone: {
-            adsr: {a: 0.05, d: 0.1, s: 4, r: 0.8, base: 0.5},
             waveForms: [
                 {
                     amplitude:0.8, form:WaveForms.harmonic,
                     am: ()=>new WaveAdditiveModulator2(2.2,0.2),
+                    adsr: {a: 0.08, d: 0.1, s: 4, r: 0.8, base: 0.5},
                 },
-                {amplitude:0.2,form:WaveForms.triangle}
+                {amplitude:0.2,form:WaveForms.triangle,adsr: {a: 0.06, d: 0.1, s: 4, r: 0.8, base: 0.5},}
             ],
             name: 'saxophone',
         },
         noop: {
-            adsr: {a: 0, d: 0, s: 0, r: 0, base: 0},
             waveForms: [
                 {
-                    amplitude:0, form:WaveForms.noop,
+                    amplitude:1, form:WaveForms.noop,adsr: {a: 0.1, d: 0.1, s: 0.1, r: 0.1, base: 0},
                 }
             ],
             name: 'saxophone',
@@ -1361,6 +1395,8 @@ export class Instrument {
                     result = this.defaultInstrumentSettings.clap;
                     break;
                 case 121: // Guitar Fret Noise
+                    result = this.defaultInstrumentSettings.guitarFret;
+                    break;
                 case 122: // Breath Noise
                 case 123: // Seashore
                 case 124: // Bird Tweet

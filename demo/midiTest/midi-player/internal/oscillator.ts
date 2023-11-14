@@ -1,5 +1,4 @@
 import {CHANNEL_PRESET, IWaveFormItem, SAMPLE, WAVE_FORM} from "./types";
-import {AdsrForm} from "./adsrForm";
 import type {MidiTracker} from "../midiTracker";
 import {CalcUtils} from "./calcUtils";
 import {MIDI_NOTE_TO_FREQUENCY_TABLE} from "./consts";
@@ -8,7 +7,6 @@ import {MIDI_NOTE_TO_FREQUENCY_TABLE} from "./consts";
 export class Oscillator {
 
     public waveForms: IWaveFormItem[];
-    public adsrForm: AdsrForm;
     public velocity: number;
     public currentNoteNumber: number;
     public channel:CHANNEL_PRESET;
@@ -31,14 +29,14 @@ export class Oscillator {
         const t = currentSampleNum / this.tracker.sampleRate;
         if (this.startedAt === undefined) this.startedAt = t;
         const dTime = t - this.startedAt;
+        const pitchBend = this.channel.pitchBend;
         let frequency:number;
-        this.channel.pitchBend.update(t);
-        const pitchBend = this.channel.pitchBend.getValue();
         if (pitchBend===0) frequency = MIDI_NOTE_TO_FREQUENCY_TABLE[this.note];
         else {
             frequency = CalcUtils.midiNumberToFr(this.note,pitchBend);
         }
         let currSample = 0;
+        let stopped = false;
         for (const w of this.waveForms) {
             let modulatedFrequency = frequency;
             if (w.fmInstance!==undefined) modulatedFrequency = w.fmInstance.getModulatedValue(frequency,dTime);
@@ -46,18 +44,30 @@ export class Oscillator {
                 w.amplitude *
                 Oscillator._generateWaveForm(this.velocity * this.channel.velocity, w.form, modulatedFrequency, dTime);
             if (w.amInstance && modulatedSample>0) modulatedSample = w.amInstance.getModulatedValue(modulatedSample, dTime);
-            currSample+=modulatedSample;
+
+            const envelope = w.adsrInstance!.calcFactorByTime(dTime,this.channel.pedalOn);
+            stopped = stopped || envelope.stopped;
+
+            currSample+=modulatedSample*envelope.val;
         }
+
         if (this.channel.am && currSample>0) currSample = this.channel.am.getModulatedValue(currSample, dTime);
-        const balanceR = this.channel.balance;
-        const balanceL = 1 - balanceR;
-        const envelope = this.adsrForm.calcFactorByTime(dTime,this.channel.pedalOn);
-        if (envelope.stopped) {
+        if (stopped) {
             this.tracker._oscillators.splice(this.tracker._oscillators.indexOf(this),1);
         }
+
+        const balanceR = this.channel.balance;
+        const balanceL = 1 - balanceR;
         return {
-            L: currSample * balanceL * envelope.val,
-            R: currSample * balanceR * envelope.val
+            L: currSample * balanceL,
+            R: currSample * balanceR
         };
     }
+
+    public forceRelease() {
+        for (const w of this.waveForms) {
+            w.adsrInstance!.forceRelease = true;
+        }
+    }
+
 }

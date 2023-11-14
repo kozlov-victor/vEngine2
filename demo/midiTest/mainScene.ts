@@ -82,10 +82,11 @@ export class MainScene extends Scene {
             '05BLACKC',
             '1-11-SecretOfTheForest',
             'jazz',
-            'wst30xgb'
+            'wst30xgb',
+            '8p_ffx_119'
         ]
 
-        const trackType:string = 'midi';
+        const trackType = 'midi' as 'midi'|'json';
         const tracks = trackType==='json'?jsonTracks:midiTracks;
 
         let i = -1;
