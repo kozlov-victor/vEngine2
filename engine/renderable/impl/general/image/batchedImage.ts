@@ -3,34 +3,10 @@ import {Game} from "@engine/core/game";
 import {Color} from "@engine/renderer/common/color";
 import {ICloneable} from "@engine/core/declarations";
 
-export class ColorEx extends Color {
-
-
-    constructor() {
-        super();
-        this.observe(()=>{
-            this.packed[0] = (this.r<<8)|this.g;
-            this.packed[1] = (this.b<<8)|this.a;
-        });
-    }
-
-    private packed:[number,number] = [0,0];
-
-    public getPackedColor():[number,number] {
-        return this.packed;
-    }
-
-    public override clone():ColorEx {
-        const col = new ColorEx();
-        col.setRGBA(this.r,this.g,this.b,this.a);
-        return col;
-    }
-
-}
 
 export class BatchedImage extends RenderableModel implements ICloneable<BatchedImage> {
 
-    public readonly fillColor: ColorEx = new ColorEx();
+    public readonly fillColor = new Color();
     public declare blendMode:never;
 
     constructor(game: Game) {

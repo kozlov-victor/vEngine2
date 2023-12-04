@@ -4,18 +4,6 @@ precision mediump float;
 #define ZERO    .0
 #define ONE     1.
 
-vec2 _unpack(float n) {
-    float a = n/256.;
-    float b = n - float(int(a))*256.;
-    return vec2(a/255.,b/255.);
-}
-
-vec4 unpackColor(vec2 v) {
-    vec2 a = _unpack(v[0]);
-    vec2 b = _unpack(v[1]);
-    return vec4(a[0],a[1],b[0],b[1]);
-}
-
 void main(){
 
     vec2 uv;
@@ -53,5 +41,5 @@ void main(){
          ZERO,  ONE
     );
 
-    v_color = unpackColor(a_color);
+    v_color = a_color;
 }

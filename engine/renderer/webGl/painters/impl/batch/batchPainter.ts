@@ -37,7 +37,7 @@ export class BatchPainter extends AbstractPainter {
 
         this.u_viewPort =gen.addVertexUniform(GL_TYPE.FLOAT_VEC2,'u_viewPort');
         this.a_idx = gen.addAttribute(GL_TYPE.FLOAT,'a_idx');
-        this.a_color = gen.addAttribute(GL_TYPE.FLOAT_VEC2,'a_color');
+        this.a_color = gen.addAttribute(GL_TYPE.FLOAT_VEC4,'a_color');
         this.a_angle = gen.addAttribute(GL_TYPE.FLOAT,'a_angle');
         this.a_pos = gen.addAttribute(GL_TYPE.FLOAT_VEC4,'a_pos');
         gen.addVarying(GL_TYPE.FLOAT_VEC4,'v_color');
@@ -86,7 +86,7 @@ export class BatchPainter extends AbstractPainter {
             miscBuffersInfo: [
                 {
                     array:this.colorBatchArray.getArray(), type:gl.FLOAT,
-                    size:2, attrName:this.a_color,
+                    size:4, attrName:this.a_color,
                 },
                 {
                     array:this.angleBatchArray.getArray(), type:gl.FLOAT,
