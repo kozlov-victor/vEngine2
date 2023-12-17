@@ -263,6 +263,12 @@ export default async (env = {})=>{
         module: {
             rules: [
                 {
+                    test: /\.txt/,
+                    use: [
+                        {loader: "txt/txt-loader",options: {debug}},
+                    ]
+                },
+                {
                     test: /\.glsl$/,
                     use: [
                         {loader: "glsl/glsl-loader",options: {debug}},

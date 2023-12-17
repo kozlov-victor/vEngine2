@@ -1,14 +1,13 @@
 import {ISize} from "@engine/geometry/size";
 import {IRectJSON} from "@engine/geometry/rect";
 import {FontTypes} from "@engine/renderable/impl/general/font/fontTypes";
-import IFontSymbolInfo = FontTypes.IFontSymbolInfo;
-import IPartialFontContext = FontTypes.IPartialFontContext;
 import {Font} from "@engine/renderable/impl/general/font/font";
-import ITextureWithId = FontTypes.ITextureWithId;
-import IFontContext = FontTypes.IFontContext;
 import {ITexture} from "@engine/renderer/common/texture";
 import {Game} from "@engine/core/game";
-import {DebugError} from "@engine/debug/debugError";
+import IFontSymbolInfo = FontTypes.IFontSymbolInfo;
+import IPartialFontContext = FontTypes.IPartialFontContext;
+import ITextureWithId = FontTypes.ITextureWithId;
+import IFontContext = FontTypes.IFontContext;
 
 export abstract class FontContextAbstractFactory<T> {
 
@@ -20,6 +19,8 @@ export abstract class FontContextAbstractFactory<T> {
     protected abstract getLetterWidth(letter:string):number;
     protected abstract getAdvancedWidth(letter:string):number;
     protected abstract getFontHeight():number;
+    protected getDestOffsetX(letter:string) {return 0}
+    protected getDestOffsetY(letter:string) {return 0}
     protected abstract createTexturePage(size:ISize):T;
     protected abstract texturePageToTexture(page:T):ITexture;
     protected abstract drawLetter(context:T,letter:string,x:number,y:number):void;
@@ -69,8 +70,8 @@ export abstract class FontContextAbstractFactory<T> {
             width: textWidthPlusPadding,
             widthAdvanced: textWidth,
             height: this.rowHeight,
-            destOffsetX: 0,
-            destOffsetY: 0,
+            destOffsetX: this.getDestOffsetX(char),
+            destOffsetY: this.getDestOffsetY(char),
             pageId: this.currentPageIndex,
         };
         this.currX += textWidthPlusPadding;

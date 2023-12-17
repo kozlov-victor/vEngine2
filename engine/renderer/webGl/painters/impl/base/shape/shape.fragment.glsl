@@ -44,6 +44,9 @@ vec4 getInterpolatedGradientColor(float position) {
     );
 }
 
+void setEmptyColor() {
+    gl_FragColor = vec4(ZERO,ZERO,ZERO,ZERO);
+}
 
 vec4 getFillColor(){
     if (u_fillType==FILL_TYPE_TEXTURE) {
@@ -53,7 +56,6 @@ vec4 getFillColor(){
         if (u_stretchMode==STRETCH_MODE_STRETCH) txVec = mixTextureColorWithTint(getStretchedImage(tx,ty),u_color);
         else if (u_stretchMode==STRETCH_MODE_REPEAT) txVec = mixTextureColorWithTint(getRepeatedImage(tx,ty),u_color);
         else txVec = ERROR_COLOR;
-        if (txVec.a==ZERO) discard;
         return txVec;
     }
     else if (u_fillType==FILL_TYPE_COLOR) return vec4(
@@ -102,7 +104,7 @@ void _drawEllipse(){
     float rInnerAtCurrAngle  = calcRadiusAtPosition(v_position.xy, vec2(HALF,HALF),vec2(u_rx, u_ry),u_lineWidth);
 
     float dist = distance(vec2(HALF, HALF), v_position.xy);
-    if (dist > rOuterAtCurrAngle) discard;
+    if (dist > rOuterAtCurrAngle) setEmptyColor();
     else if (dist > rInnerAtCurrAngle) gl_FragColor = vec4(
         u_color.r*u_color.a,
         u_color.g*u_color.a,
@@ -135,11 +137,11 @@ void drawEllipse(){
 
         bool withinArc = (angleFrom<=angle) && (angle<=angleTo);
         if (withinArc) {
-            if (anticlockwise) discard;
+            if (anticlockwise) setEmptyColor();
             else _drawEllipse();
         }
         else {
-            if (!anticlockwise) discard;
+            if (!anticlockwise) setEmptyColor();
             else _drawEllipse();
         }
     }
@@ -171,14 +173,14 @@ void drawRect(){
                 borderCenter = vec2(HALF + halfW - u_borderRadius,HALF + halfH - u_borderRadius);
             }
             float distToBorderCenter = distance(v_position.xy,borderCenter);
-            if (distToBorderCenter>u_borderRadius) discard;
+            if (distToBorderCenter>u_borderRadius) setEmptyColor();
             else if (distToBorderCenter>u_borderRadius-u_lineWidth) gl_FragColor = u_color;
             else gl_FragColor = getFillColor();
         }
         else if (distX > halfW - u_lineWidth || distY > halfH - u_lineWidth) gl_FragColor = u_color;
         else gl_FragColor = getFillColor();
     }
-    else discard;
+    else gl_FragColor = vec4(ZERO,ZERO,ZERO,ZERO);
 }
 
 void main(){

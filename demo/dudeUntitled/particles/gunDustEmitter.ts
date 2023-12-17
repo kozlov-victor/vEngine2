@@ -17,11 +17,10 @@ export class GunDustEmitter extends AbstractParticleEmitter {
     }
 
     private createPrefab(color:Color) {
-        const particle = new Circle(this.scene.getGame());
+        const particle = new Rectangle(this.scene.getGame());
         particle.lineWidth = 0;
         particle.fillColor = color;
         particle.size.setWH(2);
-        particle.blendMode = BLEND_MODE.ADDITIVE;
         return particle;
     }
 

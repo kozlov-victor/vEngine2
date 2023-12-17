@@ -2,14 +2,15 @@ import {ColorFactory} from "@engine/renderer/common/colorFactory";
 import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {AbstractParticleEmitter} from "./abstractParticleEmitter";
 import {Color} from "@engine/renderer/common/color";
+import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 
 export class GroundDustEmitter extends AbstractParticleEmitter {
 
     private createPrefab(color:Color) {
-        const particle = new Circle(this.scene.getGame());
+        const particle = new Rectangle(this.scene.getGame());
         particle.lineWidth = 0;
         particle.fillColor = color;
-        particle.radius = 1;
+        particle.size.setWH(2);
         return particle;
     }
 

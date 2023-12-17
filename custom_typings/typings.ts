@@ -8,12 +8,6 @@ declare module "*.png" {
     export = value;
 }
 
-declare interface IElementDescription {
-    tagName:string;
-    attributes:Record<string,string>;
-    children:IElementDescription[];
-}
-
 declare module "*.xml" {
     import {XmlDocument} from "@engine/misc/parsers/xml/xmlElements";
     const value:XmlDocument;
@@ -23,6 +17,11 @@ declare module "*.xml" {
 declare module "xml/xml-loader!*" {
     import {XmlDocument} from "@engine/misc/parsers/xml/xmlElements";
     const value:XmlDocument;
+    export = value;
+}
+
+declare module "txt/txt-loader!*" {
+    const value:string;
     export = value;
 }
 

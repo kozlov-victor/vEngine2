@@ -4,7 +4,6 @@ import {Color} from "@engine/renderer/common/color";
 import {Scene} from "@engine/scene/scene";
 import {FlameModifier} from "@engine/renderable/impl/general/partycleSystem/modifier/flameModifier";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
-import {BLEND_MODE} from "@engine/renderable/abstract/renderableModel";
 
 export class FireEmitter extends AbstractParticleEmitter {
 
@@ -25,7 +24,6 @@ export class FireEmitter extends AbstractParticleEmitter {
         particle.lineWidth = 0;
         particle.fillColor = color;
         particle.size.setWH(2);
-        particle.blendMode = BLEND_MODE.ADDITIVE;
         return particle;
     }
 

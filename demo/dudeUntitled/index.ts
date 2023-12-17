@@ -7,6 +7,7 @@ import {ArcadePhysicsSystem} from "@engine/physics/arcade/arcadePhysicsSystem";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {MouseControl} from "@engine/control/mouse/mouseControl";
 import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
+import {Device} from "@engine/misc/device";
 
 // window.requestAnimationFrame =  (f:FrameRequestCallback):number=>{
 //     return setTimeout(f,1000/25);
@@ -32,7 +33,7 @@ const game = new Game(
     {
         width:890,height:414, // 896
         scaleStrategy: SCALE_STRATEGY.FIT_CANVAS_TO_SCREEN,
-        containerElement: document.getElementById('canvas-wrap')!
+        containerElement: Device.embeddedEngine?undefined:document.getElementById('canvas-wrap')!
     }
 );
 game.setPhysicsSystem(ArcadePhysicsSystem);

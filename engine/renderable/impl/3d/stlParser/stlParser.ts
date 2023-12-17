@@ -161,7 +161,7 @@ export class StlParser {
 
                 if ( normalCountPerFace !== 1 ) {
 
-                    console.error( 'THREE.STLLoader: Something isn\'t right with the normal of face number ' + faceCounter );
+                    console.error( 'STLLoader: Something isn\'t right with the normal of face number ' + faceCounter );
 
                 } // each face have to own THREE valid vertices
 

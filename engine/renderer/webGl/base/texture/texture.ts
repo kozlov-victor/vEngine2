@@ -42,7 +42,7 @@ export class Texture extends AbstractTexture implements ITexture {
                 }
             }
 
-            const maxSupportedSize:number = gl.getParameter(gl.MAX_TEXTURE_SIZE) as number;
+            const maxSupportedSize = gl.getParameter(gl.MAX_TEXTURE_SIZE) as number;
             if (DEBUG && !maxSupportedSize) throw new DebugError(`Can not obtain MAX_TEXTURE_SIZE value`);
             if (size.width>maxSupportedSize || size.height>maxSupportedSize) {
                 throw new DebugError(`can not create texture with size ${size.width}x${size.height}, max supported size is ${maxSupportedSize}`);

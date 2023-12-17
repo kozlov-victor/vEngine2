@@ -3,7 +3,6 @@ import {HttpClient} from "@engine/debug/httpClient";
 import {IKeyVal} from "@engine/misc/object";
 import {Game} from "@engine/core/game";
 import {renderError} from "@engine/debug/errorWidget";
-import {extensionRegex} from "ts-loader/dist/constants";
 
 interface IGameHolder {
     game: Game;

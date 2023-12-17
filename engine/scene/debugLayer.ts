@@ -6,6 +6,11 @@ import {WordBrake} from "@engine/renderable/impl/ui/textField/textAlign";
 import {DebugError} from "@engine/debug/debugError";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
+import {BdfFontParser} from "@engine/misc/parsers/bdf/bdfFontParser";
+import {FontContextBdfFactory} from "@engine/renderable/impl/general/font/factory/fontContextBdfFactory";
+import * as fntSource from "txt/txt-loader!../misc/data/defaultFont.bdf";
+
+const bdfFontData = new BdfFontParser().parse(fntSource);
 
 export class DebugLayer extends Layer {
 
@@ -13,10 +18,14 @@ export class DebugLayer extends Layer {
     private numOfTextRows:number;
     private logs:string[] = [];
 
-    constructor(game:Game) {
+    constructor(game:Game, font?:Font) {
         super(game);
+        if (!font) {
+            const factory = new FontContextBdfFactory(this.game,bdfFontData);
+            font = factory.createFont([], [], '', 8*3)
+        }
         this.transformType = LayerTransformType.STICK_TO_CAMERA;
-        this.createTextField();
+        this.createTextField(font);
         this._parentChildDelegate.afterChildAppended =
             this._parentChildDelegate.afterChildRemoved =
             (_)=>{
@@ -26,8 +35,7 @@ export class DebugLayer extends Layer {
             }
     }
 
-    private createTextField():void {
-        const font = Font.getSystemFont(this.game);
+    private createTextField(font:Font):void {
         const textField = new TextField(this.game,font);
         textField.size.setFrom(this.game.size);
         textField.setPadding(5);
@@ -42,7 +50,7 @@ export class DebugLayer extends Layer {
         args.forEach((txt:any)=>{
             if (txt===undefined) txt = 'undefined';
             else if (txt===null) txt = 'null';
-            else if (txt instanceof HTMLElement) {
+            else if ('HTMLElement' in window && txt instanceof HTMLElement) {
                 txt = `[object ${txt.tagName}]`;
             }
             else if (txt.toJSON) {
