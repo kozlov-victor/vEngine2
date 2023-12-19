@@ -43,9 +43,6 @@ export class FontContextBdfFactory extends FontContextAbstractFactory<DrawingSur
     }
 
     protected override texturePageToTexture(page: DrawingSurface): ITexture {
-        // const img = document.createElement('img');
-        // img.src = (page.getTexture() as Texture).toDataUrl();
-        // document.body.appendChild(img);
         return page.getTexture();
     }
 
@@ -55,27 +52,22 @@ export class FontContextBdfFactory extends FontContextAbstractFactory<DrawingSur
         let yPoint = 0;
         const pixSize = this.pixelSize;
 
-        // context.setLineWidth(1);
-        // context.setDrawColor(new Color(122,0,0));
-        // context.setFillColor(Color.NONE);
-        // context.drawRect(x,y,letterInfo.width*pixSize,this._fontHeight*pixSize);
-        // context.setLineWidth(0);
-        // context.setFillColor(Color.BLACK);
-
-
-        for (const dataRow of data) {
-            for (let i=0;i<8;i++) {
-                const bit = BinBuffer.isBitSet(8-i,dataRow);
-                if (bit) {
-                     context.drawRect(
-                         x+(i)*pixSize,
-                         y+(yPoint+this.bdfFont.fontHeight-data.length)*pixSize,
-                         pixSize,pixSize
-                     );
+        context.drawBatch(()=>{
+            for (const dataRow of data) {
+                for (let i=0;i<8;i++) {
+                    const bit = BinBuffer.isBitSet(8-i,dataRow);
+                    if (bit) {
+                        context.drawRect(
+                            x+(i)*pixSize,
+                            y+(yPoint+this.bdfFont.fontHeight-data.length)*pixSize,
+                            pixSize,pixSize
+                        );
+                    }
                 }
+                yPoint++;
             }
-            yPoint++;
-        }
+        });
+
     }
 
     protected override getFontHeight(): number {

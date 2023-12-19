@@ -44,6 +44,10 @@ export class MainScene extends Scene {
         debug.setSolidBackground();
         debug.appendTo(this);
         debug.println(`${window.innerWidth} * ${window.innerHeight}`);
+        this.setInterval(()=>{
+            debug.clearLog();
+            debug.println(this.game.fps);
+        },1000)
     }
 
     private initLevel():void {

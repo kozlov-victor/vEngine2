@@ -44,10 +44,7 @@ export class MainScene extends Scene {
         ps.particleVelocity = {from: 100, to: 200};
         ps.emissionRadius = 30;
         ps.emitAuto = false;
-        ps.cacheGetPolicy = {
-            maxParticlesInCache: 6000,
-            strategy: MAX_PARTICLE_CACHE_STRATEGY.IGNORE_EMISSION_IF_OVERFLOW
-        };
+        ps.maxParticlesInCache = 6000;
         ps.onEmitParticle(p=>{
             const b = p as BatchedImage;
             b.fillColor.a=255;

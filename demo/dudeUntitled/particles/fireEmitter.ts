@@ -3,7 +3,7 @@ import {ColorFactory} from "@engine/renderer/common/colorFactory";
 import {Color} from "@engine/renderer/common/color";
 import {Scene} from "@engine/scene/scene";
 import {FlameModifier} from "@engine/renderable/impl/general/partycleSystem/modifier/flameModifier";
-import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
+import {BatchedImage} from "@engine/renderable/impl/general/image/batchedImage";
 
 export class FireEmitter extends AbstractParticleEmitter {
 
@@ -20,9 +20,8 @@ export class FireEmitter extends AbstractParticleEmitter {
     }
 
     private createPrefab(color:Color) {
-        const particle = new Rectangle(this.scene.getGame());
-        particle.lineWidth = 0;
-        particle.fillColor = color;
+        const particle = new BatchedImage(this.scene.getGame());
+        particle.fillColor.setFrom(color);
         particle.size.setWH(2);
         return particle;
     }

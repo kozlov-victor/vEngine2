@@ -12,7 +12,6 @@ import {AngleBatchArray} from "@engine/renderer/webGl/painters/impl/batch/batchA
 import {PosBatchArray} from "@engine/renderer/webGl/painters/impl/batch/batchArrays/posBatchArray";
 import {BufferInfo, DRAW_METHOD, IBufferInfoDescription} from "@engine/renderer/webGl/base/buffer/bufferInfo";
 import {Texture} from "@engine/renderer/webGl/base/texture/texture";
-import {GlCachedAccessor} from "@engine/renderer/webGl/blender/glCachedAccessor";
 
 // http://tmtg.nl/glesjs/glesjs-demo/game.js
 
