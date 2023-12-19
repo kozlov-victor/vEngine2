@@ -14,8 +14,6 @@ export class SimpleImagePainter extends AbstractPainter {
     public readonly u_vertexMatrix:string;
     public readonly u_projectionMatrix:string;
     public readonly u_texRect:string;
-    public readonly u_width:string;
-    public readonly u_height:string;
     public readonly u_color:string;
     public readonly u_alpha:string;
 
@@ -28,8 +26,6 @@ export class SimpleImagePainter extends AbstractPainter {
         this.a_position = gen.addAttribute(GL_TYPE.FLOAT_VEC4,'a_position');
         this.u_alpha = gen.addScalarFragmentUniform(GL_TYPE.FLOAT,'u_alpha');
         this.u_color = gen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC4,'u_color');
-        this.u_width = gen.addScalarFragmentUniform(GL_TYPE.FLOAT,'u_width');
-        this.u_height = gen.addScalarFragmentUniform(GL_TYPE.FLOAT,'u_height');
         this.u_texRect = gen.addScalarFragmentUniform(GL_TYPE.FLOAT_VEC4,'u_texRect');
         gen.addScalarFragmentUniform(GL_TYPE.SAMPLER_2D,'texture');
         gen.addVarying(GL_TYPE.FLOAT_VEC4,'v_position');

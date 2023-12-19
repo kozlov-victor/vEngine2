@@ -685,9 +685,6 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
             destRectHeight/srcRectHeight).toArray();
 
         sip.setUniformVector(sip.u_texRect, destArr);
-
-        sip.setUniformScalar(sip.u_width,destRectWidth);
-        sip.setUniformScalar(sip.u_height,destRectHeight);
         sip.attachTexture('texture',texture);
 
         this._blender.setBlendMode(img.blendMode);
