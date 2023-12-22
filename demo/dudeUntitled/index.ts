@@ -25,7 +25,7 @@ import {Device} from "@engine/misc/device";
 //     return dataTexture;
 // }
 
-document.body.style.backgroundColor = 'black';
+document.body.style.backgroundColor = '#052e5b';
 ResourceLoader.BASE_URL = './dudeUntitled/assets';
 ArcadePhysicsSystem.SPATIAL_CELL_SIZE.setWH(64);
 

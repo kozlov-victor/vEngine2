@@ -9,7 +9,7 @@ export class BonusParticleEmitter extends AbstractParticleEmitter {
 
     constructor(scene:Scene) {
         super(scene);
-        this.ps.numOfParticlesToEmit = {from: 10, to: 30};
+        this.ps.numOfParticlesToEmit = {from: 1, to: 5};
         this.ps.particleGravity.setXY(0);
         const modifier = new RingTangentModifier(this.ps);
         modifier.radius = 16;
