@@ -6,7 +6,7 @@ import {ISize} from "@engine/geometry/size";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
 import {Image} from "@engine/renderable/impl/general/image/image";
-import {AbstractRenderer, IRenderTarget} from "@engine/renderer/abstract/abstractRenderer";
+import {AbstractRenderer} from "@engine/renderer/abstract/abstractRenderer";
 import {Shape} from "@engine/renderable/abstract/shape";
 import {Ellipse} from "@engine/renderable/impl/geometry/ellipse";
 import {Polygon} from "@engine/renderable/impl/geometry/polygon";
@@ -27,9 +27,9 @@ import {
 } from "@engine/renderable/impl/geometry/_internal/triangulatedPathFromPolyline";
 import {SvgPathToVertexArrayBuilder} from "@engine/renderable/impl/geometry/_internal/svgPathToVertexArrayBuilder";
 import {BatchedImage} from "@engine/renderable/impl/general/image/batchedImage";
-import Mat16Holder = Mat4.Mat16Holder;
 import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
 import {FrameBufferStack} from "@engine/renderer/webGl/base/buffer/frameBufferStack";
+import Mat16Holder = Mat4.Mat16Holder;
 
 
 class ContainerForDrawingSurface extends SimpleGameObjectContainer {

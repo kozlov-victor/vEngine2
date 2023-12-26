@@ -131,11 +131,11 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
 
     public reduceState(to:IStateStackPointer):void{
         if (this._stackPointer===1) return;
-        for (let i:number = this._stackPointer-1; i>to.ptr; --i) {
+        for (let i = this._stackPointer-1; i>to.ptr; --i) {
             const currItem:IStackItem = this._stack[i];
             const nextItem:IStackItem = this._stack[i-1];
 
-            const filteredTexture:Texture =
+            const filteredTexture =
                 this._getDoubleFrameBuffer().applyFilters(
                     currItem.frameBuffer.getTexture(),
                     nextItem.frameBuffer,
@@ -156,11 +156,11 @@ export class FrameBufferStack implements IDestroyable, IRenderTarget{
 
     public renderToScreen():void{
         this._blender.setBlendMode(BLEND_MODE.NORMAL);
-        const needFullScreen:boolean = this._pixelPerfectMode || Device.embeddedEngine;
-        const w:number = needFullScreen?this.game.getRenderer().viewPortSize.width:this.game.size.width;
-        const h:number = needFullScreen?this.game.getRenderer().viewPortSize.height:this.game.size.height;
+        const needFullScreen = this._pixelPerfectMode || Device.embeddedEngine;
+        const w = needFullScreen?this.game.getRenderer().viewPortSize.width:this.game.size.width;
+        const h = needFullScreen?this.game.getRenderer().viewPortSize.height:this.game.size.height;
         FrameBuffer.getCurrent().unbind();
-        this._gl.viewport(0, 0, ~~w,~~h);
+        this._gl.viewport(0, 0, w,h);
         this._simpleRectPainter.setUniform(this._simpleRectPainter.u_alpha,1);
         this._simpleRectPainter.setUniform(this._simpleRectPainter.u_flip,true);
         this._simpleRectPainter.attachTexture('texture',this._getLast().frameBuffer.getTexture());
