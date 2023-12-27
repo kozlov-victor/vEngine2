@@ -1,15 +1,15 @@
 import {AbstractParticleEmitter} from "./abstractParticleEmitter";
 import {ColorFactory} from "@engine/renderer/common/colorFactory";
 import {Color} from "@engine/renderer/common/color";
-import {Circle} from "@engine/renderable/impl/geometry/circle";
 import {Scene} from "@engine/scene/scene";
 import {RingTangentModifier} from "@engine/renderable/impl/general/partycleSystem/modifier/ringTangentModifier";
+import {BatchedImage} from "@engine/renderable/impl/general/image/batchedImage";
 
 export class BonusParticleEmitter extends AbstractParticleEmitter {
 
     constructor(scene:Scene) {
         super(scene);
-        this.ps.numOfParticlesToEmit = {from: 1, to: 5};
+        this.ps.numOfParticlesToEmit = {from: 2, to: 10};
         this.ps.particleGravity.setXY(0);
         const modifier = new RingTangentModifier(this.ps);
         modifier.radius = 16;
@@ -19,10 +19,9 @@ export class BonusParticleEmitter extends AbstractParticleEmitter {
     }
 
     private createPrefab(color:Color) {
-        const particle = new Circle(this.scene.getGame());
-        particle.lineWidth = 0;
-        particle.fillColor = color;
-        particle.radius = 1;
+        const particle = new BatchedImage(this.scene.getGame());
+        particle.fillColor.setFrom(color);
+        particle.size.setWH(1);
         return particle;
     }
 
