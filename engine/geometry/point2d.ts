@@ -33,20 +33,12 @@ export class Point2d extends ObservableEntity implements ICloneable<Point2d>, IP
         if (onChangedFn) this.addOnChangeListener(onChangedFn);
         this.setXY(x,y);
     }
-    private static pool = new ObjectPool<Point2d>(Point2d,4);
+    public static pool = new ObjectPool<Point2d>(Point2d,4);
 
     private _x:number = 0;
     private _y:number = 0;
 
     protected _arr = new Float32Array([0,0,0]);
-
-    public static fromPool():Point2d {
-        return this.pool.getFreeObject()!;
-    }
-
-    public static toPool(obj:Point2d):void {
-        return this.pool.releaseObject(obj);
-    }
 
     // noinspection JSSuspiciousNameCombination
     public setXY(x:number = 0,y:number = x):this{

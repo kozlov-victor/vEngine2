@@ -30,7 +30,7 @@ export class MainScene extends Scene {
         const particle3 = particle1.clone();
         particle3.fillColor.setFrom(ColorFactory.fromCSS('#3a0224'));
 
-        const ps = new ParticleSystem(this.game);
+        const ps = new ParticleSystem(this.game,10_000);
         ps.addParticlePrefab(particle1);
         ps.addParticlePrefab(particle2);
         ps.addParticlePrefab(particle3);
@@ -44,7 +44,6 @@ export class MainScene extends Scene {
         ps.particleVelocity = {from: 100, to: 200};
         ps.emissionRadius = 30;
         ps.emitAuto = false;
-        ps.maxParticlesInCache = 6000;
         ps.onEmitParticle(p=>{
             const b = p as BatchedImage;
             b.fillColor.a=255;

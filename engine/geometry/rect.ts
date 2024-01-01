@@ -71,7 +71,7 @@ export class Rect extends ObservableEntity implements ICloneable<Rect>, IRect{
         this.setWH(this.width,height);
     }
 
-    private static rectPool:ObjectPool<Rect> = new ObjectPool<Rect>(Rect);
+    public static pool = new ObjectPool(Rect);
 
     private _x:number = 0;
     private _y: number = 0;
@@ -82,14 +82,6 @@ export class Rect extends ObservableEntity implements ICloneable<Rect>, IRect{
     private _bottom:number;
 
     private _arr = new Float32Array([0,0,0,0]);
-
-    public static fromPool():Rect {
-        return this.rectPool.getFreeObject()!;
-    }
-
-    public static toPool(obj:Rect):void {
-        return Rect.rectPool.releaseObject(obj);
-    }
 
     public setXYWH(x:number,y:number,width:number,height:number):Rect{
         if (

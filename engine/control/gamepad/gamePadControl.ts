@@ -73,16 +73,19 @@ export class GamePadControl extends AbstractKeypad<GamePadEvent> implements ICon
         super(game);
     }
 
-    public enabled:boolean = isEnabled;
+    public enabled = isEnabled;
 
-    public static SENSITIVITY:number = 0.05;
+    public static SENSITIVITY = 0.05;
 
-    public override readonly type:string = 'GamePadControl';
+    public override readonly type = 'GamePadControl';
 
     declare protected buffer:GamePadEvent[];
 
     private _gamepads:Gamepad[];
 
+    protected recycleEvent(e: GamePadEvent): void {
+        GamePadEvent.pool.recycle(e);
+    }
 
     private static isReleased(e:GamePadEvent):boolean{
         return e.keyState===KEY_STATE.KEY_RELEASED || e.keyState===KEY_STATE.KEY_JUST_RELEASED;
@@ -146,11 +149,7 @@ export class GamePadControl extends AbstractKeypad<GamePadEvent> implements ICon
 
     private pressButton(button:number,value:number,gamePadIndex:number,eventFromBuffer:Optional<GamePadEvent>):void {
         if (eventFromBuffer===undefined) {
-            const eventJustCreated:Optional<GamePadEvent> = GamePadEvent.fromPool();
-            if (eventJustCreated===undefined) {
-                if (DEBUG) console.warn('gamepad pool is full');
-                return;
-            }
+            const eventJustCreated = GamePadEvent.pool.get();
 
             eventJustCreated.button = button;
             eventJustCreated.gamePadIndex = gamePadIndex;
@@ -170,11 +169,11 @@ export class GamePadControl extends AbstractKeypad<GamePadEvent> implements ICon
 
 
     private pollButtons(gp:Gamepad,gamePadIndex:number):void {
-        const maxButtons:number = gp.buttons.length;
-        for (let i:number=0;i<maxButtons;i++) {
-            const btn: GamepadButton = gp.buttons[i];
+        const maxButtons = gp.buttons.length;
+        for (let i=0;i<maxButtons;i++) {
+            const btn = gp.buttons[i];
 
-            const eventFromBuffer: Optional<GamePadEvent> = this.findEvent(i, gamePadIndex);
+            const eventFromBuffer = this.findEvent(i, gamePadIndex);
             if (btn.pressed) this.pressButton(i, btn.value, gamePadIndex, eventFromBuffer);
             else this.releaseButton(eventFromBuffer);
 
@@ -195,32 +194,32 @@ export class GamePadControl extends AbstractKeypad<GamePadEvent> implements ICon
         if (Math.abs(axis1)<GamePadControl.SENSITIVITY) axis1 = 0;
 
         if (axis0>0) {
-            const eventFromBuffer: Optional<GamePadEvent> = this.findEvent(btnRight, gamePadIndex);
+            const eventFromBuffer = this.findEvent(btnRight, gamePadIndex);
             this.pressButton(btnRight,axis0,gamePadIndex,eventFromBuffer);
         } else {
-            const eventFromBuffer: Optional<GamePadEvent> = this.findEvent(btnRight, gamePadIndex);
+            const eventFromBuffer = this.findEvent(btnRight, gamePadIndex);
             this.releaseButton(eventFromBuffer);
         }
         if (axis0<0) {
-            const eventFromBuffer: Optional<GamePadEvent> = this.findEvent(btnLeft, gamePadIndex);
+            const eventFromBuffer = this.findEvent(btnLeft, gamePadIndex);
             this.pressButton(btnLeft,axis0,gamePadIndex,eventFromBuffer);
         } else {
-            const eventFromBuffer: Optional<GamePadEvent> = this.findEvent(btnLeft, gamePadIndex);
+            const eventFromBuffer = this.findEvent(btnLeft, gamePadIndex);
             this.releaseButton(eventFromBuffer);
         }
 
         if (axis1>0) {
-            const eventFromBuffer: Optional<GamePadEvent> = this.findEvent(btnDown, gamePadIndex);
+            const eventFromBuffer = this.findEvent(btnDown, gamePadIndex);
             this.pressButton(btnDown,axis1,gamePadIndex,eventFromBuffer);
         } else {
-            const eventFromBuffer: Optional<GamePadEvent> = this.findEvent(btnDown, gamePadIndex);
+            const eventFromBuffer = this.findEvent(btnDown, gamePadIndex);
             this.releaseButton(eventFromBuffer);
         }
         if (axis1<0) {
-            const eventFromBuffer: Optional<GamePadEvent> = this.findEvent(btnUp, gamePadIndex);
+            const eventFromBuffer = this.findEvent(btnUp, gamePadIndex);
             this.pressButton(btnUp,axis1,gamePadIndex,eventFromBuffer);
         } else {
-            const eventFromBuffer: Optional<GamePadEvent> = this.findEvent(btnUp, gamePadIndex);
+            const eventFromBuffer = this.findEvent(btnUp, gamePadIndex);
             this.releaseButton(eventFromBuffer);
         }
 

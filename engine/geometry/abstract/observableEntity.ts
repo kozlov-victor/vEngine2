@@ -1,8 +1,7 @@
 import {removeFromArray} from "@engine/misc/object";
-import {ReleaseableEntity} from "@engine/misc/releaseableEntity";
 
 
-export abstract class ObservableEntity extends ReleaseableEntity{
+export abstract class ObservableEntity {
 
     private _onChanged:(()=>void)[] = [];
 
@@ -19,7 +18,6 @@ export abstract class ObservableEntity extends ReleaseableEntity{
     public removeOnChangeListener(f:()=>void):void{
         removeFromArray(this._onChanged,(it)=>it===f);
     }
-
 
     public observe(onChangedFn:()=>void):void{
         this.addOnChangeListener(onChangedFn);

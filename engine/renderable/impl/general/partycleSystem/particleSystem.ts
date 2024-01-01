@@ -75,20 +75,20 @@ export class ParticleSystem extends SimpleGameObjectContainer {
     public particleLiveTime:IParticlePropertyDesc = {from:100,to:1000};
     public emissionRadius:number = 0;
     public emissionPosition:Point2d = new Point2d();
-    public maxParticlesInCache = 512;
     public readonly particleGravity:Point2d = new Point2d(0,0);
     public particleAlpha:Optional<IParticleTimedPropertyDesc>;
     public particleScale:Optional<IParticleTimedPropertyDesc>;
     public declare readonly game:Game;
 
-    private particles:tParticle[] = new Array(this.maxParticlesInCache);
+    private particles:tParticle[];
     private nextIndex = -1;
     private _prototypes:tParticle[] = [];
     private _onUpdateParticle:(r:tParticle)=>void = noop;
     private _onEmitParticle:(r:RenderableModel)=>void = noop;
 
-    constructor(game:Game){
+    constructor(game:Game, maxParticlesInCache = 512){
         super(game);
+        this.particles = new Array(maxParticlesInCache);
     }
 
     public override revalidate():void {

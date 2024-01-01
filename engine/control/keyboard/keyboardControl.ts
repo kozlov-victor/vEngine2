@@ -24,6 +24,10 @@ export class KeyboardControl extends AbstractKeypad<KeyBoardEvent> implements IC
     private _keyDownListener:(e:KeyboardEvent)=>void;
     private _keyUpListener:(e:KeyboardEvent)=>void;
 
+    protected recycleEvent(e: KeyBoardEvent): void {
+        KeyBoardEvent.pool.recycle(e);
+    }
+
     public isJustPressed(key:number):boolean{
         const event:Optional<KeyBoardEvent> = this.findEvent(key);
         if (event===undefined) return false;
@@ -70,7 +74,7 @@ export class KeyboardControl extends AbstractKeypad<KeyBoardEvent> implements IC
 
     public triggerKeyPress(code:number,nativeEvent:Event):void {
 
-        const eventFromBuffer:Optional<KeyBoardEvent> = KeyBoardEvent.fromPool();
+        const eventFromBuffer:Optional<KeyBoardEvent> = KeyBoardEvent.pool.get();
         if (eventFromBuffer===undefined) {
             if (DEBUG) console.warn('keyboard pool is full');
             return;
@@ -80,7 +84,7 @@ export class KeyboardControl extends AbstractKeypad<KeyBoardEvent> implements IC
 
         if (this.isPressed(code)) {
             this.notify(KEYBOARD_EVENTS.keyRepeated,eventFromBuffer);
-            eventFromBuffer.release();
+            KeyBoardEvent.pool.recycle(eventFromBuffer);
             return;
         }
 

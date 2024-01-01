@@ -251,7 +251,7 @@ export abstract class RenderableModel
             renderer.transformSet(this.worldTransformMatrix);
         }
 
-        const filters: IFilter[] =
+        const filters =
             this._scene._renderingSessionInfo.drawingEnabled ? this.filters : EMPTY_FILTERS_ARR;
         const statePointer: IStateStackPointer =
             renderer.beforeItemStackDraw(

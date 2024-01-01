@@ -28,6 +28,8 @@ export abstract class AbstractKeypad<T extends KeyPadEvent> {
         map: undefined
     }
 
+    protected abstract recycleEvent(e:T):void;
+
 
     constructor(game: Game) {
         this.game = game;
@@ -57,12 +59,11 @@ export abstract class AbstractKeypad<T extends KeyPadEvent> {
 
     public update(): void {
         for (const event of this.buffer) {
-            if (!event.isCaptured()) continue;
             const keyVal: KEY_STATE = event.keyState;
             switch (keyVal) {
                 case KEY_STATE.KEY_RELEASED:
                     this.buffer.splice(this.buffer.indexOf(event), 1);
-                    event.release();
+                    this.recycleEvent(event);
                     break;
                 case KEY_STATE.KEY_JUST_RELEASED:
                     event.keyState = KEY_STATE.KEY_RELEASED;

@@ -113,9 +113,9 @@ export class MouseControl implements IControl {
 
             //console.log('ontouchend body');
             while (l--){
-                const point:MousePoint = this._helper.resolvePoint(e.changedTouches[l]);
+                const point = this._helper.resolvePoint(e.changedTouches[l]);
                 this.resolveMouseUp(e.changedTouches[l]);
-                point.release();
+                MousePoint.pool.recycle(point);
             }
         };
         container.onpointerup =
@@ -276,15 +276,13 @@ export class MouseControl implements IControl {
     }
 
     private resolveClick(e:Touch|MouseEvent):void {
-        const point:MousePoint = this.triggerEvent(e,MOUSE_EVENTS.click);
-        this.triggerEvent(e,MOUSE_EVENTS.mouseDown).release();
-        point.release();
+        MousePoint.pool.recycle(this.triggerEvent(e,MOUSE_EVENTS.click));
+        MousePoint.pool.recycle(this.triggerEvent(e,MOUSE_EVENTS.mouseDown));
     }
 
     private resolveButtonPressed(e:Touch|MouseEvent):void {
-        const point:MousePoint = this.triggerEvent(e,MOUSE_EVENTS.click);
-        this.triggerEvent(e,MOUSE_EVENTS.mousePressed).release();
-        point.release();
+        MousePoint.pool.recycle(this.triggerEvent(e,MOUSE_EVENTS.click));
+        MousePoint.pool.recycle(this.triggerEvent(e,MOUSE_EVENTS.mousePressed));
     }
 
     private resolveMouseMove(e:Touch|MouseEvent|PointerEvent,isMouseDown:boolean):void {
@@ -310,30 +308,30 @@ export class MouseControl implements IControl {
         for (let i:number = 0; i < capturedNew.length; i++) {
             this._capturedObjectsByTouchIdPrevHolder.add(point.id,capturedNew[i]);
         }
-        point.release();
+        MousePoint.pool.recycle(point);
     }
 
     private resolveMouseUp(e:MouseEvent|Touch):void {
-        const point:MousePoint = this.triggerEvent(e,MOUSE_EVENTS.mouseUp);
-        const capturedNew:RenderableModel[] = this._capturedObjectsByTouchIdHolder.getByTouchId(point.id);
-        const capturedOld:RenderableModel[] = this._capturedObjectsByTouchIdPrevHolder.getByTouchId(point.id);
+        const point = this.triggerEvent(e,MOUSE_EVENTS.mouseUp);
+        const capturedNew = this._capturedObjectsByTouchIdHolder.getByTouchId(point.id);
+        const capturedOld = this._capturedObjectsByTouchIdPrevHolder.getByTouchId(point.id);
         for (let i = 0; i < capturedOld.length; i++) {
-            const obj:RenderableModel = capturedOld[i];
+            const obj = capturedOld[i];
             if (capturedNew.indexOf(obj)===-1) {
                 this._helper.triggerEventForObject(e, MOUSE_EVENTS.mouseUp, point, obj, obj);
             }
         }
         this._capturedObjectsByTouchIdPrevHolder.clear(point.id);
         this._capturedObjectsByTouchIdHolder.clear(point.id);
-        point.release();
+        MousePoint.pool.recycle(point);
     }
 
     private resolveDoubleClick(e:MouseEvent):void {
-        this.triggerEvent(e,MOUSE_EVENTS.doubleClick).release();
+        MousePoint.pool.recycle(this.triggerEvent(e,MOUSE_EVENTS.doubleClick));
     }
 
     private resolveScroll(e:MouseEvent):void {
-        this.triggerEvent(e,MOUSE_EVENTS.scroll).release();
+        MousePoint.pool.recycle(this.triggerEvent(e,MOUSE_EVENTS.scroll));
     }
 
 }

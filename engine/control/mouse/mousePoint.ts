@@ -2,7 +2,6 @@ import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Point2d} from "@engine/geometry/point2d";
 import {Scene} from "@engine/scene/scene";
 import {ObjectPool} from "@engine/misc/objectPool";
-import {ReleaseableEntity} from "@engine/misc/releaseableEntity";
 
 export const enum MOUSE_BUTTON {
     LEFT,
@@ -30,7 +29,9 @@ export interface IObjectMouseEvent extends ISceneMouseEvent {
     isPropagated:boolean;
 }
 
-export class MousePoint extends ReleaseableEntity{
+export class MousePoint {
+    public static pool = new ObjectPool(MousePoint);
+
     public readonly screenCoordinate:Point2d = new Point2d();
     public readonly sceneCoordinate:Point2d = new Point2d();
     public id:number;
@@ -38,9 +39,3 @@ export class MousePoint extends ReleaseableEntity{
     public isMouseDown:boolean;
 }
 
-export class MousePointsPullHolder {
-    private static mousePointsPool:ObjectPool<MousePoint> = new ObjectPool(MousePoint);
-    public static fromPool():MousePoint{
-        return this.mousePointsPool.getFreeObject()!;
-    }
-}

@@ -43,9 +43,8 @@ export class MainScene extends Scene {
         particle.transformPoint.setXY(particle.size.width/2,particle.size.height/2);
         particle.setRigidBody(physicsSystem.createRigidBody({type:ARCADE_RIGID_BODY_TYPE.DYNAMIC,groupNames:['particles'],ignoreCollisionWithGroupNames:['particles']}));
 
-        const ps: ParticleSystem = new ParticleSystem(this.game);
+        const ps: ParticleSystem = new ParticleSystem(this.game, 3000);
         ps.emitAuto = false;
-        ps.maxParticlesInCache = 3000;
         ps.addParticlePrefab(particle);
 
         ps.emissionRadius = 5;

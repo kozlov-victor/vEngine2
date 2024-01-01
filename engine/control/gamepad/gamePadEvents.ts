@@ -8,14 +8,10 @@ import {IGamePadEvent} from "@engine/control/gamepad/iGamePadEvent";
 
 export class GamePadEvent extends KeyPadEvent implements IGamePadEvent {
 
-    private static pool:ObjectPool<GamePadEvent> = new ObjectPool<GamePadEvent>(GamePadEvent);
+    public static pool = new ObjectPool(GamePadEvent);
 
     public override button: GAME_PAD_BUTTON;
     public gamePadIndex:number;
     public value:number;
-
-    public static fromPool():Optional<GamePadEvent> {
-        return this.pool.getFreeObject(true);
-    }
 
 }

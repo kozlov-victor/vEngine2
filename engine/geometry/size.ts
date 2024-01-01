@@ -49,17 +49,12 @@ export class Size extends ObservableEntity implements ICloneable<ISize>{
         this.setWH(width,height);
     }
 
-    private static rectPool:ObjectPool<Size> = new ObjectPool<Size>(Size);
+    public static pool = new ObjectPool(Size);
 
     private _width:number;
     private _height:number;
 
     private _arr = new Float32Array([0,0]);
-
-    public static fromPool():Size {
-        return this.rectPool.getFreeObject()!;
-    }
-
 
     public setW(width:number):Size{
         this.setWH(width,this._height);

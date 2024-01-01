@@ -157,11 +157,11 @@ export class TileMap extends RenderableModelWithTexture {
     private _numOfTilesInMapByX:number;
     private _numOfTilesInMapByY:number;
 
-    private _numOfTilesInSpriteByX:number = 0;
-    private _numOfTilesInSpriteByY:number = 0;
+    private _numOfTilesInSpriteByX = 0;
+    private _numOfTilesInSpriteByY = 0;
 
-    private _numOfTilesInScreenByX:number = 0;
-    private _numOfTilesInScreenByY:number = 0;
+    private _numOfTilesInScreenByX = 0;
+    private _numOfTilesInScreenByY = 0;
 
     private _cellImage:Image;
     private _drawingSurface:DrawingSurface;

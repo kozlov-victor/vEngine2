@@ -16,7 +16,9 @@ export abstract class VEngineTsxComponent extends BaseTsxComponent {
         private tsxDOMRenderer:AbstractTsxDOMRenderer<any>
     ) {
         super();
-        if (VEngineTsxRootHolder.ROOT) throw new Error(`only one root component can be created`);
+        if (VEngineTsxRootHolder.ROOT) {
+            console.warn(`only one root component can be created; VEngineTsxRootHolder.ROOT will be overriden`);
+        }
         VEngineTsxRootHolder.ROOT = this;
     }
 

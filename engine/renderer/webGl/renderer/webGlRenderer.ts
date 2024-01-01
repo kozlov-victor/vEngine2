@@ -83,9 +83,10 @@ const getProjectionMatrix = (id:number,viewSize:ISize):Mat16Holder=>{
     return projectionMatrix;
 }
 
-const hlpMatrix1:Mat16Holder = Mat16Holder.create();
+const hlpMatrix1 = Mat16Holder.create();
 Mat4.makeIdentity(hlpMatrix1);
-const hlpMatrix2:Mat16Holder = Mat16Holder.create();
+const hlpMatrix2 = Mat16Holder.create();
+Mat4.makeIdentity(hlpMatrix2);
 
 const makeModelViewMatrix = (rect:Rect,matrixStack:MatrixStack):Mat16Holder=>{
 
@@ -209,7 +210,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
         const modelMatrix:Mat16Holder = this._matrixStack.getCurrentValue();
 
-        const inverseTransposeModelMatrix:Mat16Holder = Mat16Holder.fromPool();
+        const inverseTransposeModelMatrix = Mat16Holder.pool.get();
         Mat4.inverse(inverseTransposeModelMatrix,modelMatrix);
         Mat4.transpose(inverseTransposeModelMatrix,inverseTransposeModelMatrix);
 
@@ -279,7 +280,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
             this._glCachedAccessor.setCullFace(mesh.cullFace);
             mp.draw();
         }
-        inverseTransposeModelMatrix.release();
+        Mat16Holder.pool.recycle(inverseTransposeModelMatrix);
     }
 
     public drawSkyBox(model:SkyBox):void {
@@ -287,31 +288,31 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
         const sbp = this._skyBoxPainterHolder.getInstance(this._gl);
 
-        const projectionMatrix = Mat16Holder.fromPool();
+        const projectionMatrix = Mat16Holder.pool.get();
         Mat4.perspective(
             projectionMatrix,
             MathEx.degToRad(60),
             this._currFrameBufferStack.getTexture().size.width/this._currFrameBufferStack.getTexture().size.height,
             1,2000);
 
-        const cameraMatrix = Mat16Holder.fromPool();
+        const cameraMatrix = Mat16Holder.pool.get();
         const fi = model.angle3d.x;
         const theta = model.angle3d.y;
         const x = Math.cos(fi)*Math.sin(theta);
         const y = Math.sin(fi)*Math.sin(theta);
         const z = Math.cos(theta);
-        const cameraPosition = Point3d.fromPool().setXYZ(x,y,z);
-        const target = Point3d.fromPool().setXYZ(0,0,0);
-        const up = Point3d.fromPool().setXYZ(0,1,0);
+        const cameraPosition = Point3d.pool3.get().setXYZ(x,y,z);
+        const target = Point3d.pool3.get().setXYZ(0,0,0);
+        const up = Point3d.pool3.get().setXYZ(0,1,0);
         Mat4.lookAt(cameraMatrix,cameraPosition, target, up);
 
-        const viewMatrix = Mat16Holder.fromPool();
+        const viewMatrix = Mat16Holder.pool.get();
         Mat4.inverse(viewMatrix,cameraMatrix);
         (viewMatrix.mat16 as Float32Array)[12] = 0;
         (viewMatrix.mat16 as Float32Array)[13] = 0;
         (viewMatrix.mat16 as Float32Array)[14] = 0;
 
-        const viewDirectionProjectionMatrix  = Mat16Holder.fromPool();
+        const viewDirectionProjectionMatrix  = Mat16Holder.pool.get();
         Mat4.matrixMultiply(viewDirectionProjectionMatrix ,projectionMatrix,viewMatrix);
         Mat4.inverse(viewDirectionProjectionMatrix, viewDirectionProjectionMatrix);
 
@@ -323,25 +324,25 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         sbp.draw();
         this._glCachedAccessor.setDepthTest(true);
 
-        projectionMatrix.release();
-        cameraMatrix.release();
-        cameraPosition.release();
-        target.release();
-        up.release();
-        viewMatrix.release();
-        viewDirectionProjectionMatrix.release();
+        Mat16Holder.pool.recycle(projectionMatrix);
+        Mat16Holder.pool.recycle(cameraMatrix);
+        Point3d.pool3.recycle(cameraPosition);
+        Point3d.pool3.recycle(target);
+        Point3d.pool3.recycle(up);
+        Mat16Holder.pool.recycle(viewMatrix);
+        Mat16Holder.pool.recycle(viewDirectionProjectionMatrix);
     }
 
     public drawMesh2d(mesh:Mesh2d):void {
 
         this.flush();
 
-        const mp:MeshPainter = this._meshPainterHolder.getInstance(this._gl);
+        const mp = this._meshPainterHolder.getInstance(this._gl);
 
         mp.bindMesh2d(mesh);
         mp.bind();
 
-        const modelMatrix:Mat16Holder = this._matrixStack.getCurrentValue();
+        const modelMatrix = this._matrixStack.getCurrentValue();
 
         mp.setModelMatrix(modelMatrix.mat16);
         mp.setInverseTransposeModelMatrix(IDENTITY);
@@ -372,7 +373,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     }
 
     public destroyMesh(mesh:Mesh2d):void {
-        const mp:MeshPainter = this._meshPainterHolder.getInstance(this._gl);
+        const mp = this._meshPainterHolder.getInstance(this._gl);
         mp.bindMesh2d(mesh);
         mp.bind();
         mp.disableAllAttributes();
@@ -396,7 +397,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
         this.flush();
 
-        const r:Rectangle = line.getRectangleRepresentation();
+        const r = line.getRectangleRepresentation();
         this.drawRectangle(r);
     }
 
@@ -409,8 +410,8 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         this.prepareShapeUniformInfo(ellipse);
         this.prepareShapeFillUniformInfo(ellipse);
 
-        const sp:ShapePainter = this._shapePainterHolder.getInstance(this._gl);
-        const maxR:number = Math.max(ellipse.radiusX,ellipse.radiusY);
+        const sp = this._shapePainterHolder.getInstance(this._gl);
+        const maxR = Math.max(ellipse.radiusX,ellipse.radiusY);
         if (maxR===ellipse.radiusX) {
             sp.setUniformScalar(sp.u_rx,0.5);
             sp.setUniformScalar(sp.u_ry,ellipse.radiusY/ellipse.radiusX*0.5);
@@ -482,7 +483,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
     public getError():Optional<{code:number,desc:string}>{
         if (!DEBUG) return undefined;
-        const err:number = this._gl.getError();
+        const err = this._gl.getError();
         if (err!==this._gl.NO_ERROR) {
             return {code:err,desc:glEnumToString(this._gl,err)};
         }
@@ -491,7 +492,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
 
     public createTexture(bitmap:ImageBitmap|HTMLImageElement|HTMLCanvasElement):ITexture{
-        const texture:Texture = new Texture(this._gl);
+        const texture = new Texture(this._gl);
         texture.setImage(bitmap);
         return texture;
     }
@@ -505,7 +506,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         imgBack:ImageBitmap|HTMLImageElement
     ): ICubeMapTexture {
 
-        const cubeTexture:CubeMapTexture = new CubeMapTexture(this._gl);
+        const cubeTexture = new CubeMapTexture(this._gl);
         cubeTexture.setImages(imgLeft,imgRight,imgTop,imgBottom,imgFront,imgBack);
         return cubeTexture;
     }
@@ -547,7 +548,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     }
 
     private _init():void{
-        const gl:WebGLRenderingContext = getCtx(this.container as HTMLCanvasElement)!;
+        const gl = getCtx(this.container as HTMLCanvasElement)!;
         if (DEBUG && gl===undefined) throw new DebugError(`WebGLRenderingContext is not supported by this device`);
         this._gl = gl;
 
@@ -567,7 +568,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     // optimised version of rectangle drawing
     private _drawSimpleColoredRectangle(rectangle:Rectangle):void{
 
-        const scp:SimpleColoredRectPainter = this._coloredRectPainterHolder.getInstance(this._gl);
+        const scp = this._coloredRectPainterHolder.getInstance(this._gl);
         if (rectangle._lastProgramId!==undefined && rectangle._lastProgramId!==scp.id) rectangle.worldTransformDirty = true;
         rectangle._lastProgramId = scp.id;
 
@@ -592,9 +593,9 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     }
 
     private _drawRectangle(rectangle:Rectangle):void {
-        const rw:number = rectangle.size.width;
-        const rh:number = rectangle.size.height;
-        const maxSize:number = Math.max(rw,rh);
+        const rw = rectangle.size.width;
+        const rh = rectangle.size.height;
+        const maxSize = Math.max(rw,rh);
         const sp = this._shapePainterHolder.getInstance(this._gl);
         if (rectangle._lastProgramId!==undefined && rectangle._lastProgramId!==sp.id) rectangle.worldTransformDirty = true;
         rectangle._lastProgramId = sp.id;
@@ -610,9 +611,9 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
     }
 
     private _drawImage(img:Image):void {
-        const texture:Texture = img.getTexture() as Texture;
+        const texture = img.getTexture() as Texture;
         texture.setInterpolationMode(img.isPixelPerfect()?INTERPOLATION_MODE.NEAREST:INTERPOLATION_MODE.LINEAR);
-        const maxSize:number = Math.max(img.size.width,img.size.height);
+        const maxSize = Math.max(img.size.width,img.size.height);
 
         const sp = this._shapePainterHolder.getInstance(this._gl);
         if (img._lastProgramId!==undefined && img._lastProgramId!==sp.id) img.worldTransformDirty = true;
@@ -634,7 +635,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         const {width: textureWidth,height: textureHeight} = texture.size;
         const {x:srcRectX,y:srcRectY,width:destRectWidth,height:destRectHeight} = img.srcRect;
 
-        const destArr:Float32Array = rect.setXYWH(
+        const destArr = rect.setXYWH(
             srcRectX/textureWidth,
             srcRectY/textureHeight,
             destRectWidth/textureWidth,
@@ -642,7 +643,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
         sp.setUniformVector(sp.u_texRect, destArr);
 
-        const offSetArr:Float32Array = size.setWH(img.offset.x/maxSize,img.offset.y/maxSize).toArray();
+        const offSetArr = size.setWH(img.offset.x/maxSize,img.offset.y/maxSize).toArray();
         sp.setUniformVector(sp.u_texOffset,offSetArr);
         sp.setUniformScalar(sp.u_stretchMode,img.stretchMode);
         sp.attachTexture('texture',texture);
@@ -657,7 +658,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         if (img._lastProgramId!==undefined && img._lastProgramId!==sip.id) img.worldTransformDirty = true;
         img._lastProgramId = sip.id;
 
-        const texture:Texture = img.getTexture() as Texture;
+        const texture = img.getTexture() as Texture;
         texture.setInterpolationMode(img.isPixelPerfect()?INTERPOLATION_MODE.NEAREST:INTERPOLATION_MODE.LINEAR);
 
         if (img.worldTransformDirty) {
@@ -678,7 +679,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         const {width: srcRectWidth,height: srcRectHeight} =texture.size;
         const {x:srcRectX,y:srcRectY,width:destRectWidth,height:destRectHeight} = img.srcRect;
 
-        const destArr:Float32Array = rect.setXYWH(
+        const destArr = rect.setXYWH(
             srcRectX/srcRectWidth,
             srcRectY/srcRectHeight,
             destRectWidth/srcRectWidth,
@@ -704,9 +705,9 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
         const rw = model.size.width;
         const rh = model.size.height;
-        const maxSize:number = Math.max(rw,rh);
-        const sp:ShapePainter = this._shapePainterHolder.getInstance(this._gl);
-        let offsetX:number = 0,offsetY:number = 0;
+        const maxSize = Math.max(rw,rh);
+        const sp = this._shapePainterHolder.getInstance(this._gl);
+        let offsetX = 0,offsetY = 0;
         if (maxSize===rw) {
             sp.setUniformScalar(sp.u_width,1);
             sp.setUniformScalar(sp.u_height,rh/rw);
@@ -723,7 +724,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
         if (model.worldTransformDirty) {
             rect.setXYWH( -offsetX, -offsetY,maxSize,maxSize);
-            const mvpHolder:Mat16Holder = makeModelViewMatrix(rect,this._matrixStack);
+            const mvpHolder = makeModelViewMatrix(rect,this._matrixStack);
             model.modelViewMatrix.fromMat16(mvpHolder);
             sp.setUniformVector(sp.u_vertexMatrix,mvpHolder.mat16,true);
         } else {
@@ -749,14 +750,14 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
             }
         }
 
-        const maxSize:number = Math.max(model.size.width,model.size.height);
-        const sp:ShapePainter = this._shapePainterHolder.getInstance(this._gl);
+        const maxSize = Math.max(model.size.width,model.size.height);
+        const sp = this._shapePainterHolder.getInstance(this._gl);
         sp.setUniformScalar(sp.u_lineWidth,Math.min(model.lineWidth/maxSize,1));
         sp.setUniformVector(sp.u_color,model.color.asGL());
     }
 
     private prepareShapeFillUniformInfo(model:{fillGradient:Optional<AbstractGradient>,fillColor:Color}) {
-        const sp:ShapePainter = this._shapePainterHolder.getInstance(this._gl);
+        const sp = this._shapePainterHolder.getInstance(this._gl);
         if (model.fillGradient!==undefined) {
             model.fillGradient.setUniforms(sp);
             if (model.fillGradient.type==='LinearGradient') {

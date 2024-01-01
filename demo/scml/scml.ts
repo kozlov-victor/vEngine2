@@ -12,7 +12,6 @@ import {EasingQuint} from "@engine/misc/easing/functions/quint";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
-import {ReleaseableEntity} from "@engine/misc/releaseableEntity";
 import {TaskQueue} from "@engine/resources/taskQueue";
 import {noop} from "@engine/misc/object";
 import {EasingBezier} from "@engine/misc/easing/functions/bezier";
@@ -167,8 +166,8 @@ class ScmlObject {
         return obj;
     }
 
-    public characherInfo():SpatialInfo{
-        const identity:SpatialInfo = SpatialInfo.objectPool.getFreeObject()!;
+    public characterInfo():SpatialInfo{
+        const identity = SpatialInfo.pool.get();
         identity.x = 0;
         identity.y = 0;
         identity.a = 1;
@@ -200,12 +199,6 @@ class ScmlObject {
         const time:number = new Date().getTime();
         if (!this.startTime) this.startTime = time;
         animation.setCurrentTime(time - this.startTime);
-
-        SpatialInfo.objectPool.releaseAll();
-        SpriteTimelineKey.objectPool.releaseAll();
-        BoneTimelineKey.objectPool.releaseAll();
-
-
     }
 
     public nextAnimation():void{
@@ -395,7 +388,7 @@ class Animation {
         const transformBoneKeys = this.transformBoneKeys;
         for (let i = 0; i < transformBoneKeys.length; i++) {
             const transformBoneKey = transformBoneKeys[i];
-            transformBoneKey.info.release();
+            SpatialInfo.pool.recycle(transformBoneKey.info);
         }
         transformBoneKeys.length = 0;
         for(const b of mainKey.boneRefs) {
@@ -405,7 +398,7 @@ class Animation {
                 parentInfo=transformBoneKeys[currentRef.parent].info;
             }
             else {
-                parentInfo=this.scmlObject.characherInfo();
+                parentInfo=this.scmlObject.characterInfo();
             }
 
             const currentKey:BoneTimelineKey=(this.keyFromRef(currentRef,newTime) as BoneTimelineKey).clone();
@@ -425,7 +418,7 @@ class Animation {
                 parentInfo=transformBoneKeys[currentRef.parent].info;
             }
             else {
-                parentInfo=this.scmlObject.characherInfo();
+                parentInfo=this.scmlObject.characterInfo();
             }
 
             const currentKey:SpriteTimelineKey=(this.keyFromRef(currentRef,newTime) as SpriteTimelineKey).clone();
@@ -542,9 +535,7 @@ class Timeline {
 type OBJECT_TYPE = 'SPRITE'|'BONE'|'BOX'|'POINT'|'SOUND'|'ENTITY'|'VARIABLE';
 type CURVE_TYPE = 'INSTANT' | 'LINEAR' | 'QUADRATIC' | 'CUBIC'|'QUARTIC'|'QUINTIC'|'BEZIER';
 
-abstract class TimelineKey extends ReleaseableEntity{
-
-
+abstract class TimelineKey {
 
     public id:number;
     public time: number = 0;
@@ -606,10 +597,9 @@ abstract class SpatialTimelineKey extends TimelineKey {
     public info:SpatialInfo;
 }
 
-class SpatialInfo extends ReleaseableEntity{
+class SpatialInfo {
 
-    public static objectPool:ObjectPool<SpatialInfo> = new ObjectPool(SpatialInfo,POOL_SIZE);
-
+    public static pool = new ObjectPool(SpatialInfo,POOL_SIZE);
 
     public x:number=0;
     public y:number=0;
@@ -633,7 +623,7 @@ class SpatialInfo extends ReleaseableEntity{
 
 
     public clone():SpatialInfo{
-        const s:SpatialInfo = SpatialInfo.objectPool.getFreeObject()!;
+        const s = SpatialInfo.pool.get();
         s.x = this.x;
         s.y = this.y;
         s.angle = this.angle;
@@ -677,7 +667,7 @@ class BoneTimelineKey extends SpatialTimelineKey {
         super();
     }
 
-    public static objectPool:ObjectPool<BoneTimelineKey> = new ObjectPool(BoneTimelineKey,POOL_SIZE);
+    public static pool = new ObjectPool(BoneTimelineKey,POOL_SIZE);
 
     // unimplemented in Spriter
     public length:number=200;
@@ -704,7 +694,7 @@ class BoneTimelineKey extends SpatialTimelineKey {
 
 
     public clone():BoneTimelineKey{
-        const b:BoneTimelineKey = BoneTimelineKey.objectPool.getFreeObject()!;
+        const b = BoneTimelineKey.pool.get();
         b.scmlObject = this.scmlObject;
         b.timeLine = this.timeLine;
         b.time = this.time;
@@ -748,7 +738,7 @@ class SpriteTimelineKey extends SpatialTimelineKey {
         super();
     }
 
-    public static objectPool:ObjectPool<SpriteTimelineKey> = new ObjectPool(SpriteTimelineKey,POOL_SIZE);
+    public static pool = new ObjectPool(SpriteTimelineKey,POOL_SIZE);
 
 
     public folder:number = 0; // index of the folder within the ScmlObject
@@ -790,7 +780,7 @@ class SpriteTimelineKey extends SpatialTimelineKey {
 
 
     public clone():SpriteTimelineKey{
-        const s:SpriteTimelineKey = SpriteTimelineKey.objectPool.getFreeObject()!;
+        const s = SpriteTimelineKey.pool.get();
         s.time = this.time;
         s.curveType = this.curveType;
         s.c1 = this.c1;
@@ -849,7 +839,7 @@ const linear = (a:number,b:number,t:number) =>{
 };
 
 const linearSpatial = (infoA:SpatialInfo,infoB:SpatialInfo,spin:number,t:number):SpatialInfo=> {
-    const resultInfo:SpatialInfo = SpatialInfo.objectPool.getFreeObject(true)!;
+    const resultInfo = SpatialInfo.pool.get();
     resultInfo.x=linear(infoA.x,infoB.x,t);
     resultInfo.y=linear(infoA.y,infoB.y,t);
     resultInfo.angle=angleLinear(infoA.angle,infoB.angle,spin,t);

@@ -20,15 +20,7 @@ export class Point3d extends Point2d implements ICloneable<Point3d>, IPoint3d{
         this.setZ(value);
     }
 
-    private static _pool = new ObjectPool<Point3d>(Point3d,4);
-
-    public static override fromPool():Point3d {
-        return this._pool.getFreeObject()!;
-    }
-
-    public static override toPool(obj:Point3d):void {
-        return this._pool.releaseObject(obj);
-    }
+    public static pool3 = new ObjectPool(Point3d);
 
     // noinspection JSSuspiciousNameCombination
     constructor(x:number = 0,y:number=x,z:number=y,onChangedFn?:()=>void) {

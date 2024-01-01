@@ -1,5 +1,5 @@
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {IObjectMouseEvent, MousePoint, MousePointsPullHolder} from "@engine/control/mouse/mousePoint";
+import {IObjectMouseEvent, MousePoint} from "@engine/control/mouse/mousePoint";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Vec4} from "@engine/geometry/vec4";
 import {LayerTransformType} from "@engine/scene/layer";
@@ -18,7 +18,7 @@ export class MouseControlHelper {
     private isPointInPolygon4 = (point:IPoint2d,polygon:Readonly<Vec4.VEC4>[]):boolean=>{
         let result:boolean = false;
         let j:number = polygon.length - 1;
-        for (let i:number = 0,max:number= polygon.length; i < max; i++) {
+        for (let i = 0,max = polygon.length; i < max; i++) {
             if (
                 polygon[i][1] < point.y
                 && polygon[j][1] >= point.y || polygon[j][1] < point.y
@@ -92,21 +92,21 @@ export class MouseControlHelper {
         if (layerTransform===LayerTransformType.STICK_TO_CAMERA) {
             mousePoint.sceneCoordinate.setFrom(mousePoint.screenCoordinate);
         } else {
-            const worldPoint:Point2d = this.game.getCurrentScene().camera.screenToWorld(mousePoint.screenCoordinate);
+            const worldPoint = this.game.getCurrentScene().camera.screenToWorld(mousePoint.screenCoordinate);
             mousePoint.sceneCoordinate.setFrom(worldPoint);
-            worldPoint.release();
+            Point2d.pool.recycle(worldPoint);
         }
     }
 
     public resolvePoint(e:MouseEvent|Touch|PointerEvent):MousePoint{
-        const game:Game = this.game;
-        const clientX:number = e.clientX;
-        const clientY:number = e.clientY;
+        const game = this.game;
+        const clientX = e.clientX;
+        const clientY = e.clientY;
 
-        const screenX:number = (clientX - game.pos.x ) / game.scale.x;
-        const screenY:number = (clientY - game.pos.y ) / game.scale.y;
+        const screenX = (clientX - game.pos.x ) / game.scale.x;
+        const screenY = (clientY - game.pos.y ) / game.scale.y;
 
-        const mousePoint:MousePoint = MousePointsPullHolder.fromPool();
+        const mousePoint = MousePoint.pool.get();
         mousePoint.target = undefined!;
         mousePoint.screenCoordinate.setXY(screenX,screenY);
         mousePoint.id = (e as Touch).identifier  || (e as PointerEvent).pointerId || 0;

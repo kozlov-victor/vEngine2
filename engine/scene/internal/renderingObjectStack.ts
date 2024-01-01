@@ -1,13 +1,12 @@
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {ObjectPool} from "@engine/misc/objectPool";
-import {ReleaseableEntity} from "@engine/misc/releaseableEntity";
 
-export class RenderingObjectStackItem extends ReleaseableEntity {
+export class RenderingObjectStackItem {
     public obj:RenderableModel;
     public constrainObjects:RenderableModel[] = [];
 }
 
-const pool:ObjectPool<RenderingObjectStackItem> = new ObjectPool(RenderingObjectStackItem,Infinity);
+const pool = new ObjectPool(RenderingObjectStackItem);
 
 export class RenderingObjectStack {
 
@@ -16,13 +15,13 @@ export class RenderingObjectStack {
     public clear():void {
         for (const item of this.stack) {
             item.constrainObjects.length = 0;
-            item.release();
+            pool.recycle(item);
         }
         this.stack.length = 0;
     }
 
     public add(obj:RenderableModel,constrainObjects:readonly RenderableModel[]):void {
-        const stackItem:RenderingObjectStackItem = pool.getFreeObject()!;
+        const stackItem = pool.get();
         stackItem.obj = obj;
         if (constrainObjects.length>0) stackItem.constrainObjects.push(...constrainObjects);
         this.stack.push(stackItem);

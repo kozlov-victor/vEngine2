@@ -1,7 +1,6 @@
 import {DebugError} from "../../debug/debugError";
 import {ObjectPool} from "@engine/misc/objectPool";
 import {ICloneable} from "@engine/core/declarations";
-import {ReleaseableEntity} from "@engine/misc/releaseableEntity";
 import {Point2d} from "@engine/geometry/point2d";
 import {IPoint3d} from "@engine/geometry/point3d";
 import {vec3} from "@engine/misc/math/vec3";
@@ -34,12 +33,11 @@ export namespace Mat4 {
         0, 0, 0, 1
     ]) as Readonly<MAT16>;
 
-    export class Mat16Holder extends ReleaseableEntity implements ICloneable<Mat16Holder>{
+    export class Mat16Holder implements ICloneable<Mat16Holder>{
 
         public identityFlag:boolean = false;
 
         public constructor(){
-            super();
             this.set(
                 0, 0, 0, 0,
                 0, 0, 0, 0,
@@ -48,18 +46,9 @@ export namespace Mat4 {
             );
         }
 
-        private static m16hPool:ObjectPool<Mat16Holder> = new ObjectPool<Mat16Holder>(Mat16Holder,Infinity); // find leak!
+        public static pool = new ObjectPool(Mat16Holder);
 
-        public readonly mat16:Readonly<MAT16> = (new Float32Array(16) as unknown) as MAT16; // exports only readonly arr
-
-        public static fromPool():Mat16Holder {
-            (window as any).p = this.m16hPool;
-            return  Mat16Holder.m16hPool.getFreeObject()!;
-        }
-
-        public static toPool(obj:Mat16Holder):void {
-            return  Mat16Holder.m16hPool.releaseObject(obj);
-        }
+        public readonly mat16 = (new Float32Array(16) as unknown) as Readonly<MAT16>;
 
         public static create(): Mat4.Mat16Holder {
             return new Mat16Holder();
@@ -532,18 +521,18 @@ export namespace Mat4 {
     };
 
     export const unproject = (x:number, y:number, projectionView:Mat16Holder):Point2d=> {
-        const vec4Holder:Vec4Holder = Vec4Holder.fromPool();
+        const vec4Holder = Vec4Holder.pool.get();
         vec4Holder.set(x, y, 0, 1);
-        const invProjectionView:Mat16Holder = Mat16Holder.fromPool();
+        const invProjectionView = Mat16Holder.pool.get();
         Mat4.inverse(invProjectionView,projectionView);
 
-        const vec4Transformed:Vec4Holder = Vec4Holder.fromPool();
+        const vec4Transformed = Vec4Holder.pool.get();
         Mat4.multVecByMatrix(vec4Transformed, invProjectionView, vec4Holder);
-        Mat16Holder.toPool(invProjectionView);
-        Vec4Holder.toPool(vec4Holder);
-        const pointResult:Point2d = Point2d.fromPool();
+        Mat16Holder.pool.recycle(invProjectionView);
+        Vec4Holder.pool.recycle(vec4Holder);
+        const pointResult = Point2d.pool.get();
         pointResult.setXY(vec4Transformed.x,vec4Transformed.y);
-        Vec4Holder.toPool(vec4Transformed);
+        Vec4Holder.pool.recycle(vec4Transformed);
         return pointResult;
     };
 
