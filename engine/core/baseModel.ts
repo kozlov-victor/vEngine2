@@ -10,7 +10,7 @@ export abstract class BaseModel {
     public readonly type:string;
     public readonly pos = new Point3d(0,0,0);
 
-    private _destRect: Rect = new Rect();
+    private _destRect = new Rect();
     private _dirtyDestRect = true;
 
     protected constructor(protected game:Game){

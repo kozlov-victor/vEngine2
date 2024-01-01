@@ -2,14 +2,14 @@ declare let navigator:any;
 
 export class Device {
 
-    public static readonly isTouch:boolean = ('ontouchstart' in window);
-    public static readonly isFrame:boolean = window.top!==window.self;
-    public static readonly isIPhone:boolean = navigator.platform.toLowerCase().indexOf('iphone')>-1;
-    public static readonly isAndroid:boolean = navigator.userAgent.toLowerCase().indexOf('android')>-1;
-    public static readonly isMobile:boolean =
+    public static readonly isTouch = ('ontouchstart' in window);
+    public static readonly isFrame = window.top!==window.self;
+    public static readonly isIPhone = navigator.platform.toLowerCase().indexOf('iphone')>-1;
+    public static readonly isAndroid = navigator.userAgent.toLowerCase().indexOf('android')>-1;
+    public static readonly isMobile =
         this.isIPhone || this.isAndroid;
 
-    public static readonly embeddedEngine:boolean = navigator.userAgent==='vEngine';
+    public static readonly embeddedEngine = navigator.userAgent==='vEngine';
 
     public static getScreenResolution():[number,number]{
         return [globalThis.innerWidth,globalThis.innerHeight];

@@ -3,7 +3,7 @@ import {XmlNode} from "@engine/misc/parsers/xml/xmlElements";
 
 export class ElementStylesHolder {
 
-    private map:FastMap<XmlNode, Record<string, string>> = new FastMap<XmlNode, Record<string, string>>();
+    private map = new FastMap<XmlNode, Record<string, string>>();
 
     public getStyle(el:XmlNode):Record<string, string> {
         let styleMap = this.map.get(el);

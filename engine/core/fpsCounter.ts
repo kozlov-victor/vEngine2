@@ -1,9 +1,9 @@
 
 export class FpsCounter {
 
-    private _timeSpan:number = 0;
-    private _frames:number = 0;
-    private _fps:number = 0;
+    private _timeSpan = 0;
+    private _frames = 0;
+    private _fps = 0;
 
     public enterFrame(deltaTime:number):void {
         this._frames++;

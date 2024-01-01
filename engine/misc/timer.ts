@@ -5,7 +5,7 @@ import {DebugError} from "@engine/debug/debugError";
 
 export class Timer {
 
-    private _lastTime:number = 0;
+    private _lastTime = 0;
     private readonly _callback:()=>void;
     private readonly _interval:number;
 

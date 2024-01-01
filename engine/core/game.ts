@@ -59,7 +59,7 @@ export class Game {
         return this.size.height;
     }
 
-    private static readonly _UPDATE_TIME_RATE:number = Math.ceil(1000 / 60);
+    private static readonly _UPDATE_TIME_RATE = Math.ceil(1000 / 60);
     private static _instance:Game;
 
     public readonly size:ISize = new Size();

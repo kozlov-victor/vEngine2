@@ -38,7 +38,7 @@ export class DataTexture extends Texture {
 
     public setRawPixelAt(x:number, y:number, r:Uint8, g:Uint8, b:Uint8, a:Uint8):void {
         const position = (y*this.size.width + x)*4;
-        const rawData:Uint8Array = this.getData();
+        const rawData = this.getData();
         if (DEBUG && (position<0 || position>rawData.length-1)) {
             throw new DebugError(`can not set raw pixel data at {${x},${y}}: position ${position} is out of range. Actual buffer length is ${this._data.length}`);
         }
@@ -53,7 +53,7 @@ export class DataTexture extends Texture {
     }
 
     private updateRawData():void{
-        const gl:WebGLRenderingContext = this.gl;
+        const gl = this.gl;
         this.beforeOperation();
         // target: GLenum,
         // level: GLint,
