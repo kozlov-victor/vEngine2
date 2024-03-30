@@ -35,7 +35,6 @@ const PropertyPanel = (props:{model:RenderableModel|Layer}&IBaseProps)=>{
         filter(key=>!key.startsWith('_') && !['game'].includes(key)).
         map(key=>({key,val:val(props.model,key)})).
         filter(it=>it.val!==undefined);
-    console.log(keyValPair);
     return (
         <div className={'propPanel'}>
             <table>

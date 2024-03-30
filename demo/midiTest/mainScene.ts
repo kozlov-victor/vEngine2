@@ -83,7 +83,8 @@ export class MainScene extends Scene {
             '1-11-SecretOfTheForest',
             'jazz',
             'wst30xgb',
-            '8p_ffx_119'
+            '8p_ffx_119',
+            'Carcass- Black Star',
         ]
 
         const trackType = 'midi' as 'midi'|'json';

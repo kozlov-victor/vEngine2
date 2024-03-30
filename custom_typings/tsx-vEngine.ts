@@ -26,6 +26,7 @@ interface IGenericProps<T> {
     ref?:(el:T)=>void;
     click?:(e?:any)=>void;
     mouseUp?:(e?:any)=>void;
+    mouseMove?:(e?:any)=>void;
     mouseLeave?:(e?:any)=>void;
     filters?:IFilter[];
     alpha?:number;

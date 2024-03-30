@@ -314,7 +314,8 @@ export namespace Mat4Special {
         const b = bHolder.mat16 as MAT16;
 
         const a0 = a[0], a5 = a[5];
-        const a10 = a[10], a12 = a[12], a13 = a[13];
+        const a12 = a[12], a13 = a[13];
+
 
         const b0 = b[0], b1 = b[1], b2 = b[2], b4 = b[4], b5 = b[5], b6 = b[6], b8 = b[8];
         const b9 = b[9], b10 = b[10], b12 = b[12], b13 = b[13], b14 = b[14];
@@ -329,14 +330,14 @@ export namespace Mat4Special {
         r[6 ] =  a5 * b6;
         r[7 ] =  0;
 
-        r[8 ] =  a10 *  b8;
-        r[9 ] =  a10 *  b9;
-        r[10] =  a10 * b10;
+        r[8 ] =  b8;  // * a10
+        r[9 ] =  b9;  // * a10
+        r[10] =  b10; // * a10
         r[11] =  0;
 
-        r[12] = a12 * b0 + a13 * b4  + b12;
-        r[13] = a12 * b1 + a13 * b5  + b13;
-        r[14] = a12 * b2 + a13 * b6  + b14;
+        r[12] = a12 * b0 + a13 * b4 + b12;
+        r[13] = a12 * b1 + a13 * b5 + b13;
+        r[14] = a12 * b2 + a13 * b6 + b14;
         r[15] = 1;
 
         out.identityFlag = false;

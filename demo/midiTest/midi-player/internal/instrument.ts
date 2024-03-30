@@ -129,8 +129,9 @@ export class Instrument {
         },
         electroGuitarOverdriven: {
             waveForms: [
-                {amplitude: 0.8, form: WaveForms.square,adsr: {a: 0.01, d: 0.01, s: 1.1, r: 0.4, base: 0.5},},
-                {amplitude:0.2, form: WaveForms.sawTooth,adsr: {a: 0.02, d: 0.01, s: 1.1, r: 0.4, base: 0.5},}
+                {amplitude: 0.7, form: WaveForms.square,adsr: {a: 0.01, d: 0.01, s: 1.1, r: 0.4, base: 0.5},},
+                {amplitude:0.2, form: WaveForms.sawTooth,adsr: {a: 0.02, d: 0.03, s: 1.3, r: 0.45, base: 0.7},},
+                {amplitude:0.2, form: WaveForms.trapezia,adsr: {a: 0.015, d: 0.02, s: 1.2, r: 0.5, base: 0.6},},
             ],
             name: 'electroGuitarOverdriven',
         },

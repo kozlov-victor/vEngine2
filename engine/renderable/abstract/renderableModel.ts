@@ -374,25 +374,23 @@ export abstract class RenderableModel
         return this._scene === undefined;
     }
 
+    private _registerEventFromProps(props: any,ev:MOUSE_EVENTS) {
+        if (props[ev] !== undefined && this.tsxEvents[ev] !== props[ev]) {
+            if (this.tsxEvents[props] !== undefined) this.mouseEventHandler.off(ev, this.tsxEvents[ev]);
+            this.mouseEventHandler.on(ev, props[ev]);
+            this.tsxEvents[ev] = props[ev];
+        }
+    }
+
     public override setProps(props: ITransformableProps & IPositionableProps): void {
         if (props.id !== undefined) this.id = props.id;
         if (props.alpha !== undefined) this.alpha = props.alpha;
         if (props.filters !== undefined) this.filters = props.filters;
-        if (props.click !== undefined && this.tsxEvents.click !== props.click) {
-            if (this.tsxEvents.click !== undefined) this.mouseEventHandler.off(MOUSE_EVENTS.click, this.tsxEvents.click);
-            this.mouseEventHandler.on(MOUSE_EVENTS.click, props.click);
-            this.tsxEvents.click = props.click;
-        }
-        if (props.mouseUp !== undefined && this.tsxEvents.mouseUp !== props.mouseUp) {
-            if (this.tsxEvents.mouseUp !== undefined) this.mouseEventHandler.off(MOUSE_EVENTS.mouseUp, this.tsxEvents.mouseUp);
-            this.mouseEventHandler.on(MOUSE_EVENTS.mouseUp, props.mouseUp);
-            this.tsxEvents.mouseUp = props.mouseUp;
-        }
-        if (props.mouseLeave !== undefined && this.tsxEvents.mouseLeave !== props.mouseLeave) {
-            if (this.tsxEvents.mouseLeave !== undefined) this.mouseEventHandler.off(MOUSE_EVENTS.mouseLeave, this.tsxEvents.mouseLeave);
-            this.mouseEventHandler.on(MOUSE_EVENTS.mouseLeave, props.mouseLeave);
-            this.tsxEvents.mouseLeave = props.mouseLeave;
-        }
+
+        this._registerEventFromProps(props,MOUSE_EVENTS.click);
+        this._registerEventFromProps(props,MOUSE_EVENTS.mouseUp);
+        this._registerEventFromProps(props,MOUSE_EVENTS.mouseMove);
+        this._registerEventFromProps(props,MOUSE_EVENTS.mouseLeave);
         super.setProps(props);
     }
 

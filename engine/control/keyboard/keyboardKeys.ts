@@ -100,6 +100,7 @@ export const enum KEYBOARD_KEY {
     BACK_QUOTE = 192, // ё
     BACKSLASH = 220,
 
+    // kaios specific cell phone buttons
     SOFT_RIGHT = -1,
     SOFT_LEFT = -2,
     CALL = -3,

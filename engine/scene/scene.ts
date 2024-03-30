@@ -53,31 +53,31 @@ export abstract class Scene implements IRevalidatable, ITweenable,IFilterable,IA
         this.size.setFrom(this.game.size);
     }
 
-    public readonly type:string = "Scene";
+    public readonly type = "Scene";
     public backgroundColor = Color.WHITE.clone();
-    public readonly pos:Point2d = new Point2d();
+    public readonly pos = new Point2d();
     public filters:IFilter[] = [];
-    public alpha:number = 1;
-    public interactive:boolean = false;
-    public readonly size:Size = new Size();
-    public lifeCycleState:SceneLifeCycleState = SceneLifeCycleState.CREATED;
+    public alpha = 1;
+    public interactive = false;
+    public readonly size = new Size();
+    public lifeCycleState = SceneLifeCycleState.CREATED;
     public preloadingGameObject:RenderableModel;
-    public readonly camera:Camera = new Camera(this.game,this);
+    public readonly camera = new Camera(this.game,this);
     public _spatialSpace:SpatialSpace;
 
-    public readonly keyboardEventHandler:KeyboardEventEmitterDelegate = new KeyboardEventEmitterDelegate(this.game);
-    public readonly gamepadEventHandler:GamepadEventEmitterDelegate = new GamepadEventEmitterDelegate(this.game);
-    public readonly mouseEventHandler:MouseEventEmitterDelegate<ISceneMouseEvent> = new MouseEventEmitterDelegate<ISceneMouseEvent>(this.game,this);
+    public readonly keyboardEventHandler = new KeyboardEventEmitterDelegate(this.game);
+    public readonly gamepadEventHandler = new GamepadEventEmitterDelegate(this.game);
+    public readonly mouseEventHandler = new MouseEventEmitterDelegate<ISceneMouseEvent>(this.game,this);
     public readonly sceneEventHandler = new EventEmitterDelegate<SCENE_EVENTS,{taskQueue:TaskQueue}>(this.game);
 
     public readonly _renderingObjectStack:RenderingObjectStack;
-    public readonly _renderingSessionInfo:RenderingSessionInfo = new RenderingSessionInfo();
+    public readonly _renderingSessionInfo = new RenderingSessionInfo();
 
     private _layers: Layer[] = [];
     private _propertyAnimations:IAnimation[] = [];
 
-    private _tweenDelegate: TweenableDelegate = new TweenableDelegate(this.game);
-    private _timerDelegate:TimerDelegate = new TimerDelegate(this.game);
+    private _tweenDelegate = new TweenableDelegate(this.game);
+    private _timerDelegate = new TimerDelegate(this.game);
 
 
     private static isLayerGuard(modelOrLayer:RenderableModel|Layer):modelOrLayer is Layer {

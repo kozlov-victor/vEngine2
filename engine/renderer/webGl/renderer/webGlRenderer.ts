@@ -52,7 +52,7 @@ import {NullTexture} from "@engine/renderer/webGl/base/texture/nullTexture";
 
 const getCtx = (el:HTMLCanvasElement):Optional<WebGLRenderingContext>=>{
     const contextAttrs:WebGLContextAttributes = {alpha:false,premultipliedAlpha:false};
-    const possibles:string[] = ['webgl','experimental-webgl','webkit-3d','moz-webgl'];
+    const possibles = ['webgl','experimental-webgl','webkit-3d','moz-webgl'];
     for (const p of possibles) {
         const ctx = el.getContext(p,contextAttrs) as WebGLRenderingContext;
         if (ctx) {
@@ -65,7 +65,7 @@ const getCtx = (el:HTMLCanvasElement):Optional<WebGLRenderingContext>=>{
     return undefined;
 };
 
-const SCENE_DEPTH:number = 1000;
+const SCENE_DEPTH = 1000;
 
 const lruCache = new LruMap<number, Mat4.Mat16Holder>();
 
@@ -203,12 +203,12 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
         this.flush();
 
-        const mp:MeshPainter = this._meshPainterHolder.getInstance(this._gl);
+        const mp = this._meshPainterHolder.getInstance(this._gl);
 
         mp.bindMesh3d(mesh);
         mp.bind();
 
-        const modelMatrix:Mat16Holder = this._matrixStack.getCurrentValue();
+        const modelMatrix = this._matrixStack.getCurrentValue();
 
         const inverseTransposeModelMatrix = Mat16Holder.pool.get();
         Mat4.inverse(inverseTransposeModelMatrix,modelMatrix);
@@ -219,7 +219,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         mp.setProjectionMatrix(getProjectionMatrix(this._currFrameBufferStack.id,this._currFrameBufferStack.getCurrentTargetSize()).mat16);
         mp.setAlpha(mesh.getChildrenCount()===0?mesh.alpha:1);
 
-        const isTextureUsed:boolean = mesh.texture!==undefined;
+        const isTextureUsed = mesh.texture!==undefined;
         if (DEBUG && isTextureUsed && mesh._modelPrimitive.texCoordArr===undefined) throw new DebugError(`can not apply texture without texture coordinates`);
         mp.setTextureUsed(isTextureUsed);
         mp.attachTexture(
@@ -227,10 +227,10 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
             isTextureUsed?mesh.texture as Texture:this._nullTextureHolder.getInstance(this._gl)
         );
 
-        const isVertexColorUsed:boolean = mesh._modelPrimitive.vertexColorArr!==undefined;
+        const isVertexColorUsed = mesh._modelPrimitive.vertexColorArr!==undefined;
         mp.setVertexColorUsed(isVertexColorUsed);
 
-        const isNormalsTextureUsed:boolean = mesh.normalsTexture!==undefined;
+        const isNormalsTextureUsed = mesh.normalsTexture!==undefined;
         mp.setNormalsTextureUsed(isNormalsTextureUsed);
         mp.attachTexture(
             'u_normalsTexture',
@@ -244,7 +244,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
             isSpecularTextureUsed?mesh.specularTexture as Texture:this._nullTextureHolder.getInstance(this._gl)
         );
 
-        const isCubeMapTextureUsed:boolean = mesh.cubeMapTexture!==undefined;
+        const isCubeMapTextureUsed = mesh.cubeMapTexture!==undefined;
         if (DEBUG && !isCubeMapTextureUsed && mesh.material.reflectivity!==0) throw new DebugError(`can not apply reflectivity without cubeMapTexture`);
         mp.setCubeMapTextureUsed(isCubeMapTextureUsed);
         mp.setReflectivity(mesh.material.reflectivity);
@@ -663,7 +663,6 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
         if (img.worldTransformDirty) {
             rect.setXYWH( 0,0,img.size.width,img.size.height);
-            size.setFrom(this._currFrameBufferStack.getCurrentTargetSize());
             const mvpHolder = makeModelViewMatrix(rect,this._matrixStack);
             sip.setUniformVector(sip.u_vertexMatrix,mvpHolder.mat16, true);
             img.modelViewMatrix.fromMat16(mvpHolder);
