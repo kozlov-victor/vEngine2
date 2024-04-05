@@ -3,12 +3,15 @@ import {VirtualNode} from "@engine/renderable/tsx/_genetic/virtualNode";
 import {Optional} from "@engine/core/declarations";
 import {IRealNode} from "@engine/renderable/tsx/_genetic/realNode";
 import {AbstractElementCreator} from "@engine/renderable/tsx/_genetic/abstractElementCreator";
+import {getComponentUuid, VEngineTsxFactory} from "@engine/renderable/tsx/_genetic/vEngineTsxFactory.h";
+import {BaseTsxComponent} from "@engine/renderable/tsx/base/baseTsxComponent";
 
 const debug = false;
 
 export abstract class AbstractTsxDOMRenderer<T extends IRealNode> {
 
     private oldVirtualDom:VirtualNode;
+    private toMount: BaseTsxComponent[] = [];
 
     protected constructor(private elementCreator:AbstractElementCreator<T>) {
     }
@@ -25,12 +28,20 @@ export abstract class AbstractTsxDOMRenderer<T extends IRealNode> {
         const newVirtualDom:VirtualNode = new VirtualNode({},"root",newVirtualNodeChildren);
         this.reconcileChildren(newVirtualDom,this.oldVirtualDom,root);
         this.oldVirtualDom = newVirtualDom;
+
+        for (const cmp of this.toMount) {
+            cmp.onMounted();
+        }
+        this.toMount.length = 0;
+
         return newVirtualDom;
     }
 
-    private removeNode(node:T):void {
+    private removeNode(node:T,vNode:VirtualNode):void {
         if (debug) console.log('remove',node);
         node.removeSelf();
+        VEngineTsxFactory.destroyElement(vNode);
+        VEngineTsxFactory.clearCachedInstance((vNode.parentComponent as any)?.props);
     }
 
     private replaceNode(node:T,newVirtualNode:VirtualNode,parent:T):Optional<T>{
@@ -50,6 +61,10 @@ export abstract class AbstractTsxDOMRenderer<T extends IRealNode> {
         const node:T = this.elementCreator.createElementByTagName(newVirtualNode);
         this.setGenericProps(node,newVirtualNode);
         parent.appendChild(node);
+        if (newVirtualNode.shouldBeMounted) {
+            newVirtualNode.shouldBeMounted = false;
+            this.toMount.push(newVirtualNode.parentComponent);
+        }
         return node;
     }
 
@@ -61,8 +76,9 @@ export abstract class AbstractTsxDOMRenderer<T extends IRealNode> {
         //render node
         let newRealNode:Optional<T> = realNode;
         if (newVirtualNode===undefined && oldVirtualNode!==undefined) {  // remove node
-            if (newRealNode!==undefined) this.removeNode(newRealNode);
-        } else if (newVirtualNode!==undefined && oldVirtualNode!==undefined && newRealNode!==undefined) {
+            if (newRealNode!==undefined) this.removeNode(newRealNode,oldVirtualNode);
+        }
+        else if (newVirtualNode!==undefined && oldVirtualNode!==undefined && newRealNode!==undefined) {
             if (
                 newVirtualNode.index !==oldVirtualNode.index ||
                 newVirtualNode.props?.__id !==oldVirtualNode.props?.__id ||
@@ -73,7 +89,8 @@ export abstract class AbstractTsxDOMRenderer<T extends IRealNode> {
             } else {
                 this.updateNode(newRealNode,newVirtualNode); // update node
             }
-        } else if (newVirtualNode!==undefined && (oldVirtualNode===undefined || newRealNode===undefined)){ // create new node
+        }
+        else if (newVirtualNode!==undefined && (oldVirtualNode===undefined || newRealNode===undefined)){ // create new node
             newRealNode = this.createNode(newVirtualNode,parent);
         }
         // render children

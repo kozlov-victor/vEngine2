@@ -12,6 +12,10 @@ const flattenDeep = (arr:(VirtualNode[]|VirtualNode)[]):VirtualNode[]=> {
     return res as VirtualNode[];
 };
 
+export const getComponentUuid = (props:Record<string, any>)=>{
+    return props.trackBy ??  props.__id;
+}
+
 export class VEngineTsxFactory<T> {
 
     private static components:Record<number, BaseTsxComponent> = {};
@@ -44,16 +48,19 @@ export class VEngineTsxFactory<T> {
             {...props,children:flattenedNoFragments};
 
         if ((item as any).__VEngineTsxComponent) {
-            if (VEngineTsxFactory.components[props.__id]) {
-                const instance = VEngineTsxFactory.components[props.__id];
+            const uuid = getComponentUuid(props);
+            if (VEngineTsxFactory.components[uuid]) {
+                const instance = VEngineTsxFactory.components[uuid];
                 (instance as any).props = props;
-                return instance.render();
+                const node =  instance.render() as VirtualNode;
+                node.parentComponent = instance;
+                return node;
             } else {
                 const instance = new (item as any)(props) as BaseTsxComponent;
-                VEngineTsxFactory.components[props.__id] = instance;
+                VEngineTsxFactory.components[uuid] = instance;
                 const node = instance.render() as VirtualNode;
                 node.parentComponent = instance;
-                instance.onMounted();
+                node.shouldBeMounted = true;
                 return node;
             }
 
@@ -67,14 +74,22 @@ export class VEngineTsxFactory<T> {
     }
 
     public static destroyElement(el:VirtualNode) {
-        if (this.components[el.props.__id]) {
-            delete VEngineTsxFactory.components[el.props.__id];
-        }
-        el.children.forEach(it=>this.destroyElement(el));
+        this.clearCachedInstance(el.props);
+        el.children.forEach(it=>this.destroyElement(it));
+    }
+
+    public static clearCachedInstance(props:Record<string, any>) {
+        if (!props) return;
+        const uuid = getComponentUuid(props);
+        delete this.components[uuid];
     }
 
     public static createFragment({children}:{children: VirtualNode[]}):VirtualFragment {
         return new VirtualFragment(children);
+    }
+
+    public static clean() {
+        this.components = {};
     }
 
 }

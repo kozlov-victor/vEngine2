@@ -278,7 +278,7 @@ export class WidgetContainer extends MarkableGameObjectContainer implements ICon
             this.setState(ContainerState.ACTIVE);
             this.focus();
             if (this.focusable) {
-                e.isPropagated = false; // ie if editTextFiend is in container, only editTextFiend can be focused
+                e.transclude = false; // ie if editTextFiend is in container, only editTextFiend can be focused
             }
         });
         this.mouseEventHandler.on(MOUSE_EVENTS.mouseUp, e=>{

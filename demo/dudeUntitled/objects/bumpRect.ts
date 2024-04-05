@@ -6,6 +6,8 @@ import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleG
 
 export class BumpRect {
 
+    public static NAME = 'BumpRect';
+
     constructor(private scene:MainScene,tiledObject:ITiledJSON['layers'][0]['objects'][0]) {
 
         const obj = new SimpleGameObjectContainer(scene.getGame());

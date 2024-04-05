@@ -218,20 +218,20 @@ export class ResourceLoader {
         const pages:XmlNode[] = doc.querySelectorAll('page');
         if (DEBUG && !pages.length) throw new DebugError(`no 'page' node`);
         for (const page of pages) {
-            let baseUrlCopy:string|IURLRequest = baseUrl;
-            const pageFile:string = page.getAttribute('file');
+            const pageFile = page.getAttribute('file');
             if (DEBUG && !pageFile) throw new DebugError(`no 'file' attribute for 'page' node`);
+            let baseUrlCopy:string|IURLRequest = baseUrl;
             if (isString(baseUrlCopy)) {
-                baseUrlCopy = path.join(ResourceLoader.BASE_URL,baseUrlCopy,pageFile);
+                baseUrlCopy = path.join(baseUrlCopy,pageFile);
             } else {
                 baseUrlCopy = {...baseUrlCopy};
-                baseUrlCopy.url = path.join(ResourceLoader.BASE_URL,baseUrlCopy.url,pageFile);
+                baseUrlCopy.url = path.join(baseUrlCopy.url,pageFile);
             }
-            const texturePage:ITexture =
+            const texturePage =
                 await this.loadTexture(baseUrlCopy,n=>{
                     if (progress!==undefined) progress(n/pages.length);
                 });
-            const pageId:number = +page.getAttribute('id');
+            const pageId = +page.getAttribute('id');
             if (DEBUG && Number.isNaN(pageId)) throw new DebugError(`wrong page id: ${page.getAttribute('id')}`);
             texturePages.push({texture:texturePage,id:pageId});
         }
@@ -239,13 +239,13 @@ export class ResourceLoader {
     }
 
     public async loadFontFromAtlasUrl(baseUrl:string|IURLRequest,docFileName:string,docParser:{new(str:string):IParser<IXmlNode>}, progress?:(n:number)=>void):Promise<Font>{
-        let docUrl = baseUrl;
-        if (isString(docUrl)) {
-            docUrl = path.join(ResourceLoader.BASE_URL,docUrl,docFileName);
+        let docUrl:string|IURLRequest;
+        if (isString(baseUrl)) {
+            docUrl = path.join(baseUrl,docFileName);
         } else {
             docUrl = {
-                ...docUrl,
-                url:path.join(ResourceLoader.BASE_URL,docUrl.url,docFileName)
+                ...baseUrl,
+                url:path.join(baseUrl.url,docFileName)
             }
         }
         const plainText = await this.loadText(docUrl,n=>progress && progress(n/2));

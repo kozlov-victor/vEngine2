@@ -7,7 +7,9 @@ import {Font} from "@engine/renderable/impl/general/font/font";
 import {TaskQueue} from "@engine/resources/taskQueue";
 import {FontContextBdfFactory} from "@engine/renderable/impl/general/font/factory/fontContextBdfFactory";
 import {BdfFontParser} from "@engine/misc/parsers/bdf/bdfFontParser";
+import {DI} from "@engine/core/ioc";
 
+@DI.Injectable()
 export class Assets extends ResourceAutoHolder {
 
     @Resource.JSON('levels/level1.json') public readonly levelData:ITiledJSON;

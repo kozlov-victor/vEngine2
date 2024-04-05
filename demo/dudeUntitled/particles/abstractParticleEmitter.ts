@@ -4,13 +4,15 @@ import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {ICloneable} from "@engine/core/declarations";
 import {Scene} from "@engine/scene/scene";
 
+
 export abstract class AbstractParticleEmitter {
 
     protected ps:ParticleSystem;
 
     protected abstract createParticlePrefabs():(RenderableModel & ICloneable<RenderableModel & ICloneable<any>>)[];
 
-    constructor(protected scene:Scene) {
+
+    protected init(scene:Scene) {
         const ps = new ParticleSystem(scene.getGame());
         ps.emissionRadius = 5;
         ps.particleVelocity = {from:40, to: 60};
@@ -27,6 +29,7 @@ export abstract class AbstractParticleEmitter {
     }
 
     public emit(x:number,y:number):void {
+        if (!this.ps) return;
         this.ps.emissionPosition.setXY(x, y);
         this.ps.emit();
     }

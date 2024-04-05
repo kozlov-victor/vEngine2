@@ -1,6 +1,7 @@
 import {ITexture} from "@engine/renderer/common/texture";
 import {Game} from "@engine/core/game";
 import {ISize} from "@engine/geometry/size";
+import {Color} from "@engine/renderer/common/color";
 
 export class CanvasTexture implements ITexture {
 
@@ -16,10 +17,18 @@ export class CanvasTexture implements ITexture {
         }
         this.canvas = canvas;
         this.context = canvas.getContext('2d')!;
+        this.clear(Color.NONE);
     }
 
     public getContext():CanvasRenderingContext2D {
         return this.context;
+    }
+
+    public clear(color:Color) {
+        const ctx = this.context;
+        ctx.clearRect(0,0,this.size.width,this.size.height);
+        ctx.fillStyle = color.asCssRgba();
+        ctx.fillRect(0,0,this.size.width,this.size.height);
     }
 
     public getCanvas():HTMLCanvasElement {

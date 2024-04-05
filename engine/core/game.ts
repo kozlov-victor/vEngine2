@@ -55,6 +55,14 @@ export class Game {
         return this.size.width;
     }
 
+    public getCenterX() {
+        return this.size.width/2;
+    }
+
+    public getCenterY() {
+        return this.size.height/2;
+    }
+
     public get height():number {
         return this.size.height;
     }

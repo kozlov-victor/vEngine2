@@ -82,7 +82,7 @@ export class MouseControlHelper {
             eventName,
             isMouseDown: mousePoint.isMouseDown,
             button: (e as MouseEvent).buttons,
-            isPropagated:true,
+            transclude:true,
         };
         currentTarget.mouseEventHandler.trigger(eventName,mouseEvent);
         return mouseEvent;

@@ -17,7 +17,8 @@ export abstract class VEngineTsxComponent extends BaseTsxComponent {
     ) {
         super();
         if (VEngineTsxRootHolder.ROOT) {
-            console.warn(`only one root component can be created; VEngineTsxRootHolder.ROOT will be overriden`);
+            // collect garbage from ald root component
+            VEngineTsxFactory.clean();
         }
         VEngineTsxRootHolder.ROOT = this;
     }

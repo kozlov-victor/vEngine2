@@ -21,6 +21,7 @@ interface IFilter {
 
 interface IGenericProps<T> {
     __id?: number|never;
+    trackBy?:string;
     id?: string;
     key?:number|string;
     ref?:(el:T)=>void;

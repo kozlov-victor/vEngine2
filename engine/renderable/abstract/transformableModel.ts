@@ -123,11 +123,11 @@ export abstract class TransformableModel extends BaseModel implements ITransform
     public readonly anchorPoint = new ModelPoint2d(this);
     public readonly transformPoint = new ModelPoint2d(this);
     public readonly angle3d = new AnglePoint3d(this,'angle');
-    public billBoard:boolean = false;
+    public billBoard = false;
 
     protected _angleVelocity3d = new AnglePoint3d(this,'angleVelocity');
 
-    private _angle:number = 0;
+    private _angle = 0;
 
     protected constructor(game:Game){
         super(game);
@@ -185,7 +185,7 @@ export abstract class TransformableModel extends BaseModel implements ITransform
         cloned.anchorPoint.setFrom(this.anchorPoint);
         cloned.skew.setFrom(this.skew);
         cloned.transformPoint.setFrom(this.transformPoint);
-        const angle3dCloned:AnglePoint3d = this.angle3d.clone(this);
+        const angle3dCloned = this.angle3d.clone(this);
         cloned.angle3d.x = angle3dCloned.x;
         cloned.angle3d.y = angle3dCloned.y;
         cloned.angle3d.z = angle3dCloned.z;

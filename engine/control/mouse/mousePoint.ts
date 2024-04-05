@@ -26,7 +26,7 @@ export interface IObjectMouseEvent extends ISceneMouseEvent {
     objectY:number;
     currentTarget:RenderableModel;
     initialTarget:RenderableModel;
-    isPropagated:boolean;
+    transclude:boolean;
 }
 
 export class MousePoint {

@@ -35,6 +35,7 @@ import IDENTITY_HOLDER = Mat4.IDENTITY_HOLDER;
 import {ISceneMouseEvent} from "@engine/control/mouse/mousePoint";
 import {SpatialSpace} from "@engine/physics/common/spatialSpace";
 import {IStateStackPointer} from "@engine/renderer/webGl/base/buffer/frameBufferStack";
+import {DebugLayer} from "@engine/scene/debugLayer";
 
 export const enum SCENE_EVENTS {
     PRELOADING = 'PRELOADING',
@@ -100,7 +101,16 @@ export abstract class Scene implements IRevalidatable, ITweenable,IFilterable,IA
 
     public getDefaultLayer():Layer {
         if (!this._layers.length) this.appendChild(new Layer(this.game));
-        return this._layers[this._layers.length-1];
+        let l = this._layers.length;
+        while (l--){
+            const layer = this._layers[l];
+            if (layer instanceof DebugLayer) continue;
+            else return layer;
+        }
+        if (DEBUG) {
+            throw new DebugError(`no default layer`);
+        }
+        return undefined!;
     }
 
     public getLayerById(id:string):Optional<Layer> {
@@ -236,7 +246,7 @@ export abstract class Scene implements IRevalidatable, ITweenable,IFilterable,IA
         renderer.transformSave();
         renderer.clearColor.setFrom(this.backgroundColor);
 
-        const ptr:IStateStackPointer = renderer.beforeItemStackDraw(this.filters,this.alpha,false);
+        const ptr = renderer.beforeItemStackDraw(this.filters,this.alpha,false);
         renderer.beforeFrameDraw();
 
         if (this.camera.worldTransformDirty) {

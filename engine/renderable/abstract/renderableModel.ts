@@ -16,7 +16,6 @@ import {
 } from "../../core/declarations";
 import {DebugError} from "../../debug/debugError";
 import {Point2d} from "../../geometry/point2d";
-import {IRect, Rect} from "../../geometry/rect";
 import {Game} from "@engine/core/game";
 import {ITweenDescription, Tween} from "@engine/animation/tween";
 import {TweenMovie} from "@engine/animation/tweenMovie";
@@ -59,22 +58,22 @@ export abstract class RenderableModel
         IAlphaBlendable, IFilterable,
         IUpdatable, IDestroyable,IInteractive {
 
-    public id: string = `object_${Incrementer.getValue()}`;
+    public id = `object_${Incrementer.getValue()}`;
 
-    public alpha: number = 1;
-    public visible: boolean = true;
-    public blendMode: BLEND_MODE = BLEND_MODE.NORMAL;
+    public alpha = 1;
+    public visible = true;
+    public blendMode = BLEND_MODE.NORMAL;
     public depthTest: boolean = false;
     public filters: IFilter[] = [];
-    public forceDrawChildrenOnNewSurface: boolean = false;
+    public forceDrawChildrenOnNewSurface = false;
 
     public readonly parent: RenderableModel;
 
-    public readonly mouseEventHandler: MouseEventEmitterDelegate<IObjectMouseEvent> = new MouseEventEmitterDelegate(this.game,this);
-    public readonly dragEventHandler: EventEmitterDelegate<DRAG_EVENTS, IDragPoint> = new EventEmitterDelegate(this.game);
+    public readonly mouseEventHandler = new MouseEventEmitterDelegate<IObjectMouseEvent>(this.game,this);
+    public readonly dragEventHandler = new EventEmitterDelegate<DRAG_EVENTS, IDragPoint>(this.game);
 
     public readonly velocity = new Point2d(0, 0);
-    public readonly interactive: boolean = false;
+    public readonly interactive = false;
 
     public _lastProgramId:number;
 
@@ -83,14 +82,14 @@ export abstract class RenderableModel
     private _layer: Optional<Layer>;
     private _scene: Scene;
     private _rigidBody: IRigidBody;
-    private _destroyed:boolean = false;
+    private _destroyed = false;
 
-    private _tweenDelegate: TweenableDelegate = new TweenableDelegate(this.game);
-    private _timerDelegate: TimerDelegate = new TimerDelegate(this.game);
+    private _tweenDelegate = new TweenableDelegate(this.game);
+    private _timerDelegate = new TimerDelegate(this.game);
     private tsxEvents: Record<string, () => void> = {};
     private memoizeCache: Record<string, RenderableModel> = {};
 
-    protected _parentChildDelegate: ParentChildDelegate<RenderableModel> = new ParentChildDelegate<RenderableModel>(this);
+    protected _parentChildDelegate = new ParentChildDelegate<RenderableModel>(this);
     public declare readonly _children: RenderableModel[];
 
     protected getMemoizedView(factory: () => IPositionableProps): RenderableModel {
@@ -376,7 +375,7 @@ export abstract class RenderableModel
 
     private _registerEventFromProps(props: any,ev:MOUSE_EVENTS) {
         if (props[ev] !== undefined && this.tsxEvents[ev] !== props[ev]) {
-            if (this.tsxEvents[props] !== undefined) this.mouseEventHandler.off(ev, this.tsxEvents[ev]);
+            if (this.tsxEvents[ev] !== undefined) this.mouseEventHandler.off(ev, this.tsxEvents[ev]);
             this.mouseEventHandler.on(ev, props[ev]);
             this.tsxEvents[ev] = props[ev];
         }
@@ -387,10 +386,11 @@ export abstract class RenderableModel
         if (props.alpha !== undefined) this.alpha = props.alpha;
         if (props.filters !== undefined) this.filters = props.filters;
 
-        this._registerEventFromProps(props,MOUSE_EVENTS.click);
-        this._registerEventFromProps(props,MOUSE_EVENTS.mouseUp);
-        this._registerEventFromProps(props,MOUSE_EVENTS.mouseMove);
-        this._registerEventFromProps(props,MOUSE_EVENTS.mouseLeave);
+        this._registerEventFromProps(props, MOUSE_EVENTS.click);
+        this._registerEventFromProps(props, MOUSE_EVENTS.mouseUp);
+        this._registerEventFromProps(props, MOUSE_EVENTS.mouseMove);
+        this._registerEventFromProps(props, MOUSE_EVENTS.mouseLeave);
+
         super.setProps(props);
     }
 

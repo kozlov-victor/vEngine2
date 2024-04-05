@@ -9,6 +9,8 @@ import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 
 export class Sausage {
 
+    public static NAME = 'Sausage';
+
     private readonly image:Image;
 
     constructor(private scene:MainScene,tiledObject:ITiledJSON['layers'][0]['objects'][0]) {

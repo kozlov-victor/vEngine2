@@ -9,6 +9,8 @@ import {BumpRect} from "./bumpRect";
 
 export class PlatformMoveable {
 
+    public static NAME = 'PlatformMoveable';
+
     private lastBumped:BumpRect;
 
     constructor(private scene:MainScene,tiledObject:ITiledJSON['layers'][0]['objects'][0]) {

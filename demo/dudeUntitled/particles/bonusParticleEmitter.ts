@@ -1,14 +1,19 @@
 import {AbstractParticleEmitter} from "./abstractParticleEmitter";
 import {ColorFactory} from "@engine/renderer/common/colorFactory";
 import {Color} from "@engine/renderer/common/color";
-import {Scene} from "@engine/scene/scene";
-import {RingTangentModifier} from "@engine/renderable/impl/general/partycleSystem/modifier/ringTangentModifier";
 import {BatchedImage} from "@engine/renderable/impl/general/image/batchedImage";
+import {RingTangentModifier} from "@engine/renderable/impl/general/partycleSystem/modifier/ringTangentModifier";
+import {DI} from "@engine/core/ioc";
+import {Game} from "@engine/core/game";
 
+@DI.Injectable()
 export class BonusParticleEmitter extends AbstractParticleEmitter {
 
-    constructor(scene:Scene) {
-        super(scene);
+    @DI.Inject(Game) private game: Game;
+
+    @DI.PostConstruct()
+    protected onPostConstruct() {
+        this.init(this.game.getCurrentScene());
         this.ps.numOfParticlesToEmit = {from: 2, to: 10};
         this.ps.particleGravity.setXY(0);
         const modifier = new RingTangentModifier(this.ps);
@@ -19,7 +24,7 @@ export class BonusParticleEmitter extends AbstractParticleEmitter {
     }
 
     private createPrefab(color:Color) {
-        const particle = new BatchedImage(this.scene.getGame());
+        const particle = new BatchedImage(this.game);
         particle.fillColor.setFrom(color);
         particle.size.setWH(1);
         return particle;
@@ -34,6 +39,7 @@ export class BonusParticleEmitter extends AbstractParticleEmitter {
     }
 
     public override emit(x:number,y:number):void {
+        if (!this.ps) return;
         this.ps.emissionPosition.setXY(x, y);
         this.ps.emitAuto = true;
         this.ps.setTimeout(()=>{

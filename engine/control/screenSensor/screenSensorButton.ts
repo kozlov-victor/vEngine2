@@ -37,15 +37,15 @@ export class ScreenSensorButton extends SimpleGameObjectContainer {
 
     private listenToMouse():void {
         this.btn.mouseEventHandler.on(MOUSE_EVENTS.mouseDown, e=>{
-            e.isPropagated = false;
+            e.transclude = false;
             this.press();
         });
         this.btn.mouseEventHandler.on(MOUSE_EVENTS.mouseUp, e=>{
-            e.isPropagated = false;
+            e.transclude = false;
             this.release();
         });
         this.btn.mouseEventHandler.on(MOUSE_EVENTS.mouseLeave, e=>{
-            e.isPropagated = false;
+            e.transclude = false;
             this.release();
         });
     }

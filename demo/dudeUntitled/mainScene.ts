@@ -11,23 +11,17 @@ import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {ScreenSensorCursor} from "@engine/control/screenSensor/screenSensorCursor";
 import {ScreenSensorButton} from "@engine/control/screenSensor/screenSensorButton";
 import {Key} from "./objects/key";
-import {DiContainer} from "./ioc";
-import {GroundDustEmitter} from "./particles/groundDustEmitter";
-import {Script} from "./objects/script";
-import {WallDustEmitter} from "./particles/wallDustEmitter";
 import {KeyboardControl} from "@engine/control/keyboard/keyboardControl";
 import {Device} from "@engine/misc/device";
 import {DebugLayer} from "@engine/scene/debugLayer";
 import {Candy} from "./objects/candy";
-import {BonusParticleEmitter} from "./particles/bonusParticleEmitter";
 import {Fire} from "./objects/fire";
-import {FireEmitter} from "./particles/fireEmitter";
 import {PlatformMoveable} from "./objects/platformMoveable";
 import {BumpRect} from "./objects/bumpRect";
 import {FirePowerup} from "./objects/firePowerup";
-import {GunDustEmitter} from "./particles/gunDustEmitter";
+import {DI} from "@engine/core/ioc";
 
-
+@DI.Injectable()
 export class MainScene extends Scene {
 
     @Resource.ResourceHolder() public readonly assets:Assets;
@@ -68,46 +62,37 @@ export class MainScene extends Scene {
         });
         tileMap.appendTo(this);
 
-        DiContainer.register(tileMap);
-        DiContainer.register(new GroundDustEmitter(this));
-        DiContainer.register(new GunDustEmitter(this));
-        DiContainer.register(new WallDustEmitter(this));
-        DiContainer.register(new BonusParticleEmitter(this));
-        DiContainer.register(new FireEmitter(this));
-        DiContainer.register(new Script(this));
-        DiContainer.register(this.assets);
+        DI.registerInstance(tileMap);
 
         this.assets.levelData.layers.find(it=>it.type==='objectgroup')!.objects.forEach(obj=>{
             const cl = obj.class;
             switch (cl) {
-                case Character.name:
-                    DiContainer.register(new Character(this,obj));
+                case Character.NAME:
+                    new Character(this,obj);
                     break;
-                case Sausage.name:
+                case Sausage.NAME:
                     new Sausage(this,obj);
                     break;
-                case Key.name:
+                case Key.NAME:
                     new Key(this,obj);
                     break;
-                case Candy.name:
+                case Candy.NAME:
                     new Candy(this,obj);
                     break;
-                case Fire.name:
+                case Fire.NAME:
                     new Fire(this,obj);
                     break;
-                case FirePowerup.name:
+                case FirePowerup.NAME:
                     new FirePowerup(this,obj);
                     break;
-                case PlatformMoveable.name:
+                case PlatformMoveable.NAME:
                     new PlatformMoveable(this,obj);
                     break;
-                case BumpRect.name:
+                case BumpRect.NAME:
                     new BumpRect(this,obj);
                     break;
             }
         });
-
-        DiContainer.complete();
 
     }
 

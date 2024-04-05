@@ -7,7 +7,6 @@ import {AtlasFrameAnimation} from "@engine/animation/frameAnimation/atlas/atlasF
 import {ArcadeSideScrollControl} from "@engine/behaviour/impl/arcadeSideScroll/arcadeSideScrollControl";
 import {ITiledJSON} from "@engine/renderable/impl/general/tileMap/tileMap";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
-import {DiContainer, Injectable} from "../ioc";
 import {MainScene} from "../mainScene";
 import {GroundDustEmitter} from "../particles/groundDustEmitter";
 import {Script} from "./script";
@@ -17,20 +16,23 @@ import {Sausage} from "./sausage";
 import {Candy} from "./candy";
 import {Fire} from "./fire";
 import {FirePowerup} from "./firePowerup";
-import Inject = DiContainer.Inject;
+import {DI} from "@engine/core/ioc";
 
 const JUMP_VEL = 200;
 
-export class Character implements Injectable {
+@DI.Injectable()
+export class Character {
+
+    public static NAME = 'Character';
 
     public readonly image:AnimatedImage;
     public body:ArcadeRigidBody;
 
     private blinking = false;
 
-    @Inject(GroundDustEmitter) private readonly groundDust:GroundDustEmitter;
-    @Inject(AnimatedTileMap) private readonly tileMap:AnimatedTileMap;
-    @Inject(Script) private script:Script;
+    @DI.Inject(GroundDustEmitter) private readonly groundDust:GroundDustEmitter;
+    @DI.Inject(AnimatedTileMap) private readonly tileMap:AnimatedTileMap;
+    @DI.Inject(Script) private script:Script;
 
     public bh:ArcadeSideScrollControl;
     public firePower:0|1|2|3 = 0;
@@ -55,6 +57,7 @@ export class Character implements Injectable {
 
     }
 
+    @DI.PostConstruct()
     public postConstruct(): void {
         this.initBh();
         this.listenToKeys();

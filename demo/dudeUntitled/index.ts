@@ -8,6 +8,7 @@ import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {MouseControl} from "@engine/control/mouse/mouseControl";
 import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
 import {Device} from "@engine/misc/device";
+import {DI} from "@engine/core/ioc";
 
 // window.requestAnimationFrame =  (f:FrameRequestCallback):number=>{
 //     return setTimeout(f,1000/25);
@@ -53,7 +54,7 @@ game.getControl(KeyboardControl).reflectToSelf(
         [KEYBOARD_KEY.D]: KEYBOARD_KEY.RIGHT,
     }
 );
-
+DI.registerInstance(game);
 const mainScene: Scene = new MainScene(game);
 game.runScene(mainScene);
 

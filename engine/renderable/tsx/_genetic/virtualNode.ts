@@ -11,6 +11,7 @@ export class VirtualNode implements INode, JSX.Element {
     public text:string;
     public type:'virtualNode'|'virtualFragment' = 'virtualNode';
     public parentComponent:BaseTsxComponent;
+    public shouldBeMounted = false;
 
     constructor(
         public readonly props: Readonly<Record<string, any>>,

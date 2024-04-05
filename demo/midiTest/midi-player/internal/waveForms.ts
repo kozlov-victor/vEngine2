@@ -122,8 +122,8 @@ export namespace WaveForms {
                 out+=wave(i,t);
                 cnt++;
             }
-            out*= 5; // compensation
-            out/= cnt;
+            out *=5; // compensation
+            out /= cnt;
             return out;
         }
     }

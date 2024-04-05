@@ -7,16 +7,17 @@ import {MainScene} from "../mainScene";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {AnimatedImage} from "@engine/renderable/impl/general/image/animatedImage";
 import {AtlasFrameAnimation} from "@engine/animation/frameAnimation/atlas/atlasFrameAnimation";
-import {DiContainer} from "../ioc";
 import {FireEmitter} from "../particles/fireEmitter";
-import Inject = DiContainer.Inject;
+import {DI} from "@engine/core/ioc";
 
-
+@DI.Injectable()
 export class Fire {
+
+    public static NAME = 'Fire';
 
     private readonly image:Image;
 
-    @Inject(FireEmitter) private readonly fireEmitter:FireEmitter;
+    @DI.Inject(FireEmitter) private readonly fireEmitter:FireEmitter;
 
     constructor(private scene:MainScene,tiledObject:ITiledJSON['layers'][0]['objects'][0]) {
 
@@ -53,8 +54,6 @@ export class Fire {
     public getRenderable():RenderableModel {
         return this.image;
     }
-
-    public postConstruct(): void {}
 
 
 }

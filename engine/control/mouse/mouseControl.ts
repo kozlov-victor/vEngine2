@@ -208,7 +208,7 @@ export class MouseControl implements IControl {
         });
     }
 
-    private triggerEvent(e:MouseEvent|Touch, mouseEvent:MOUSE_EVENTS, isMouseDown:boolean = false):MousePoint{
+    private triggerEvent(e:MouseEvent|Touch, mouseEvent:MOUSE_EVENTS, isMouseDown = false):MousePoint{
         const scene = this.game.getCurrentScene();
         const mousePoint = this._helper.resolvePoint(e);
         mousePoint.isMouseDown = isMouseDown;
@@ -224,16 +224,16 @@ export class MouseControl implements IControl {
         } else {
             // trigger the most top object
             while(i--) {
-                const objectStackItem:RenderingObjectStackItem = objectStackItems[i];
-                const obj:RenderableModel = objectStackItem.obj;
-                const constrainObjects:RenderableModel[] = objectStackItem.constrainObjects;
-                const layer:Layer = obj.getLayer();
+                const objectStackItem = objectStackItems[i];
+                const obj = objectStackItem.obj;
+                const constrainObjects = objectStackItem.constrainObjects;
+                const layer = obj.getLayer();
                 if (layer===undefined) continue;
 
                 this._helper.resolveSceneCoordinates(mousePoint,layer.transformType);
-                const capturedEvent:Optional<IObjectMouseEvent> = this._helper.captureObject(e, mouseEvent, mousePoint, obj, obj, constrainObjects);
+                const capturedEvent = this._helper.captureObject(e, mouseEvent, mousePoint, obj, obj, constrainObjects);
                 if (capturedEvent!==undefined) {
-                    if (!capturedEvent.isPropagated) {
+                    if (!capturedEvent.transclude) {
                         propagationCancelled = true;
                         break;
                     }
@@ -241,10 +241,10 @@ export class MouseControl implements IControl {
                     // propagate event to parents
                     let parent:Optional<RenderableModel> = obj.parent;
                     while (parent!==undefined) {
-                        const propagationEvent:Optional<IObjectMouseEvent> =
+                        const propagationEvent =
                             this._helper.captureObject(e,mouseEvent,mousePoint,parent, obj, constrainObjects);
                         if (propagationEvent!==undefined) {
-                            if (!propagationEvent.isPropagated) {
+                            if (!propagationEvent.transclude) {
                                 propagationCancelled = true;
                                 break;
                             }
@@ -286,26 +286,26 @@ export class MouseControl implements IControl {
     }
 
     private resolveMouseMove(e:Touch|MouseEvent|PointerEvent,isMouseDown:boolean):void {
-        const point:MousePoint = this.triggerEvent(e,MOUSE_EVENTS.mouseMove,isMouseDown);
-        const capturedNew:RenderableModel[] = this._capturedObjectsByTouchIdHolder.getByTouchId(point.id);
-        const capturedOld:RenderableModel[] = this._capturedObjectsByTouchIdPrevHolder.getByTouchId(point.id);
+        const point = this.triggerEvent(e,MOUSE_EVENTS.mouseMove,isMouseDown);
+        const capturedNew = this._capturedObjectsByTouchIdHolder.getByTouchId(point.id);
+        const capturedOld = this._capturedObjectsByTouchIdPrevHolder.getByTouchId(point.id);
         // mouse enter
-        for (let i:number = 0; i < capturedNew.length; i++) {
-            const obj:RenderableModel = capturedNew[i];
+        for (let i = 0; i < capturedNew.length; i++) {
+            const obj = capturedNew[i];
             if (capturedOld.indexOf(obj)===-1) {
                 this._helper.triggerEventForObject(e, MOUSE_EVENTS.mouseEnter, point, obj, obj);
             }
         }
         // mouse leave
-        for (let i:number = 0; i < capturedOld.length; i++) {
-            const obj:RenderableModel = capturedOld[i];
+        for (let i = 0; i < capturedOld.length; i++) {
+            const obj = capturedOld[i];
             if (capturedNew.indexOf(obj)===-1) {
                 this._helper.triggerEventForObject(e, MOUSE_EVENTS.mouseLeave, point, obj, obj);
             }
         }
         // swap captured objects
         this._capturedObjectsByTouchIdPrevHolder.clear(point.id);
-        for (let i:number = 0; i < capturedNew.length; i++) {
+        for (let i = 0; i < capturedNew.length; i++) {
             this._capturedObjectsByTouchIdPrevHolder.add(point.id,capturedNew[i]);
         }
         MousePoint.pool.recycle(point);

@@ -4,18 +4,26 @@ import {Game} from "@engine/core/game";
 import {VEngineTsxFactory} from "@engine/renderable/tsx/_genetic/vEngineTsxFactory.h";
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 import {Resource} from "@engine/resources/resourceDecorators";
-import {Assets} from "./assets/assets";
-import {GameScene} from "./gameScene";
+import {Assets} from "../assets/assets";
+import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
+import {MenuScene} from "./menuScene";
+import {ColorFactory} from "@engine/renderer/common/colorFactory";
+import {DI} from "@engine/core/ioc";
 
-export class IntroSceneUi extends VEngineRootComponent {
+@DI.Injectable()
+class IntroSceneUi extends VEngineRootComponent {
 
-    constructor(game: Game, private assets: Assets) {
+    @DI.Inject(Assets) private assets: Assets;
+
+    constructor(game: Game) {
         super(game);
+        this.game.getCurrentScene().keyboardEventHandler.onceKeyPressed(KEYBOARD_KEY.SOFT_RIGHT, _=>this.go());
     }
 
     private go() {
-        this.game.runScene(new GameScene(this.game));
+        this.game.runScene(new MenuScene(this.game));
     }
+
 
     public render(): JSX.Element {
         return (
@@ -32,13 +40,16 @@ export class IntroSceneUi extends VEngineRootComponent {
 export class IntroScene extends Scene {
 
     @Resource.ResourceHolder() private assets: Assets;
+    public override backgroundColor = ColorFactory.fromCSS('green');
+
 
     override onReady() {
 
         const root = new SimpleGameObjectContainer(this.game);
         root.appendTo(this);
 
-        const ui = new IntroSceneUi(this.game,this.assets);
+        const ui = new IntroSceneUi(this.game);
         ui.mountTo(root);
+
     }
 }

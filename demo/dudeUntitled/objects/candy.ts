@@ -1,13 +1,14 @@
 import {Image} from "@engine/renderable/impl/general/image/image";
-import {ITileCollisionRect, ITiledJSON} from "@engine/renderable/impl/general/tileMap/tileMap";
+import {ITiledJSON} from "@engine/renderable/impl/general/tileMap/tileMap";
 import {TexturePackerAtlas} from "@engine/animation/frameAnimation/atlas/texturePackerAtlas";
 import {ARCADE_RIGID_BODY_TYPE, ArcadeRigidBody} from "@engine/physics/arcade/arcadeRigidBody";
 import {ArcadePhysicsSystem} from "@engine/physics/arcade/arcadePhysicsSystem";
 import {MainScene} from "../mainScene";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 
-
 export class Candy {
+
+    public static NAME = 'Candy';
 
     private readonly image:Image;
 

@@ -6,9 +6,9 @@ import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 
 const ADDITIONAL_KEYS_MAP:Record<string, number> = {
-    'softRight': KEYBOARD_KEY.SOFT_RIGHT,
-    'softLeft': KEYBOARD_KEY.SOFT_LEFT,
-    'call': KEYBOARD_KEY.CALL
+    'SoftRight': KEYBOARD_KEY.SOFT_RIGHT,
+    'SoftLeft': KEYBOARD_KEY.SOFT_LEFT,
+    'Call': KEYBOARD_KEY.CALL,
 };
 
 export class KeyboardControl extends AbstractKeypad<KeyBoardEvent> implements IControl {

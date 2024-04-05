@@ -9,6 +9,8 @@ import {ARCADE_RIGID_BODY_TYPE, ArcadeRigidBody} from "@engine/physics/arcade/ar
 
 export class FirePowerup {
 
+    public static NAME = 'FirePowerup';
+
     private readonly image:Image;
 
     constructor(private scene:MainScene,tiledObject:ITiledJSON['layers'][0]['objects'][0]) {

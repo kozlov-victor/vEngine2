@@ -1,5 +1,4 @@
 import {Key} from "./key";
-import {DiContainer, Injectable} from "../ioc";
 import {MainScene} from "../mainScene";
 import {IRectJSON} from "@engine/geometry/rect";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
@@ -12,14 +11,13 @@ import {Character} from "./character";
 import {AtlasFrameAnimation} from "@engine/animation/frameAnimation/atlas/atlasFrameAnimation";
 import {TexturePackerAtlas} from "@engine/animation/frameAnimation/atlas/texturePackerAtlas";
 import {CharacterBullet} from "./characterBullet";
-import {Image} from "@engine/renderable/impl/general/image/image";
 import {GunDustEmitter} from "../particles/gunDustEmitter";
-import {AbstractParticleEmitter} from "../particles/abstractParticleEmitter";
 import {EditTextField} from "@engine/renderable/impl/ui/textField/editTextField/editTextField";
 import {Assets} from "../assets/assets";
-import Inject = DiContainer.Inject;
 import {ColorFactory} from "@engine/renderer/common/colorFactory";
 import {Tween} from "@engine/animation/tween";
+import {DI} from "@engine/core/ioc";
+import {Game} from "@engine/core/game";
 
 export const waitFor = (root:RenderableModel,time:number):Promise<void>=> {
     return new Promise(resolve=>{
@@ -27,19 +25,17 @@ export const waitFor = (root:RenderableModel,time:number):Promise<void>=> {
     });
 }
 
-export class Script implements Injectable {
+@DI.Injectable()
+export class Script {
 
-    @Inject(AnimatedTileMap) private readonly tileMap:AnimatedTileMap;
-    @Inject(WallDustEmitter) public readonly wallDustEmitter:AbstractParticleEmitter;
-    @Inject(BonusParticleEmitter) private readonly bonusParticleEmitter:AbstractParticleEmitter;
-    @Inject(GunDustEmitter) private readonly gunDustEmitter:AbstractParticleEmitter;
-    @Inject(Assets) private readonly assets:Assets;
+    @DI.Inject(AnimatedTileMap) private readonly tileMap:AnimatedTileMap;
+    @DI.Inject(WallDustEmitter) public readonly wallDustEmitter:WallDustEmitter;
+    @DI.Inject(BonusParticleEmitter) private readonly bonusParticleEmitter:BonusParticleEmitter;
+    @DI.Inject(GunDustEmitter) private readonly gunDustEmitter:GunDustEmitter;
+    @DI.Inject(Assets) private readonly assets:Assets;
+    @DI.Inject(Game) private readonly game:Game;
 
-    constructor(private scene:MainScene) {
-    }
 
-    public postConstruct(): void {
-    }
 
     public onHeroCollectedSausage(sausage:Sausage):void {
         const host = sausage.getRenderable();
@@ -63,7 +59,7 @@ export class Script implements Injectable {
 
     public async onHeroCollidedWithKey(key:Key):Promise<void> {
         const targetRect =
-            this.scene.assets.levelData.layers.find(it=>it.type==='objectgroup')?.
+            this.assets.levelData.layers.find(it=>it.type==='objectgroup')?.
                 objects?.find(it=>{
                     return it.class==='OverlapRect' &&
                         it.properties.find(it => it.name === 'id' && it.value===key.rectId);
@@ -90,14 +86,14 @@ export class Script implements Injectable {
     }
 
     private createBullet(hero:Character):CharacterBullet {
-        const bullet = new CharacterBullet(this.scene.getGame());
+        const bullet = new CharacterBullet(this.game);
         const characterImage = hero.image;
         bullet.getContainer().getRigidBody().velocity.x = (300 + 100*hero.firePower)*characterImage.scale.x;
         bullet.getContainer().pos.setXY(
             characterImage.pos.x + characterImage.size.width  / 2 + (characterImage.size.width/2)*characterImage.scale.x,
             characterImage.pos.y + characterImage.size.height / 2
         );
-        bullet.getContainer().appendTo(this.scene.getLayerAtIndex(0));
+        bullet.getContainer().appendTo(this.game.getCurrentScene().getLayerAtIndex(0));
         if (hero.firePower>=2) {
             bullet.container.setInterval(()=>{
                 this.gunDustEmitter.emit(bullet.container.pos.x,bullet.container.pos.y);
@@ -124,18 +120,18 @@ export class Script implements Injectable {
     }
 
     private createPopupText(x:number, y: number, text: string) {
-        const textField = new EditTextField(this.scene.getGame(), this.assets.font);
-        textField.size.setFrom(this.scene.getGame().size);
+        const textField = new EditTextField(this.game, this.assets.font);
+        textField.size.setFrom(this.game.size);
         textField.textColor.setFrom(ColorFactory.fromCSS('#36ec02'));
         textField.setText(text);
         textField.setAutoSize(true);
         textField.setPixelPerfect(true);
         textField.pos.setXY(x,y);
-        this.scene.getLayerAtIndex(0).appendChild(textField);
+        this.game.getCurrentScene().getLayerAtIndex(0).appendChild(textField);
         textField.transformPoint.setToCenter();
         textField.anchorPoint.setToCenter();
         const moveTween = new Tween(
-            this.scene.getGame(),
+            this.game,
             {
                 target: textField,
                 from: {alpha:1},
@@ -156,12 +152,12 @@ export class Script implements Injectable {
     public onHeroCollidedWithFirePowerup(hero:Character) {
         hero.firePower++;
         if (hero.firePower>3) hero.firePower = 3;
-        const atlas = new TexturePackerAtlas(this.scene.assets.spritesAtlas);
+        const atlas = new TexturePackerAtlas(this.assets.spritesAtlas);
         this.createPopupText(hero.body.getMidX(),hero.body.getMidY(),'Power+1');
         switch (hero.firePower) {
             case 1: {
                 hero.bh.setFireAnimation(
-                    new AtlasFrameAnimation(this.scene.getGame(),{
+                    new AtlasFrameAnimation(this.game,{
                         frames: [
                             atlas.getFrameByKey('character_shoot1'),
                             atlas.getFrameByKey('character_shoot2'),
@@ -174,7 +170,7 @@ export class Script implements Injectable {
             }
             case 2: {
                 hero.bh.setFireAnimation(
-                    new AtlasFrameAnimation(this.scene.getGame(),{
+                    new AtlasFrameAnimation(this.game,{
                         frames: [
                             atlas.getFrameByKey('character_gun1'),
                             atlas.getFrameByKey('character_gun2'),

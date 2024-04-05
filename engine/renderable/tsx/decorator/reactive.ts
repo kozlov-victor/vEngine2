@@ -1,4 +1,5 @@
 import {VEngineTsxComponent} from "@engine/renderable/tsx/_genetic/vEngineTsxComponent";
+import {VEngineTsxRootHolder} from "@engine/renderable/tsx/_genetic/vEngineTsxRootHolder";
 
 export const Reactive = {
     Method: function() {
@@ -34,6 +35,18 @@ export const Reactive = {
                     }
                 });
             });
+        };
+    },
+    Function: function <K extends unknown[],U>(fn:(...args:[...K]) => U):(...args:[...K])=>U {
+        return (...args: [...K]) => {
+            const res = fn(...args);
+            VEngineTsxRootHolder.ROOT._triggerRendering();
+            if (res instanceof Promise) {
+                res.then(()=>{
+                    VEngineTsxRootHolder.ROOT._triggerRendering();
+                });
+            }
+            return res;
         };
     }
 }
