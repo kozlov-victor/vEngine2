@@ -1,11 +1,14 @@
 import {VirtualNode} from "@engine/renderable/tsx/_genetic/virtualNode";
 import {VirtualFragment} from "@engine/renderable/tsx/_genetic/virtualFragment";
 import {BaseTsxComponent} from "@engine/renderable/tsx/base/baseTsxComponent";
+import {VEngineTsxRootHolder} from "@engine/renderable/tsx/_genetic/vEngineTsxRootHolder";
 
 const flattenDeep = (arr:(VirtualNode[]|VirtualNode)[]):VirtualNode[]=> {
     const res =  arr.reduce((acc, val) => {
         if (Array.isArray(val)) {
-            val.forEach((v,i)=>v.loopIndex=i);
+            val.forEach((v,i)=>{
+                v.loopIndex=i;
+            });
             return (acc as VirtualNode[]).concat(flattenDeep(val as VirtualNode[]));
         } else return (acc as VirtualNode[]).concat(val as VirtualNode);
     },[]);
@@ -18,7 +21,7 @@ export const getComponentUuid = (props:Record<string, any>)=>{
 
 export class VEngineTsxFactory<T> {
 
-    private static components:Record<number, BaseTsxComponent> = {};
+    private static componentInstances:Record<number, BaseTsxComponent> = {};
 
     public static createElement(
         item:string|((props:Record<string, any>)=>VirtualNode)|{new: BaseTsxComponent},
@@ -49,15 +52,15 @@ export class VEngineTsxFactory<T> {
 
         if ((item as any).__VEngineTsxComponent) {
             const uuid = getComponentUuid(props);
-            if (VEngineTsxFactory.components[uuid]) {
-                const instance = VEngineTsxFactory.components[uuid];
+            if (VEngineTsxFactory.componentInstances[uuid]) {
+                const instance = VEngineTsxFactory.componentInstances[uuid];
                 (instance as any).props = props;
                 const node =  instance.render() as VirtualNode;
                 node.parentComponent = instance;
                 return node;
             } else {
                 const instance = new (item as any)(props) as BaseTsxComponent;
-                VEngineTsxFactory.components[uuid] = instance;
+                VEngineTsxFactory.componentInstances[uuid] = instance;
                 const node = instance.render() as VirtualNode;
                 node.parentComponent = instance;
                 node.shouldBeMounted = true;
@@ -81,7 +84,7 @@ export class VEngineTsxFactory<T> {
     public static clearCachedInstance(props:Record<string, any>) {
         if (!props) return;
         const uuid = getComponentUuid(props);
-        delete this.components[uuid];
+        delete this.componentInstances[uuid];
     }
 
     public static createFragment({children}:{children: VirtualNode[]}):VirtualFragment {
@@ -89,7 +92,7 @@ export class VEngineTsxFactory<T> {
     }
 
     public static clean() {
-        this.components = {};
+        this.componentInstances = {};
     }
 
 }

@@ -39,15 +39,15 @@ import {SkyBoxPainter} from "@engine/renderer/webGl/painters/impl/base/skyBox/sk
 import {MathEx} from "@engine/misc/math/mathEx";
 import {Point3d} from "@engine/geometry/point3d";
 import {IRenderTarget} from "@engine/renderer/abstract/abstractRenderer";
-import Mat16Holder = Mat4.Mat16Holder;
-import glEnumToString = DebugUtil.glEnumToString;
-import IDENTITY = Mat4.IDENTITY;
-import MAT16 = Mat4.MAT16;
 import {CubeMapTexture} from "@engine/renderer/webGl/base/texture/cubeMapTexture";
 import {FrameBufferStack, IStateStackPointer} from "@engine/renderer/webGl/base/buffer/frameBufferStack";
 import {BufferInfo} from "@engine/renderer/webGl/base/buffer/bufferInfo";
 import {Texture} from "@engine/renderer/webGl/base/texture/texture";
 import {NullTexture} from "@engine/renderer/webGl/base/texture/nullTexture";
+import Mat16Holder = Mat4.Mat16Holder;
+import glEnumToString = DebugUtil.glEnumToString;
+import IDENTITY = Mat4.IDENTITY;
+import MAT16 = Mat4.MAT16;
 
 
 const getCtx = (el:HTMLCanvasElement):Optional<WebGLRenderingContext>=>{
@@ -61,7 +61,7 @@ const getCtx = (el:HTMLCanvasElement):Optional<WebGLRenderingContext>=>{
             return ctx;
         }
     }
-    if (DEBUG) throw new DebugError(`webGl is not accessible on this device`);
+    if (DEBUG) throw new DebugError(`webGl is not accessible for this device`);
     return undefined;
 };
 
@@ -612,7 +612,11 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
     private _drawImage(img:Image):void {
         const texture = img.getTexture() as Texture;
-        texture.setInterpolationMode(img.isPixelPerfect()?INTERPOLATION_MODE.NEAREST:INTERPOLATION_MODE.LINEAR);
+        texture.setInterpolationMode(
+            (img.isPixelPerfect() || this._pixelPerfectMode)?
+                INTERPOLATION_MODE.NEAREST:
+                INTERPOLATION_MODE.LINEAR
+        );
         const maxSize = Math.max(img.size.width,img.size.height);
 
         const sp = this._shapePainterHolder.getInstance(this._gl);
@@ -659,7 +663,11 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
         img._lastProgramId = sip.id;
 
         const texture = img.getTexture() as Texture;
-        texture.setInterpolationMode(img.isPixelPerfect()?INTERPOLATION_MODE.NEAREST:INTERPOLATION_MODE.LINEAR);
+        texture.setInterpolationMode(
+            (img.isPixelPerfect() || this._pixelPerfectMode)?
+                INTERPOLATION_MODE.NEAREST:
+                INTERPOLATION_MODE.LINEAR
+        );
 
         if (img.worldTransformDirty) {
             rect.setXYWH( 0,0,img.size.width,img.size.height);

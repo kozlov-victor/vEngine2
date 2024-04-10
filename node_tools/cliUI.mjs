@@ -30,6 +30,7 @@ const getCh = ()=>{
         process.stdin.setRawMode(true);
 
         process.stdin.once('keypress', (str, key) => {
+            process.stdin.setRawMode(false);
             resolve(key);
         })
 

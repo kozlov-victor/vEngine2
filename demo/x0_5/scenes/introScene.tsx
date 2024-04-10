@@ -24,13 +24,30 @@ class IntroSceneUi extends VEngineRootComponent {
         this.game.runScene(new MenuScene(this.game));
     }
 
+    private exit() {
+        window.close();
+    }
+
 
     public render(): JSX.Element {
         return (
             <>
                 <v_image texture={this.assets.bg}/>
-                <v_image pos={{x:25,y:25}} texture={this.assets.logo}/>
-                <v_image click={()=>this.go()} pos={{x:150,y:270}} texture={this.assets.arrow}/>
+                <v_widgetContainer
+                    padding={[5]}
+                    layoutSize={{width:'FULL',height:'FULL'}}>
+                    <v_image
+                        layoutPos={{vertical:'start',horizontal:'center'}}
+                        texture={this.assets.logo}/>
+                    <v_image click={()=>this.exit()}
+                             scale={{x:-1,y:1}}
+                             transformPoint={'center'}
+                             layoutPos={{horizontal:'start',vertical:'end'}}
+                             texture={this.assets.arrow}/>
+                    <v_image click={()=>this.go()}
+                        layoutPos={{horizontal:'end',vertical:'end'}}
+                        texture={this.assets.arrow}/>
+                </v_widgetContainer>
             </>
         )
     }

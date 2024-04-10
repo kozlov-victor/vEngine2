@@ -28,6 +28,7 @@ import {AnimatedTextField} from "@engine/renderable/impl/ui/textField/animated/a
 import {LinearLayout} from "@engine/renderable/impl/ui/layouts/linearLayout";
 import {VerticalLayout} from "@engine/renderable/impl/ui/layouts/verticalLayout";
 import {HorizontalLayout} from "@engine/renderable/impl/ui/layouts/horizontalLayout";
+import {WidgetContainer} from "@engine/renderable/impl/ui/widgetContainer";
 
 export class VEngineElementCreator extends AbstractElementCreator<RenderableModel>{
 
@@ -123,6 +124,9 @@ export class VEngineElementCreator extends AbstractElementCreator<RenderableMode
                 break;
             case 'v_horizontalLayout':
                 element = new HorizontalLayout(game);
+                break;
+            case 'v_widgetContainer':
+                element = new WidgetContainer(game);
                 break;
             case undefined: {
                 if (DEBUG) throw new DebugError(`text nodes are not supported (${node.text})`);

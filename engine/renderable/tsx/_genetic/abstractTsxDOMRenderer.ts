@@ -59,8 +59,8 @@ export abstract class AbstractTsxDOMRenderer<T extends IRealNode> {
 
     private createNode(newVirtualNode:VirtualNode,parent:T):Optional<T>{
         const node:T = this.elementCreator.createElementByTagName(newVirtualNode);
-        this.setGenericProps(node,newVirtualNode);
         parent.appendChild(node);
+        this.setGenericProps(node,newVirtualNode);
         if (newVirtualNode.shouldBeMounted) {
             newVirtualNode.shouldBeMounted = false;
             this.toMount.push(newVirtualNode.parentComponent);

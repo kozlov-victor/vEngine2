@@ -2,6 +2,7 @@ import {ITexture} from "@engine/renderer/common/texture";
 import {Game} from "@engine/core/game";
 import {ISize} from "@engine/geometry/size";
 import {Color} from "@engine/renderer/common/color";
+import {ICanvasRenderingContext2DEx} from "@engine/renderer/canvas/canvasRenderer";
 
 export class CanvasTexture implements ITexture {
 
@@ -29,6 +30,14 @@ export class CanvasTexture implements ITexture {
         ctx.clearRect(0,0,this.size.width,this.size.height);
         ctx.fillStyle = color.asCssRgba();
         ctx.fillRect(0,0,this.size.width,this.size.height);
+    }
+
+    public setPixelPerfect(val:boolean) {
+        const context = this.context as ICanvasRenderingContext2DEx;
+        context.webkitImageSmoothingEnabled = !val;
+        context.mozImageSmoothingEnabled = !val;
+        context.msImageSmoothingEnabled = !val;
+        context.imageSmoothingEnabled = !val;
     }
 
     public getCanvas():HTMLCanvasElement {

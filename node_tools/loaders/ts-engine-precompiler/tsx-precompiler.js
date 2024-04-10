@@ -12,6 +12,9 @@ module.exports = function(content) {
         ];
     allTsxNodes.forEach(node=>{
         const factory = ts.factory;
+        if (node.attributes.properties.find(it=>it?.name?.escapedText==='___id')) {
+            return;
+        }
         node.attributes.properties.push(
             // https://ts-ast-viewer.com/#code/G4QwTgBCELwQPAEwJbAgZxgbwMwF8A+eAehWAKA
             factory.createJsxAttribute(

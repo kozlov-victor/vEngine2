@@ -40,11 +40,9 @@ class MenuSceneUI extends VEngineRootComponent {
     })();
 
     private levels: ILevel[] = [
-        {label:'Дуже легко',selected:true,aiLevel: 0},
-        {label:'Легко',selected:false,aiLevel:4},
-        {label:'Важкувато',selected:false,aiLevel:6},
-        {label:'Важко',selected:false,aiLevel:8},
-        {label:'Експерт',selected:false,aiLevel:10},
+        {label:'Початківець',selected:false,aiLevel:3},
+        {label:'Середняк',selected:false,aiLevel:10},
+        {label:'Експерт',selected:false,aiLevel:20},
     ]
 
     constructor(game: Game) {
@@ -87,19 +85,19 @@ class MenuSceneUI extends VEngineRootComponent {
             <>
                 <v_image texture={this.assets.bg}/>
                 <v_verticalLayout
-                    pos={{x:0,y:20}}
-                    size={this.game.size}
+                    padding={[30,5,0,5]}
+                    layoutSize={{width:'FULL',height:'FULL'}}
                 >
                     <v_textField
                         textColor={Color.WHITE}
                         alignTextContentHorizontal={AlignTextContentHorizontal.CENTER}
                         alignText={AlignText.CENTER}
-                        size={{width:this.game.width, height: 20}}
+                        layoutSize={{width:'FULL',height:20}}
                         text={'Оберіть рівень складності'}
                         font={this.assets.font}/>
                     <v_rectangle
                         lineWidth={0}
-                        size={{width:this.game.width,height:1}}
+                        layoutSize={{width:'FULL',height:1}}
                     />
                     <v_null_game_object size={{width:this.game.width,height:10}}/>
                     {this.levels.map(l=>
@@ -110,7 +108,7 @@ class MenuSceneUI extends VEngineRootComponent {
                             background={()=>l.selected?this.textFieldBgSelected:this.textFieldBgUnSelected}
                             alignTextContentHorizontal={AlignTextContentHorizontal.CENTER}
                             alignText={AlignText.CENTER}
-                            size={{width:this.game.width, height: 20}}
+                            layoutSize={{width:'FULL', height: 20}}
                             text={l.label}
                             font={this.assets.font}/>
                     )}

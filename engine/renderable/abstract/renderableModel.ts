@@ -37,6 +37,7 @@ import {MouseEventEmitterDelegate} from "@engine/delegates/eventDelegates/mouseE
 import {DRAG_EVENTS} from "@engine/behaviour/impl/draggable/dragEvents";
 import {IDragPoint} from "@engine/behaviour/impl/draggable/dragPoint";
 import {IStateStackPointer} from "@engine/renderer/webGl/base/buffer/frameBufferStack";
+import {WidgetContainer} from "@engine/renderable/impl/ui/widgetContainer";
 
 export const enum BLEND_MODE {
     NORMAL,
@@ -48,6 +49,7 @@ export const enum BLEND_MODE {
 }
 
 const EMPTY_FILTERS_ARR:IFilter[] = [];
+const ZERO_POINT = new Point2d();
 
 export abstract class RenderableModel
     extends TransformableModel
@@ -88,6 +90,7 @@ export abstract class RenderableModel
     private _timerDelegate = new TimerDelegate(this.game);
     private tsxEvents: Record<string, () => void> = {};
     private memoizeCache: Record<string, RenderableModel> = {};
+    private memoizedLayoutCalculation: {width?:string,height?:string,x?:string,y?:string};
 
     protected _parentChildDelegate = new ParentChildDelegate<RenderableModel>(this);
     public declare readonly _children: RenderableModel[];
@@ -381,10 +384,95 @@ export abstract class RenderableModel
         }
     }
 
+    private _calculateLayoutDimension(layout: NonNullable<ITransformableProps['layoutSize']>, dimension:'width'|'height') {
+        if (DEBUG && !this.parent) {
+            throw new DebugError(`can not calculate layout: parent is not set`);
+        }
+        const parentDimension =
+            (this.parent as WidgetContainer).getClientRect?
+                (this.parent as WidgetContainer).getClientRect()[dimension]:
+                this.parent.size[dimension];
+        if (DEBUG && !parentDimension) {
+            console.error({parent:this.parent,element:this});
+            throw new DebugError(`can not calculate layout: parent ${dimension} is ${parentDimension}`);
+        }
+
+        if (!this.memoizedLayoutCalculation) this.memoizedLayoutCalculation = {};
+        const memoizedValue = `${parentDimension}_${layout[dimension]}`;
+        if (memoizedValue===this.memoizedLayoutCalculation[dimension]) return;
+
+        if (layout[dimension]==='FULL') {
+            this.size[dimension] = parentDimension;
+        }
+        else if ((layout[dimension] as number).toFixed!==undefined) {
+            this.size[dimension] = layout[dimension] as number;
+        }
+        else if ((layout[dimension] as string).endsWith('%')) {
+            this.size[dimension] = Math.floor(parentDimension * parseInt(layout[dimension] as string)/100);
+        }
+        this.memoizedLayoutCalculation[dimension] = memoizedValue;
+    }
+
+    private _calculateLayoutSize(layout: NonNullable<ITransformableProps['layoutSize']>) {
+        this._calculateLayoutDimension(layout,'width');
+        this._calculateLayoutDimension(layout,'height');
+    }
+
+    private __calculateLayoutPos(layout: NonNullable<IPositionableProps['layoutPos']>, layoutKey:'horizontal'|'vertical',pos:'x'|'y',size:'width'|'height') {
+        const parent = this.parent;
+        if (DEBUG && !parent) {
+            throw new DebugError(`can not calculate layout: parent is not set`);
+        }
+        const parentSize =
+            (this.parent as WidgetContainer).getClientRect?
+                (this.parent as WidgetContainer).getClientRect():
+                this.parent.size;
+        if (DEBUG && !parentSize[size]) {
+            console.error({parent:this.parent,element:this});
+            throw new DebugError(`can not calculate layout: parent ${size} is ${parentSize[size]}`);
+        }
+        const offset =
+            (this.parent as WidgetContainer).getClientRect?
+                (this.parent as WidgetContainer).getClientRect():
+                ZERO_POINT;
+        if (!this.memoizedLayoutCalculation) this.memoizedLayoutCalculation = {};
+        const memoizedValue = `${parentSize}_${layout[layoutKey]}`;
+        if (memoizedValue===this.memoizedLayoutCalculation[pos]) return;
+        switch (layout[layoutKey]) {
+            case 'start':
+                this.pos[pos] = offset[pos];
+                break;
+            case 'end':
+                this.pos[pos] = parentSize[size] - this.size[size];
+                break;
+            case 'center':
+                this.pos[pos] = (parentSize[size] - this.size[size]) / 2;
+                break;
+        }
+        this.memoizedLayoutCalculation[pos] = memoizedValue;
+    }
+
+    private _calculateLayoutPos(layout: NonNullable<IPositionableProps['layoutPos']>) {
+        this.__calculateLayoutPos(layout,'horizontal','x','width');
+        this.__calculateLayoutPos(layout,'vertical','y','height');
+    }
+
     public override setProps(props: ITransformableProps & IPositionableProps): void {
         if (props.id !== undefined) this.id = props.id;
         if (props.alpha !== undefined) this.alpha = props.alpha;
-        if (props.filters !== undefined) this.filters = props.filters;
+        if (props.filters !== undefined) this.filters = props.filters
+
+        if (DEBUG && props.layoutSize && props.size) {
+            throw new DebugError(`use either 'pos' or 'layoutPos' property but not both`);
+        }
+        else if (props.layoutSize) this._calculateLayoutSize(props.layoutSize);
+        else if (props.size) this.size.setFrom(props.size);
+
+        if (DEBUG && props.layoutPos && props.pos) {
+            throw new DebugError(`use either 'size' or 'layoutSize' property but not both`);
+        }
+        else if (props.layoutPos) this._calculateLayoutPos(props.layoutPos);
+        else if (props.pos) this.pos.setFrom(props.pos);
 
         this._registerEventFromProps(props, MOUSE_EVENTS.click);
         this._registerEventFromProps(props, MOUSE_EVENTS.mouseUp);

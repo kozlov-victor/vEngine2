@@ -14,6 +14,7 @@ import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {Reactive} from "@engine/renderable/tsx/decorator/reactive";
 import {Game} from "@engine/core/game";
 import {DI} from "@engine/core/ioc";
+import {ColorFactory} from "@engine/renderer/common/colorFactory";
 
 @DI.Injectable()
 export class Alert extends BaseTsxComponent {
@@ -22,7 +23,7 @@ export class Alert extends BaseTsxComponent {
     @DI.Inject(Assets) private assets: Assets;
     @DI.Inject(Game) private game: Game;
 
-    constructor(private props:{__id?:number,hide:()=>void,text:string}) {
+    constructor(private props:{__id?:number,hide:()=>void,text:string,color:IColor}) {
         super();
     }
 
@@ -33,21 +34,25 @@ export class Alert extends BaseTsxComponent {
                 click={e=>this.props.hide()}
                 fillColor={{r:0,g:0,b:0,a:100}}
                 size={this.game}>
-                <v_textField
-                    textColor={Color.WHITE}
-                    pos={{x:0,y:30}}
-                    ref={el=>this.root = el as RenderableModel}
-                    margin={[5]}
-                    padding={[5]}
-                    alignText={AlignText.CENTER}
-                    alignTextContentVertical={AlignTextContentVertical.CENTER}
-                    alignTextContentHorizontal={AlignTextContentHorizontal.CENTER}
-                    background={()=>this.assets.textFieldBg}
-                    text={this.props.text}
-                    wordBrake={WordBrake.FIT}
-                    size={{width:this.game.width, height:100}}
-                    font={this.assets.font}
-                />
+                <v_rectangle
+                    fillColor={this.props.color}
+                    lineWidth={1}
+                    layoutPos={{horizontal:'center', vertical:'center'}}
+                    layoutSize={{width:'90%', height:'40%'}}
+                >
+                    <v_textField
+                        textColor={Color.WHITE}
+                        ref={el=>this.root = el as RenderableModel}
+                        padding={[5]}
+                        alignText={AlignText.CENTER}
+                        alignTextContentVertical={AlignTextContentVertical.CENTER}
+                        alignTextContentHorizontal={AlignTextContentHorizontal.CENTER}
+                        text={this.props.text}
+                        wordBrake={WordBrake.FIT}
+                        layoutSize={{width:'FULL', height:'FULL'}}
+                        font={this.assets.font}
+                    />
+                </v_rectangle>
             </v_rectangle>
         );
     }
@@ -70,31 +75,41 @@ export class Alert extends BaseTsxComponent {
     }
 }
 
-export namespace AlertService {
+@DI.Injectable()
+export class AlertService {
 
-    let shown = false;
-    let text = '';
-    let resolveFn:()=>void;
+    public static successColor = ColorFactory.fromCSS('#029b28');
+    public static errorColor = ColorFactory.fromCSS('#4b0101');
+    public static neutralColor = ColorFactory.fromCSS('#b48004');
 
-    export const show = Reactive.Function((game:Game,txt:string)=>{
-        shown = true;
-        text = txt;
+    private shown = false;
+    private text = '';
+    private color:IColor;
+    private resolveFn:()=>void;
+    @DI.Inject(Game) private game: Game;
+
+    @Reactive.Method()
+    public async show(txt:string,color:IColor){
+        this.shown = true;
+        this.color = color;
+        this.text = txt;
         return new Promise<void>(resolve=>{
-            resolveFn = resolve;
-            game.getCurrentScene().keyboardEventHandler.onceKeyPressed(KEYBOARD_KEY.ENTER, e=>{
-                hide();
+            this.resolveFn = resolve;
+            this.game.getCurrentScene().keyboardEventHandler.onceKeyPressed(KEYBOARD_KEY.ENTER, e=>{
+                this.hide();
                 resolve();
             });
         });
-    });
-
-    export const hide = ()=>{
-        shown = false;
-        resolveFn();
     }
 
-    export const getElement = ()=>{
-        return shown?<Alert hide={hide} text={text}/>:undefined;
+    @Reactive.Method()
+    private hide(){
+        this.shown = false;
+        this.resolveFn();
+    }
+
+    public getElement(){
+        return this.shown?<Alert hide={this.hide} color={this.color} text={this.text}/>:undefined;
     }
 
 }

@@ -63,8 +63,6 @@ export const DI = {
                 Object.defineProperty(this, context.name, {
                     get: () => {
                         if (!DIContext[tkn]) {
-                            console.log(tkn,clazz);
-                            (window as any).c = clazz;
                             DIContext[tkn] = new clazz();
                         }
                         return DIContext[tkn];

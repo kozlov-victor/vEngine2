@@ -35,13 +35,18 @@ interface IGenericProps<T> {
 
 interface IPositionableProps {
     pos?:IPoint;
+    layoutPos?:{
+        horizontal?:'start'|'end'|'center',
+        vertical?:'start'|'end'|'center',
+    };
 }
 
 interface ITransformableProps extends IGenericProps<unknown>{
     size?:{width:number,height:number};
-    scale?:{x:number,y:number};
+    layoutSize?:{width:`${number}%`|'FULL'|number,height:`${number}%`|'FULL'|number};
+    scale?:IPoint;
     anchorPoint?:IPoint;
-    transformPoint?:IPoint;
+    transformPoint?:IPoint|'center';
 }
 
 interface IShapeProps extends ITransformableProps{
@@ -184,6 +189,7 @@ declare namespace JSX {
         v_linearLayout:             IWidgetContainerProps;
         v_verticalLayout:           IWidgetContainerProps;
         v_horizontalLayout:         IWidgetContainerProps;
+        v_widgetContainer:          IWidgetContainerProps;
     }
     export interface Element {}
 }

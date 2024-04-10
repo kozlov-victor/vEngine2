@@ -71,12 +71,12 @@ export class WidgetContainer extends MarkableGameObjectContainer implements ICon
     private backgroundActive: RenderableModel = new DefaultBackgroundObject(this.game);
     private backgroundDisabled: RenderableModel = new DefaultBackgroundObject(this.game);
 
-    protected state:ContainerState = ContainerState.NORMAL;
-    protected focusable:boolean = false;
+    protected state = ContainerState.NORMAL;
+    protected focusable = false;
 
-    private clientRect:Rect = new Rect();
-    private hovered:boolean = false;
-    private clicked:boolean = false;
+    private clientRect = new Rect();
+    private hovered = false;
+    private clicked = false;
 
     private static normalizeBorders(top:number,right?:number,bottom?:number,left?:number)
         :{top:number,right:number,bottom:number,left:number} {
@@ -184,19 +184,19 @@ export class WidgetContainer extends MarkableGameObjectContainer implements ICon
     public override setProps(props: IWidgetContainerProps):void {
         super.setProps(props);
         if (props.background!==undefined) {
-            const memoized:RenderableModel = this.getMemoizedView(props.background);
+            const memoized = this.getMemoizedView(props.background);
             if (memoized!==this.background) this.setBackground(memoized);
         }
         if (props.backgroundActive!==undefined) {
-            const memoized:RenderableModel = this.getMemoizedView(props.backgroundActive);
+            const memoized = this.getMemoizedView(props.backgroundActive);
             if (memoized!==this.backgroundActive) this.setBackgroundActive(memoized);
         }
         if (props.backgroundHover!==undefined) {
-            const memoized:RenderableModel = this.getMemoizedView(props.backgroundHover);
+            const memoized = this.getMemoizedView(props.backgroundHover);
             if (memoized!==this.backgroundHover) this.setBackgroundActive(memoized);
         }
         if (props.backgroundDisabled!==undefined) {
-            const memoized:RenderableModel = this.getMemoizedView(props.backgroundDisabled);
+            const memoized = this.getMemoizedView(props.backgroundDisabled);
             if (memoized!==this.backgroundDisabled) this.setBackgroundActive(memoized);
         }
         if (props.padding && props.padding.length>0) {

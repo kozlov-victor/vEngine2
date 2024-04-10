@@ -10,7 +10,7 @@ export const wait = Reactive.Function((n:number)=>{
 
 export const SIZE = 12;
 export type SYMBOL = 'X'|'0';
-const MAX_AI_LEVEL = 10;
+const MAX_AI_LEVEL = 20;
 export class Cell {
     value:Optional<SYMBOL>;
     score:number;
@@ -36,25 +36,13 @@ class AI {
         }
     }
 
-    private actionPatterns = [
-        {val: '0xxxx', score: 40},
-        {val: '00xxx', score: 35},
-        {val: '0x0xx', score: 35},
-        {val: '0xx0x', score: 35},
-        {val: '0xxx0', score: 35},
-        {val: '0xxx', score: 30},
-        {val: '0x0x', score: 25},
-        {val: '0xx', score: 20},
-        {val: '0x', score: 10},
-
-    ]
-
-    private constructPattern(cell:Cell,rowFactor:0|1|-1,colFactor:0|1|-1,symbol:SYMBOL):{value:string,cells:Cell[]} {
+    private getRowScore(cell:Cell,rowFactor:0|1|-1,colFactor:0|1|-1,from:0|1,symbol:SYMBOL):{score:number,full:boolean,cells:Cell[]} {
         const result = {
-            value:'',
+            score:0,
+            full: false,
             cells: [] as Cell[],
         }
-        for (let k=0;k<5;k++) {
+        for (let k=from;k<5;k++) {
             const row = cell.row+k*rowFactor;
             const col = cell.col+k*colFactor;
             if (row>SIZE-1) break;
@@ -62,49 +50,27 @@ class AI {
             if (row<0) break;
             if (col<0) break;
             switch (this.board.field[row][col].value) {
-                case undefined:
-                    result.value+='0';
-                    result.cells.push(undefined!);
-                    break;
                 case symbol:
-                    result.value+='x';
+                    result.score+=1;
                     result.cells.push(this.board.field[row][col]);
                     break;
                 default:
-                    result.value+='.';
-                    break;
+                    return result;
             }
         }
+        result.full = result.cells.length===5 && result.cells.every(it=>it && it.value===symbol);
         return result;
-    }
-
-    private getPatternScore(pattern:string) {
-        const allScores:number[] = [0];
-        this.actionPatterns.forEach(p=>{
-            if (pattern.startsWith(p.val)) {
-                allScores.push(p.score);
-            }
-        });
-        return Math.max(...allScores);
-    }
-
-    private getAllPatterns(cell:Cell, symbol: SYMBOL) {
-        return [
-            this.constructPattern(cell,0,1, symbol),
-            this.constructPattern(cell,0,-1, symbol),
-            this.constructPattern(cell,1,0, symbol),
-            this.constructPattern(cell,-1,0, symbol),
-            this.constructPattern(cell,1,1, symbol),
-            this.constructPattern(cell,-1,1, symbol),
-            this.constructPattern(cell,1,-1, symbol),
-            this.constructPattern(cell,-1,-1, symbol)
-        ]
     }
 
     private getCellScore(cell:Cell,symbol:SYMBOL):number {
         if (cell.value!=undefined) return -1;
-        return Math.max(
-            ...this.getAllPatterns(cell,symbol).map(p=>this.getPatternScore(p.value))
+        return Math.max(...
+            [
+                this.getRowScore(cell,1,0, 1,symbol).score + this.getRowScore(cell,-1,0, 1,symbol).score,
+                this.getRowScore(cell,0,1, 1,symbol).score + this.getRowScore(cell,0,-1, 1,symbol).score,
+                this.getRowScore(cell,1,1, 1,symbol).score + this.getRowScore(cell,-1,-1, 1,symbol).score,
+                this.getRowScore(cell,1,-1, 1,symbol).score + this.getRowScore(cell,-1,1, 1,symbol).score,
+            ]
         );
     }
 
@@ -116,7 +82,7 @@ class AI {
             cell.score = Math.max(
                 this.getCellScore(cell,'X'),
                 this.getCellScore(cell,'0'),
-            )
+            );
         });
         // додаємо шум в розрахований miniMax
         this.board.cells.forEach(c=>{
@@ -124,15 +90,21 @@ class AI {
                 c.score+=Math.random()*(MAX_AI_LEVEL-this.aiLevel);
             }
         });
+
         const maxScore = Math.max(0,...this.board.cells.map(it=>it.score));
         const theBestCells = this.board.cells.filter(c=>c.score===maxScore);
         return theBestCells[Math.floor((Math.random()*theBestCells.length))];
     }
 
     public checkPossibleWinner(symbol:SYMBOL):Cell[]|undefined {
-        for (const c of this.board.cells) {
-            const allRows = this.getAllPatterns(c,symbol);
-            const winRow = allRows.find(it=>it.value==='xxxxx');
+        for (const cell of this.board.cells) {
+            const allRows = [
+                this.getRowScore(cell,0,1, 0,symbol),
+                this.getRowScore(cell,1,0, 0,symbol),
+                this.getRowScore(cell,1,1, 0,symbol),
+                this.getRowScore(cell,1,-1, 0,symbol),
+            ]
+            const winRow = allRows.find(it=>it.full);
             if (winRow) {
                 return winRow.cells;
             }
@@ -183,6 +155,7 @@ export class Board {
         if (this.finished) return {result:'keep',cells:undefined};
         if (this.waitingForOpponentAction) return {result:'keep',cells:undefined};
         cell.value = 'X';
+
         this.waitingForOpponentAction = true;
         await wait(500);
         const winCells = this.ai.checkPossibleWinner('X');

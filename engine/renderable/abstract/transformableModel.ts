@@ -153,7 +153,7 @@ export abstract class TransformableModel extends BaseModel implements ITransform
     }
 
     public _transform():void{
-        const renderer:AbstractRenderer = this.game.getRenderer();
+        const renderer = this.game.getRenderer();
         renderer.transformRotateX(this.angle3d.x);
         renderer.transformRotateY(this.angle3d.y);
         renderer.transformRotateZ(this.angle3d.z);
@@ -166,11 +166,15 @@ export abstract class TransformableModel extends BaseModel implements ITransform
     }
 
     public setProps(props:ITransformableProps&IPositionableProps):void{
-        if (props.pos!==undefined) this.pos.setFrom(props.pos);
-        if (props.size!==undefined) this.size.setFrom(props.size);
         if (props.scale!==undefined) this.scale.setFrom(props.scale);
         if (props.anchorPoint!==undefined) this.anchorPoint.setFrom(props.anchorPoint);
-        if (props.transformPoint!==undefined) this.transformPoint.setFrom(props.transformPoint);
+        if (props.transformPoint!==undefined) {
+            if (props.transformPoint==='center') {
+                this.transformPoint.setToCenter();
+            } else {
+                this.transformPoint.setFrom(props.transformPoint);
+            }
+        }
     }
 
     public getScreenCoords():[Vec4.VEC4,Vec4.VEC4,Vec4.VEC4,Vec4.VEC4] {

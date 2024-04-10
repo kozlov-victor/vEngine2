@@ -17,7 +17,7 @@ import type {BatchedImage} from "@engine/renderable/impl/general/image/batchedIm
 import Mat16Holder = Mat4.Mat16Holder;
 
 
-interface ICanvasRenderingContext2DEx extends CanvasRenderingContext2D {
+export interface ICanvasRenderingContext2DEx extends CanvasRenderingContext2D {
     webkitImageSmoothingEnabled:boolean;
     mozImageSmoothingEnabled:boolean;
     msImageSmoothingEnabled:boolean;
@@ -41,20 +41,7 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
     }
 
     public override setPixelPerfect(val:boolean):void {
-
-        if (val) {
-            this.container.style.cssText += 'image-rendering: optimizeSpeed;' + // FireFox < 6.0
-                'image-rendering: -moz-crisp-edges;' + // FireFox
-                'image-rendering: -o-crisp-edges;' +  // Opera
-                'image-rendering: -webkit-crisp-edges;' + // Chrome
-                'image-rendering: crisp-edges;' + // Chrome
-                'image-rendering: -webkit-optimize-contrast;' + // Safari
-                'image-rendering: pixelated; ' + // Future browsers
-                '-ms-interpolation-mode: nearest-neighbor;'; // IE
-        } else {
-            this.container.style.imageRendering = '';
-        }
-
+        super.setPixelPerfect(val);
         const context = this.container.getContext('2d') as ICanvasRenderingContext2DEx;
         context.webkitImageSmoothingEnabled = !val;
         context.mozImageSmoothingEnabled = !val;
@@ -222,6 +209,7 @@ export class CanvasRenderer extends AbstractCanvasRenderer {
     public createTexture(bitmap:HTMLImageElement|ImageBitmap|HTMLCanvasElement):CanvasTexture {
         const texture = new CanvasTexture(this.game,{width:bitmap.width,height:bitmap.height});
         texture.getContext().drawImage(bitmap,0,0);
+        texture.setPixelPerfect(this.game.getRenderer<AbstractCanvasRenderer>().isPixelPerfect());
         return texture;
     }
 

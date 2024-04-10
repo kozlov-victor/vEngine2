@@ -62,9 +62,9 @@ class T extends BaseTsxComponent {
 class GameSceneUi extends VEngineRootComponent {
 
     @DI.Inject(Assets) private assets: Assets;
+    @DI.Inject(AlertService) private alertService: AlertService;
 
     private board = new Board(this.aiLevel);
-    private readonly BOARD_ANCHOR_POINT = {x:SIZE*BOX_SIZE/2,y:SIZE*BOX_SIZE/2};
     private currentSelection = {x:-1,y:-1};
     private rowToAnimate: Cell[] = [];
 
@@ -104,6 +104,7 @@ class GameSceneUi extends VEngineRootComponent {
 
     @Reactive.Method()
     private async onCellClicked(j:number,i:number) {
+        //await this.alertService.show('test check hello',AlertService.successColor);
         const result = await this.board.actByUser(j,i);
         switch (result.result) {
             case 'keep':
@@ -115,12 +116,17 @@ class GameSceneUi extends VEngineRootComponent {
                     await wait(300);
                 }
                 await wait(300);
-                await AlertService.show(this.game,result.result==='win'?'Ви виграли :)':'Ви програли :(');
+                if (result.result==='win') {
+                    await this.alertService.show('Ви виграли :)',AlertService.successColor);
+                }
+                else {
+                    await this.alertService.show('Ви програли :(',AlertService.errorColor);
+                }
                 await wait(1000);
                 this.game.runScene(new MenuScene(this.game));
                 break;
             case 'tie':
-                await AlertService.show(this.game,"Ніч'я");
+                await this.alertService.show("Ніч'я",AlertService.neutralColor);
                 this.game.runScene(new MenuScene(this.game));
                 break;
 
@@ -138,10 +144,9 @@ class GameSceneUi extends VEngineRootComponent {
         return (
             <>
                 <v_image texture={this.assets.bg}/>
-                <v_linearLayout
+                <v_verticalLayout
                     mouseMove={this.onBoardMouseMove}
-                    pos={{x:this.game.getCenterX(),y:this.game.getCenterY()}}
-                    anchorPoint={this.BOARD_ANCHOR_POINT}
+                    layoutPos={{vertical:'center',horizontal:'center'}}
                     size={{width:SIZE*BOX_SIZE,height:SIZE*BOX_SIZE}}
                 >
                     {this.board.field.map((cells,j)=>
@@ -164,8 +169,8 @@ class GameSceneUi extends VEngineRootComponent {
                             )}
                         </v_horizontalLayout>
                     )}
-                </v_linearLayout>
-                {AlertService.getElement()}
+                </v_verticalLayout>
+                {this.alertService.getElement()}
             </>
         )
     }
