@@ -54,8 +54,8 @@ class MenuSceneUI extends VEngineRootComponent {
         scene.keyboardEventHandler.onKeyPressed(KEYBOARD_KEY.BACKSPACE, _=>window.close());
     }
 
-    private go() {
-        const selected = this.levels.find(it=>it.selected)!.aiLevel;
+    private go(l?:ILevel) {
+        const selected = l?.aiLevel ?? this.levels.find(it=>it.selected)!.aiLevel;
         this.game.runScene(new GameScene(this.game,selected));
     }
 
@@ -104,7 +104,7 @@ class MenuSceneUI extends VEngineRootComponent {
                         <v_textField
                             textColor={Color.WHITE}
                             mouseMove={e=>this.onLevelMouseMove(l)}
-                            click={e=>this.go()}
+                            click={e=>this.go(l)}
                             background={()=>l.selected?this.textFieldBgSelected:this.textFieldBgUnSelected}
                             alignTextContentHorizontal={AlignTextContentHorizontal.CENTER}
                             alignText={AlignText.CENTER}

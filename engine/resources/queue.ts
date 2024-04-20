@@ -62,33 +62,4 @@ export class Queue {
         this.onResolved.forEach(f=>f());
     }
 
-    // public async start():Promise<void>{
-    //     return new Promise<void>((resolve, reject)=>{
-    //         let resolvedTasksCnt = 0;
-    //         let rejected = false;
-    //         for (const task of this._tasks) {
-    //             const {taskId,fn} = task;
-    //             const onProgressCallBack = (n:number)=> this.progressTask(taskId,n);
-    //             fn(onProgressCallBack).
-    //                 then(()=>{
-    //                     this.resolveTask(taskId);
-    //                     if (this.onProgress!==undefined) this.onProgress(this.calcProgress());
-    //                     resolvedTasksCnt++;
-    //                     if (resolvedTasksCnt===this._tasks.length) {
-    //                         this._resolved = true;
-    //                         if (this.onProgress!==undefined) this.onProgress(1);
-    //                         this.onResolved.forEach(f=>f());
-    //                         resolve();
-    //                     }
-    //                 }).catch(e=>{
-    //                     console.error(e);
-    //                     if (!rejected) reject(e);
-    //                     rejected = true;
-    //                 });
-    //         }
-    //     });
-    //
-    // }
-
-
 }

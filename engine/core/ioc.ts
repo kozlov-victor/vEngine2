@@ -14,8 +14,9 @@ export const DI = {
         ) {
             return class extends target {
                 public static __injectable = target.name;
-                public __postConstruct: ()=>void;
-                public __injected:string[];
+                public static __constructorArgumentsLength = target.length;
+                public __postConstruct: (()=>void)|undefined = undefined;
+                public __injected:(string[])|undefined = undefined;
                 constructor(...args: any[]) {
                     super(...args);
                     DIContext[target.name] = this;
@@ -63,6 +64,10 @@ export const DI = {
                 Object.defineProperty(this, context.name, {
                     get: () => {
                         if (!DIContext[tkn]) {
+                            const constructorArgumentsLength = (clazz as any).__constructorArgumentsLength as number;
+                            if (constructorArgumentsLength>0) {
+                                throw new Error(`can not inject ${tkn}: constructor without arguments is not provided`);
+                            }
                             DIContext[tkn] = new clazz();
                         }
                         return DIContext[tkn];

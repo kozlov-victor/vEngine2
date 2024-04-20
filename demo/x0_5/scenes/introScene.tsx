@@ -18,6 +18,7 @@ class IntroSceneUi extends VEngineRootComponent {
     constructor(game: Game) {
         super(game);
         this.game.getCurrentScene().keyboardEventHandler.onceKeyPressed(KEYBOARD_KEY.SOFT_RIGHT, _=>this.go());
+        this.game.getCurrentScene().keyboardEventHandler.onceKeyPressed(KEYBOARD_KEY.SOFT_LEFT, _=>this.exit());
     }
 
     private go() {
