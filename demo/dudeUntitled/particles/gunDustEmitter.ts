@@ -3,17 +3,13 @@ import {ColorFactory} from "@engine/renderer/common/colorFactory";
 import {Color} from "@engine/renderer/common/color";
 import {BatchedImage} from "@engine/renderable/impl/general/image/batchedImage";
 import {DI} from "@engine/core/ioc";
-import {MainScene} from "../mainScene";
-import {Game} from "@engine/core/game";
 
 @DI.Injectable()
 export class GunDustEmitter extends AbstractParticleEmitter {
 
-    @DI.Inject(Game) private game: Game;
 
-    @DI.PostConstruct()
-    protected onPostConstruct() {
-        this.init(this.game.getCurrentScene());
+    constructor() {
+        super();
         this.ps.numOfParticlesToEmit = {from: 2, to: 4};
         this.ps.particleGravity.setXY(0);
         this.ps.emissionRadius = 5;

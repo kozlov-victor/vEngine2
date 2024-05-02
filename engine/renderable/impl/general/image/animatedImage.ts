@@ -1,13 +1,9 @@
 import {Game} from "@engine/core/game";
 import {ICloneable, Optional} from "@engine/core/declarations";
 import {DebugError} from "@engine/debug/debugError";
-import {
-    AbstractFrameAnimation,
-    FRAME_ANIMATION_EVENTS
-} from "@engine/animation/frameAnimation/abstract/abstractFrameAnimation";
+import {AbstractFrameAnimation} from "@engine/animation/frameAnimation/abstract/abstractFrameAnimation";
 import {Image} from "@engine/renderable/impl/general/image/image";
 import {ITexture} from "@engine/renderer/common/texture";
-import {Point2d} from "@engine/geometry/point2d";
 import {removeFromArray} from "@engine/misc/object";
 
 

@@ -55,13 +55,15 @@ export class Character {
         characterImage.appendTo(scene);
         scene.camera.followTo(characterImage);
 
-    }
-
-    @DI.PostConstruct()
-    public postConstruct(): void {
         this.initBh();
         this.listenToKeys();
         this.initCollisions();
+
+    }
+
+    //@DI.PostConstruct()
+    public postConstruct(): void {
+
     }
 
 
@@ -136,8 +138,6 @@ export class Character {
     }
 
     private listenToKeys() {
-        const characterImage = this.image;
-        const texturePackerAtlas = new TexturePackerAtlas(this.scene.assets.spritesAtlas);
         this.scene.keyboardEventHandler.onKeyPressed(KEYBOARD_KEY.CONTROL, e=>{
             this.bh.fire();
             this.script.heroWillShoot(this);

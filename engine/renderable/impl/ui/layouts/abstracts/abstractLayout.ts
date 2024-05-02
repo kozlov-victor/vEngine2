@@ -16,4 +16,5 @@ export abstract class AbstractLayout extends WidgetContainer {
             cb(c);
         });
     }
+
 }

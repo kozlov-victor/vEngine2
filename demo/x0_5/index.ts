@@ -7,7 +7,6 @@ import {IntroScene} from "./scenes/introScene";
 import {ResourceLoader} from "@engine/resources/resourceLoader";
 import {AbstractCanvasRenderer} from "@engine/renderer/abstract/abstractCanvasRenderer";
 import {DI} from "@engine/core/ioc";
-import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
 
 ResourceLoader.BASE_URL = './x0_5/assets';
 const game = new Game({width:240,height:320});

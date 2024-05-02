@@ -4,16 +4,12 @@ import {Color} from "@engine/renderer/common/color";
 import {BatchedImage} from "@engine/renderable/impl/general/image/batchedImage";
 import {RingTangentModifier} from "@engine/renderable/impl/general/partycleSystem/modifier/ringTangentModifier";
 import {DI} from "@engine/core/ioc";
-import {Game} from "@engine/core/game";
 
 @DI.Injectable()
 export class BonusParticleEmitter extends AbstractParticleEmitter {
 
-    @DI.Inject(Game) private game: Game;
-
-    @DI.PostConstruct()
-    protected onPostConstruct() {
-        this.init(this.game.getCurrentScene());
+    constructor() {
+        super();
         this.ps.numOfParticlesToEmit = {from: 2, to: 10};
         this.ps.particleGravity.setXY(0);
         const modifier = new RingTangentModifier(this.ps);

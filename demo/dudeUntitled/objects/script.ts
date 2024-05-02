@@ -1,5 +1,4 @@
 import {Key} from "./key";
-import {MainScene} from "../mainScene";
 import {IRectJSON} from "@engine/geometry/rect";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {WallDustEmitter} from "../particles/wallDustEmitter";
@@ -25,17 +24,16 @@ export const waitFor = (root:RenderableModel,time:number):Promise<void>=> {
     });
 }
 
+
 @DI.Injectable()
 export class Script {
 
     @DI.Inject(AnimatedTileMap) private readonly tileMap:AnimatedTileMap;
-    @DI.Inject(WallDustEmitter) public readonly wallDustEmitter:WallDustEmitter;
     @DI.Inject(BonusParticleEmitter) private readonly bonusParticleEmitter:BonusParticleEmitter;
     @DI.Inject(GunDustEmitter) private readonly gunDustEmitter:GunDustEmitter;
     @DI.Inject(Assets) private readonly assets:Assets;
     @DI.Inject(Game) private readonly game:Game;
-
-
+    @DI.Inject(WallDustEmitter) public readonly wallDustEmitter:WallDustEmitter;
 
     public onHeroCollectedSausage(sausage:Sausage):void {
         const host = sausage.getRenderable();

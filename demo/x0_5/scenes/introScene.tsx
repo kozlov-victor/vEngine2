@@ -62,7 +62,6 @@ export class IntroScene extends Scene {
 
 
     override onReady() {
-
         const root = new SimpleGameObjectContainer(this.game);
         root.appendTo(this);
 

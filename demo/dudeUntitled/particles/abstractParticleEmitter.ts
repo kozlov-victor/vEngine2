@@ -2,7 +2,8 @@ import {ParticleSystem} from "@engine/renderable/impl/general/partycleSystem/par
 import {ArcadePhysicsSystem} from "@engine/physics/arcade/arcadePhysicsSystem";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {ICloneable} from "@engine/core/declarations";
-import {Scene} from "@engine/scene/scene";
+import {DI} from "@engine/core/ioc";
+import {Game} from "@engine/core/game";
 
 
 export abstract class AbstractParticleEmitter {
@@ -11,9 +12,10 @@ export abstract class AbstractParticleEmitter {
 
     protected abstract createParticlePrefabs():(RenderableModel & ICloneable<RenderableModel & ICloneable<any>>)[];
 
+    @DI.Inject(Game) protected game: Game;
 
-    protected init(scene:Scene) {
-        const ps = new ParticleSystem(scene.getGame());
+    protected constructor() {
+        const ps = new ParticleSystem(this.game);
         ps.emissionRadius = 5;
         ps.particleVelocity = {from:40, to: 60};
         ps.numOfParticlesToEmit = {from: 1, to: 2};
@@ -23,8 +25,7 @@ export abstract class AbstractParticleEmitter {
         prefabs.forEach(p=>{
             ps.addParticlePrefab(p);
         });
-
-        ps.appendTo(scene);
+        ps.appendTo(this.game.getCurrentScene());
         this.ps = ps;
     }
 
