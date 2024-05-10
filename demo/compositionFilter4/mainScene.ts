@@ -64,7 +64,7 @@ export class MainScene extends Scene {
             palletFilter.setPalletOffset(offset);
         },1);
 
-        const logo: Image = new Image(this.game, this.logoTexture);
+        const logo = new Image(this.game, this.logoTexture);
         logo.filters = [];
         logo.scale.setXYZ(0.3);
         this.appendChild(logo);

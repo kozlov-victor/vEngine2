@@ -1,4 +1,3 @@
-import {VEngineTsxComponent} from "@engine/renderable/tsx/_genetic/vEngineTsxComponent";
 import {VEngineTsxRootHolder} from "@engine/renderable/tsx/_genetic/vEngineTsxRootHolder";
 
 export const Reactive = {

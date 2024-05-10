@@ -19,6 +19,7 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {DRAG_EVENTS} from "@engine/behaviour/impl/draggable/dragEvents";
 import {EventEmitterDelegate} from "@engine/delegates/eventDelegates/eventEmitterDelegate";
 import {TOGGLE_BUTTON_EVENTS} from "@engine/renderable/impl/ui/toggleButton/_internal/toggleButtonEvents";
+import {IRealNode} from "@engine/renderable/tsx/_genetic/realNode";
 
 export interface IChangeNumericSliderEvent {
     target: AbstractNumericSlider;
@@ -84,8 +85,8 @@ export abstract class AbstractNumericSlider extends WidgetContainer {
         this.calcHandlerPositionByValue();
     }
 
-    public override setProps(props:INumericSliderProp):void {
-        super.setProps(props);
+    public override setProps(props:INumericSliderProp,parent:IRealNode):void {
+        super.setProps(props,parent);
         if (props.backgroundHandler!==undefined) {
             const memoized:RenderableModel = this.getMemoizedView(props.backgroundHandler);
             if (memoized!==this.handler) this.setBackgroundHandler(memoized);

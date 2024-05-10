@@ -10,6 +10,7 @@ import {Color} from "@engine/renderer/common/color";
 import {ContainerState} from "@engine/renderable/impl/ui/widgetContainer";
 import {TOGGLE_BUTTON_EVENTS} from "@engine/renderable/impl/ui/toggleButton/_internal/toggleButtonEvents";
 import {IToggleButtonEvent} from "@engine/renderable/impl/ui/toggleButton/_internal/toggleButtonEvent";
+import {IRealNode} from "@engine/renderable/tsx/_genetic/realNode";
 
 
 export class CheckBox extends AbstractToggleButton implements ICheckBoxWritable {
@@ -35,8 +36,8 @@ export class CheckBox extends AbstractToggleButton implements ICheckBoxWritable 
         this.changeEventHandler.trigger(TOGGLE_BUTTON_EVENTS.changed, {value:this.checked,target:this});
     }
 
-    public override setProps(props:ICheckBoxProps):void {
-        super.setProps(props);
+    public override setProps(props:ICheckBoxProps,parent:IRealNode):void {
+        super.setProps(props,parent);
         if (props.changed!==undefined && props.changed!==this._tsxChanged) {
             if (this._tsxChanged!==undefined) this.changeEventHandler.off(TOGGLE_BUTTON_EVENTS.changed,this._tsxChanged);
             this.changeEventHandler.on(TOGGLE_BUTTON_EVENTS.changed, props.changed);

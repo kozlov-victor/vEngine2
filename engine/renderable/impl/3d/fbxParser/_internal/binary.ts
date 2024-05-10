@@ -1,4 +1,3 @@
-
 import {FBXData, FBXNode, FBXProperty} from "@engine/renderable/impl/3d/fbxParser/_internal/types";
 import {BinBuffer} from "@engine/misc/parsers/bin/binBuffer";
 

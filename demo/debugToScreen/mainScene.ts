@@ -20,7 +20,7 @@ export class MainScene extends Scene {
         debugLayer.log(document);
         debugLayer.log(document.body);
         debugLayer.log(this);
-        debugLayer.log(this.getDefaultLayer());
+        debugLayer.log(debugLayer);
         debugLayer.log(Number);
         debugLayer.log(new Rect());
 

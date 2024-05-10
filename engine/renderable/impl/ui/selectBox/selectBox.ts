@@ -1,9 +1,7 @@
 import {Game} from "@engine/core/game";
 import {Font} from "@engine/renderable/impl/general/font/font";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
-import {
-    VerticalList
-} from "@engine/renderable/impl/ui/scrollViews/directional/verticalList";
+import {VerticalList} from "@engine/renderable/impl/ui/scrollViews/directional/verticalList";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
@@ -16,6 +14,7 @@ import {WidgetContainer} from "@engine/renderable/impl/ui/widgetContainer";
 import {LIST_VIEW_EVENTS} from "@engine/renderable/impl/ui/scrollViews/directional/directionalListEvents";
 import {IChangeSelectBoxEvent} from "@engine/renderable/impl/ui/selectBox/selectBoxEvents";
 import {ColorFactory} from "@engine/renderer/common/colorFactory";
+import {IRealNode} from "@engine/renderable/tsx/_genetic/realNode";
 
 
 export class SelectBox extends VerticalList {
@@ -107,8 +106,8 @@ export class SelectBox extends VerticalList {
         return this._options[this._selectedIndex];
     }
 
-    public override setProps(props:ISelectBoxProps<any>):void {
-        super.setProps(props);
+    public override setProps(props:ISelectBoxProps<any>,parent:IRealNode):void {
+        super.setProps(props,parent);
         if (props.data && this.getOptions()!==props.data) {
             const renderItemFn =
                 props.renderItem===undefined?undefined:

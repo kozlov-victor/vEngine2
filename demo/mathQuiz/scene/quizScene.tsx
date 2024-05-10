@@ -24,8 +24,9 @@ import {Resource} from "@engine/resources/resourceDecorators";
 import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 import {VEngineRootComponent} from "@engine/renderable/tsx/vEngine/vEngineRootComponent";
 import {Reactive} from "@engine/renderable/tsx/decorator/reactive";
+import {DI} from "@engine/core/ioc";
 
-
+@DI.Injectable()
 class QuizSceneUI extends VEngineRootComponent {
 
     private currentButton:0|1|2|3|undefined = undefined;
@@ -37,16 +38,16 @@ class QuizSceneUI extends VEngineRootComponent {
     private quizRunner:QuizRunner;
     private currentQuestion:IQuizQuestion;
 
-    private assets:Assets = Assets.getInstance();
+    @DI.Inject(Assets) private assets:Assets;
 
-    private textFieldBg:Rectangle = (()=>{
+    private textFieldBg = (()=>{
         const rect = new Rectangle(this.game);
         rect.fillColor = ColorFactory.fromCSS(`rgba(40, 40, 40, 0.53)`);
         rect.borderRadius = 15;
         return rect;
     })();
 
-    private textFieldBgBlinked:Rectangle = (()=>{
+    private textFieldBgBlinked = (()=>{
         const rect = new Rectangle(this.game);
         rect.fillColor = ColorFactory.fromCSS(`rgba(146, 255, 48, 0.75)`);
         rect.borderRadius = 15;

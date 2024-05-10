@@ -3,13 +3,15 @@ import {ITexture} from "@engine/renderer/common/texture";
 import {DebugError} from "@engine/debug/debugError";
 import {Optional} from "@engine/core/declarations";
 import {FontTypes} from "@engine/renderable/impl/general/font/fontTypes";
+import {fontAsCss} from "@engine/renderable/impl/general/font/helpers";
+import {
+    createFontFromCssDescription
+} from "@engine/renderable/impl/general/font/createFontMethods/createFontFromCssDescription";
+import {createSystemFont} from "@engine/renderable/impl/general/font/createFontMethods/createSystemFont";
 import IFontContext = FontTypes.IFontContext;
 import IFontSymbolInfo = FontTypes.IFontSymbolInfo;
 import ITextureWithId = FontTypes.ITextureWithId;
-import {fontAsCss} from "@engine/renderable/impl/general/font/helpers";
 import ICssFontParameters = FontTypes.ICssFontParameters;
-import {createFontFromCssDescription} from "@engine/renderable/impl/general/font/createFontMethods/createFontFromCssDescription";
-import {createSystemFont} from "@engine/renderable/impl/general/font/createFontMethods/createSystemFont";
 
 export class Font {
 

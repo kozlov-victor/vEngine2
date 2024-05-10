@@ -9,8 +9,9 @@ import {
     DefaultBackgroundObject
 } from "@engine/renderable/impl/ui/_internal/defaultBackgroundObject";
 import {DebugError} from "@engine/debug/debugError";
-import {ICloneable, IFocusable} from "@engine/core/declarations";
+import {IFocusable} from "@engine/core/declarations";
 import {CurrentIKeyBoardFocusable} from "@engine/renderable/impl/ui/textField/_internal/currentIKeyBoardFocusable";
+import {IRealNode} from "@engine/renderable/tsx/_genetic/realNode";
 
 interface IContainerWithMarginPadding {
     marginLeft      :number;
@@ -181,8 +182,8 @@ export class WidgetContainer extends MarkableGameObjectContainer implements ICon
         return this.clientRect;
     }
 
-    public override setProps(props: IWidgetContainerProps):void {
-        super.setProps(props);
+    public override setProps(props: IWidgetContainerProps,parent:IRealNode):void {
+        super.setProps(props,parent);
         if (props.background!==undefined) {
             const memoized = this.getMemoizedView(props.background);
             if (memoized!==this.background) this.setBackground(memoized);
@@ -278,7 +279,7 @@ export class WidgetContainer extends MarkableGameObjectContainer implements ICon
             this.setState(ContainerState.ACTIVE);
             this.focus();
             if (this.focusable) {
-                e.transclude = false; // ie if editTextFiend is in container, only editTextFiend can be focused
+                e.transclude = false; // ie if editTextField is in container, only editTextField can be focused
             }
         });
         this.mouseEventHandler.on(MOUSE_EVENTS.mouseUp, e=>{

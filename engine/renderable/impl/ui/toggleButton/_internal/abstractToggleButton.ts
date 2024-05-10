@@ -6,6 +6,7 @@ import {DefaultBackgroundObject} from "@engine/renderable/impl/ui/_internal/defa
 import {EventEmitterDelegate} from "@engine/delegates/eventDelegates/eventEmitterDelegate";
 import {TOGGLE_BUTTON_EVENTS} from "@engine/renderable/impl/ui/toggleButton/_internal/toggleButtonEvents";
 import {IToggleButtonEvent} from "@engine/renderable/impl/ui/toggleButton/_internal/toggleButtonEvent";
+import {IRealNode} from "@engine/renderable/tsx/_genetic/realNode";
 
 export interface ICheckBoxWritable {
     checked:boolean;
@@ -47,8 +48,8 @@ export abstract class AbstractToggleButton extends WidgetContainer {
         this.backgroundChecked.size.setFrom(clientRect);
     }
 
-    public override setProps(props: IToggleButtonProps):void {
-        super.setProps(props);
+    public override setProps(props: IToggleButtonProps,parent:IRealNode):void {
+        super.setProps(props,parent);
         if (props.backgroundChecked!==undefined) {
             const memoized:RenderableModel = this.getMemoizedView(props.backgroundChecked);
             if (memoized!==this.backgroundChecked) this.setBackgroundChecked(memoized);

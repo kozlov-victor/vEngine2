@@ -1,6 +1,7 @@
 import {Ellipse} from "./ellipse";
 import {ICloneable} from "@engine/core/declarations";
 import {Game} from "@engine/core/game";
+import {IRealNode} from "@engine/renderable/tsx/_genetic/realNode";
 
 export class Circle extends Ellipse implements ICloneable<Circle>, ICircleProps{
 
@@ -39,8 +40,8 @@ export class Circle extends Ellipse implements ICloneable<Circle>, ICircleProps{
         return cloned;
     }
 
-    public override setProps(props:ICircleProps):void{
-        super.setProps(props);
+    public override setProps(props:ICircleProps,parent:IRealNode):void{
+        super.setProps(props,parent);
         if (props.radius!==undefined) this.radius = props.radius;
     }
 

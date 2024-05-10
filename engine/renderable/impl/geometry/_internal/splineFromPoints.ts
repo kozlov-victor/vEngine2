@@ -2,8 +2,6 @@
 
 // by https://www.particleincell.com/wp-content/uploads/2012/06/circles.svg
 
-import {IPoint2d} from "@engine/geometry/point2d";
-
 export const createSplinePathFromPoints = (points:number[]):string=> {
     /*grab (x,y) coordinates of the control points*/
     const x:number[]=[];

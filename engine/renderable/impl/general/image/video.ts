@@ -32,20 +32,22 @@ export class Video extends Image {
             video.srcObject = source;
         }
         this.htmlVideoElement = video;
-        await video.play();
+        await video.play().catch(e=>console.error(e));
 
         video.width = video.videoWidth;
         video.height = video.videoHeight;
         this.size.setWH(video.videoWidth,video.videoHeight);
         this.srcRect.setFrom({x:0,y:0,width:this.size.width,height: this.size.height});
+        this.texture.size.setFrom(this.size);
 
+        console.log(this.size.toJSON());
         this.setTexture(this.texture);
         this.isPlaying = true;
 
     }
 
     public play():void {
-        this.htmlVideoElement.play().then(e=>console.error(e));
+        this.htmlVideoElement.play().catch(e=>console.error(e));
         this.isPlaying = true;
     }
 

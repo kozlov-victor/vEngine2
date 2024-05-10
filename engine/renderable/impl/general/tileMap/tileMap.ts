@@ -9,7 +9,7 @@ import {RenderableModelWithTexture} from "@engine/renderable/abstract/renderable
 import {ITexture} from "@engine/renderer/common/texture";
 import {ArcadePhysicsSystem, SLOPE_TYPE} from "@engine/physics/arcade/arcadePhysicsSystem";
 import {ARCADE_RIGID_BODY_TYPE} from "@engine/physics/arcade/arcadeRigidBody";
-import {IRectJSON, Rect} from "@engine/geometry/rect";
+import {IRectJSON} from "@engine/geometry/rect";
 import {IRigidBody} from "@engine/physics/common/interfaces";
 import {Point2d} from "@engine/geometry/point2d";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";

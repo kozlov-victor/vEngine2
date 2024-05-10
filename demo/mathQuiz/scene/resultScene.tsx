@@ -18,11 +18,12 @@ import {ColorFactory} from "@engine/renderer/common/colorFactory";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 import {VEngineRootComponent} from "@engine/renderable/tsx/vEngine/vEngineRootComponent";
+import {DI} from "@engine/core/ioc";
 
-
+@DI.Injectable()
 class ResultSceneUI extends VEngineRootComponent {
 
-    private assets:Assets = Assets.getInstance();
+    @DI.Inject(Assets) private assets:Assets;
 
     constructor(game:Game, private correct:number, private total:number) {
         super(game);

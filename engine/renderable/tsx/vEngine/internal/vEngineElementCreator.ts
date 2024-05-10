@@ -29,6 +29,7 @@ import {LinearLayout} from "@engine/renderable/impl/ui/layouts/linearLayout";
 import {VerticalLayout} from "@engine/renderable/impl/ui/layouts/verticalLayout";
 import {HorizontalLayout} from "@engine/renderable/impl/ui/layouts/horizontalLayout";
 import {WidgetContainer} from "@engine/renderable/impl/ui/widgetContainer";
+import {IRealNode} from "@engine/renderable/tsx/_genetic/realNode";
 
 export class VEngineElementCreator extends AbstractElementCreator<RenderableModel>{
 
@@ -139,8 +140,8 @@ export class VEngineElementCreator extends AbstractElementCreator<RenderableMode
         return element!;
     }
 
-    public setProps(model: RenderableModel, virtualNode: VirtualNode): void {
-        model.setProps(virtualNode.props);
+    public setProps(model: RenderableModel, virtualNode: VirtualNode,parent:IRealNode): void {
+        model.setProps(virtualNode.props,parent);
     }
 
 }

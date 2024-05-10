@@ -7,7 +7,6 @@ import {PolySegment} from "@engine/renderable/impl/geometry/_internal/polyline-t
 import {EndCapStyle, JointStyle} from "@engine/renderable/impl/geometry/_internal/triangulatedPathFromPolyline";
 
 
-
 export class PolylineTriangulator {
 
     /**

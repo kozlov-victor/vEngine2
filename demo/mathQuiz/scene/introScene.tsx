@@ -27,13 +27,15 @@ import {QuizScene} from "./quizScene";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 import {VEngineRootComponent} from "@engine/renderable/tsx/vEngine/vEngineRootComponent";
+import {DI} from "@engine/core/ioc";
 
+@DI.Injectable()
 class IntroSceneUI extends VEngineRootComponent {
 
     private textField:AnimatedTextField;
     private started:boolean = false;
     private readonly classLevel:number;
-    private assets:Assets = Assets.getInstance();
+    @DI.Inject(Assets) private assets:Assets;
 
     constructor(game:Game,private level:number) {
         super(game);

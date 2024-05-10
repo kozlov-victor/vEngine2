@@ -15,7 +15,9 @@ import {Resource} from "@engine/resources/resourceDecorators";
 import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 import {VEngineRootComponent} from "@engine/renderable/tsx/vEngine/vEngineRootComponent";
 import {Reactive} from "@engine/renderable/tsx/decorator/reactive";
+import {DI} from "@engine/core/ioc";
 
+@DI.Injectable()
 class SelectLevelSceneUI extends VEngineRootComponent {
 
     private currentButton:number|undefined = undefined;

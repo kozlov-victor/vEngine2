@@ -6,7 +6,9 @@ import {MarkableGameObjectContainer} from "@engine/renderable/impl/ui/textField/
 import {
     assignPos,
     assignSize,
-    Direction, getOppositeDirection, getPos,
+    Direction,
+    getOppositeDirection,
+    getPos,
     getSize
 } from "@engine/renderable/impl/ui/_internal/sideHelperFunctions";
 

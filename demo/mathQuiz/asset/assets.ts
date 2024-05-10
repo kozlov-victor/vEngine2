@@ -6,7 +6,9 @@ import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Sound} from "@engine/media/sound";
 import {AngelCodeParser} from "@engine/misc/parsers/angelCode/angelCodeParser";
 import {ColorFactory} from "@engine/renderer/common/colorFactory";
+import {DI} from "@engine/core/ioc";
 
+@DI.Injectable()
 export class Assets extends ResourceAutoHolder{
 
     @Resource.Sound('./mathQuiz/asset/sound/btn1.wav') public btn1Sound:Sound;

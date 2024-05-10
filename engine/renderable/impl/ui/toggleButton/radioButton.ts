@@ -11,6 +11,7 @@ import {ContainerState} from "@engine/renderable/impl/ui/widgetContainer";
 import {TOGGLE_BUTTON_EVENTS} from "@engine/renderable/impl/ui/toggleButton/_internal/toggleButtonEvents";
 import {IToggleButtonEvent} from "@engine/renderable/impl/ui/toggleButton/_internal/toggleButtonEvent";
 import {DebugError} from "@engine/debug/debugError";
+import {IRealNode} from "@engine/renderable/tsx/_genetic/realNode";
 
 export class RadioButtonGroup {
 
@@ -74,8 +75,8 @@ export class RadioButton extends AbstractToggleButton {
         this.updateState();
     }
 
-    public override setProps(props:IRadioButtonProps):void {
-        super.setProps(props);
+    public override setProps(props:IRadioButtonProps,parent:IRealNode):void {
+        super.setProps(props,parent);
         if (props.checked && !this.checked) this.toggle();
         if (props.changed!==undefined && this.tsxChanged!==props.changed) {
             if (this.tsxChanged!==undefined) this.changeEventHandler.off(TOGGLE_BUTTON_EVENTS.changed,this.tsxChanged);

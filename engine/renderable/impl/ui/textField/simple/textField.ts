@@ -18,6 +18,7 @@ import {CharacterImage} from "@engine/renderable/impl/ui/textField/_internal/cha
 import {Word} from "@engine/renderable/impl/ui/textField/_internal/word";
 import {StringEx} from "@engine/renderable/impl/ui/textField/_internal/stringEx";
 import {Size} from "@engine/geometry/size";
+import {IRealNode} from "@engine/renderable/tsx/_genetic/realNode";
 
 
 export class TextField extends WidgetContainer {
@@ -89,8 +90,8 @@ export class TextField extends WidgetContainer {
         else this._revalidateWithoutCache();
     }
 
-    public override setProps(props: ITextFieldProps):void {
-        super.setProps(props);
+    public override setProps(props: ITextFieldProps,parent:IRealNode):void {
+        super.setProps(props,parent);
         if (props.textColor) this.textColor.setRGBA(props.textColor.r,props.textColor.g,props.textColor.b,props.textColor.a);
         if (props.text!==undefined) this.setText(props.text);
         if (props.autoSize!==undefined) this.setAutoSize(props.autoSize);

@@ -16,8 +16,8 @@ import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {IKeyBoardEvent} from "@engine/control/keyboard/iKeyBoardEvent";
 import {TypeHelper} from "@engine/renderable/impl/ui/textField/editTextField/typeHelper";
 import {FontTypes} from "@engine/renderable/impl/general/font/fontTypes";
-import IFontSymbolInfo = FontTypes.IFontSymbolInfo;
 import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
+import IFontSymbolInfo = FontTypes.IFontSymbolInfo;
 
 
 export class Cursor {

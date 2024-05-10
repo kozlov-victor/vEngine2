@@ -1,8 +1,7 @@
 import {RenderableModel} from "./renderableModel";
 import {Color} from "@engine/renderer/common/color";
 import {Game} from "@engine/core/game";
-import {Optional} from "@engine/core/declarations";
-import {AbstractGradient} from "@engine/renderable/impl/fill/abstract/abstractGradient";
+import {IRealNode} from "@engine/renderable/tsx/_genetic/realNode";
 
 export abstract class Shape extends RenderableModel implements IShapeProps{
 
@@ -22,8 +21,8 @@ export abstract class Shape extends RenderableModel implements IShapeProps{
         super(game);
     }
 
-    public override setProps(props:IShapeProps):void{
-        super.setProps(props);
+    public override setProps(props:IShapeProps,parent:IRealNode):void{
+        super.setProps(props,parent);
         if (props.color!==undefined) {
             this.color.setRGBA(props.color.r,props.color.g,props.color.b,props.color.a);
         }

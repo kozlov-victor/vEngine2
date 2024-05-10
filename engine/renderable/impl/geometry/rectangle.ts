@@ -2,6 +2,7 @@ import {Game} from "@engine/core/game";
 import {Shape} from "../../abstract/shape";
 import {ICloneable, Optional} from "@engine/core/declarations";
 import {AbstractGradient} from "@engine/renderable/impl/fill/abstract/abstractGradient";
+import {IRealNode} from "@engine/renderable/tsx/_genetic/realNode";
 
 export class Rectangle extends Shape implements ICloneable<Rectangle>, IRectangleProps{
 
@@ -25,8 +26,8 @@ export class Rectangle extends Shape implements ICloneable<Rectangle>, IRectangl
         return cloned;
     }
 
-    public override setProps(props: IRectangleProps): void {
-        super.setProps(props);
+    public override setProps(props: IRectangleProps,parent:IRealNode): void {
+        super.setProps(props,parent);
         if (props.borderRadius!==undefined) this.borderRadius = props.borderRadius;
     }
 

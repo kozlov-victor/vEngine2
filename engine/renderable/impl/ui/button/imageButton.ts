@@ -4,6 +4,7 @@ import {Image} from "@engine/renderable/impl/general/image/image";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 import {DebugError} from "@engine/debug/debugError";
+import {IRealNode} from "@engine/renderable/tsx/_genetic/realNode";
 
 export class ImageButton extends SimpleGameObjectContainer {
 
@@ -35,8 +36,8 @@ export class ImageButton extends SimpleGameObjectContainer {
         this._imgOff.visible = true;
     }
 
-    public override setProps(props:IImageButtonProps):void {
-        super.setProps(props);
+    public override setProps(props:IImageButtonProps,parent:IRealNode):void {
+        super.setProps(props,parent);
         if (props.imgOn!==undefined) {
             const memoized:RenderableModel = this.getMemoizedView(props.imgOn);
             if (memoized!==this._imgOn) {

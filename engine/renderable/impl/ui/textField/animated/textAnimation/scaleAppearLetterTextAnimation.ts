@@ -1,4 +1,6 @@
-import {AbstractTextAnimation} from "@engine/renderable/impl/ui/textField/animated/textAnimation/abstarct/abstractTextAnimation";
+import {
+    AbstractTextAnimation
+} from "@engine/renderable/impl/ui/textField/animated/textAnimation/abstarct/abstractTextAnimation";
 import {Game} from "@engine/core/game";
 import {AnimatedTextField} from "@engine/renderable/impl/ui/textField/animated/animatedTextField";
 import {CharacterImage} from "@engine/renderable/impl/ui/textField/_internal/characterImage";

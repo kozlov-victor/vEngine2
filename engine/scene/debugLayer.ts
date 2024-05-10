@@ -22,7 +22,8 @@ export class DebugLayer extends Layer {
         super(game);
         if (!font) {
             const factory = new FontContextBdfFactory(this.game,bdfFontData);
-            font = factory.createFont([], [], '', 8*3)
+            const fontSize = 8;
+            font = factory.createFont([], [], '', fontSize)
         }
         this.transformType = LayerTransformType.STICK_TO_CAMERA;
         this.createTextField(font);
@@ -70,7 +71,7 @@ export class DebugLayer extends Layer {
             this.logs.push(...txt.split('\n'));
         });
         this.logs = this.logs.slice(-this.numOfTextRows);
-        const textToSet:string = (this.logs.join('\n'));
+        const textToSet = this.logs.join('\n');
         this.textField.setText(textToSet);
     }
 

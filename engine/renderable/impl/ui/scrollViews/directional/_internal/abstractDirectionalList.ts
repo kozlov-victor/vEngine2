@@ -6,6 +6,7 @@ import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {VirtualNode} from "@engine/renderable/tsx/_genetic/virtualNode";
 import {assignPos, assignSize, Direction, getSize} from "@engine/renderable/impl/ui/_internal/sideHelperFunctions";
 import {LIST_VIEW_EVENTS} from "@engine/renderable/impl/ui/scrollViews/directional/directionalListEvents";
+import {IRealNode} from "@engine/renderable/tsx/_genetic/realNode";
 
 
 export abstract class AbstractDirectionalList extends ScrollView {
@@ -48,8 +49,8 @@ export abstract class AbstractDirectionalList extends ScrollView {
         });
     }
 
-    public override setProps(props:IDirectionalListProps<any>):void {
-        super.setProps(props);
+    public override setProps(props:IDirectionalListProps<any>,parent:IRealNode):void {
+        super.setProps(props,parent);
         if (props.data!==undefined && props.data!==this._tsxData) {
             this._tsxData = props.data;
             this._empty();

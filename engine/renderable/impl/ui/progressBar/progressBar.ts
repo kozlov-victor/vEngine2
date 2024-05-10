@@ -4,6 +4,7 @@ import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Game} from "@engine/core/game";
 import {Color} from "@engine/renderer/common/color";
 import {DebugError} from "@engine/debug/debugError";
+import {IRealNode} from "@engine/renderable/tsx/_genetic/realNode";
 
 export class ProgressBar extends WidgetContainer {
 
@@ -46,8 +47,8 @@ export class ProgressBar extends WidgetContainer {
         this.backgroundProgress = view;
     }
 
-    public override setProps(props:IProgressBarProps):void {
-        super.setProps(props);
+    public override setProps(props:IProgressBarProps,parent:IRealNode):void {
+        super.setProps(props,parent);
         if (props.max!==undefined) this.setMax(props.max);
         if (props.progress!==undefined) this.setProgress(props.progress);
         if (props.backgroundProgress!==undefined) {

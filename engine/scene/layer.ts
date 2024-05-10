@@ -13,21 +13,21 @@ export const enum LayerTransformType {
 
 export class Layer implements IParentChild, IFilterable,IAlphaBlendable, IWithId {
 
-    public readonly type:string = 'Layer';
-    public transformType:LayerTransformType = LayerTransformType.TRANSFORM;
+    public readonly type = 'Layer';
+    public transformType = LayerTransformType.TRANSFORM;
     public readonly parent:IParentChild;
     public filters:IFilter[] = [];
-    public alpha:number = 1;
-    public id:string = `object_${Incrementer.getValue()}`;
+    public alpha = 1;
+    public id = `object_${Incrementer.getValue()}`;
 
     public readonly _children:RenderableModel[] = [];
 
-    protected _parentChildDelegate:ParentChildDelegate<IParentChild> = new ParentChildDelegate<IParentChild>(this);
+    protected _parentChildDelegate = new ParentChildDelegate<IParentChild>(this);
     private _scene:Scene;
 
     constructor(protected game:Game) {
         this._parentChildDelegate.afterChildAppended = (c:IParentChild)=>{
-            const m:RenderableModel = c as RenderableModel;
+            const m = c as RenderableModel;
             m._setLayer(this);
             m._setScene(this._scene);
             (c as IParentChild).parent = undefined;
@@ -125,9 +125,8 @@ export class Layer implements IParentChild, IFilterable,IAlphaBlendable, IWithId
     public render():void {
         const renderer = this.game.getRenderer();
         const layerStatePointer = renderer.beforeItemStackDraw(this.filters,this.alpha,false);
-        for (let i=0,l=this._children.length;i<l;++i) {
-            const c = this._children[i];
-            if (c!==undefined) c.render();
+        for (const c of this._children) {
+            c.render();
         }
         renderer.afterItemStackDraw(layerStatePointer);
     }

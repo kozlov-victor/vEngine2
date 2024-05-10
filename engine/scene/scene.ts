@@ -89,7 +89,6 @@ export abstract class Scene implements IRevalidatable, ITweenable,IFilterable,IA
         if (this.size.isZero()) this.size.setFrom(this.game.size);
     }
 
-
     public getLayers(): Layer[] {
         return this._layers;
     }
@@ -98,8 +97,7 @@ export abstract class Scene implements IRevalidatable, ITweenable,IFilterable,IA
         return this.game;
     }
 
-
-    public getDefaultLayer():Layer {
+    protected getDefaultLayer():Layer {
         if (!this._layers.length) this.appendChild(new Layer(this.game));
         let l = this._layers.length;
         while (l--){
@@ -138,7 +136,7 @@ export abstract class Scene implements IRevalidatable, ITweenable,IFilterable,IA
     public appendChild(layer:Layer):void;
     public appendChild(modelOrLayer:RenderableModel|Layer):void {
         if (DEBUG && !modelOrLayer) {
-            throw new DebugError(`cannot append child, is is ${modelOrLayer}`);
+            throw new DebugError(`cannot append child, it is ${modelOrLayer}`);
         }
         if (Scene.isLayerGuard(modelOrLayer)) {
             if (DEBUG && this._layers.indexOf(modelOrLayer)>-1) {

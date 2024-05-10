@@ -2,7 +2,7 @@ import {Game} from "@engine/core/game";
 import {Rect} from "@engine/geometry/rect";
 import {Color} from "@engine/renderer/common/color";
 import {Point2d} from "@engine/geometry/point2d";
-import {ICloneable} from "@engine/core/declarations";
+import {ICloneable, IParentChild} from "@engine/core/declarations";
 import {ITexture} from "@engine/renderer/common/texture";
 import {RenderableModelWithTexture} from "@engine/renderable/abstract/renderableModelWithTexture";
 
@@ -44,8 +44,8 @@ export class Image extends RenderableModelWithTexture implements ICloneable<Imag
         return cloned;
     }
 
-    public override setProps(props:IImageProps):void{
-        super.setProps(props);
+    public override setProps(props:IImageProps,parent:IParentChild):void{
+        super.setProps(props,parent);
         if (props.borderRadius!==undefined) this.borderRadius = props.borderRadius;
         if (props.color!==undefined) this.color.setRGBA(props.color.r,props.color.g,props.color.b,props.color.a);
         if (props.lineWidth!==undefined) this.lineWidth = props.lineWidth;

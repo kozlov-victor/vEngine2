@@ -1,4 +1,3 @@
-
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Game} from "@engine/core/game";
 

@@ -1,5 +1,4 @@
 import {Game} from "@engine/core/game";
-import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 import {Point3d} from "@engine/geometry/point3d";
 import {Model3d} from "@engine/renderable/impl/3d/model3d";
 import {ICubeMapTexture} from "@engine/renderer/common/texture";

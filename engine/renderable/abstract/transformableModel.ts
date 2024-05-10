@@ -2,14 +2,14 @@ import {Point2d} from "@engine/geometry/point2d";
 import {DebugError} from "@engine/debug/debugError";
 import {Game} from "@engine/core/game";
 import {BaseModel} from "@engine/core/baseModel";
-import {AbstractRenderer} from "@engine/renderer/abstract/abstractRenderer";
 import {Mat4} from "@engine/misc/math/mat4";
 import {ITransformable} from "@engine/core/declarations";
 import {ObservableEntity} from "@engine/geometry/abstract/observableEntity";
-import Mat16Holder = Mat4.Mat16Holder;
 import {IPoint3d, Point3d} from "@engine/geometry/point3d";
 import {Vec4} from "@engine/geometry/vec4";
 import {getScreenCoords} from "@engine/renderable/_helper/getScreenCoords";
+import {IRealNode} from "@engine/renderable/tsx/_genetic/realNode";
+import Mat16Holder = Mat4.Mat16Holder;
 
 class AnglePoint3d extends ObservableEntity implements IPoint3d {
 
@@ -165,7 +165,7 @@ export abstract class TransformableModel extends BaseModel implements ITransform
         if (this.billBoard) renderer.transformRotationReset();
     }
 
-    public setProps(props:ITransformableProps&IPositionableProps):void{
+    public setProps(props:ITransformableProps&IPositionableProps,parent:IRealNode):void{
         if (props.scale!==undefined) this.scale.setFrom(props.scale);
         if (props.anchorPoint!==undefined) this.anchorPoint.setFrom(props.anchorPoint);
         if (props.transformPoint!==undefined) {

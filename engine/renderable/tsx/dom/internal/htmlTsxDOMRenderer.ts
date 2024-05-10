@@ -3,7 +3,6 @@ import {DomElementCreator} from "@engine/renderable/tsx/dom/internal/domElementC
 import {HTMLElementWrap} from "@engine/renderable/tsx/dom/internal/HTMLElementWrap";
 
 
-
 export class HtmlTsxDOMRenderer extends AbstractTsxDOMRenderer<HTMLElementWrap> {
     constructor() {
         super(new DomElementCreator());

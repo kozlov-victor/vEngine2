@@ -4,6 +4,7 @@ import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Game} from "@engine/core/game";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Color} from "@engine/renderer/common/color";
+import {IRealNode} from "@engine/renderable/tsx/_genetic/realNode";
 
 
 export class Line extends RenderableModel implements ICloneable<Line>, ILineProps {
@@ -56,8 +57,8 @@ export class Line extends RenderableModel implements ICloneable<Line>, ILineProp
         return this._rectangleRepresentation;
     }
 
-    public override setProps(props:ILineProps):void {
-        super.setProps(props);
+    public override setProps(props:ILineProps,parent:IRealNode):void {
+        super.setProps(props,parent);
         this.setXYX1Y1(props.pos?.x??0,props.pos?.y??0,props.pointTo.x,props.pointTo.y);
     }
 

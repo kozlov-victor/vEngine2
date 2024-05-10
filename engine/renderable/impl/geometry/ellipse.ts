@@ -3,6 +3,7 @@ import {ICloneable, Optional} from "@engine/core/declarations";
 import {Point2d} from "@engine/geometry/point2d";
 import {Game} from "@engine/core/game";
 import {AbstractGradient} from "@engine/renderable/impl/fill/abstract/abstractGradient";
+import {IRealNode} from "@engine/renderable/tsx/_genetic/realNode";
 
 export class Ellipse extends Shape implements ICloneable<Ellipse>, IEllipseProps{
 
@@ -63,8 +64,8 @@ export class Ellipse extends Shape implements ICloneable<Ellipse>, IEllipseProps
         return cloned;
     }
 
-    public override setProps(props:IEllipseProps):void {
-        super.setProps(props);
+    public override setProps(props:IEllipseProps,parent:IRealNode):void {
+        super.setProps(props,parent);
         if (props.center!==undefined) this.center.setXY(props.center.x,props.center.y);
         if (props.arcAngleFrom!==undefined) this.arcAngleFrom=props.arcAngleFrom;
         if (props.arcAngleTo!==undefined) this.arcAngleTo=props.arcAngleTo;

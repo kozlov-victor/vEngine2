@@ -38,6 +38,7 @@ import {DRAG_EVENTS} from "@engine/behaviour/impl/draggable/dragEvents";
 import {IDragPoint} from "@engine/behaviour/impl/draggable/dragPoint";
 import {IStateStackPointer} from "@engine/renderer/webGl/base/buffer/frameBufferStack";
 import {WidgetContainer} from "@engine/renderable/impl/ui/widgetContainer";
+import {IRealNode} from "@engine/renderable/tsx/_genetic/realNode";
 
 export const enum BLEND_MODE {
     NORMAL,
@@ -384,16 +385,16 @@ export abstract class RenderableModel
         }
     }
 
-    private _calculateLayoutDimension(layout: NonNullable<ITransformableProps['layoutSize']>, dimension:'width'|'height') {
-        if (DEBUG && !this.parent) {
-            throw new DebugError(`can not calculate layout: parent is not set`);
+    private _calculateLayoutDimension(layout: NonNullable<ITransformableProps['layoutSize']>, dimension:'width'|'height',parent:IRealNode) {
+        if (DEBUG && !parent) {
+            throw new DebugError(`can not calculate layout ${dimension}: parent is not set`);
         }
         const parentDimension =
-            (this.parent as WidgetContainer).getClientRect?
-                (this.parent as WidgetContainer).getClientRect()[dimension]:
-                this.parent.size[dimension];
+            (parent as WidgetContainer).getClientRect?
+                (parent as WidgetContainer).getClientRect()[dimension]:
+                (parent as RenderableModel).size[dimension];
         if (DEBUG && !parentDimension) {
-            console.error({parent:this.parent,element:this});
+            console.error({parent,element:this});
             throw new DebugError(`can not calculate layout: parent ${dimension} is ${parentDimension}`);
         }
 
@@ -413,27 +414,26 @@ export abstract class RenderableModel
         this.memoizedLayoutCalculation[dimension] = memoizedValue;
     }
 
-    private _calculateLayoutSize(layout: NonNullable<ITransformableProps['layoutSize']>) {
-        this._calculateLayoutDimension(layout,'width');
-        this._calculateLayoutDimension(layout,'height');
+    private _calculateLayoutSize(layout: NonNullable<ITransformableProps['layoutSize']>,parent:IRealNode) {
+        this._calculateLayoutDimension(layout,'width',parent);
+        this._calculateLayoutDimension(layout,'height',parent);
     }
 
-    private __calculateLayoutPos(layout: NonNullable<IPositionableProps['layoutPos']>, layoutKey:'horizontal'|'vertical',pos:'x'|'y',size:'width'|'height') {
-        const parent = this.parent;
+    private __calculateLayoutPos(layout: NonNullable<IPositionableProps['layoutPos']>, layoutKey:'horizontal'|'vertical',pos:'x'|'y',size:'width'|'height',parent:IRealNode) {
         if (DEBUG && !parent) {
-            throw new DebugError(`can not calculate layout: parent is not set`);
+            throw new DebugError(`can not calculate layout pos ${pos}: parent is not set`);
         }
         const parentSize =
-            (this.parent as WidgetContainer).getClientRect?
-                (this.parent as WidgetContainer).getClientRect():
-                this.parent.size;
+            (parent as WidgetContainer).getClientRect?
+                (parent as WidgetContainer).getClientRect():
+                (parent as RenderableModel).size;
         if (DEBUG && !parentSize[size]) {
-            console.error({parent:this.parent,element:this});
+            console.error({parent,element:this});
             throw new DebugError(`can not calculate layout: parent ${size} is ${parentSize[size]}`);
         }
         const offset =
-            (this.parent as WidgetContainer).getClientRect?
-                (this.parent as WidgetContainer).getClientRect():
+            (parent as WidgetContainer).getClientRect?
+                (parent as WidgetContainer).getClientRect():
                 ZERO_POINT;
         if (!this.memoizedLayoutCalculation) this.memoizedLayoutCalculation = {};
         const memoizedValue = `${parentSize}_${layout[layoutKey]}`;
@@ -452,26 +452,26 @@ export abstract class RenderableModel
         this.memoizedLayoutCalculation[pos] = memoizedValue;
     }
 
-    private _calculateLayoutPos(layout: NonNullable<IPositionableProps['layoutPos']>) {
-        this.__calculateLayoutPos(layout,'horizontal','x','width');
-        this.__calculateLayoutPos(layout,'vertical','y','height');
+    private _calculateLayoutPos(layout: NonNullable<IPositionableProps['layoutPos']>,parent:IRealNode) {
+        this.__calculateLayoutPos(layout,'horizontal','x','width',parent);
+        this.__calculateLayoutPos(layout,'vertical','y','height',parent);
     }
 
-    public override setProps(props: ITransformableProps & IPositionableProps): void {
+    public override setProps(props: ITransformableProps & IPositionableProps,parent:IRealNode): void {
         if (props.id !== undefined) this.id = props.id;
         if (props.alpha !== undefined) this.alpha = props.alpha;
-        if (props.filters !== undefined) this.filters = props.filters
+        if (props.filters !== undefined) this.filters = props.filters;
 
         if (DEBUG && props.layoutSize && props.size) {
             throw new DebugError(`use either 'pos' or 'layoutPos' property but not both`);
         }
-        else if (props.layoutSize) this._calculateLayoutSize(props.layoutSize);
+        else if (props.layoutSize) this._calculateLayoutSize(props.layoutSize,parent);
         else if (props.size) this.size.setFrom(props.size);
 
         if (DEBUG && props.layoutPos && props.pos) {
             throw new DebugError(`use either 'size' or 'layoutSize' property but not both`);
         }
-        else if (props.layoutPos) this._calculateLayoutPos(props.layoutPos);
+        else if (props.layoutPos) this._calculateLayoutPos(props.layoutPos,parent);
         else if (props.pos) this.pos.setFrom(props.pos);
 
         this._registerEventFromProps(props, MOUSE_EVENTS.click);
@@ -479,7 +479,7 @@ export abstract class RenderableModel
         this._registerEventFromProps(props, MOUSE_EVENTS.mouseMove);
         this._registerEventFromProps(props, MOUSE_EVENTS.mouseLeave);
 
-        super.setProps(props);
+        super.setProps(props,parent);
     }
 
     protected override setClonedProperties(cloned: RenderableModel): void {

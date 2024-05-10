@@ -3,6 +3,7 @@ import {ScrollableTextField} from "@engine/renderable/impl/ui/textField/scrollab
 import {Optional} from "@engine/core/declarations";
 import {StringEx} from "@engine/renderable/impl/ui/textField/_internal/stringEx";
 import {Font} from "@engine/renderable/impl/general/font/font";
+import {IRealNode} from "@engine/renderable/tsx/_genetic/realNode";
 
 interface ITextFragment {
     italic?: boolean;
@@ -37,8 +38,8 @@ export class RichTextField extends ScrollableTextField {
         else return this._textEx.asString();
     }
 
-    public override setProps(props:ITextFieldProps & {richText?:INode}):void {
-        super.setProps(props);
+    public override setProps(props:ITextFieldProps & {richText?:INode},parent:IRealNode):void {
+        super.setProps(props,parent);
         if (props.richText!==undefined) this.setRichText(props.richText as VirtualNode);
     }
 

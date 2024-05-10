@@ -1,4 +1,3 @@
-
 import {Game} from "@engine/core/game";
 import {FbxAbstractParser} from "@engine/renderable/impl/3d/fbxParser/_internal/fbxAbstractParser";
 import {IFbxParams} from "@engine/renderable/impl/3d/fbxParser/_internal/types";

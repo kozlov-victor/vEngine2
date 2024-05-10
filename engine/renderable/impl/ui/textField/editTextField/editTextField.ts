@@ -15,6 +15,7 @@ import {VirtualNode} from "@engine/renderable/tsx/_genetic/virtualNode";
 import {IKeyboardFocusable} from "@engine/renderable/impl/ui/textField/_internal/iKeyboardFocusable";
 import {EventEmitterDelegate} from "@engine/delegates/eventDelegates/eventEmitterDelegate";
 import {TOGGLE_BUTTON_EVENTS} from "@engine/renderable/impl/ui/toggleButton/_internal/toggleButtonEvents";
+import {IRealNode} from "@engine/renderable/tsx/_genetic/realNode";
 
 export interface IChangeEditTextFieldEvent {
     target: EditTextField;
@@ -76,8 +77,8 @@ export class EditTextField extends RichTextField implements IKeyboardFocusable{
         this.changeEventHandler.trigger(TOGGLE_BUTTON_EVENTS.changed, {target:this,value:this.getText()});
     }
 
-    public override setProps(props: IEditTextFieldProps):void {
-        super.setProps(props);
+    public override setProps(props: IEditTextFieldProps,parent:IRealNode):void {
+        super.setProps(props,parent);
         if (props.changed!==undefined && props.changed!==this._tsxChanged) {
             if (this._tsxChanged!==undefined) this.changeEventHandler.off(TOGGLE_BUTTON_EVENTS.changed,this._tsxChanged);
             this.changeEventHandler.on(TOGGLE_BUTTON_EVENTS.changed, props.changed);
