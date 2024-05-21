@@ -10,14 +10,6 @@ import {IBdfFont} from "@engine/misc/parsers/bdf/bdfFontParser";
 
 // font collection example https://github.com/Tecate/bitmap-fonts/tree/master/bitmap
 
-interface ILetterInfo {
-    data: number[];
-    width: number;
-    widthExact: number;
-    offsetX:number;
-    offsetY:number;
-}
-
 export class FontContextBdfFactory extends FontContextAbstractFactory<DrawingSurface> {
 
     private pixelSize:number;

@@ -22,6 +22,18 @@ export class VEngineTsxFactory<T> {
 
     private static componentInstances:Record<number, BaseTsxComponent> = {};
 
+    private static attachComponentInstanceToNode(node:VirtualNode|VirtualFragment, componentInstance:any) {
+        if (node.type==='virtualNode') {
+            node.parentComponent = componentInstance;
+            node.shouldBeMounted = true;
+        }
+        else {
+            node.children?.forEach(c=>{
+                this.attachComponentInstanceToNode(c,componentInstance);
+            });
+        }
+    }
+
     public static createElement(
         item:string|((props:Record<string, any>)=>VirtualNode)|{new: BaseTsxComponent},
         // eslint-disable-next-line @typescript-eslint/ban-types
@@ -54,15 +66,14 @@ export class VEngineTsxFactory<T> {
             if (VEngineTsxFactory.componentInstances[uuid]) {
                 const instance = VEngineTsxFactory.componentInstances[uuid];
                 (instance as any).props = props;
-                const node =  instance.render() as VirtualNode;
-                node.parentComponent = instance;
+                const node =  instance.render() as VirtualNode|VirtualFragment;
+                this.attachComponentInstanceToNode(node,instance);
                 return node;
             } else {
                 const instance = new (item as any)(props) as BaseTsxComponent;
                 VEngineTsxFactory.componentInstances[uuid] = instance;
-                const node = instance.render() as VirtualNode;
-                node.parentComponent = instance;
-                node.shouldBeMounted = true;
+                const node = instance.render() as VirtualNode|VirtualFragment;
+                this.attachComponentInstanceToNode(node,instance);
                 return node;
             }
 
@@ -77,7 +88,7 @@ export class VEngineTsxFactory<T> {
 
     public static destroyElement(el:VirtualNode) {
         this.clearCachedInstance(el.props);
-        el.children.forEach(it=>this.destroyElement(it));
+        el.children?.forEach(it=>this.destroyElement(it));
     }
 
     public static clearCachedInstance(props:Record<string, any>) {

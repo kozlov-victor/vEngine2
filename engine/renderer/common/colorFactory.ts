@@ -176,14 +176,14 @@ export class ColorFactory {
         }
         else {
             if (literal.indexOf('rgb')===0) {
-                [r,g,b,a] = literal.split("(")[1].split(")")[0].split(",").map(x=>+x) as [Uint8,Uint8,Uint8,Uint8];
+                [r,g,b,a] = literal.split("(")[1].split(")")[0].split(/[ ,]+/).map(x=>+x) as [Uint8,Uint8,Uint8,Uint8];
                 if (a===undefined) a = 255 as Uint8;
                 else a=~~(a * 255) as Uint8;
             }
             else if (literal.indexOf('hsl')===0) {
                 let h: number, s: number, l: number,
                     alfa: Uint8;
-                [h, s, l, alfa] = literal.split("(")[1].split(")")[0].split(",").map(x => parseInt(x)) as [number, number, number, Uint8];
+                [h, s, l, alfa] = literal.split("(")[1].split(")")[0].split(/[ ,]+/).map(x => parseInt(x)) as [number, number, number, Uint8];
                 if (alfa === undefined) alfa = 255 as Uint8;
                 else alfa = ~~(alfa * 255) as Uint8;
                 return this.fromHSLA(h, s, l, alfa);

@@ -63,7 +63,7 @@ export abstract class AbstractTsxDOMRenderer<T extends IRealNode> {
         parent.appendChild(node);
         if (newVirtualNode.shouldBeMounted) {
             newVirtualNode.shouldBeMounted = false;
-            this.toMount.push(newVirtualNode.parentComponent);
+            if (!this.toMount.includes(newVirtualNode.parentComponent)) this.toMount.push(newVirtualNode.parentComponent);
         }
         return node;
     }

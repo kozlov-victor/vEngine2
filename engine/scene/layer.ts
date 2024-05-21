@@ -111,7 +111,6 @@ export class Layer implements IParentChild, IFilterable,IAlphaBlendable, IWithId
         return this._children[index];
     }
 
-
     public _setScene(scene:Scene):void{
         this._scene = scene;
     }

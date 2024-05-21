@@ -9,7 +9,7 @@ export class Texture extends AbstractTexture implements ITexture {
     public type = 'Texture';
     public readonly __kind__ = 'Texture';
 
-    protected samplerType: GLenum = this.gl.TEXTURE_2D;
+    protected samplerType = this.gl.TEXTURE_2D;
 
     constructor(gl:WebGLRenderingContext){
         super(gl);
@@ -29,7 +29,7 @@ export class Texture extends AbstractTexture implements ITexture {
         img:ImageBitmap|ImageData|HTMLVideoElement|HTMLImageElement|HTMLCanvasElement|undefined,
         size:ISize = new Size(0,0)):void{
 
-        const gl:WebGLRenderingContext = this.gl;
+        const gl = this.gl;
 
         if (DEBUG) {
             if (!(img || size.width || size.height))
@@ -66,31 +66,32 @@ export class Texture extends AbstractTexture implements ITexture {
     }
 
 
-    public toDataArray():Uint8Array {
-        const gl:WebGLRenderingContext = this.gl;
-        const wxh:number = this.size.width*this.size.height;
+    public toDataArray() {
+        const gl = this.gl;
+        const wxh = this.size.width*this.size.height;
 
-        const fb:WebGLFramebuffer = gl.createFramebuffer()!;
+        const fb = gl.createFramebuffer()!;
         this.beforeOperation();
         gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
         gl.framebufferTexture2D(
             gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0,
-            gl.TEXTURE_2D, this.tex, 0);
+            gl.TEXTURE_2D, this.tex, 0
+        );
 
         if (DEBUG && gl.checkFramebufferStatus(gl.FRAMEBUFFER)!==gl.FRAMEBUFFER_COMPLETE)
             throw new DebugError(`wrong framebuffer state!`);
-        const pixels:Uint8Array = new Uint8Array(wxh * 4);
+        const pixels = new Uint8Array(wxh * 4);
         gl.readPixels(0, 0, this.size.width, this.size.height, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
         this.afterOperation();
         return pixels;
     }
 
     public toDataUrl():string {
-        const canvas:HTMLCanvasElement = document.createElement('canvas');
-        const ctx:CanvasRenderingContext2D = canvas.getContext('2d')!;
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d')!;
         canvas.width = this.size.width;
         canvas.height = this.size.height;
-        const imgData:ImageData = ctx.createImageData(this.size.width,this.size.height);
+        const imgData = ctx.createImageData(this.size.width,this.size.height);
         imgData.data.set(this.toDataArray());
         ctx.putImageData(imgData, 0, 0);
         return canvas.toDataURL();
@@ -98,12 +99,12 @@ export class Texture extends AbstractTexture implements ITexture {
 
     protected setRawData(data:Uint8Array,width:number,height:number,mode:INTERPOLATION_MODE = INTERPOLATION_MODE.LINEAR):void{
         if (DEBUG) {
-            const numOfBytes:number = width*height*4;
+            const numOfBytes = width*height*4;
             if (data.length!==numOfBytes) {
                 throw new DebugError(`unexpected Uint8Array length, expected width*height*4 (${width}*${height}*4=${numOfBytes}), but is found ${data.length}`);
             }
         }
-        const gl:WebGLRenderingContext = this.gl;
+        const gl = this.gl;
         this.size.setWH(width,height);
 
         this.beforeOperation();

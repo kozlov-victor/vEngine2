@@ -28,7 +28,7 @@ export abstract class AbstractTexture  {
                 }
             }
         }
-        this.tex = gl.createTexture() as WebGLTexture;
+        this.tex = gl.createTexture()!;
         if (DEBUG && !this.tex) throw new DebugError(`can not allocate memory for texture`);
 
     }
@@ -39,7 +39,7 @@ export abstract class AbstractTexture  {
 
     private static _instances:AbstractTexture[] = [];
 
-    public readonly size:Size = new Size(0,0);
+    public readonly size = new Size(0,0);
 
     protected abstract samplerType:GLenum;
 
@@ -104,9 +104,9 @@ export abstract class AbstractTexture  {
         if (mode===this._interpolationMode) return;
         this.beforeOperation();
 
-        const gl:WebGLRenderingContext = this.gl;
+        const gl = this.gl;
 
-        let glMode:number;
+        let glMode!:number;
         switch (mode) {
             case INTERPOLATION_MODE.LINEAR:
                 glMode = gl.LINEAR;
@@ -119,8 +119,8 @@ export abstract class AbstractTexture  {
                 break;
         }
 
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, glMode!);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, glMode!);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, glMode);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, glMode);
 
         this._interpolationMode = mode;
 
@@ -147,7 +147,6 @@ export abstract class AbstractTexture  {
         const isPowerOfTwo =
             this.size.width>1 && this.size.height>1 &&
             isPowerOf2(this.size.width) && isPowerOf2(this.size.height);
-        // Check if the image is a power of 2 in both dimensions.
         if (isPowerOfTwo) {
             gl.generateMipmap(gl.TEXTURE_2D);
             gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);

@@ -7,6 +7,7 @@ import {Color} from "@engine/renderer/common/color";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {Image} from "@engine/renderable/impl/general/image/image";
 import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
+import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 
 
 export class MainScene extends Scene {
@@ -19,7 +20,7 @@ export class MainScene extends Scene {
         this.backgroundColor = Color.BLACK;
 
         const image = new Image(this.game,this.fireTexture);
-        image.blendMode = BLEND_MODE.ADDITIVE;
+        //image.blendMode = BLEND_MODE.ADDITIVE;
 
         const ps: ParticleSystem = new ParticleSystem(this.game);
         ps.addParticlePrefab(image);
@@ -38,6 +39,18 @@ export class MainScene extends Scene {
         });
         this.mouseEventHandler.on(MOUSE_EVENTS.mouseMove,(e)=>{
             ps.emissionPosition.setXY(e.screenX - image.size.width/2,e.screenY-image.size.height/2);
+        });
+        this.keyboardEventHandler.onKeyHold(KEYBOARD_KEY.RIGHT, _=>{
+            ps.emissionPosition.x+=1;
+        });
+        this.keyboardEventHandler.onKeyHold(KEYBOARD_KEY.LEFT, _=>{
+            ps.emissionPosition.x-=1;
+        });
+        this.keyboardEventHandler.onKeyHold(KEYBOARD_KEY.UP, _=>{
+            ps.emissionPosition.y-=1;
+        });
+        this.keyboardEventHandler.onKeyHold(KEYBOARD_KEY.DOWN, _=>{
+            ps.emissionPosition.y+=1;
         });
 
 

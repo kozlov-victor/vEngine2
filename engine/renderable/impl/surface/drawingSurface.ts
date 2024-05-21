@@ -83,8 +83,9 @@ class DrawingSession implements IDrawingSession {
     public pathParams:ITriangulatedPathParams = {
         lineWidth:1
     };
-    public fillColor:Color = Color.RGBA(0,0,0,255);
-    public drawColor:Color = Color.RGBA(0,0,0,255);
+    public fillColor = Color.RGBA(0,0,0,255);
+    public drawColor = Color.RGBA(0,0,0,255);
+    public globalAlpha = 1;
 
 
     constructor(private game:Game,private surface:DrawingSurface,private _matrixStack:MatrixStack) {
@@ -143,7 +144,7 @@ class DrawingSession implements IDrawingSession {
         this.drawSimpleShape(this._ellipse);
     }
 
-    public drawArc(cx:number,cy:number,radius:number,startAngle:number,endAngle:number, anticlockwise:boolean = false):void {
+    private _drawArc(cx:number,cy:number,radius:number,startAngle:number,endAngle:number, anticlockwise:boolean,fill:boolean) {
         if (radius===0) return;
         this._ellipse.radiusX = radius;
         this._ellipse.radiusY = radius;
@@ -151,35 +152,18 @@ class DrawingSession implements IDrawingSession {
         this._ellipse.arcAngleFrom = startAngle;
         this._ellipse.arcAngleTo = endAngle;
         this._ellipse.anticlockwise = anticlockwise;
-        const fillColor:Readonly<IColor> = this.surface.getFillColor();
-        this.surface.setFillColor(Color.NONE);
+        const fillColor = this.surface.getFillColor();
+        if (!fill) this.surface.setFillColor(Color.NONE);
         this.drawSimpleShape(this._ellipse);
-        this.surface.setFillColor(fillColor as Color);
+        if (!fill) this.surface.setFillColor(fillColor as Color);
+    }
+
+    public drawArc(cx:number,cy:number,radius:number,startAngle:number,endAngle:number, anticlockwise:boolean = false):void {
+        this._drawArc(cx,cy,radius,startAngle,endAngle,anticlockwise,false);
     }
 
     public fillArc(cx:number,cy:number,radius:number,startAngle:number,endAngle:number, anticlockwise:boolean = false):void {
-        if (radius===0) return;
-        if ( // full circle
-            Math.abs(
-                Math.abs(startAngle%(Math.PI*2)) -
-                Math.abs(endAngle%(Math.PI*2))
-            )<=0.001
-        ) {
-            const lineWidth:number = this.surface.getLineWidth();
-            this.surface.setLineWidth(0);
-            this.drawCircle(cx,cy,radius);
-            this.surface.setLineWidth(lineWidth);
-        } else {
-            if (anticlockwise) {
-                const tmp:number = startAngle;
-                startAngle = endAngle;
-                endAngle = tmp + 2*Math.PI;
-            }
-            const path:string = arcToSvgCurve(cx,cy,radius,startAngle,endAngle)+` z`;
-            const polygon:Polygon = Polygon.fromSvgPath(this.game,path);
-            polygon.fillColor.setFrom(this.surface.getFillColor());
-            this.drawModel(polygon);
-        }
+        this._drawArc(cx,cy,radius,startAngle,endAngle,anticlockwise,true);
     }
 
 
@@ -329,6 +313,7 @@ class DrawingSession implements IDrawingSession {
         shape.fillColor.setFrom(this.surface.getFillColor());
         shape.lineWidth = this.surface.getLineWidth();
         shape.color.setFrom(this.surface.getDrawColor());
+        shape.alpha = this.globalAlpha;
     }
 
     private drawSimpleShape(shape:Shape):void{
@@ -401,6 +386,10 @@ export class DrawingSurface
     public setFillColor(r:Uint8, g:Uint8, b:Uint8, a?:Uint8):void;
     public setFillColor(col:Uint8|number|Color, g?:Uint8, b?:Uint8, a:Uint8 = 255):void{
         this._drawingSession.fillColor = DrawingSurface.normalizeColor(col,g,b,a);
+    }
+
+    public setGlobalAlpha(a:number) {
+        this._drawingSession.globalAlpha = a;
     }
 
     public getFillColor():Readonly<IColor>{
