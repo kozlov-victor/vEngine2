@@ -5,8 +5,8 @@ import {Game} from "@engine/core/game";
 
 export class TaskQueue {
 
-    private startScheduled:boolean = false;
-    private resourceLoader:ResourceLoader = new ResourceLoader(this.game);
+    private startScheduled = false;
+    private resourceLoader = new ResourceLoader(this.game);
 
     constructor(private game:Game) {
     }

@@ -5,8 +5,8 @@ import {IRealNode} from "@engine/renderable/tsx/_genetic/realNode";
 import {AbstractElementCreator} from "@engine/renderable/tsx/_genetic/abstractElementCreator";
 import {VEngineTsxFactory} from "@engine/renderable/tsx/_genetic/vEngineTsxFactory.h";
 import {BaseTsxComponent} from "@engine/renderable/tsx/base/baseTsxComponent";
+import {VirtualFragment} from "@engine/renderable/tsx/_genetic/virtualFragment";
 
-const debug = false;
 
 export abstract class AbstractTsxDOMRenderer<T extends IRealNode> {
 
@@ -17,15 +17,14 @@ export abstract class AbstractTsxDOMRenderer<T extends IRealNode> {
     }
 
     public render(component:VEngineTsxComponent, root:T):VirtualNode{
-        if (debug) console.log('before render');
-        const newVirtualNode = component.render() as VirtualNode;
+        const newVirtualNode = component.render() as VirtualNode|VirtualFragment;
         const newVirtualNodeChildren:VirtualNode[] = [];
         if (newVirtualNode.type==='virtualFragment') {
             newVirtualNodeChildren.push(...newVirtualNode.children);
         } else {
             newVirtualNodeChildren.push(newVirtualNode);
         }
-        const newVirtualDom:VirtualNode = new VirtualNode({},"root",newVirtualNodeChildren);
+        const newVirtualDom = new VirtualNode({},'root',newVirtualNodeChildren);
         this.reconcileChildren(newVirtualDom,this.oldVirtualDom,root);
         this.oldVirtualDom = newVirtualDom;
 
@@ -38,32 +37,29 @@ export abstract class AbstractTsxDOMRenderer<T extends IRealNode> {
     }
 
     private removeNode(node:T,vNode:VirtualNode):void {
-        if (debug) console.log('remove',node);
         node.removeSelf();
         VEngineTsxFactory.destroyElement(vNode);
-        VEngineTsxFactory.clearCachedInstance((vNode.parentComponent as any)?.props);
     }
 
-    private replaceNode(node:T,newVirtualNode:VirtualNode,parent:T):Optional<T>{
-        if (debug) console.log('replacing',newVirtualNode);
-        const newNode:T = this.elementCreator.createElementByTagName(newVirtualNode);
+    private replaceNode(node:T,oldVirtualNode:VirtualNode,newVirtualNode:VirtualNode,parent:T) {
+        const newNode = this.elementCreator.createElementByTagName(newVirtualNode);
         this.setGenericProps(newNode,newVirtualNode,parent);
         parent.replaceChild(node,newNode);
+        VEngineTsxFactory.destroyElement(oldVirtualNode);
         return newNode;
     }
 
-    private updateNode(node:T,newVirtualNode:VirtualNode,parent:T):void{
-        if (debug) console.log('updating',newVirtualNode);
+    private updateNode(node:T,newVirtualNode:VirtualNode,parent:T) {
         this.setGenericProps(node,newVirtualNode,parent);
     }
 
-    private createNode(newVirtualNode:VirtualNode,parent:T):Optional<T>{
-        const node:T = this.elementCreator.createElementByTagName(newVirtualNode);
+    private createNode(newVirtualNode:VirtualNode,parent:T) {
+        const node = this.elementCreator.createElementByTagName(newVirtualNode);
         this.setGenericProps(node,newVirtualNode,parent);
         parent.appendChild(node);
-        if (newVirtualNode.shouldBeMounted) {
-            newVirtualNode.shouldBeMounted = false;
-            if (!this.toMount.includes(newVirtualNode.parentComponent)) this.toMount.push(newVirtualNode.parentComponent);
+        if (newVirtualNode.parentComponent?.__shouldBeMounted) {
+            newVirtualNode.parentComponent.__shouldBeMounted = false;
+            this.toMount.push(newVirtualNode.parentComponent);
         }
         return node;
     }
@@ -71,7 +67,7 @@ export abstract class AbstractTsxDOMRenderer<T extends IRealNode> {
     private reconcile(
         newVirtualNode:Optional<VirtualNode>,
         oldVirtualNode:Optional<VirtualNode>,realNode:T,
-        parent:T):Optional<T>{
+        parent:T) {
 
         //render node
         let newRealNode:Optional<T> = realNode;
@@ -85,7 +81,7 @@ export abstract class AbstractTsxDOMRenderer<T extends IRealNode> {
                 newVirtualNode.loopIndex!==oldVirtualNode.loopIndex ||
                 newVirtualNode.tagName!==oldVirtualNode.tagName
             ) { // replace node
-                newRealNode = this.replaceNode(newRealNode,newVirtualNode,parent);
+                newRealNode = this.replaceNode(newRealNode,oldVirtualNode,newVirtualNode,parent);
             } else {
                 this.updateNode(newRealNode,newVirtualNode,parent); // update node
             }
@@ -98,22 +94,22 @@ export abstract class AbstractTsxDOMRenderer<T extends IRealNode> {
         return newRealNode;
     }
 
-    private reconcileChildren(newVirtualNode:Optional<VirtualNode>,oldVirtualNode:Optional<VirtualNode>,parent:T):void{
-        const maxNumOfChild:number =
+    private reconcileChildren(newVirtualNode:Optional<VirtualNode>,oldVirtualNode:Optional<VirtualNode>,parent:T) {
+        const maxNumOfChild =
             Math.max(
                 newVirtualNode?.children?.length ?? 0,
                 oldVirtualNode?.children?.length ?? 0
             );
         const realChildren:IRealNode[] = [];
         for (let i=0,max=parent.getChildrenCount();i<max;++i) realChildren.push(parent.getChildAt(i));
-        for (let i:number = 0;i<maxNumOfChild;++i) {
-            const newVirtualChild:Optional<VirtualNode> = newVirtualNode?.children?.[i];
-            const oldVirtualChild:Optional<VirtualNode> = oldVirtualNode?.children?.[i];
+        for (let i = 0;i<maxNumOfChild;++i) {
+            const newVirtualChild = newVirtualNode?.children?.[i];
+            const oldVirtualChild = oldVirtualNode?.children?.[i];
             this.reconcile(newVirtualChild,oldVirtualChild,realChildren[i] as T,parent);
         }
     }
 
-    private setGenericProps(model:T,virtualNode:VirtualNode,parent:IRealNode):void{
+    private setGenericProps(model:T,virtualNode:VirtualNode,parent:IRealNode) {
         if (virtualNode?.props?.ref!==undefined) virtualNode.props.ref(model);
         this.elementCreator.setProps(model,virtualNode,parent);
     }

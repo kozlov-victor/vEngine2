@@ -30,7 +30,7 @@ export class ResourceLoader {
         this.game = game;
     }
 
-    private readonly q:Queue = new Queue();
+    private readonly q = new Queue();
 
     private static _loadHtmlImage = (imgUrl:URI|IURLRequest|Base64,progress?:(n:number)=>void):Promise<HTMLImageElement>=>{
         let url:string = (imgUrl as IURLRequest).url?(imgUrl as IURLRequest).url:(imgUrl as string);
@@ -154,17 +154,17 @@ export class ResourceLoader {
             if (progress!==undefined) progress(n/6);
         };
 
-        const imgLeft:HTMLImageElement|ImageBitmap =
+        const imgLeft =
             await ResourceLoader._loadHtmlImage(leftSide as (URI|Base64|IURLRequest),progressCallBack);
-        const imgRight:HTMLImageElement|ImageBitmap =
+        const imgRight =
             await ResourceLoader._loadHtmlImage(rightSide as (URI|Base64|IURLRequest),progressCallBack);
-        const imgTop:HTMLImageElement|ImageBitmap =
+        const imgTop =
             await ResourceLoader._loadHtmlImage(topSide as (URI|Base64|IURLRequest),progressCallBack);
-        const imgBottom:HTMLImageElement|ImageBitmap =
+        const imgBottom =
             await ResourceLoader._loadHtmlImage(bottomSide as (URI|Base64|IURLRequest),progressCallBack);
-        const imgFront:HTMLImageElement|ImageBitmap =
+        const imgFront =
             await ResourceLoader._loadHtmlImage(frontSide as (URI|Base64|IURLRequest),progressCallBack);
-        const imgBack:HTMLImageElement|ImageBitmap =
+        const imgBack =
             await ResourceLoader._loadHtmlImage(backSide as (URI|Base64|IURLRequest),progressCallBack);
         return this.game.getRenderer().createCubeTexture(imgLeft,imgRight,imgTop,imgBottom,imgFront,imgBack);
     }

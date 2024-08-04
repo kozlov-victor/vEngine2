@@ -23,6 +23,9 @@ export class MainScene extends Scene {
         debugLayer.log(debugLayer);
         debugLayer.log(Number);
         debugLayer.log(new Rect());
+        debugLayer.log('В чащах юга жил бы цитрус? Да, но фальшивый экземпляр!');
+        debugLayer.log('Глянь (!): що ж є шрифт, цей спазм — ґід букв? Юч їх.');
+        debugLayer.log('Фабрикуймо гідність, лящім їжею, ґав хапаймо, з’єднавці чаш!');
 
         const codeLines = [
             ...this.game.constructor.toString().split('\n'),

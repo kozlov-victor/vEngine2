@@ -87,8 +87,8 @@ interface IImageProps extends ITransformableProps, IPositionableProps {
 }
 
 interface IWidgetContainerProps  extends ITransformableProps, IPositionableProps {
-    margin?:[number,number,number,number]|[number,number,number]|[number,number]|[number];
-    padding?:[number,number,number,number]|[number,number,number]|[number,number]|[number];
+    margin?:[number,number,number,number]|[number,number,number]|[number,number]|[number]|number;
+    padding?:[number,number,number,number]|[number,number,number]|[number,number]|[number]|number;
     background?:()=>IPositionableProps;
     backgroundHover?:()=>IPositionableProps;
     backgroundActive?:()=>IPositionableProps;

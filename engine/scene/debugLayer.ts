@@ -6,11 +6,8 @@ import {WordBrake} from "@engine/renderable/impl/ui/textField/textAlign";
 import {DebugError} from "@engine/debug/debugError";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Color} from "@engine/renderer/common/color";
-import {BdfFontParser} from "@engine/misc/parsers/bdf/bdfFontParser";
 import {FontContextBdfFactory} from "@engine/renderable/impl/general/font/factory/fontContextBdfFactory";
-import * as fntSource from "txt/txt-loader!../misc/data/defaultFont.bdf";
-
-const bdfFontData = new BdfFontParser().parse(fntSource);
+import * as bdfFontData from "../misc/data/defaultFont.json";
 
 export class DebugLayer extends Layer {
 

@@ -24,7 +24,7 @@ export class BatchPainter extends AbstractPainter {
     private readonly a_angle: string;
     private readonly a_pos: string;
     private readonly u_viewPort: string;
-    private dirty:boolean = false;
+    private dirty = false;
 
     private readonly colorBatchArray:ColorBatchArray;
     private readonly angleBatchArray:AngleBatchArray;
@@ -32,7 +32,7 @@ export class BatchPainter extends AbstractPainter {
 
     constructor(gl:WebGLRenderingContext) {
         super(gl);
-        const gen: ShaderGenerator = new ShaderGenerator();
+        const gen = new ShaderGenerator();
 
         this.u_viewPort =gen.addVertexUniform(GL_TYPE.FLOAT_VEC2,'u_viewPort');
         this.a_idx = gen.addAttribute(GL_TYPE.FLOAT,'a_idx');

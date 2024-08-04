@@ -1,4 +1,4 @@
-import {VirtualNode} from "@engine/renderable/tsx/_genetic/virtualNode";
+import {VirtualNode, VirtualTextNode} from "@engine/renderable/tsx/_genetic/virtualNode";
 import {ScrollableTextField} from "@engine/renderable/impl/ui/textField/scrollable/scrollableTextField";
 import {Optional} from "@engine/core/declarations";
 import {StringEx} from "@engine/renderable/impl/ui/textField/_internal/stringEx";
@@ -59,7 +59,7 @@ export class RichTextField extends ScrollableTextField {
             }
         }
         fragments.push({
-            text: node.text,
+            text: (node as VirtualTextNode).text,
             italic: node.tagName==='i'?true:undefined,
             bold: node.tagName==='b'?true:undefined,
             underlined: node.tagName==='u'?true:undefined,

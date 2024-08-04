@@ -8,7 +8,7 @@ export class HTMLElementWrap implements IRealNode {
 
     private _childrenCache:HTMLElementWrap[] = [];
 
-    constructor(public readonly htmlElement:HTMLElement|Text|SVGElement) {
+    constructor(public readonly htmlElement:HTMLElement|Comment|Text|SVGElement) {
     }
 
     public appendChild(child: HTMLElementWrap): void {

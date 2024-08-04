@@ -8,6 +8,13 @@ export const DI = {
         instance.constructor.__injectable = tkn;
         DIContext[tkn] = instance;
     },
+    getInstance: <T>(tkn:string):T=>{
+        const res = DIContext[tkn];
+        if (!res) {
+            throw new Error(`instance is not registered: ${tkn}`);
+        }
+        return res as T;
+    },
     Injectable: ()=> {
         return function ClassDecorator<C extends Constructor>(
             target: C,
@@ -32,7 +39,7 @@ export const DI = {
                 const thisToken = (this as any).constructor.__injectable as string;
                 if (!thisToken) {
                     console.error(this);
-                    throw new Error(`not injectable: ${(this as any).constructor.name}`)
+                    throw new Error(`not injectable: ${(this as any).constructor.name}`);
                 }
                 const injectToken = (clazz as any).__injectable;
                 if (!injectToken) {

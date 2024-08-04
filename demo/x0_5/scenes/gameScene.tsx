@@ -70,15 +70,31 @@ class GameSceneUi extends VEngineRootComponent {
 
     constructor(game: Game, private aiLevel: number) {
         super(game);
-        const scene = game.getCurrentScene();
-        scene.keyboardEventHandler.onKeyPressed(KEYBOARD_KEY.RIGHT, _=>this.moveSelectionByKeys(1,0));
-        scene.keyboardEventHandler.onKeyPressed(KEYBOARD_KEY.LEFT, _=>this.moveSelectionByKeys(-1,0));
-        scene.keyboardEventHandler.onKeyPressed(KEYBOARD_KEY.UP, _=>this.moveSelectionByKeys(0,-1));
-        scene.keyboardEventHandler.onKeyPressed(KEYBOARD_KEY.DOWN, _=>this.moveSelectionByKeys(0,1));
-        scene.keyboardEventHandler.onKeyPressed(KEYBOARD_KEY.ENTER, _=>
-            this.onCellClicked(this.currentSelection.y,this.currentSelection.x)
-        );
+    }
 
+    @Reactive.OnKeyPressed(KEYBOARD_KEY.UP)
+    private onKeyUp() {
+        this.moveSelectionByKeys(0,-1);
+    }
+
+    @Reactive.OnKeyPressed(KEYBOARD_KEY.DOWN)
+    private onKeyDown() {
+        this.moveSelectionByKeys(0,1);
+    }
+
+    @Reactive.OnKeyPressed(KEYBOARD_KEY.LEFT)
+    private onKeyLeft() {
+        this.moveSelectionByKeys(-1,0);
+    }
+
+    @Reactive.OnKeyPressed(KEYBOARD_KEY.RIGHT)
+    private onKeyRight() {
+        this.moveSelectionByKeys(1,0);
+    }
+
+    @Reactive.OnKeyPressed(KEYBOARD_KEY.ENTER)
+    private onKeyEnter() {
+        this.onCellClicked(this.currentSelection.y,this.currentSelection.x);
     }
 
     @Reactive.Method()
@@ -111,6 +127,7 @@ class GameSceneUi extends VEngineRootComponent {
                 return;
             case 'loose':
             case 'win':
+                await wait(600);
                 for (const c of result.cells!) {
                     this.rowToAnimate.push(c);
                     await wait(300);
@@ -143,7 +160,6 @@ class GameSceneUi extends VEngineRootComponent {
     public render(): JSX.Element {
         return (
             <>
-                <v_image texture={this.assets.bg}/>
                 <v_verticalLayout
                     mouseMove={this.onBoardMouseMove}
                     layoutPos={{vertical:'center',horizontal:'center'}}
@@ -181,6 +197,7 @@ class GameSceneUi extends VEngineRootComponent {
 export class GameScene extends Scene {
 
     @Resource.ResourceHolder() private assets: Assets;
+    public override backgroundColor = ColorFactory.fromCSS('green');
 
     constructor(game: Game, private aiLevel: number) {
         super(game);

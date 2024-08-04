@@ -157,7 +157,7 @@ export class Board {
         cell.value = 'X';
 
         this.waitingForOpponentAction = true;
-        await wait(500);
+        await wait(800);
         const winCells = this.ai.checkPossibleWinner('X');
         if (winCells) {
             this.finished = true;
@@ -178,6 +178,7 @@ export class Board {
                 cells: looseCells
             };
         }
+        await wait(800);
         this.waitingForOpponentAction = false;
         if (this.allCellsAreOccupied()) {
             this.finished = true;

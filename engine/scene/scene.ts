@@ -11,7 +11,7 @@ import {
 } from "@engine/core/declarations";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {TweenMovie} from "@engine/animation/tweenMovie";
-import {AbstractRenderer, IRenderTarget} from "@engine/renderer/abstract/abstractRenderer";
+import {IRenderTarget} from "@engine/renderer/abstract/abstractRenderer";
 import {ITweenDescription, Tween} from "@engine/animation/tween";
 import {Timer} from "@engine/misc/timer";
 import {TweenableDelegate} from "@engine/delegates/tweenableDelegate";
@@ -31,11 +31,10 @@ import {TaskQueue} from "@engine/resources/taskQueue";
 import {KeyboardEventEmitterDelegate} from "@engine/delegates/eventDelegates/keyboardEventEmitterDelegate";
 import {MouseEventEmitterDelegate} from "@engine/delegates/eventDelegates/mouseEventEmitterDelegate";
 import {GamepadEventEmitterDelegate} from "@engine/delegates/eventDelegates/gamepadEventEmitterDelegate";
-import IDENTITY_HOLDER = Mat4.IDENTITY_HOLDER;
 import {ISceneMouseEvent} from "@engine/control/mouse/mousePoint";
 import {SpatialSpace} from "@engine/physics/common/spatialSpace";
-import {IStateStackPointer} from "@engine/renderer/webGl/base/buffer/frameBufferStack";
 import {DebugLayer} from "@engine/scene/debugLayer";
+import IDENTITY_HOLDER = Mat4.IDENTITY_HOLDER;
 
 export const enum SCENE_EVENTS {
     PRELOADING = 'PRELOADING',

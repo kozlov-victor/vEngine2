@@ -16,7 +16,6 @@ export class FontContextBdfFactory extends FontContextAbstractFactory<DrawingSur
 
     constructor(game:Game, private bdfFont:IBdfFont) {
         super(game);
-
     }
 
 
@@ -67,7 +66,8 @@ export class FontContextBdfFactory extends FontContextAbstractFactory<DrawingSur
     }
 
     protected override getLetterWidth(letter: string): number {
-        return (this.bdfFont.chars[letter].width-this.bdfFont.chars[letter].offsetX)*this.pixelSize;
+        const width = this.bdfFont.chars[letter].widthExact || this.bdfFont.chars[letter].width;
+        return (width-this.bdfFont.chars[letter].offsetX)*this.pixelSize;
     }
 
     protected getAdvancedWidth(letter: string): number {

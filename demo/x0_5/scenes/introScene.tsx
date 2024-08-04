@@ -9,6 +9,7 @@ import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {MenuScene} from "./menuScene";
 import {ColorFactory} from "@engine/renderer/common/colorFactory";
 import {DI} from "@engine/core/ioc";
+import {Reactive} from "@engine/renderable/tsx/decorator/reactive";
 
 @DI.Injectable()
 class IntroSceneUi extends VEngineRootComponent {
@@ -17,8 +18,6 @@ class IntroSceneUi extends VEngineRootComponent {
 
     constructor(game: Game) {
         super(game);
-        this.game.getCurrentScene().keyboardEventHandler.onceKeyPressed(KEYBOARD_KEY.SOFT_RIGHT, _=>this.go());
-        this.game.getCurrentScene().keyboardEventHandler.onceKeyPressed(KEYBOARD_KEY.SOFT_LEFT, _=>this.exit());
     }
 
     private go() {
@@ -29,22 +28,31 @@ class IntroSceneUi extends VEngineRootComponent {
         window.close();
     }
 
+    @Reactive.OnceKeyPressed(KEYBOARD_KEY.SOFT_RIGHT)
+    private onSoftRight() {
+        this.go();
+    }
+
+    @Reactive.OnceKeyPressed(KEYBOARD_KEY.SOFT_RIGHT)
+    private onSoftLeft() {
+        this.exit();
+    }
+
 
     public render(): JSX.Element {
         return (
             <>
-                <v_image texture={this.assets.bg}/>
                 <v_widgetContainer
-                    padding={[5]}
+                    padding={5}
                     layoutSize={{width:'FULL',height:'FULL'}}>
                     <v_image
                         layoutPos={{vertical:'start',horizontal:'center'}}
                         texture={this.assets.logo}/>
                     <v_image click={()=>this.exit()}
-                             scale={{x:-1,y:1}}
-                             transformPoint={'center'}
-                             layoutPos={{horizontal:'start',vertical:'end'}}
-                             texture={this.assets.arrow}/>
+                        scale={{x:-1,y:1}}
+                        transformPoint={'center'}
+                        layoutPos={{horizontal:'start',vertical:'end'}}
+                        texture={this.assets.arrow}/>
                     <v_image click={()=>this.go()}
                         layoutPos={{horizontal:'end',vertical:'end'}}
                         texture={this.assets.arrow}/>

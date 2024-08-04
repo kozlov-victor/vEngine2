@@ -21,6 +21,13 @@ export class BinBuffer {
         return (n & mask) > 0;
     }
 
+    public static setBitValue(nBit:number,n:number,value:0|1):number {
+        if (nBit<0) throw new Error(`wrong nBit value: ${nBit}`);
+        const mask:number = 1<<nBit;
+        if (value) return n |= mask;
+        else return n & (~mask);
+    }
+
     constructor(arrOrSize:number|number[]|ArrayBuffer){
         if (isCommonArray(arrOrSize)) {
             const buffer:ArrayBuffer = new ArrayBuffer(arrOrSize.length);

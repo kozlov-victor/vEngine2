@@ -8,11 +8,11 @@ import {DI} from "@engine/core/ioc";
 import {TaskQueue} from "@engine/resources/taskQueue";
 import {BdfFontParser} from "@engine/misc/parsers/bdf/bdfFontParser";
 import {FontContextBdfFactory} from "@engine/renderable/impl/general/font/factory/fontContextBdfFactory";
+import * as bdfFontData from "@engine/misc/data/defaultFont.json";
 
 @DI.Injectable()
 export class Assets extends ResourceAutoHolder {
 
-    @Resource.Texture('images/bg.png') public readonly bg: ITexture;
     @Resource.Texture('images/arrow.png') public readonly arrow: ITexture;
     @Resource.Texture('images/logo.png') public readonly logo: ITexture;
     @Resource.Texture('images/x.png') public readonly x: ITexture;
@@ -20,18 +20,15 @@ export class Assets extends ResourceAutoHolder {
     @Resource.Texture('sprites/x0.png') public readonly xo: ITexture;
     @Resource.JSON('sprites/x0.json') public readonly xoAtlas: ITextureAtlasJSON;
     @Resource.FontFromAtlasUrl('fonts/','font.fnt',AngelCodeParser) public font:Font;
-    @Resource.Text('fonts/font.txt') private readonly fontSrc:string;
 
-    public fontBDF:Font;
-
+    //public font:Font;
 
     protected override onPreloading(taskQueue: TaskQueue) {
         super.onPreloading(taskQueue);
-        taskQueue.addNextTask(async progress => {
-            const bdfFont = new BdfFontParser().parse(this.fontSrc);
-            const fontBdfFactory = new FontContextBdfFactory(this.scene.getGame(), bdfFont);
-            this.fontBDF = fontBdfFactory.createFont([], [], '', 12);
-        });
+        // taskQueue.addNextTask(async progress => {
+        //     const fontBdfFactory = new FontContextBdfFactory(this.scene.getGame(), bdfFontData);
+        //     this.font = fontBdfFactory.createFont([], [], '', 12);
+        // });
     }
 
 }

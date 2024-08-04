@@ -26,11 +26,6 @@ export class TexturePackerWidget extends BaseTsxComponent {
         this.loadInitialData().then();
     }
 
-    override onMounted() {
-        super.onMounted();
-        console.log('TexturePackerWidget mounted2');
-    }
-
     @Reactive.Method()
     private async loadInitialData() {
         try {

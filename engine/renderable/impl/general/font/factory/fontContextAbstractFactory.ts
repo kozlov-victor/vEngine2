@@ -11,9 +11,9 @@ import IFontContext = FontTypes.IFontContext;
 
 export abstract class FontContextAbstractFactory<T> {
 
-    private readonly SYMBOL_PADDING = 4 as const;
-    private readonly MAX_HEIGHT = 512 as const;
-    private readonly WIDTH:number = 512 as const;
+    private readonly SYMBOL_PADDING = 4;
+    private readonly MAX_HEIGHT = 512;
+    private readonly WIDTH = 512;
 
 
     protected abstract getLetterWidth(letter:string):number;
@@ -33,8 +33,8 @@ export abstract class FontContextAbstractFactory<T> {
     private currentPageRect:ISize = undefined!;
     private currentPageIndex:number = -1;
     private rowHeight:number;
-    private currX:number = 0;
-    private currY:number = 0;
+    private currX = 0;
+    private currY = 0;
     private symbols:{[key:string]:IFontSymbolInfo} = {};
     private texturePages:T[] = [];
 

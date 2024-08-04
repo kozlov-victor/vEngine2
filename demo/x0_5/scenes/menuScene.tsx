@@ -47,11 +47,26 @@ class MenuSceneUI extends VEngineRootComponent {
 
     constructor(game: Game) {
         super(game);
-        const scene = game.getCurrentScene();
-        scene.keyboardEventHandler.onKeyPressed(KEYBOARD_KEY.UP, _=>this.selectNextLevel(-1));
-        scene.keyboardEventHandler.onKeyPressed(KEYBOARD_KEY.DOWN, _=>this.selectNextLevel(1));
-        scene.keyboardEventHandler.onKeyPressed(KEYBOARD_KEY.ENTER, _=>this.go());
-        scene.keyboardEventHandler.onKeyPressed(KEYBOARD_KEY.BACKSPACE, _=>window.close());
+    }
+
+    @Reactive.OnKeyPressed(KEYBOARD_KEY.ENTER)
+    private onEnterKey() {
+        this.go();
+    }
+
+    @Reactive.OnKeyPressed(KEYBOARD_KEY.BACKSPACE)
+    private onBackSpaceKey() {
+        window.close();
+    }
+
+    @Reactive.OnKeyPressed(KEYBOARD_KEY.UP)
+    private onUpKey() {
+        this.selectNextLevel(-1);
+    }
+
+    @Reactive.OnKeyPressed(KEYBOARD_KEY.DOWN)
+    private onDownKey() {
+        this.selectNextLevel(1);
     }
 
     private go(l?:ILevel) {
@@ -83,7 +98,6 @@ class MenuSceneUI extends VEngineRootComponent {
     override render(): JSX.Element {
         return (
             <>
-                <v_image texture={this.assets.bg}/>
                 <v_verticalLayout
                     padding={[30,5,0,5]}
                     layoutSize={{width:'FULL',height:'FULL'}}
@@ -121,6 +135,7 @@ class MenuSceneUI extends VEngineRootComponent {
 export class MenuScene extends Scene {
 
     @Resource.ResourceHolder() private assets: Assets;
+    public override backgroundColor = ColorFactory.fromCSS('green');
 
     override onReady() {
         const root = new SimpleGameObjectContainer(this.game);

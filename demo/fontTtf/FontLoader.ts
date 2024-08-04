@@ -46,8 +46,7 @@ export namespace fontLoader {
     };
 
     export const loadFont = (game:Game,taskQueue:TaskQueue,url:string,fontFaceName:string):void=>{
-        // eslint-disable-next-line @typescript-eslint/ban-types
-        if ((window as unknown as {FontFace:{}}).FontFace!==undefined) {
+        if ((window as unknown as {FontFace:any}).FontFace!==undefined) {
             loadViaFontFace(game,taskQueue,url,fontFaceName);
         } else {
             loadViaDomCss(game,taskQueue,url,fontFaceName);

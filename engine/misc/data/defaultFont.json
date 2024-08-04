@@ -1,0 +1,3353 @@
+{
+    "fontHeight": 10,
+    "chars": {
+        "0": {
+            "data": [
+                0,
+                0,
+                96,
+                144,
+                176,
+                208,
+                144,
+                96,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "1": {
+            "data": [
+                0,
+                0,
+                32,
+                96,
+                32,
+                32,
+                32,
+                32,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "2": {
+            "data": [
+                0,
+                0,
+                96,
+                144,
+                16,
+                32,
+                64,
+                240,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "3": {
+            "data": [
+                0,
+                0,
+                224,
+                16,
+                96,
+                16,
+                16,
+                224,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "4": {
+            "data": [
+                0,
+                0,
+                48,
+                80,
+                144,
+                248,
+                16,
+                16,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "5": {
+            "data": [
+                0,
+                0,
+                240,
+                128,
+                224,
+                16,
+                16,
+                224,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "6": {
+            "data": [
+                0,
+                0,
+                96,
+                128,
+                224,
+                144,
+                144,
+                96,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "7": {
+            "data": [
+                0,
+                0,
+                240,
+                16,
+                32,
+                32,
+                64,
+                64,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "8": {
+            "data": [
+                0,
+                0,
+                96,
+                144,
+                96,
+                144,
+                144,
+                96,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "9": {
+            "data": [
+                0,
+                0,
+                96,
+                144,
+                144,
+                112,
+                16,
+                96,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        " ": {
+            "data": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "!": {
+            "data": [
+                0,
+                0,
+                32,
+                32,
+                32,
+                32,
+                0,
+                32,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "\"": {
+            "data": [
+                0,
+                80,
+                80,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "#": {
+            "data": [
+                0,
+                0,
+                80,
+                248,
+                80,
+                248,
+                80,
+                0,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "$": {
+            "data": [
+                0,
+                0,
+                32,
+                120,
+                128,
+                112,
+                8,
+                240,
+                32,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "%": {
+            "data": [
+                0,
+                0,
+                192,
+                216,
+                48,
+                96,
+                216,
+                24,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "&": {
+            "data": [
+                0,
+                48,
+                64,
+                64,
+                104,
+                144,
+                144,
+                104,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "'": {
+            "data": [
+                0,
+                64,
+                64,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "(": {
+            "data": [
+                0,
+                32,
+                64,
+                64,
+                64,
+                64,
+                64,
+                64,
+                32,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        ")": {
+            "data": [
+                0,
+                64,
+                32,
+                32,
+                32,
+                32,
+                32,
+                32,
+                64,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "*": {
+            "data": [
+                0,
+                0,
+                32,
+                168,
+                112,
+                168,
+                32,
+                0,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "+": {
+            "data": [
+                0,
+                0,
+                0,
+                32,
+                32,
+                248,
+                32,
+                32,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        ",": {
+            "data": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                32,
+                96,
+                64,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "-": {
+            "data": [
+                0,
+                0,
+                0,
+                0,
+                248,
+                0,
+                0,
+                0,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        ".": {
+            "data": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                96,
+                96,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "/": {
+            "data": [
+                0,
+                16,
+                16,
+                32,
+                32,
+                64,
+                64,
+                128,
+                128,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        ":": {
+            "data": [
+                0,
+                0,
+                0,
+                96,
+                96,
+                0,
+                96,
+                96,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        ";": {
+            "data": [
+                0,
+                0,
+                0,
+                96,
+                96,
+                0,
+                32,
+                96,
+                64,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "<": {
+            "data": [
+                0,
+                0,
+                0,
+                32,
+                96,
+                192,
+                96,
+                32,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "=": {
+            "data": [
+                0,
+                0,
+                0,
+                0,
+                240,
+                0,
+                240,
+                0,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        ">": {
+            "data": [
+                0,
+                0,
+                0,
+                128,
+                192,
+                96,
+                192,
+                128,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "?": {
+            "data": [
+                0,
+                96,
+                144,
+                16,
+                32,
+                64,
+                0,
+                64,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "@": {
+            "data": [
+                0,
+                96,
+                144,
+                176,
+                208,
+                208,
+                176,
+                128,
+                96,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "A": {
+            "data": [
+                0,
+                0,
+                112,
+                144,
+                144,
+                144,
+                240,
+                144,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "B": {
+            "data": [
+                0,
+                0,
+                224,
+                144,
+                224,
+                144,
+                144,
+                224,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "C": {
+            "data": [
+                0,
+                0,
+                112,
+                128,
+                128,
+                128,
+                128,
+                112,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "D": {
+            "data": [
+                0,
+                0,
+                224,
+                144,
+                144,
+                144,
+                144,
+                224,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "E": {
+            "data": [
+                0,
+                0,
+                240,
+                128,
+                224,
+                128,
+                128,
+                240,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "F": {
+            "data": [
+                0,
+                0,
+                240,
+                128,
+                224,
+                128,
+                128,
+                128,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "G": {
+            "data": [
+                0,
+                0,
+                112,
+                128,
+                128,
+                144,
+                144,
+                112,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "H": {
+            "data": [
+                0,
+                0,
+                144,
+                144,
+                144,
+                240,
+                144,
+                144,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "I": {
+            "data": [
+                0,
+                0,
+                32,
+                32,
+                32,
+                32,
+                32,
+                32,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "J": {
+            "data": [
+                0,
+                0,
+                16,
+                16,
+                16,
+                16,
+                16,
+                96,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "K": {
+            "data": [
+                0,
+                0,
+                144,
+                160,
+                192,
+                192,
+                160,
+                144,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "L": {
+            "data": [
+                0,
+                0,
+                128,
+                128,
+                128,
+                128,
+                128,
+                240,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "M": {
+            "data": [
+                0,
+                0,
+                216,
+                168,
+                168,
+                168,
+                136,
+                136,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "N": {
+            "data": [
+                0,
+                0,
+                144,
+                144,
+                208,
+                176,
+                144,
+                144,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "O": {
+            "data": [
+                0,
+                0,
+                96,
+                144,
+                144,
+                144,
+                144,
+                96,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "P": {
+            "data": [
+                0,
+                0,
+                112,
+                72,
+                72,
+                112,
+                64,
+                64,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "Q": {
+            "data": [
+                0,
+                0,
+                96,
+                144,
+                144,
+                144,
+                144,
+                96,
+                48,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "R": {
+            "data": [
+                0,
+                0,
+                224,
+                144,
+                144,
+                224,
+                160,
+                144,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "S": {
+            "data": [
+                0,
+                0,
+                112,
+                128,
+                96,
+                16,
+                16,
+                224,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "T": {
+            "data": [
+                0,
+                0,
+                248,
+                32,
+                32,
+                32,
+                32,
+                32,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "U": {
+            "data": [
+                0,
+                0,
+                144,
+                144,
+                144,
+                144,
+                144,
+                112,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "V": {
+            "data": [
+                0,
+                0,
+                144,
+                144,
+                144,
+                144,
+                96,
+                96,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "W": {
+            "data": [
+                0,
+                0,
+                136,
+                136,
+                168,
+                168,
+                168,
+                216,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "X": {
+            "data": [
+                0,
+                0,
+                144,
+                144,
+                96,
+                96,
+                144,
+                144,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "Y": {
+            "data": [
+                0,
+                0,
+                136,
+                136,
+                80,
+                32,
+                32,
+                32,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "Z": {
+            "data": [
+                0,
+                0,
+                240,
+                16,
+                32,
+                64,
+                128,
+                240,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "[": {
+            "data": [
+                0,
+                96,
+                64,
+                64,
+                64,
+                64,
+                64,
+                64,
+                96,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "\\": {
+            "data": [
+                0,
+                128,
+                128,
+                64,
+                64,
+                32,
+                32,
+                16,
+                16,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "]": {
+            "data": [
+                0,
+                96,
+                32,
+                32,
+                32,
+                32,
+                32,
+                32,
+                96,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "^": {
+            "data": [
+                0,
+                0,
+                32,
+                80,
+                136,
+                0,
+                0,
+                0,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "_": {
+            "data": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                248,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "`": {
+            "data": [
+                0,
+                128,
+                64,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 4,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "a": {
+            "data": [
+                0,
+                0,
+                0,
+                96,
+                16,
+                112,
+                144,
+                112,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "b": {
+            "data": [
+                0,
+                128,
+                128,
+                224,
+                144,
+                144,
+                144,
+                224,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "c": {
+            "data": [
+                0,
+                0,
+                0,
+                112,
+                128,
+                128,
+                128,
+                112,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "d": {
+            "data": [
+                0,
+                16,
+                16,
+                112,
+                144,
+                144,
+                144,
+                112,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "e": {
+            "data": [
+                0,
+                0,
+                0,
+                96,
+                144,
+                240,
+                128,
+                112,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "f": {
+            "data": [
+                0,
+                48,
+                64,
+                112,
+                64,
+                64,
+                64,
+                64,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "g": {
+            "data": [
+                0,
+                0,
+                0,
+                112,
+                144,
+                144,
+                112,
+                16,
+                96,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "h": {
+            "data": [
+                0,
+                128,
+                128,
+                224,
+                144,
+                144,
+                144,
+                144,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "i": {
+            "data": [
+                0,
+                32,
+                0,
+                32,
+                32,
+                32,
+                32,
+                32,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "j": {
+            "data": [
+                0,
+                32,
+                0,
+                32,
+                32,
+                32,
+                32,
+                32,
+                64,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "k": {
+            "data": [
+                0,
+                128,
+                128,
+                144,
+                160,
+                192,
+                160,
+                144,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "l": {
+            "data": [
+                0,
+                64,
+                64,
+                64,
+                64,
+                64,
+                64,
+                48,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "m": {
+            "data": [
+                0,
+                0,
+                0,
+                240,
+                168,
+                168,
+                168,
+                136,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "n": {
+            "data": [
+                0,
+                0,
+                0,
+                224,
+                144,
+                144,
+                144,
+                144,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "o": {
+            "data": [
+                0,
+                0,
+                0,
+                96,
+                144,
+                144,
+                144,
+                96,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "p": {
+            "data": [
+                0,
+                0,
+                0,
+                224,
+                144,
+                144,
+                224,
+                128,
+                128,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "q": {
+            "data": [
+                0,
+                0,
+                0,
+                112,
+                144,
+                144,
+                112,
+                16,
+                16,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "r": {
+            "data": [
+                0,
+                0,
+                0,
+                112,
+                64,
+                64,
+                64,
+                64,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "s": {
+            "data": [
+                0,
+                0,
+                0,
+                112,
+                128,
+                96,
+                16,
+                224,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "t": {
+            "data": [
+                0,
+                64,
+                64,
+                112,
+                64,
+                64,
+                64,
+                48,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "u": {
+            "data": [
+                0,
+                0,
+                0,
+                144,
+                144,
+                144,
+                144,
+                112,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "v": {
+            "data": [
+                0,
+                0,
+                0,
+                144,
+                144,
+                144,
+                96,
+                96,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "w": {
+            "data": [
+                0,
+                0,
+                0,
+                136,
+                168,
+                168,
+                168,
+                120,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "x": {
+            "data": [
+                0,
+                0,
+                0,
+                144,
+                144,
+                96,
+                144,
+                144,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "y": {
+            "data": [
+                0,
+                0,
+                0,
+                144,
+                144,
+                144,
+                112,
+                16,
+                96,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "z": {
+            "data": [
+                0,
+                0,
+                0,
+                240,
+                16,
+                96,
+                128,
+                240,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "{": {
+            "data": [
+                0,
+                16,
+                32,
+                32,
+                96,
+                32,
+                32,
+                32,
+                16,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "|": {
+            "data": [
+                0,
+                0,
+                32,
+                32,
+                32,
+                32,
+                32,
+                32,
+                32,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "}": {
+            "data": [
+                0,
+                64,
+                32,
+                32,
+                48,
+                32,
+                32,
+                32,
+                64,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "~": {
+            "data": [
+                0,
+                0,
+                0,
+                0,
+                104,
+                176,
+                0,
+                0,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "¢": {
+            "data": [
+                0,
+                0,
+                16,
+                112,
+                168,
+                160,
+                200,
+                112,
+                64,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "£": {
+            "data": [
+                0,
+                0,
+                56,
+                64,
+                64,
+                240,
+                64,
+                248,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "¤": {
+            "data": [
+                0,
+                0,
+                136,
+                112,
+                80,
+                112,
+                136,
+                0,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "¥": {
+            "data": [
+                0,
+                0,
+                136,
+                80,
+                32,
+                112,
+                32,
+                112,
+                32,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "§": {
+            "data": [
+                0,
+                0,
+                0,
+                112,
+                64,
+                160,
+                80,
+                32,
+                224,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "©": {
+            "data": [
+                0,
+                48,
+                72,
+                180,
+                196,
+                180,
+                72,
+                48,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 8,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "«": {
+            "data": [
+                0,
+                0,
+                0,
+                0,
+                72,
+                144,
+                72,
+                0,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "¬": {
+            "data": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                248,
+                8,
+                8,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "®": {
+            "data": [
+                0,
+                48,
+                72,
+                188,
+                180,
+                172,
+                72,
+                48,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 8,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "¯": {
+            "data": [
+                0,
+                0,
+                112,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "°": {
+            "data": [
+                0,
+                0,
+                64,
+                160,
+                64,
+                0,
+                0,
+                0,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "±": {
+            "data": [
+                0,
+                0,
+                32,
+                112,
+                32,
+                0,
+                112,
+                0,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "´": {
+            "data": [
+                64,
+                128,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 4,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "¶": {
+            "data": [
+                0,
+                0,
+                120,
+                232,
+                232,
+                104,
+                40,
+                40,
+                40,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "·": {
+            "data": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                192,
+                192,
+                0,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 4,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "Ё": {
+            "data": [
+                144,
+                0,
+                240,
+                128,
+                224,
+                128,
+                128,
+                240,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "Ї": {
+            "data": [
+                160,
+                0,
+                224,
+                64,
+                64,
+                64,
+                64,
+                224,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 5,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "ё": {
+            "data": [
+                0,
+                144,
+                0,
+                96,
+                144,
+                240,
+                128,
+                112,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "А": {
+            "data": [
+                0,
+                0,
+                112,
+                144,
+                144,
+                144,
+                240,
+                144,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "Б": {
+            "data": [
+                0,
+                0,
+                240,
+                128,
+                224,
+                144,
+                144,
+                224,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "В": {
+            "data": [
+                0,
+                0,
+                224,
+                144,
+                224,
+                144,
+                144,
+                224,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "Г": {
+            "data": [
+                0,
+                0,
+                240,
+                128,
+                128,
+                128,
+                128,
+                128,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "Д": {
+            "data": [
+                0,
+                0,
+                192,
+                160,
+                160,
+                160,
+                160,
+                496,
+                272,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "Э": {
+            "data": [
+                0,
+                0,
+                224,
+                16,
+                112,
+                16,
+                16,
+                224,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "Е": {
+            "data": [
+                0,
+                0,
+                240,
+                128,
+                224,
+                128,
+                128,
+                240,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "Ж": {
+            "data": [
+                0,
+                0,
+                168,
+                168,
+                248,
+                168,
+                168,
+                168,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "З": {
+            "data": [
+                0,
+                0,
+                224,
+                16,
+                96,
+                16,
+                16,
+                224,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "И": {
+            "data": [
+                0,
+                0,
+                144,
+                144,
+                176,
+                208,
+                144,
+                144,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "Й": {
+            "data": [
+                96,
+                0,
+                144,
+                144,
+                176,
+                208,
+                144,
+                144,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "К": {
+            "data": [
+                0,
+                0,
+                144,
+                160,
+                192,
+                192,
+                160,
+                144,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "Л": {
+            "data": [
+                0,
+                0,
+                112,
+                144,
+                144,
+                144,
+                144,
+                144,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "М": {
+            "data": [
+                0,
+                0,
+                216,
+                168,
+                168,
+                168,
+                136,
+                136,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "Н": {
+            "data": [
+                0,
+                0,
+                144,
+                144,
+                144,
+                240,
+                144,
+                144,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "О": {
+            "data": [
+                0,
+                0,
+                96,
+                144,
+                144,
+                144,
+                144,
+                96,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "П": {
+            "data": [
+                0,
+                0,
+                240,
+                144,
+                144,
+                144,
+                144,
+                144,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "Р": {
+            "data": [
+                0,
+                0,
+                224,
+                144,
+                144,
+                224,
+                128,
+                128,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "С": {
+            "data": [
+                0,
+                0,
+                112,
+                128,
+                128,
+                128,
+                128,
+                112,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "Т": {
+            "data": [
+                0,
+                0,
+                248,
+                32,
+                32,
+                32,
+                32,
+                32,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "У": {
+            "data": [
+                0,
+                0,
+                136,
+                136,
+                120,
+                8,
+                136,
+                112,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "Ф": {
+            "data": [
+                0,
+                0,
+                216,
+                168,
+                168,
+                248,
+                32,
+                32,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "Х": {
+            "data": [
+                0,
+                0,
+                144,
+                144,
+                96,
+                96,
+                144,
+                144,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "Ц": {
+            "data": [
+                0,
+                0,
+                144,
+                144,
+                144,
+                144,
+                144,
+                120,
+                8,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "Ш": {
+            "data": [
+                0,
+                0,
+                136,
+                136,
+                168,
+                168,
+                168,
+                248,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "Щ": {
+            "data": [
+                0,
+                0,
+                136,
+                136,
+                168,
+                168,
+                168,
+                252,
+                4,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "Ч": {
+            "data": [
+                0,
+                0,
+                144,
+                144,
+                144,
+                112,
+                16,
+                16,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "Ы": {
+            "data": [
+                0,
+                0,
+                136,
+                136,
+                200,
+                168,
+                168,
+                200,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "Ь": {
+            "data": [
+                0,
+                0,
+                128,
+                128,
+                224,
+                144,
+                144,
+                224,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "Ъ": {
+            "data": [
+                0,
+                0,
+                192,
+                64,
+                112,
+                72,
+                72,
+                112,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "Ю": {
+            "data": [
+                0,
+                0,
+                144,
+                168,
+                168,
+                232,
+                168,
+                144,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "Я": {
+            "data": [
+                0,
+                0,
+                112,
+                144,
+                144,
+                112,
+                80,
+                144,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "а": {
+            "data": [
+                0,
+                0,
+                0,
+                96,
+                16,
+                112,
+                144,
+                112,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "б": {
+            "data": [
+                0,
+                0,
+                0,
+                240,
+                128,
+                224,
+                144,
+                224,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "в": {
+            "data": [
+                0,
+                0,
+                0,
+                224,
+                144,
+                224,
+                144,
+                224,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "г": {
+            "data": [
+                0,
+                0,
+                0,
+                224,
+                128,
+                128,
+                128,
+                128,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 5,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "д": {
+            "data": [
+                0,
+                0,
+                0,
+                192,
+                160,
+                160,
+                160,
+                496,
+                272,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "э": {
+            "data": [
+                0,
+                0,
+                0,
+                224,
+                16,
+                112,
+                16,
+                224,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "е": {
+            "data": [
+                0,
+                0,
+                0,
+                96,
+                144,
+                240,
+                128,
+                112,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "ж": {
+            "data": [
+                0,
+                0,
+                0,
+                168,
+                168,
+                248,
+                168,
+                168,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "з": {
+            "data": [
+                0,
+                0,
+                0,
+                224,
+                16,
+                96,
+                16,
+                224,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "и": {
+            "data": [
+                0,
+                0,
+                0,
+                144,
+                144,
+                176,
+                208,
+                144,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "й": {
+            "data": [
+                0,
+                96,
+                0,
+                144,
+                144,
+                176,
+                208,
+                144,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "к": {
+            "data": [
+                0,
+                0,
+                0,
+                144,
+                160,
+                192,
+                160,
+                144,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "л": {
+            "data": [
+                0,
+                0,
+                0,
+                112,
+                144,
+                144,
+                144,
+                144,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "м": {
+            "data": [
+                0,
+                0,
+                0,
+                136,
+                216,
+                168,
+                168,
+                136,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "н": {
+            "data": [
+                0,
+                0,
+                0,
+                144,
+                144,
+                240,
+                144,
+                144,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "о": {
+            "data": [
+                0,
+                0,
+                0,
+                96,
+                144,
+                144,
+                144,
+                96,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "р": {
+            "data": [
+                0,
+                0,
+                0,
+                224,
+                144,
+                144,
+                224,
+                128,
+                128,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "п": {
+            "data": [
+                0,
+                0,
+                0,
+                240,
+                144,
+                144,
+                144,
+                144,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "с": {
+            "data": [
+                0,
+                0,
+                0,
+                112,
+                128,
+                128,
+                128,
+                112,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "т": {
+            "data": [
+                0,
+                0,
+                0,
+                248,
+                32,
+                32,
+                32,
+                32,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "у": {
+            "data": [
+                0,
+                0,
+                0,
+                144,
+                144,
+                144,
+                112,
+                16,
+                96,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "ф": {
+            "data": [
+                0,
+                0,
+                0,
+                216,
+                168,
+                248,
+                32,
+                32,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "х": {
+            "data": [
+                0,
+                0,
+                0,
+                144,
+                144,
+                96,
+                144,
+                144,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "ц": {
+            "data": [
+                0,
+                0,
+                0,
+                144,
+                144,
+                144,
+                144,
+                120,
+                8,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "ч": {
+            "data": [
+                0,
+                0,
+                0,
+                144,
+                144,
+                112,
+                16,
+                16,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "ш": {
+            "data": [
+                0,
+                0,
+                0,
+                136,
+                136,
+                168,
+                168,
+                248,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "щ": {
+            "data": [
+                0,
+                0,
+                0,
+                136,
+                136,
+                168,
+                168,
+                252,
+                4,
+                0
+            ],
+            "width": 6,
+            "widthExact": 7,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "ы": {
+            "data": [
+                0,
+                0,
+                0,
+                136,
+                136,
+                200,
+                168,
+                200,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "ь": {
+            "data": [
+                0,
+                0,
+                0,
+                64,
+                64,
+                112,
+                72,
+                112,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "ъ": {
+            "data": [
+                0,
+                0,
+                0,
+                192,
+                64,
+                112,
+                72,
+                112,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "ю": {
+            "data": [
+                0,
+                0,
+                0,
+                144,
+                168,
+                232,
+                168,
+                144,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "я": {
+            "data": [
+                0,
+                0,
+                0,
+                96,
+                144,
+                112,
+                48,
+                208,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "Є": {
+            "data": [
+                0,
+                0,
+                112,
+                128,
+                224,
+                128,
+                128,
+                112,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "є": {
+            "data": [
+                0,
+                0,
+                0,
+                112,
+                128,
+                224,
+                128,
+                112,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "—": {
+            "data": [
+                0,
+                0,
+                0,
+                0,
+                248,
+                0,
+                0,
+                0,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "Ґ": {
+            "data": [
+                0,
+                16,
+                240,
+                128,
+                128,
+                128,
+                128,
+                128,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 6,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "ґ": {
+            "data": [
+                0,
+                0,
+                32,
+                224,
+                128,
+                128,
+                128,
+                128,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 5,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "і": {
+            "data": [
+                0,
+                128,
+                0,
+                128,
+                128,
+                128,
+                128,
+                128,
+                0,
+                0
+            ],
+            "width": 4,
+            "widthExact": 3,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "І": {
+            "data": [
+                0,
+                128,
+                128,
+                128,
+                128,
+                128,
+                128,
+                128,
+                0,
+                0
+            ],
+            "width": 4,
+            "widthExact": 3,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "ї": {
+            "data": [
+                0,
+                320,
+                0,
+                128,
+                128,
+                128,
+                128,
+                128,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 4,
+            "offsetX": 0,
+            "offsetY": -2
+        },
+        "’": {
+            "data": [
+                0,
+                128,
+                128,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+            ],
+            "width": 6,
+            "widthExact": 3,
+            "offsetX": 0,
+            "offsetY": -2
+        }
+    }
+}

@@ -1,5 +1,5 @@
 import {AbstractElementCreator} from "@engine/renderable/tsx/_genetic/abstractElementCreator";
-import {VirtualNode} from "@engine/renderable/tsx/_genetic/virtualNode";
+import {VirtualCommentNode, VirtualNode, VirtualTextNode} from "@engine/renderable/tsx/_genetic/virtualNode";
 import {HTMLElementWrap} from "@engine/renderable/tsx/dom/internal/HTMLElementWrap";
 
 const ELEMENT_PROPERTIES = ['value','checked','selected','focus','disabled','readonly'];
@@ -10,24 +10,24 @@ export class ElementFactory {
 
     private static instance:ElementFactory = new ElementFactory();
 
-    private elements:(Text|HTMLElement|SVGElement)[] = [];
+    private elements:(Text|Comment|HTMLElement|SVGElement)[] = [];
     private wrappers:HTMLElementWrap[] = [];
 
     public static getInstance():ElementFactory{
         return ElementFactory.instance;
     }
 
-    public onElementCreated(el:Text|HTMLElement|SVGElement):void{
+    public onElementCreated(el:Text|Comment|HTMLElement|SVGElement):void{
         this.elements.push(el);
     }
 
-    public onElementRemoved(el:Text|HTMLElement|SVGElement):void {
+    public onElementRemoved(el:Text|Comment|HTMLElement|SVGElement):void {
         const indexOf:number = this.elements.indexOf(el);
         this.elements.splice(indexOf,1);
         this.wrappers.splice(indexOf,1);
     }
 
-    public getWrapByElement(el:Text|HTMLElement):HTMLElementWrap {
+    public getWrapByElement(el:Text|Comment|HTMLElement):HTMLElementWrap {
         const indexOf:number = this.elements.indexOf(el);
         this.wrappers[indexOf] = this.wrappers[indexOf] || new HTMLElementWrap(el);
         return this.wrappers[indexOf];
@@ -42,10 +42,14 @@ export class DomElementCreator extends AbstractElementCreator<HTMLElementWrap>{
     }
 
     createElementByTagName(node:VirtualNode): HTMLElementWrap {
-        let htmlNode:Text|HTMLElement|SVGElement;
-        if (node.tagName===undefined) {
+        let htmlNode:Text|HTMLElement|Comment|SVGElement;
+        if (node instanceof VirtualTextNode) {
             htmlNode = document.createTextNode(node.text);
-        } else {
+        }
+        else if (node instanceof VirtualCommentNode) {
+            htmlNode = document.createComment(node.comment);
+        }
+        else {
             if (svgTags.indexOf(node.tagName)>-1) {
                 htmlNode = document.createElementNS('http://www.w3.org/2000/svg',node.tagName);
             }
@@ -59,12 +63,13 @@ export class DomElementCreator extends AbstractElementCreator<HTMLElementWrap>{
         const props = virtualNode.props;
         const el = model.htmlElement;
         if (el.nodeType===3) {
-            if (virtualNode.text!==model.attributes.text) {
-                model.attributes.text = virtualNode.text;
-                (el as Text).data = virtualNode.text;
+            const virtualTextNode = virtualNode as VirtualTextNode;
+            if (virtualTextNode.text!==model.attributes.text) {
+                model.attributes.text = virtualTextNode.text;
+                (el as Text).data = virtualTextNode.text;
             }
         } else {
-            const htmlEl:HTMLElement = el as HTMLElement;
+            const htmlEl = el as HTMLElement;
             for (const key of Object.keys(props)) {
                 if (key.indexOf('on')===0) {// events
                     (htmlEl as Record<string, any>)[key] = props[key];

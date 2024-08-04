@@ -132,7 +132,7 @@ export class WebGlRenderer extends AbstractCanvasRenderer {
 
     public readonly type:string = 'WebGlRenderer';
 
-    protected rendererHelper:RendererHelper = new WebGlRendererHelper(this.game);
+    protected rendererHelper = new WebGlRendererHelper(this.game);
 
     private _gl:WebGLRenderingContext;
 

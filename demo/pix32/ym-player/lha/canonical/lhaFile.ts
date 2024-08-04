@@ -144,7 +144,6 @@ export class LhaFile {
         this.size = 0;
         // eslint-disable-next-line no-constant-condition
         while (true) {
-            // eslint-disable-next-line @typescript-eslint/ban-types
             const e: LhaEntry | null = hr.readHeader();
 
             if (e === null)

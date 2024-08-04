@@ -3,8 +3,8 @@ import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 
 export class RenderingSessionInfo {
 
-    public drawingEnabled:boolean = true;
-    public drawingStackEnabled:boolean = true;
+    public drawingEnabled = true;
+    public drawingStackEnabled = true;
     public currentLayer:Layer;
     public currentConstrainObjects:RenderableModel[] = [];
 

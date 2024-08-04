@@ -12,7 +12,6 @@ interface IShaderErrorInfo {
 const parseErrors = (log:string):IShaderErrorInfo[]=> {
     if (!DEBUG) return [];
     const logs:IShaderErrorInfo[] = [];
-    // eslint-disable-next-line @typescript-eslint/ban-types
     let result:RegExpMatchArray|null;
 
     // eslint-disable-next-line no-cond-assign
@@ -47,7 +46,6 @@ export const compileShader = (gl:WebGLRenderingContext, shaderSource:string, sha
     const compiled:number = gl.getShaderParameter(shader, gl.COMPILE_STATUS);
     if (!compiled) {
         // Something went wrong during compilation; get the error
-        // eslint-disable-next-line @typescript-eslint/ban-types
         const lastError:string|null = gl.getShaderInfoLog(shader);
         gl.deleteShader(shader);
         if (lastError!==null) {
@@ -89,7 +87,6 @@ export const createProgram = (gl:WebGLRenderingContext, vertexShader:WebGLShader
     const linked:boolean = gl.getProgramParameter(program, gl.LINK_STATUS) as boolean;
     if (!linked) {
         // something went wrong with the link
-        // eslint-disable-next-line @typescript-eslint/ban-types
         const lastError:string|null = gl.getProgramInfoLog(program);
         if (lastError) {
             if (DEBUG) {

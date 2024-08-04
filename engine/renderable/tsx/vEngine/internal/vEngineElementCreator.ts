@@ -8,7 +8,7 @@ import {Line} from "@engine/renderable/impl/geometry/line";
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 import {Image} from "@engine/renderable/impl/general/image/image";
 import {DebugError} from "@engine/debug/debugError";
-import {VirtualNode} from "@engine/renderable/tsx/_genetic/virtualNode";
+import {VirtualCommentNode, VirtualNode, VirtualTextNode} from "@engine/renderable/tsx/_genetic/virtualNode";
 import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 import {Button} from "@engine/renderable/impl/ui/button/button";
 import {ScrollableTextField} from "@engine/renderable/impl/ui/textField/scrollable/scrollableTextField";
@@ -49,7 +49,7 @@ export class VEngineElementCreator extends AbstractElementCreator<RenderableMode
 
     public createElementByTagName(node: VirtualNode): RenderableModel {
         let element:RenderableModel;
-        const game:Game = this.game;
+        const game = this.game;
         switch (node.tagName) {
             case 'v_textField':
                 element = new TextField(game,node.props.font);
@@ -130,7 +130,10 @@ export class VEngineElementCreator extends AbstractElementCreator<RenderableMode
                 element = new WidgetContainer(game);
                 break;
             case undefined: {
-                if (DEBUG) throw new DebugError(`text nodes are not supported (${node.text})`);
+                if (node instanceof VirtualCommentNode) {
+                    return new WidgetContainer(game);
+                }
+                if (DEBUG) throw new DebugError(`text nodes are not supported (${(node as VirtualTextNode).text})`);
                 return undefined!;
             }
             default:

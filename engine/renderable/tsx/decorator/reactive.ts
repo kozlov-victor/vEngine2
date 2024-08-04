@@ -1,4 +1,8 @@
 import {VEngineTsxRootHolder} from "@engine/renderable/tsx/_genetic/vEngineTsxRootHolder";
+import {DI} from "@engine/core/ioc";
+import {VEngineRootComponent} from "@engine/renderable/tsx/vEngine/vEngineRootComponent";
+import {Game} from "@engine/core/game";
+import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 
 export const Reactive = {
     Method: function() {
@@ -47,5 +51,25 @@ export const Reactive = {
             }
             return res;
         };
-    }
+    },
+    OnceKeyPressed: function(key:KEYBOARD_KEY) {
+        return (originalMethod:any,context:ClassMethodDecoratorContext) => {
+            context.addInitializer(function(){
+                const game: Game = DI.getInstance('Game');
+                game.getCurrentScene().keyboardEventHandler.onceKeyPressed(key,()=>{
+                    originalMethod.apply(this,[]);
+                });
+            });
+        };
+    },
+    OnKeyPressed: function(key:KEYBOARD_KEY) {
+        return (originalMethod:any,context:ClassMethodDecoratorContext) => {
+            context.addInitializer(function(){
+                const game: Game = DI.getInstance('Game');
+                game.getCurrentScene().keyboardEventHandler.onKeyPressed(key,()=>{
+                    originalMethod.apply(this,[]);
+                });
+            });
+        };
+    },
 }

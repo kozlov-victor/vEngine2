@@ -12,6 +12,7 @@ import {DebugError} from "@engine/debug/debugError";
 import {IFocusable} from "@engine/core/declarations";
 import {CurrentIKeyBoardFocusable} from "@engine/renderable/impl/ui/textField/_internal/currentIKeyBoardFocusable";
 import {IRealNode} from "@engine/renderable/tsx/_genetic/realNode";
+import {isArray, isCommonArray} from "@engine/misc/object";
 
 interface IContainerWithMarginPadding {
     marginLeft      :number;
@@ -125,7 +126,7 @@ export class WidgetContainer extends MarkableGameObjectContainer implements ICon
     public setMargin(top:number,right?:number,bottom?:number,left?:number):void{
         ({top,right,bottom,left} = WidgetContainer.normalizeBorders(top,right,bottom,left));
 
-        const isDirty:boolean =
+        const isDirty =
             this.marginTop !== top ||
             this.marginRight !== right ||
             this.marginBottom !== bottom ||
@@ -147,7 +148,7 @@ export class WidgetContainer extends MarkableGameObjectContainer implements ICon
         ({top,right,bottom,left} = WidgetContainer.normalizeBorders(top,right,bottom,left));
 
         const thisWriteable = this as IContainerWithMarginPadding;
-        const isDirty:boolean =
+        const isDirty =
             this.paddingTop !== top ||
             this.paddingRight !== right ||
             this.paddingBottom !== bottom ||
@@ -200,11 +201,21 @@ export class WidgetContainer extends MarkableGameObjectContainer implements ICon
             const memoized = this.getMemoizedView(props.backgroundDisabled);
             if (memoized!==this.backgroundDisabled) this.setBackgroundActive(memoized);
         }
-        if (props.padding && props.padding.length>0) {
-            this.setPadding(props.padding[0],props.padding[1],props.padding[2],props.padding[3]);
+        if (props.padding) {
+            if (isCommonArray(props.padding)) {
+                this.setPadding(props.padding[0],props.padding[1],props.padding[2],props.padding[3]);
+            }
+            else {
+                this.setPadding(props.padding);
+            }
         }
-        if (props.margin && props.margin.length>0) {
-            this.setMargin(props.margin[0],props.margin[1],props.margin[2],props.margin[3]);
+        if (props.margin) {
+            if (isCommonArray(props.margin)) {
+                this.setPadding(props.margin[0],props.margin[1],props.margin[2],props.margin[3]);
+            }
+            else {
+                this.setMargin(props.margin);
+            }
         }
     }
 
