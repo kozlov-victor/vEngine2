@@ -33,14 +33,14 @@ export namespace MathEx {
     };
 
     export const rectToPolar = (point: IPoint2d, center: IPoint2d): { radius: number, angle: number } => {
-        const radius:number = Math.sqrt(point.x * point.x + center.y * center.y);
-        const angle:number = Math.atan2(center.y - point.y, center.x - point.x);
+        const radius = Math.sqrt(point.x * point.x + center.y * center.y);
+        const angle = Math.atan2(center.y - point.y, center.x - point.x);
         return {radius, angle};
     };
 
     export const polarToRect = (radius: number, angle: number, center: IPoint2d): Point2d => {
-        const x:number = radius * Math.cos(angle);
-        const y:number = radius * Math.sin(angle);
+        const x = radius * Math.cos(angle);
+        const y = radius * Math.sin(angle);
         return new Point2d(center.x - x, center.y - y);
     };
 
@@ -57,8 +57,8 @@ export namespace MathEx {
     };
 
     export const getAngle = (p1: IPoint2d, p2: IPoint2d): number => {
-        const dx: number = p1.x - p2.x;
-        const dy: number = p1.y - p2.y;
+        const dx = p1.x - p2.x;
+        const dy = p1.y - p2.y;
         return Math.atan2(dy, dx);
     };
 

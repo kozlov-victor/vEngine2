@@ -20,7 +20,7 @@ export class MainScene extends Scene {
         this.backgroundColor = Color.BLACK;
 
         const image = new Image(this.game,this.fireTexture);
-        //image.blendMode = BLEND_MODE.ADDITIVE;
+        image.blendMode = BLEND_MODE.ADDITIVE;
 
         const ps: ParticleSystem = new ParticleSystem(this.game);
         ps.addParticlePrefab(image);

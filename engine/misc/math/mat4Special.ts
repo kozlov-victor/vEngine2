@@ -11,6 +11,12 @@ export namespace Mat4Special {
      */
     export const multiplyTranslationByAny = (out:Mat16Holder, aHolder:Mat16Holder, bHolder:Mat16Holder):void => {
 
+        if (bHolder.identityFlag) {
+            out.mat16.set(aHolder.mat16);
+            out.identityFlag = aHolder.identityFlag;
+            return;
+        }
+
         // r[0] = b[0];
         // r[1] = b[1];
         // r[2] = b[2];

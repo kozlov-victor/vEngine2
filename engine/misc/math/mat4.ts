@@ -26,7 +26,7 @@ export namespace Mat4 {
         n,n,n,n
     ] & Float32Array;
 
-    export const IDENTITY:Readonly<MAT16> = new Float32Array([
+    export const IDENTITY = new Float32Array([
         1, 0, 0, 0,
         0, 1, 0, 0,
         0, 0, 1, 0,
@@ -35,7 +35,7 @@ export namespace Mat4 {
 
     export class Mat16Holder implements ICloneable<Mat16Holder>{
 
-        public identityFlag:boolean = false;
+        public identityFlag = false;
 
         public constructor(){
             this.set(
