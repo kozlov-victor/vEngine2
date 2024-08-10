@@ -6,7 +6,7 @@ export class MultiImageAtlasFrameAnimation extends AbstractFrameAnimation<{resou
 
 
     public clone(): this {
-        const cloned:MultiImageAtlasFrameAnimation = new MultiImageAtlasFrameAnimation(this.game,{
+        const cloned = new MultiImageAtlasFrameAnimation(this.game,{
             frames: [...this._frames],
             duration: this._duration,
             isRepeating: this._isRepeating,
@@ -22,7 +22,7 @@ export class MultiImageAtlasFrameAnimation extends AbstractFrameAnimation<{resou
 
     protected onNextFrame(i: number): void {
         this._target.setTexture(this._frames[i].resource);
-        const currRect:IRectJSON = this._frames[i].rect;
+        const currRect = this._frames[i].rect;
         this._target.srcRect.setFrom(currRect);
 
     }

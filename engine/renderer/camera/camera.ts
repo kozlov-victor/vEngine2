@@ -23,8 +23,6 @@ export class Camera implements IUpdatable, ITransformable, IRevalidatable  {
     public readonly scale = new Point2d(1,1);
     public worldTransformDirty:boolean = true;
     public readonly worldTransformMatrix = new Mat16Holder();
-
-    private _objFollowTo:Optional<RenderableModel>;
     private _angle:number = 0;
 
     private _rect = new Rect();
@@ -57,11 +55,9 @@ export class Camera implements IUpdatable, ITransformable, IRevalidatable  {
 
     public followTo(gameObject:Optional<RenderableModel>):void {
         if (gameObject===undefined) {
-            this._objFollowTo = undefined;
             this._followStrategy.init(undefined,this);
             return;
         }
-        this._objFollowTo = gameObject;
         this._followStrategy.init(gameObject,this);
         this.revalidate();
     }
@@ -88,12 +84,12 @@ export class Camera implements IUpdatable, ITransformable, IRevalidatable  {
 
 
     public _translate():void{
-        const renderer:AbstractRenderer = this.game.getRenderer();
+        const renderer = this.game.getRenderer();
         renderer.transformTranslate(-this.pos.x,-this.pos.y,-this.pos.z);
     }
 
     public _transform():void{
-        const renderer:AbstractRenderer = this.game.getRenderer();
+        const renderer = this.game.getRenderer();
 
         const needTransform = this.angle!==0 || !this.scale.equals(1);
         if (needTransform) {

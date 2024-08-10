@@ -4,16 +4,16 @@ import {MathEx} from "@engine/misc/math/mathEx";
 
 export abstract class AbstractMoveAnimation extends AbstractPropertyAnimation {
 
-    public rotate:boolean = false;
+    public rotate = false;
     declare public onProgress:(fn:(point:Point2d,angle:number)=>void)=>void;
     public repeatCount:number = Infinity;
 
-    protected numOfLoopPassed:number = 0;
-    protected angle:number = 0;
-    protected progressPoint:Point2d = new Point2d();
+    protected numOfLoopPassed = 0;
+    protected angle = 0;
+    protected progressPoint = new Point2d();
 
     private _oldPoint:Point2d;
-    private _terminated:boolean = false;
+    private _terminated = false;
 
     protected onUpdate(): void {
         if (this._terminated) return;

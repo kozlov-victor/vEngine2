@@ -16,7 +16,7 @@ export interface ICellFrameAnimationParams extends IFrameAnimationBaseParams {
 
 export class CellFrameAnimation extends AbstractFrameAnimation<number> implements IRevalidatable, ICloneable<CellFrameAnimation>{
 
-    public readonly type:string = 'CellFrameAnimation';
+    public readonly type = 'CellFrameAnimation';
 
     private readonly _numOfFramesH:number;
     private readonly _numOfFramesV:number;
@@ -38,15 +38,15 @@ export class CellFrameAnimation extends AbstractFrameAnimation<number> implement
             }
         }
         const {width,height} = this._target.getTexture().size;
-        const frameWidth:number = ~~(width / this._numOfFramesH);
-        const frameHeight:number = ~~(height / this._numOfFramesV);
+        const frameWidth = ~~(width / this._numOfFramesH);
+        const frameHeight = ~~(height / this._numOfFramesV);
         this._target.srcRect.setWH(frameWidth,frameHeight);
         this._target.size.setWH(frameWidth,frameHeight);
         super.revalidate();
     }
 
     public clone():this {
-        const cloned:CellFrameAnimation = new CellFrameAnimation(this.game,{
+        const cloned = new CellFrameAnimation(this.game,{
             frames: [...this._frames],
             duration: this._duration,
             isRepeating: this._isRepeating,

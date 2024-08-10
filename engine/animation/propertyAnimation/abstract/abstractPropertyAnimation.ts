@@ -9,10 +9,10 @@ export abstract class AbstractPropertyAnimation implements ITargetAnimation {
 
     protected progress:Optional<(...opts:unknown[])=>void>;
 
-    protected passedTime:number = 0;
+    protected passedTime = 0;
 
-    private _playing:boolean = true;
-    private _startTime:number = 0;
+    private _playing = true;
+    private _startTime = 0;
 
 
     constructor(protected game: Game) {

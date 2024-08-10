@@ -111,8 +111,8 @@ export class GamePadControl extends AbstractKeypad<GamePadEvent> implements ICon
             this.pollButtons(gp,i);
 
             if (gp.axes.length>=2) {
-                const axisLeftStick0:number = GamePadControl.clampAxis(gp.axes[0]);
-                const axisLeftStick1:number = GamePadControl.clampAxis(gp.axes[1]);
+                const axisLeftStick0 = GamePadControl.clampAxis(gp.axes[0]);
+                const axisLeftStick1 = GamePadControl.clampAxis(gp.axes[1]);
                 this.pollAxes(
                     axisLeftStick0,
                     axisLeftStick1,
@@ -123,8 +123,8 @@ export class GamePadControl extends AbstractKeypad<GamePadEvent> implements ICon
             }
 
             if (gp.axes.length>=4) {
-                const axisRightStick0:number = GamePadControl.clampAxis(gp.axes[2]);
-                const axisRightStick1:number = GamePadControl.clampAxis(gp.axes[3]);
+                const axisRightStick0 = GamePadControl.clampAxis(gp.axes[2]);
+                const axisRightStick1 = GamePadControl.clampAxis(gp.axes[3]);
                 this.pollAxes(
                     axisRightStick0,
                     axisRightStick1,
@@ -174,7 +174,9 @@ export class GamePadControl extends AbstractKeypad<GamePadEvent> implements ICon
             const btn = gp.buttons[i];
 
             const eventFromBuffer = this.findEvent(i, gamePadIndex);
-            if (btn.pressed) this.pressButton(i, btn.value, gamePadIndex, eventFromBuffer);
+            if (btn.pressed) {
+                this.pressButton(i, btn.value, gamePadIndex, eventFromBuffer);
+            }
             else this.releaseButton(eventFromBuffer);
 
         }

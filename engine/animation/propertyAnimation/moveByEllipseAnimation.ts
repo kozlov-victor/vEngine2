@@ -8,8 +8,8 @@ export class MoveByEllipseAnimation extends AbstractMoveAnimation {
 
     public radiusX:number = 50;
     public radiusY:number = 50;
-    public angularVelocity:number = 1; // rad in sec
-    public readonly center:Point2d = new Point2d(this.game.size.width/2,this.game.size.height/2);
+    public angularVelocity = 1; // rad in sec
+    public readonly center = new Point2d(this.game.size.width/2,this.game.size.height/2);
 
     protected override onUpdate(): void {
         const arg:number = FACTOR * this.angularVelocity * this.passedTime;

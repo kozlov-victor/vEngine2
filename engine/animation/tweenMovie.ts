@@ -9,11 +9,11 @@ interface ITweenInMovie<T> {
 
 
 export class TweenMovie {
-    private _loop:boolean = false;
+    private _loop = false;
     private _onComplete:Optional<(()=>void)>;
     private _tweensInMovie:ITweenInMovie<unknown>[] = [];
-    private _startedTime:number = 0;
-    private _completed:boolean = false;
+    private _startedTime = 0;
+    private _completed = false;
 
     constructor(private game:Game){}
 
@@ -42,10 +42,10 @@ export class TweenMovie {
 
     public update():void{
         if (this._completed) return;
-        const currTime:number = this.game.getCurrentTime();
+        const currTime = this.game.getCurrentTime();
         if (this._startedTime===0) this._startedTime = currTime;
-        const deltaTime:number = currTime - this._startedTime;
-        let allCompleted:boolean = true;
+        const deltaTime = currTime - this._startedTime;
+        let allCompleted = true;
 
         for (const item of this._tweensInMovie) {
             if (deltaTime>item.startTime) {

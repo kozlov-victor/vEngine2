@@ -20,6 +20,8 @@ import {PlatformMoveable} from "./objects/platformMoveable";
 import {BumpRect} from "./objects/bumpRect";
 import {FirePowerup} from "./objects/firePowerup";
 import {DI} from "@engine/core/ioc";
+import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
+import {IGamePadEvent} from "@engine/control/gamepad/iGamePadEvent";
 
 @DI.Injectable()
 export class MainScene extends Scene {
@@ -41,7 +43,8 @@ export class MainScene extends Scene {
         this.setInterval(()=>{
             debug.clearLog();
             debug.println(this.game.fps);
-        },1000)
+        },1000);
+
     }
 
     private initLevel():void {
@@ -101,7 +104,7 @@ export class MainScene extends Scene {
         uiLayer.transformType = LayerTransformType.STICK_TO_CAMERA;
         uiLayer.appendTo(this);
 
-        const sensorCursor = new ScreenSensorCursor(this.game, this, 65);
+        const sensorCursor = new ScreenSensorCursor(this.game, this, 60);
         sensorCursor.reflectToKeyboardControl(this.game.getControl(KeyboardControl), {
             [ScreenSensorCursor.DIRECTION.UP]: KEYBOARD_KEY.UP,
             [ScreenSensorCursor.DIRECTION.DOWN]: KEYBOARD_KEY.DOWN,
@@ -109,15 +112,15 @@ export class MainScene extends Scene {
             [ScreenSensorCursor.DIRECTION.RIGHT]: KEYBOARD_KEY.RIGHT,
         });
         sensorCursor.appendTo(uiLayer);
-        sensorCursor.getExternalRing().pos.setXY(65, 245);
+        sensorCursor.getExternalRing().pos.setXY(30, 145);
 
         const jumpButton = new ScreenSensorButton(this.game, 30);
-        jumpButton.pos.setXY(790, 320);
+        jumpButton.pos.setXY(540, 180);
         jumpButton.reflectToKeyboardControl(this.game.getControl(KeyboardControl), KEYBOARD_KEY.SPACE);
         jumpButton.appendTo(uiLayer);
 
         const fireButton = new ScreenSensorButton(this.game, 30);
-        fireButton.pos.setXY(740, 270);
+        fireButton.pos.setXY(490, 230);
         fireButton.reflectToKeyboardControl(this.game.getControl(KeyboardControl), KEYBOARD_KEY.CONTROL);
         fireButton.appendTo(uiLayer);
 

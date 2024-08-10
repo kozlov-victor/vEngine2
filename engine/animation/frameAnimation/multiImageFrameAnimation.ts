@@ -6,10 +6,10 @@ import {DebugError} from "@engine/debug/debugError";
 
 export class MultiImageFrameAnimation extends AbstractFrameAnimation<ITexture> implements IRevalidatable, ICloneable<MultiImageFrameAnimation> {
 
-    public readonly type:string = 'MultiImageFrameAnimation';
+    public readonly type = 'MultiImageFrameAnimation';
 
     public clone(): this {
-        const cloned:MultiImageFrameAnimation = new MultiImageFrameAnimation(this.game,{
+        const cloned = new MultiImageFrameAnimation(this.game,{
             frames: [...this._frames],
             duration: this._duration,
             isRepeating: this._isRepeating,
@@ -27,7 +27,7 @@ export class MultiImageFrameAnimation extends AbstractFrameAnimation<ITexture> i
 
     protected onNextFrame(i: number): void {
         this._target.setTexture(this._frames[i]);
-        const texture:ITexture = this._target.getTexture();
+        const texture = this._target.getTexture();
         this._target.size.setFrom(texture.size);
         this._target.srcRect.setSize(texture.size);
     }

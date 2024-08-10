@@ -98,7 +98,7 @@ export class Game {
     }
 
     public addControl(C:ClazzEx<IControl,Game>):void{
-        const instance:IControl = new C(this);
+        const instance = new C(this);
         if (DEBUG) {
             for (const c of this._controls) {
                 if (c.type===instance.type) {
@@ -189,7 +189,7 @@ export class Game {
         return renderer;
     }
 
-    public runScene(scene:Scene, transition?:Optional<ISceneTransition>,replaceStack:boolean = true):void{
+    public runScene(scene:Scene, transition?:Optional<ISceneTransition>,replaceStack = true):void{
         Scene._currentRenderingScene = scene;
         if (replaceStack) this._sceneStack.replaceLast({scene,transition});
         this._prevScene = this._currScene;
@@ -251,10 +251,10 @@ export class Game {
     }
 
     public popScene():void{
-        const last:ISceneWithTransition = this._sceneStack.pop()!;
+        const last = this._sceneStack.pop()!;
         if (DEBUG && !last) throw new DebugError(`can not pop scene: no scene in stack`);
-        const transition:Optional<ISceneTransition> = last.transition?last.transition.getOppositeTransition():undefined;
-        const prevScene:Scene = this._sceneStack.getLast()!.scene;
+        const transition = last.transition?last.transition.getOppositeTransition():undefined;
+        const prevScene = this._sceneStack.getLast()!.scene;
         this.runScene(prevScene,transition);
     }
 
@@ -279,14 +279,14 @@ export class Game {
             }
         }
 
-        const numOfLoops:number = Math.ceil(this._deltaTime / Game._UPDATE_TIME_RATE);
+        const numOfLoops = Math.ceil(this._deltaTime / Game._UPDATE_TIME_RATE);
         this._currTime =
             numOfLoops===1?
                 currTimeOrig:
                 this._lastTime;
 
-        const currentScene:Scene = this._currScene;
-        let loopCnt:number = 0;
+        const currentScene = this._currScene;
+        let loopCnt = 0;
         do {
             if (loopCnt===numOfLoops-1) { // last loop
                 this._currTime = currTimeOrig;
@@ -368,7 +368,7 @@ class MainLoop {
 
     public start():void{
         const game:Game = this.game;
-        const updateFn:()=>void = game.update.bind(game);
+        const updateFn = game.update.bind(game);
         const loopFn = ()=>{
             updateFn();
             this.timerId = requestAnimationFrame(loopFn);

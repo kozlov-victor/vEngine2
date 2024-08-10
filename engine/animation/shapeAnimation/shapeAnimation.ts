@@ -34,7 +34,7 @@ export class ShapeAnimation implements IAnimation {
 
     constructor(private game:Game,private from:Polygon,private to:Polygon,private container:RenderableModel,private time:number = 1000,private ease:EaseFn = EasingLinear) {
         const {from:pFrom,to:pTo} = ShapeAnimation.normalizePoints(game,from,to);
-        const numberOfFrames:number = ~~(time/60);
+        const numberOfFrames = ~~(time/60);
         const target:{frame:number} = {frame:0};
 
         let currentShape:Polygon = undefined!;
@@ -48,11 +48,11 @@ export class ShapeAnimation implements IAnimation {
             time,
             ease,
             progress:(t)=>{
-                for (let i:number = 0;i<pFrom.length;i++) {
-                    const currPFrom:Point2d = pFrom[i];
-                    const currPTo:Point2d = pTo[i];
-                    const interpolatedX:number = EasingLinear(t.frame,currPFrom.x,currPTo.x - currPFrom.x,numberOfFrames);
-                    const interpolatedY:number = EasingLinear(t.frame,currPFrom.y,currPTo.y - currPFrom.y,numberOfFrames);
+                for (let i = 0;i<pFrom.length;i++) {
+                    const currPFrom = pFrom[i];
+                    const currPTo = pTo[i];
+                    const interpolatedX = EasingLinear(t.frame,currPFrom.x,currPTo.x - currPFrom.x,numberOfFrames);
+                    const interpolatedY = EasingLinear(t.frame,currPFrom.y,currPTo.y - currPFrom.y,numberOfFrames);
                     interpolated[i].setXY(interpolatedX,interpolatedY);
                 }
                 if (currentShape!==undefined) currentShape.removeSelf();
@@ -70,19 +70,19 @@ export class ShapeAnimation implements IAnimation {
         const pointsOfFromPoly:IPointOnCurve[] = [];
         const pointsOfToPoly:IPointOnCurve[] = [];
 
-        const polylineFrom:PolyLine = PolyLine.fromVertices(game,from.getEdgeVertices());
-        const polyLineTo:PolyLine = PolyLine.fromVertices(game,to.getEdgeVertices());
+        const polylineFrom = PolyLine.fromVertices(game,from.getEdgeVertices());
+        const polyLineTo = PolyLine.fromVertices(game,to.getEdgeVertices());
 
-        const polylineFromLength:number = calcPolylineLength(polylineFrom);
-        const polylineToLength:number = calcPolylineLength(polyLineTo);
+        const polylineFromLength = calcPolylineLength(polylineFrom);
+        const polylineToLength = calcPolylineLength(polyLineTo);
 
-        let lengthPassed:number = 0;
+        let lengthPassed = 0;
 
         const controlPointFromResolver = new ControlPointByLengthPassedResolver(polylineFrom);
-        const helperPoint:Point2d = new Point2d();
+        const helperPoint = new Point2d();
         polylineFrom.getSegments().forEach((line:Readonly<Line>)=>{
-            const relativePassed:number = lengthPassed/polylineFromLength;
-            const p:Optional<IPoint2d> = controlPointFromResolver.nextPointByLengthPassedRelative(relativePassed);
+            const relativePassed = lengthPassed/polylineFromLength;
+            const p = controlPointFromResolver.nextPointByLengthPassedRelative(relativePassed);
             if (p===undefined) return;
             lengthPassed+=MathEx.getDistance(helperPoint,line.pointTo);
             pointsOfFromPoly.push({lengthPassed:relativePassed,point:new Point2d(p.x,p.y)});
@@ -90,8 +90,8 @@ export class ShapeAnimation implements IAnimation {
         controlPointFromResolver.reset();
         lengthPassed = 0;
         polyLineTo.getSegments().forEach((line:Readonly<Line>)=>{
-            const relativePassed:number = lengthPassed/polylineToLength;
-            const p:Optional<IPoint2d> = controlPointFromResolver.nextPointByLengthPassedRelative(relativePassed);
+            const relativePassed = lengthPassed/polylineToLength;
+            const p = controlPointFromResolver.nextPointByLengthPassedRelative(relativePassed);
             if (p===undefined) return;
             lengthPassed+=MathEx.getDistance(helperPoint,line.pointTo);
             pointsOfFromPoly.push({lengthPassed:relativePassed,point:new Point2d(p.x,p.y)});
@@ -100,8 +100,8 @@ export class ShapeAnimation implements IAnimation {
         lengthPassed = 0;
         const controlPointToResolver = new ControlPointByLengthPassedResolver(polyLineTo);
         polyLineTo.getSegments().forEach((line:Readonly<Line>)=>{
-            const relativePassed:number = lengthPassed/polylineToLength;
-            const p:Optional<IPoint2d> = controlPointToResolver.nextPointByLengthPassedRelative(relativePassed);
+            const relativePassed = lengthPassed/polylineToLength;
+            const p = controlPointToResolver.nextPointByLengthPassedRelative(relativePassed);
             if (p===undefined) return;
             lengthPassed+=MathEx.getDistance(helperPoint,line.pointTo);
             pointsOfToPoly.push({lengthPassed:relativePassed,point:new Point2d(p.x,p.y)});
@@ -109,8 +109,8 @@ export class ShapeAnimation implements IAnimation {
         lengthPassed = 0;
         controlPointToResolver.reset();
         polylineFrom.getSegments().forEach((line:Readonly<Line>)=>{
-            const relativePassed:number = lengthPassed/polylineFromLength;
-            const p:Optional<IPoint2d> = controlPointToResolver.nextPointByLengthPassedRelative(relativePassed);
+            const relativePassed = lengthPassed/polylineFromLength;
+            const p = controlPointToResolver.nextPointByLengthPassedRelative(relativePassed);
             if (p===undefined) return;
             lengthPassed+=MathEx.getDistance(helperPoint,line.pointTo);
             pointsOfToPoly.push({lengthPassed:relativePassed,point:new Point2d(p.x,p.y)});
@@ -118,8 +118,8 @@ export class ShapeAnimation implements IAnimation {
 
         pointsOfFromPoly.sort((_a, _b)=>_a.lengthPassed>_b.lengthPassed?1:-1);
         pointsOfToPoly.sort((_a, _b)=>_a.lengthPassed>_b.lengthPassed?1:-1);
-        const resultPointsFrom:Point2d[] = pointsOfFromPoly.map(it=>it.point);
-        const resultPointsTo:Point2d[] = pointsOfToPoly.map(it=>it.point);
+        const resultPointsFrom = pointsOfFromPoly.map(it=>it.point);
+        const resultPointsTo = pointsOfToPoly.map(it=>it.point);
         return {
             from:resultPointsFrom,
             to:resultPointsTo,

@@ -9,7 +9,7 @@ export abstract class BaseAbstractBehaviour implements IUpdatable, IDestroyable,
     protected game:Game;
     protected parameters:IKeyVal<any>;
 
-    private _destroyed:boolean = false;
+    private _destroyed = false;
 
     protected constructor(game:Game,parameters:IKeyVal<unknown>){
         this.game = game;

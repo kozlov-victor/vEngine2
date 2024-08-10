@@ -14,13 +14,7 @@ type AllowedNames<Base, Condition> =
     FilterFlags<Base, Condition>[keyof Base];
 type SubType<Base, Condition> =
     Pick<Base, AllowedNames<Base, Condition>>;
-//
 
-
-
-interface IKeyVal {
-    [key:string]:any;
-}
 
 
 export interface ITweenDescription<T> {
@@ -52,22 +46,21 @@ interface ITweenDescriptionNormalized<T> {
 export class Tween<T> {
 
     private _propsToChange:(keyof T)[] = [];
-    private _startedTime:number = 0;
-    private _delayWaitTime:number = 0;
-    private _currTime:number = 0;
-    private _completed:boolean = false;
+    private _startedTime = 0;
+    private _delayWaitTime = 0;
+    private _completed = false;
     private readonly _target: T;
     private readonly _progressFn:Optional<((arg:T)=>void)>;
-    private readonly _delayBeforeStart:number = 0;
+    private readonly _delayBeforeStart: number = 0;
     private readonly _completeFn:Optional<((arg:T)=>void)>;
     private readonly _startedFn:Optional<((arg:T)=>void)>;
     private readonly _easeFn:EaseFn;
     private readonly _tweenTime: number;
     private readonly _loop: boolean;
-    private _currentLoop:number = 0;
+    private _currentLoop = 0;
     private readonly _numOfLoops:number;
     private readonly _yoyo:boolean;
-    private _started: boolean = false;
+    private _started = false;
     private _desc:ITweenDescriptionNormalized<T>;
 
     /*
@@ -119,14 +112,13 @@ export class Tween<T> {
 
     public update():void {
         if (this._completed) return;
-        const currTime:number = this.game.getCurrentTime();
+        const currTime = this.game.getCurrentTime();
 
         if (this._currentLoop===0 && this._delayBeforeStart>0) {
             this._delayWaitTime = this._delayWaitTime || currTime;
             if (currTime - this._delayWaitTime<this._delayBeforeStart) return;
         }
 
-        this._currTime = currTime;
         if (this._startedTime===0) this._startedTime = currTime;
         let curTweenTime:number = currTime - this._startedTime;
 
@@ -149,13 +141,13 @@ export class Tween<T> {
             curTweenTime = this._tweenTime - curTweenTime; // invert current tween time to achieve yoyo-effect
         }
 
-        let l:number = this._propsToChange.length;
+        let l = this._propsToChange.length;
         if (this._startedFn && !this._started) this._startedFn(this._target);
         while(l--) {
             const prp = this._propsToChange[l];
             const valFrom = this._desc.from[prp] as number;
             const valTo = this._desc.to[prp] as number;
-            const fn:EaseFn = this._easeFn;
+            const fn = this._easeFn;
             this._target[prp] = fn(
                 curTweenTime,
                 valFrom,
@@ -173,8 +165,8 @@ export class Tween<T> {
 
     public complete():void {
         if (this._completed) return;
-        const needReversion:boolean = this._yoyo && this._currentLoop%2!==0;
-        const target:Partial<Record<keyof T,number>> = needReversion?this._desc.from:this._desc.to;
+        const needReversion = this._yoyo && this._currentLoop%2!==0;
+        const target = needReversion?this._desc.from:this._desc.to;
         for (const k of this._propsToChange) {
             this._target[k] = target[k] as T[keyof T];
         }
@@ -201,11 +193,11 @@ export class Tween<T> {
 
     private normalizeDesc(tweenDesc:ITweenDescription<T>):ITweenDescriptionNormalized<T>{
 
-        const normalized:ITweenDescriptionNormalized<T> = tweenDesc as unknown as ITweenDescriptionNormalized<T> ;
+        const normalized = tweenDesc as unknown as ITweenDescriptionNormalized<T> ;
 
         normalized.from = normalized.from! || {};
         normalized.to = normalized.to! || {};
-        const allPropsMap:IKeyVal = {};
+        const allPropsMap:Record<string, any> = {};
         Object.keys(normalized.from!).forEach((keyFrom)=>{
             allPropsMap[keyFrom] = true;
         });
