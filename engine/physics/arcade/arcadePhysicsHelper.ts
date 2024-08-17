@@ -142,13 +142,20 @@ export namespace arcadePhysicsHelper {
 
     const reflectVelocityY = (player:ArcadeRigidBody, entity:ArcadeRigidBody):void=> {
         const restitution:number = calcCommonRestitution(player, entity);
-        player.velocity.y = getComparedToSticky(-player.velocity.y * restitution);
+        player.velocity.y =
+            getComparedToSticky(
+                -player.velocity.y *
+                restitution
+            );
     }
 
     const reflectVelocityX = (player:ArcadeRigidBody, entity:ArcadeRigidBody):void=> {
         const restitution:number = calcCommonRestitution(player, entity);
         // v' = (m1v1 + m2v2)/(m1 + m2)
-        player.velocity.x = getComparedToSticky(-player.velocity.x * restitution);
+        player.velocity.x = getComparedToSticky(
+            -player.velocity.x *
+            restitution
+        );
     }
 
     const emitCollisionEvents = (player:ArcadeRigidBody, entity:ArcadeRigidBody):void=> {
