@@ -14,7 +14,7 @@ export class BumpRect {
         obj.pos.setXY(tiledObject.x,tiledObject.y);
         obj.size.setWH(tiledObject.width,tiledObject.height);
         obj.setRigidBody(scene.getGame().getPhysicsSystem(ArcadePhysicsSystem).createRigidBody({
-            type: ARCADE_RIGID_BODY_TYPE.KINEMATIC,
+            type: ARCADE_RIGID_BODY_TYPE.STATIC,
             rect: undefined,
             acceptCollisions: false,
             groupNames: ['bump']

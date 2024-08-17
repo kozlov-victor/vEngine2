@@ -32,8 +32,8 @@ export interface IObjectMouseEvent extends ISceneMouseEvent {
 export class MousePoint {
     public static pool = new ObjectPool(MousePoint);
 
-    public readonly screenCoordinate:Point2d = new Point2d();
-    public readonly sceneCoordinate:Point2d = new Point2d();
+    public readonly screenCoordinate = new Point2d();
+    public readonly sceneCoordinate = new Point2d();
     public id:number;
     public target:RenderableModel|Scene;
     public isMouseDown:boolean;

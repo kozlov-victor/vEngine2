@@ -104,7 +104,7 @@ export class GamePadControl extends AbstractKeypad<GamePadEvent> implements ICon
         this._gamepads = gamePadGetter();
 
         for (let i:number=0,max=this._gamepads.length;i<max;i++) {
-            const gp:Gamepad = this._gamepads[i];
+            const gp = this._gamepads[i];
 
             if (!gp) continue;
 

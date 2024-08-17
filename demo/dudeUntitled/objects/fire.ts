@@ -37,7 +37,7 @@ export class Fire {
         animation.play();
         image.pos.setXY(tiledObject.x,tiledObject.y - tiledObject.height);
         image.setRigidBody(scene.getGame().getPhysicsSystem(ArcadePhysicsSystem).createRigidBody({
-            type: ARCADE_RIGID_BODY_TYPE.KINEMATIC,
+            type: ARCADE_RIGID_BODY_TYPE.STATIC,
             rect: TileMap.getCollisionRect(this.scene.assets.levelData,'fire'),
             acceptCollisions: false,
             groupNames: ['damageable']

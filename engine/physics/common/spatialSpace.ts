@@ -3,19 +3,23 @@ import {IRectJSON} from "@engine/geometry/rect";
 import {Optional} from "@engine/core/declarations";
 import {Color} from "@engine/renderer/common/color";
 import {IRigidBody} from "@engine/physics/common/interfaces";
-import {RectWithUpdateId} from "@engine/physics/arcade/arcadeRigidBody";
+import {ARCADE_RIGID_BODY_TYPE, ArcadeRigidBody, RectWithUpdateId} from "@engine/physics/arcade/arcadeRigidBody";
 
 let cnt = 0;
 const initialColor = Color.GREY.clone();
 const activeColor = Color.from({r:90,g:255,b:90});
 
+const alreadyCheckedTiles = new Set<number>();
+
 export class SpatialCell {
     public readonly id = cnt++;
     //public debugView:Rectangle;
     public objects:IRigidBody[] = [];
+    public hasDynamicObjects = false;
 
     public clear(): void {
         this.objects.length = 0;
+        this.hasDynamicObjects = false;
         //this.debugView.fillColor = initialColor;
     }
 
@@ -27,7 +31,8 @@ export class SpatialSpace {
     private numOfCellsY:number;
 
     private cells:SpatialCell[] = [];
-    private notEmptyCells:SpatialCell[] = [];
+    private notEmptyCells:SpatialCell[] = []; // is is faster to iterate plain array
+    private notEmptyCellsToCheck = new Set<SpatialCell>(); // but it is faster to check if element in notEmptyCells
 
     constructor(private game:Game, private cellWidth:number, private cellHeight:number, private spaceWidth:number, private spaceHeight:number) {
         this.rebuild(cellWidth,cellHeight,spaceWidth,spaceHeight);
@@ -76,8 +81,7 @@ export class SpatialSpace {
     }
 
     public getCellsInRect(rect:IRectJSON,result:SpatialCell[]):void {
-        const alreadyCheckedTiles:{[key:string]:boolean} = {};
-
+        alreadyCheckedTiles.clear();
         let x:number = rect.x,y:number;
         const maxX:number = rect.x+rect.width,
             maxY:number = rect.y+rect.height;
@@ -88,9 +92,9 @@ export class SpatialSpace {
             while (true) {
                 const cell = this.getCellAtXY(x,y);
                 if (cell) {
-                    if (!alreadyCheckedTiles[cell.id]) {
+                    if (!alreadyCheckedTiles.has(cell.id)) {
                         result.push(cell);
-                        alreadyCheckedTiles[cell.id] = true;
+                        alreadyCheckedTiles.add(cell.id);
                     }
                 }
                 if (y===maxY) break;
@@ -111,13 +115,18 @@ export class SpatialSpace {
         }
         for (const c of body.spatialCellsOccupied) {
             c.objects.push(body);
-            if (!this.notEmptyCells.includes(c)) this.notEmptyCells.push(c);
+            if (!this.notEmptyCellsToCheck.has(c)) {
+                this.notEmptyCellsToCheck.add(c);
+                this.notEmptyCells.push(c);
+            }
+            c.hasDynamicObjects = c.hasDynamicObjects || body._isDynamic;
             //c.debugView.fillColor = activeColor;
         }
     }
 
     public clear():void {
         this.notEmptyCells.length = 0;
+        this.notEmptyCellsToCheck.clear();
     }
 
     public getCellsToCheck():readonly SpatialCell[] {

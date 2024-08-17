@@ -12,21 +12,6 @@ import {DI} from "@engine/core/ioc";
 import {GamePadControl} from "@engine/control/gamepad/gamePadControl";
 import {GAME_PAD_BUTTON} from "@engine/control/gamepad/gamePadKeys";
 
-// window.requestAnimationFrame =  (f:FrameRequestCallback):number=>{
-//     return setTimeout(f,1000/25);
-// };
-
-// (WebGlRenderer as any).prototype.createTexture = (bitmap:ImageBitmap|HTMLImageElement|HTMLCanvasElement):ITexture=>{
-//     const c = document.createElement('canvas');
-//     c.width = bitmap.width;
-//     c.height = bitmap.height;
-//     const ctx = c.getContext('2d')!;
-//     ctx.drawImage(bitmap,0,0);
-//     const imgData = ctx.getImageData(0,0,bitmap.width,bitmap.height);
-//     const dataTexture = new DataTexture(Game.getInstance(),bitmap.width,bitmap.height);
-//     dataTexture.setNewData(new Uint8Array(imgData.data.buffer));
-//     return dataTexture;
-// }
 
 document.body.style.backgroundColor = '#052e5b';
 ResourceLoader.BASE_URL = './dudeUntitled/assets';

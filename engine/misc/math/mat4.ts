@@ -26,6 +26,10 @@ export namespace Mat4 {
         n,n,n,n
     ] & Float32Array;
 
+    export const enum MATRIX_TYPE {
+        IDENTITY, TRANSLATION, ANY
+    }
+
     export const IDENTITY = new Float32Array([
         1, 0, 0, 0,
         0, 1, 0, 0,
@@ -35,7 +39,7 @@ export namespace Mat4 {
 
     export class Mat16Holder implements ICloneable<Mat16Holder>{
 
-        public identityFlag = false;
+        public matrixType = MATRIX_TYPE.ANY;
 
         public constructor(){
             this.set(
@@ -60,18 +64,18 @@ export namespace Mat4 {
             mat16[4 ]= v4;mat16[5 ]=v5 ;mat16[6 ]=v6 ;mat16[7 ]=v7;
             mat16[8 ]= v8;mat16[9 ]=v9 ;mat16[10]=v10;mat16[11]=v11;
             mat16[12]=v12;mat16[13]=v13;mat16[14]=v14;mat16[15]=v15;
-            this.identityFlag = false;
+            this.matrixType = MATRIX_TYPE.ANY;
         }
 
         public fromMat16(mat16Holder:Readonly<Mat16Holder>):void{
             this.mat16.set(mat16Holder.mat16);
-            this.identityFlag = mat16Holder.identityFlag;
+            this.matrixType = mat16Holder.matrixType;
         }
 
         public clone(): Mat4.Mat16Holder {
             const m:Mat16Holder = new Mat16Holder();
             m.fromMat16(this);
-            m.identityFlag = this.identityFlag;
+            m.matrixType = this.matrixType;
             return m;
         }
 
@@ -79,7 +83,7 @@ export namespace Mat4 {
 
     export const makeIdentity = (out:Mat16Holder):void => {
         out.mat16.set(IDENTITY);
-        out.identityFlag = true;
+        out.matrixType = MATRIX_TYPE.IDENTITY;
     };
 
 
@@ -90,7 +94,7 @@ export namespace Mat4 {
         // 0, 0, 0, 1
         out.mat16.set(IDENTITY);
         (out.mat16 as MAT16)[11] = fudgeFactor;
-        out.identityFlag = false;
+        out.matrixType = MATRIX_TYPE.ANY;
     };
 
     export const make2DProjection = (out: Mat16Holder,width:n, height:n, depth:n):void => {
@@ -101,6 +105,7 @@ export namespace Mat4 {
             0,         0,          2 / depth, 0,
             -1,       1,         0,         1
         );
+        out.matrixType = MATRIX_TYPE.ANY;
     };
 
     export const ortho = (
@@ -131,7 +136,7 @@ export namespace Mat4 {
         outMat16[13] = (top + bottom) * bt;
         outMat16[14] = (near + far) * nf;
 
-        out.identityFlag = false;
+        out.matrixType = MATRIX_TYPE.ANY;
     };
 
     export const perspective = (out:Mat16Holder,fovy:n, aspect:n, near:n, far:n):void => {
@@ -160,7 +165,7 @@ export namespace Mat4 {
         outMat16[14] = (2 * far * near) * nf;
         outMat16[15] = 0;
 
-        out.identityFlag = false;
+        out.matrixType = MATRIX_TYPE.ANY;
 
     };
 
@@ -186,6 +191,7 @@ export namespace Mat4 {
         dst[13] = cameraPosition.y;
         dst[14] = cameraPosition.z;
         dst[15] = 1;
+        out.matrixType = MATRIX_TYPE.ANY;
     }
 
 
@@ -204,7 +210,7 @@ export namespace Mat4 {
         m[13] = ty;
         m[14] = tz;
 
-        out.identityFlag = false;
+        out.matrixType = MATRIX_TYPE.TRANSLATION;
     };
 
 
@@ -222,7 +228,7 @@ export namespace Mat4 {
         m.set(IDENTITY);
         m[4] = t;
 
-        out.identityFlag = false;
+        out.matrixType = MATRIX_TYPE.ANY;
 
     };
 
@@ -240,7 +246,7 @@ export namespace Mat4 {
         m.set(IDENTITY);
         m[1] = t;
 
-        out.identityFlag = false;
+        out.matrixType = MATRIX_TYPE.ANY;
 
     };
 
@@ -262,7 +268,7 @@ export namespace Mat4 {
         m[9] = -s;
         m[10] = c;
 
-        out.identityFlag = false;
+        out.matrixType = MATRIX_TYPE.ANY;
     };
 
     export const makeYRotation = (out:Mat16Holder,angleInRadians:n):void=> {
@@ -283,7 +289,7 @@ export namespace Mat4 {
         m[8] = s;
         m[10] = c;
 
-        out.identityFlag = false;
+        out.matrixType = MATRIX_TYPE.ANY;
     };
 
     export const makeZRotation = (out:Mat16Holder,angleInRadians:n):void=> {
@@ -304,7 +310,7 @@ export namespace Mat4 {
         m[4] = -s;
         m[5] =  c;
 
-        out.identityFlag = false;
+        out.matrixType = MATRIX_TYPE.ANY;
     };
 
 
@@ -338,7 +344,7 @@ export namespace Mat4 {
         m[13] = m13;
         m[14] = m14;
 
-        out.identityFlag = false;
+        out.matrixType = MATRIX_TYPE.ANY;
 
     };
 
@@ -355,7 +361,7 @@ export namespace Mat4 {
         m[ 5] = sy;
         m[10] = sz;
 
-        out.identityFlag = false;
+        out.matrixType = MATRIX_TYPE.ANY;
     };
 
 
@@ -395,6 +401,8 @@ export namespace Mat4 {
         dst[14] = b12 * a2 + b13 * a6  + b14 * a10 + b15 * a14;
         dst[15] = b12 * a3 + b13 * a7  + b14 * a11 + b15 * a15;
 
+        out.matrixType = MATRIX_TYPE.ANY;
+
     };
 
     export const multVecByMatrix = (out:Vec4Holder, matrix:Mat16Holder, vec4Arr:Vec4Holder):void => {
@@ -419,8 +427,8 @@ export namespace Mat4 {
     };
 
     export const inverse = (out:Mat16Holder,mHolder:Mat16Holder):void=>{
-        const dst:MAT16 = out.mat16 as MAT16;
-        const m:MAT16 = mHolder.mat16 as MAT16;
+        const dst = out.mat16 as MAT16;
+        const m = mHolder.mat16 as MAT16;
 
         const m00 = m[0 * 4 + 0];
         const m01 = m[0 * 4 + 1];
@@ -504,7 +512,7 @@ export namespace Mat4 {
         dst[15] = d * ((tmp_22 * m22 + tmp_16 * m02 + tmp_21 * m12) -
             (tmp_20 * m12 + tmp_23 * m22 + tmp_17 * m02));
 
-        out.identityFlag = false;
+        out.matrixType = MATRIX_TYPE.ANY;
 
     };
 
@@ -517,6 +525,7 @@ export namespace Mat4 {
             m[2], m[6], m[10], m[14],
             m[3], m[7], m[11], m[15]
         );
+        out.matrixType = MATRIX_TYPE.ANY;
 
     };
 
@@ -538,6 +547,6 @@ export namespace Mat4 {
 
     export const IDENTITY_HOLDER:Readonly<Mat16Holder> = new Mat16Holder();
     IDENTITY_HOLDER.mat16.set(IDENTITY);
-    (IDENTITY_HOLDER as Mat16Holder).identityFlag = true;
+    (IDENTITY_HOLDER as Mat16Holder).matrixType = MATRIX_TYPE.IDENTITY;
 }
 

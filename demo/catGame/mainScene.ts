@@ -135,7 +135,7 @@ export class MainScene extends Scene {
             const extraProperties: IExtraProperties = this.extractExtraProperties(obj.properties);
             switch (obj.type) {
                 case Hero.groupName:
-                    const hero:Hero = new Hero(this.game, this.spriteSheetHero);
+                    const hero = new Hero(this.game, this.spriteSheetHero);
                     hero.injectResources({
                         soundShoot:this.soundShoot,
                         soundHurt:this.soundHurt,

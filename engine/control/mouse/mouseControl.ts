@@ -1,15 +1,13 @@
 import {Game} from "../../core/game";
-import {Scene} from "@engine/scene/scene";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {IControl} from "@engine/control/abstract/iControl";
 import {DebugError} from "@engine/debug/debugError";
-import {IObjectMouseEvent, ISceneMouseEvent, MousePoint} from "@engine/control/mouse/mousePoint";
+import {ISceneMouseEvent, MousePoint} from "@engine/control/mouse/mousePoint";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {Layer, LayerTransformType} from "@engine/scene/layer";
+import {LayerTransformType} from "@engine/scene/layer";
 import {MouseControlHelper} from "@engine/control/mouse/mouseControlHelper";
 import {Optional} from "@engine/core/declarations";
 import {CapturedObjectsByTouchIdHolder} from "@engine/control/mouse/capturedObjectsByTouchIdHolder";
-import {RenderingObjectStackItem} from "@engine/scene/internal/renderingObjectStack";
 
 
 const LEFT_MOUSE_BTN  = 0 as const;

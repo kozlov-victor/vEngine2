@@ -170,19 +170,26 @@ export class TileMap extends RenderableModelWithTexture {
     private rigidBodies:IRigidBody[] = [];
 
 
-    private static _isTileCollideable(tileId:number,collisionInfo:ICollisionInfo) {
+    private _isTileCollideable(tileId:number) {
         let result:boolean;
-        if (collisionInfo.collideWithTiles ==='all') {
+        if (this._collisionInfo.collideWithTiles ==='all') {
             result = true;
         } else {
-            result = collisionInfo.collideWithTiles.indexOf(tileId)>-1;
+            result = this._collisionInfo.collideWithTiles.indexOf(tileId)>-1;
         }
-        if (collisionInfo.exceptCollisionTiles!==undefined) {
+        if (this._collisionInfo.exceptCollisionTiles!==undefined) {
             if (result) {
-                result = collisionInfo.exceptCollisionTiles.indexOf(tileId)===-1;
+                result = this._collisionInfo.exceptCollisionTiles.indexOf(tileId)===-1;
             }
         }
         return result;
+    }
+
+    private _isTileCollideableCandidate(x:number,y:number) {
+        if (x<0 || y<0 || x>this._numOfTilesInMapByX-1 || y>this._numOfTilesInMapByY-1) return true;
+        const tileId = this.getDataValueAtCellXY(x,y);
+        if (tileId===undefined) return false;
+        return this._isTileCollideable(tileId);
     }
 
     constructor(game:Game,texture:ITexture){
@@ -209,9 +216,9 @@ export class TileMap extends RenderableModelWithTexture {
         if (!mapHeight) mapHeight = source.length / mapWidth;
         this._data = new Array<number[]>(mapHeight);
         let cnt:number = 0;
-        for (let j:number=0;j<mapHeight;j++){
+        for (let j=0;j<mapHeight;j++){
             this._data[j] =  new Array<number>(mapWidth);
-            for (let i:number=0;i<mapWidth;i++) {
+            for (let i=0;i<mapWidth;i++) {
                 let val = source[cnt++];
                 if (val!==0) val= val - this._dataOffsetIndex + 1;
                 this._data[j][i] = val;
@@ -309,8 +316,8 @@ export class TileMap extends RenderableModelWithTexture {
         if (!this._collisionInfo) return;
         const collisionInfo = this._collisionInfo;
         const rigidBodies:IRigidBody[] = [];
-        for (let y:number=0;y<this._numOfTilesInMapByY;y++) {
-            for (let x:number=0;x<this._numOfTilesInMapByX;x++) {
+        for (let y=0;y<this._numOfTilesInMapByY;y++) {
+            for (let x=0;x<this._numOfTilesInMapByX;x++) {
                 const tileId = this.getDataValueAtCellXY(x,y);
                 if (tileId===undefined) continue;
 
@@ -321,13 +328,31 @@ export class TileMap extends RenderableModelWithTexture {
                     collisionRect = {x:0,y:0,width:this._tileWidth,height:this._tileHeight};
                 }
 
+                /*
+                 X  X  X
+                 X (X) X
+                 X  X  X
+                 is collideable tile is enclosed by four collideable tiles it will not be collideable
+                 */
+                if(
+                    this._isTileCollideableCandidate(x-1,y) &&
+                    this._isTileCollideableCandidate(x+1,y) &&
+                    this._isTileCollideableCandidate(x,y-1) &&
+                    this._isTileCollideableCandidate(x,y+1) &&
+                    this._isTileCollideableCandidate(x-1,y-1) &&
+                    this._isTileCollideableCandidate(x+1,y-1) &&
+                    this._isTileCollideableCandidate(x+1,y+1) &&
+                    this._isTileCollideableCandidate(x-1,y+1)
+                ) {
+                    continue;
+                }
 
                 const rigidBody = this.game.getPhysicsSystem(ArcadePhysicsSystem).createRigidBody({
-                    type: ARCADE_RIGID_BODY_TYPE.KINEMATIC,
+                    type: ARCADE_RIGID_BODY_TYPE.STATIC,
                     groupNames: collisionInfo.groupNames,
                     ignoreCollisionWithGroupNames: collisionInfo.ignoreCollisionsWithGroupNames,
                     restitution: collisionInfo.restitution,
-                    acceptCollisions: TileMap._isTileCollideable(tileId,collisionInfo),
+                    acceptCollisions: this._isTileCollideable(tileId),
                 });
                 rigidBody.addInfo = {tile:true,tileId,tileX:x,tileY:y};
 
@@ -354,10 +379,10 @@ export class TileMap extends RenderableModelWithTexture {
                 if (collisionInfo.debug) {
                     const debugRect = new Rectangle(this.game);
                     debugRect.lineWidth = 0;
-                    debugRect.fillColor.setRGB(0,100,0);
+                    debugRect.fillColor.setRGB(0, 100, 0);
                     debugRect.alpha = 0.4;
                     debugRect.pos.setFrom(rigidBody.pos);
-                    debugRect.size.setWH(rigidBody._rect.width,rigidBody._rect.height);
+                    debugRect.size.setWH(rigidBody._rect.width, rigidBody._rect.height);
                     this.appendChild(debugRect);
                 }
             }
@@ -371,7 +396,7 @@ export class TileMap extends RenderableModelWithTexture {
         scene.size.width = Math.max(scene.size.width,this._numOfTilesInMapByX * this._tileWidth);
         scene.size.height = Math.max(scene.size.height,this._numOfTilesInMapByY * this._tileHeight);
 
-        const texSize:ISize = this.getTexture().size;
+        const texSize = this.getTexture().size;
         this._numOfTilesInSpriteByX = ~~(texSize.width / this._tileWidth);
         this._numOfTilesInSpriteByY = ~~(texSize.height / this._tileHeight);
 
@@ -380,7 +405,7 @@ export class TileMap extends RenderableModelWithTexture {
         this._cellImage.srcRect.setWH(this._tileWidth,this._tileHeight);
         this._cellImage.revalidate();
         if (!this._drawingSurface) {
-            const size:Size = new Size();
+            const size = new Size();
             size.setFrom(this.game.size);
             size.addWH(this._tileWidth*2,this._tileHeight*2);
             this._drawingSurface = new DrawingSurface(this.game,size);
@@ -422,11 +447,11 @@ export class TileMap extends RenderableModelWithTexture {
 
     private drawBatch = ()=>{
         this.beforeDraw();
-        for (let y:number=0;y<this._numOfTilesInScreenByY;y++) {
-            const currTileByY:number = this._drawInfo.firstTileToDrawByY + y;
+        for (let y=0;y<this._numOfTilesInScreenByY;y++) {
+            const currTileByY = this._drawInfo.firstTileToDrawByY + y;
             if (currTileByY<0) continue;
             if (currTileByY>this._numOfTilesInMapByY-1) continue;
-            for (let x:number=0;x<this._numOfTilesInScreenByX;x++) {
+            for (let x=0;x<this._numOfTilesInScreenByX;x++) {
                 const currTileByX:number = this._drawInfo.firstTileToDrawByX + x;
                 if (currTileByX<0) continue;
                 if (currTileByX>this._numOfTilesInMapByX-1) continue;
@@ -473,9 +498,9 @@ export class TileMap extends RenderableModelWithTexture {
         const result:ITileAtRectInfo[] = [];
         const alreadyCheckedTiles:{[key:string]:boolean} = {};
 
-        let x:number = rect.x,y:number;
-        const maxX:number = rect.x+rect.width,
-            maxY:number = rect.y+rect.height;
+        let x = rect.x,y:number;
+        const maxX = rect.x+rect.width,
+            maxY = rect.y+rect.height;
         // eslint-disable-next-line no-constant-condition
         while (true) {
             y = rect.y;

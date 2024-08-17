@@ -57,8 +57,11 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
 
     public createRigidBody(params?:ICreateRigidBodyParams): ArcadeRigidBody {
         type Clazz = new(game:Game) => ArcadeRigidBody; // "unprivate" constructor
-        const body:ArcadeRigidBody = new (ArcadeRigidBody as Clazz)(this.game);
+        const body = new (ArcadeRigidBody as Clazz)(this.game);
         body._modelType = params?.type??body._modelType;
+        body._isDynamic =
+            body._modelType === ARCADE_RIGID_BODY_TYPE.DYNAMIC ||
+            body._modelType === ARCADE_RIGID_BODY_TYPE.KINEMATIC;
         body._restitution = params?.restitution??body._restitution;
         body.gravityImpact = params?.gravityImpact??body.gravityImpact;
         if (params?.acceptCollisions!==undefined) body.acceptCollisions = params.acceptCollisions;
@@ -100,6 +103,10 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
         const cells = scene._spatialSpace.getCellsToCheck();
         for (let i=0,max_i=cells.length;i<max_i;++i) {
             const cell = cells[i];
+            if (!cell.hasDynamicObjects) {
+                cell.clear();
+                continue;
+            }
             const bodies = cell.objects;
             for (let j=0,max_j=bodies.length;j<max_j;++j) {
                 const playerBody = bodies[j] as ArcadeRigidBody;

@@ -22,7 +22,10 @@ export namespace arcadePhysicsHelper {
     const STICKY_THRESHOLD = 0.01;
 
     export const interpolateAndResolveCollision_AABB = (playerBody:ArcadeRigidBody, pos:Point2d, entityBody:ArcadeRigidBody):void=> {
-        if (playerBody._modelType===ARCADE_RIGID_BODY_TYPE.KINEMATIC) return;
+        if (
+            playerBody._modelType===ARCADE_RIGID_BODY_TYPE.KINEMATIC ||
+            playerBody._modelType===ARCADE_RIGID_BODY_TYPE.STATIC
+        ) return;
         let oldEntityPosX:number;
         let oldEntityPosY:number;
         if (entityBody._modelType===ARCADE_RIGID_BODY_TYPE.KINEMATIC) {
@@ -89,20 +92,20 @@ export namespace arcadePhysicsHelper {
 
     const resolveCollision_AABB = (player:ArcadeRigidBody, pos:Point2d, entity:ArcadeRigidBody):void=> {
 
-        // Find the mid points of the entity and player
-        const pMidX:number = player.getMidX();
-        const pMidY:number = player.getMidY();
-        const eMidX:number = entity.getMidX();
-        const eMidY:number = entity.getMidY();
+        // Find the mid-points of the entity and player
+        const pMidX = player.getMidX();
+        const pMidY = player.getMidY();
+        const eMidX = entity.getMidX();
+        const eMidY = entity.getMidY();
 
         // To find the side of entry calculate based on
         // the normalized sides
-        const dx:number = (eMidX - pMidX) / entity._halfSize.width;
-        const dy:number = (eMidY - pMidY) / entity._halfSize.height;
+        const dx = (eMidX - pMidX) / entity._halfSize.width;
+        const dy = (eMidY - pMidY) / entity._halfSize.height;
 
         // Calculate the absolute change in x and y
-        const absDX:number = abs(dx);
-        const absDY:number = abs(dy);
+        const absDX = abs(dx);
+        const absDY = abs(dy);
 
         //If the object is approaching from the sides
         if (absDX > absDY) {
@@ -132,7 +135,9 @@ export namespace arcadePhysicsHelper {
     const getComparedToSticky = (val:number):number=> {
         if (abs(val) < STICKY_THRESHOLD) {
             return 0;
-        } else return val;
+        } else {
+            return val;
+        }
     }
 
     const reflectVelocityY = (player:ArcadeRigidBody, entity:ArcadeRigidBody):void=> {

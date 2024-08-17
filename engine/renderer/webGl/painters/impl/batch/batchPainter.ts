@@ -123,7 +123,7 @@ export class BatchPainter extends AbstractPainter {
         const viewPortSize =
             (renderer.getRenderTarget().getTexture() as Texture).size.toArray();
         this.setUniform(this.u_viewPort,viewPortSize);
-        this.colorBatchArray.uploadToVertexBuffer();
+        this.colorBatchArray.uploadToVertexBuffer(true);
         this.colorBatchArray.clearUnused();
         this.angleBatchArray.uploadToVertexBuffer();
         this.posBatchArray.uploadToVertexBuffer();

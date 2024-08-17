@@ -20,8 +20,8 @@ import {PlatformMoveable} from "./objects/platformMoveable";
 import {BumpRect} from "./objects/bumpRect";
 import {FirePowerup} from "./objects/firePowerup";
 import {DI} from "@engine/core/ioc";
-import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
-import {IGamePadEvent} from "@engine/control/gamepad/iGamePadEvent";
+import {ArcadePhysicsSystem} from "@engine/physics/arcade/arcadePhysicsSystem";
+import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 
 @DI.Injectable()
 export class MainScene extends Scene {
@@ -97,6 +97,22 @@ export class MainScene extends Scene {
             }
         });
 
+        const physicsSystem = this.game.getPhysicsSystem(ArcadePhysicsSystem);
+
+        const rect1 = new Rectangle(this.game);
+        rect1.size.setWH(50,50);
+        rect1.pos.setXY(291,30);
+        rect1.fillColor = ColorFactory.fromCSS(`#202dbe`);
+        rect1.setRigidBody(physicsSystem.createRigidBody());
+        this.appendChild(rect1);
+
+        const rect2 = new Rectangle(this.game);
+        rect2.size.setWH(50,50);
+        rect2.pos.setXY(321,30);
+        rect2.fillColor = ColorFactory.fromCSS(`#202dbe`);
+        rect2.setRigidBody(physicsSystem.createRigidBody());
+        this.appendChild(rect2);
+
     }
 
     private initUI():void {
@@ -115,12 +131,12 @@ export class MainScene extends Scene {
         sensorCursor.getExternalRing().pos.setXY(30, 145);
 
         const jumpButton = new ScreenSensorButton(this.game, 30);
-        jumpButton.pos.setXY(540, 180);
+        jumpButton.pos.setXY(540, 230);
         jumpButton.reflectToKeyboardControl(this.game.getControl(KeyboardControl), KEYBOARD_KEY.SPACE);
         jumpButton.appendTo(uiLayer);
 
         const fireButton = new ScreenSensorButton(this.game, 30);
-        fireButton.pos.setXY(490, 230);
+        fireButton.pos.setXY(490, 180);
         fireButton.reflectToKeyboardControl(this.game.getControl(KeyboardControl), KEYBOARD_KEY.CONTROL);
         fireButton.appendTo(uiLayer);
 

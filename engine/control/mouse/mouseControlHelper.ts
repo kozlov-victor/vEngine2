@@ -62,7 +62,7 @@ export class MouseControlHelper {
     ):Optional<IObjectMouseEvent>{
 
         if (this.isPointInRect(mousePoint,currentTarget,constrainObjects)) {
-            return  this.triggerEventForObject(e,eventName,mousePoint,currentTarget,initialTarget);
+            return this.triggerEventForObject(e,eventName,mousePoint,currentTarget,initialTarget);
         } else return undefined;
     }
 

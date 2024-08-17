@@ -5,17 +5,27 @@ import {Mat4} from "@engine/misc/math/mat4";
 export namespace Mat4Special {
     import Mat16Holder = Mat4.Mat16Holder;
     import MAT16 = Mat4.MAT16;
+    import MATRIX_TYPE = Mat4.MATRIX_TYPE;
 
     /**
      * multiply translation matrix by any matrix
      */
     export const multiplyTranslationByAny = (out:Mat16Holder, aHolder:Mat16Holder, bHolder:Mat16Holder):void => {
 
-        if (bHolder.identityFlag) {
+        if (bHolder.matrixType===MATRIX_TYPE.IDENTITY) {
             out.mat16.set(aHolder.mat16);
-            out.identityFlag = aHolder.identityFlag;
+            out.matrixType = aHolder.matrixType;
             return;
         }
+        else if (bHolder.matrixType===MATRIX_TYPE.TRANSLATION) {
+            const r = out.mat16 as MAT16;
+            const a = aHolder.mat16;
+            r[12]+=a[12];
+            r[13]+=a[13];
+            r[14]+=a[14];
+            return;
+        }
+
 
         // r[0] = b[0];
         // r[1] = b[1];
@@ -52,7 +62,7 @@ export namespace Mat4Special {
         r[14] = a12 * b2 + a13 * b6 + a14 * b10 + b14;
         // r[15] = a12 * b3 + a13 * b7 + a14 * b11 + b15;
 
-        out.identityFlag = false;
+        out.matrixType = MATRIX_TYPE.ANY;
 
     };
 
@@ -91,7 +101,7 @@ export namespace Mat4Special {
         r[14] = b14;
         r[15] = b15;
 
-        out.identityFlag = false;
+        out.matrixType = MATRIX_TYPE.ANY;
 
     };
 
@@ -130,7 +140,7 @@ export namespace Mat4Special {
         r[14] = b14;
         r[15] = b15;
 
-        out.identityFlag = false;
+        out.matrixType = MATRIX_TYPE.ANY;
     };
 
     /**
@@ -179,7 +189,7 @@ export namespace Mat4Special {
         r[6] = a4 * b2 + a5 * b6;
         r[7] = 0;//a4 * b3 + a5 * b7;
 
-        out.identityFlag = false;
+        out.matrixType = MATRIX_TYPE.ANY;
     };
 
     /**
@@ -215,7 +225,7 @@ export namespace Mat4Special {
         r[14] = b14;
         r[15] = b15;
 
-        out.identityFlag = false;
+        out.matrixType = MATRIX_TYPE.ANY;
     };
 
     /**
@@ -263,7 +273,7 @@ export namespace Mat4Special {
         r[6] = a4 * b2 + b6;
         r[7] = 0;//a4 * b3 + b7;
 
-        out.identityFlag = false;
+        out.matrixType = MATRIX_TYPE.ANY;
 
     };
 
@@ -307,7 +317,7 @@ export namespace Mat4Special {
         r[2] = b2 + a1 * b6;
         r[3] = 0;//b3 + a1 * b7;
 
-        out.identityFlag = false;
+        out.matrixType = MATRIX_TYPE.ANY;
     };
 
     /**
@@ -346,7 +356,7 @@ export namespace Mat4Special {
         r[14] = a12 * b2 + a13 * b6 + b14;
         r[15] = 1;
 
-        out.identityFlag = false;
+        out.matrixType = MATRIX_TYPE.ANY;
     };
 
     export const matrixMultiplyOptimized = (out:Mat16Holder,aHolder:Mat16Holder, bHolder:Mat16Holder):void => {
@@ -381,7 +391,7 @@ export namespace Mat4Special {
         r[14] = a12 * b2 + a13 * b6 + a14 * b10 + b14;
         r[15] = 1;
 
-        out.identityFlag = false;
+        out.matrixType = MATRIX_TYPE.ANY;
     };
 
 }

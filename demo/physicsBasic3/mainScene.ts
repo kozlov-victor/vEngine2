@@ -23,6 +23,13 @@ export class MainScene extends Scene {
         rect2.setRigidBody(physicsSystem.createRigidBody());
         this.appendChild(rect2);
 
+        const rect3 = new Rectangle(this.game);
+        rect3.size.setWH(350,350);
+        rect3.pos.setXY(320,80);
+        rect3.fillColor = ColorFactory.fromCSS(`#f10f97`);
+        rect3.setRigidBody(physicsSystem.createRigidBody());
+        this.appendChild(rect3);
+
     }
 
 }

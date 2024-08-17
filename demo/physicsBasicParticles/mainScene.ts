@@ -2,10 +2,7 @@ import {Scene} from "@engine/scene/scene";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {ArcadePhysicsSystem} from "@engine/physics/arcade/arcadePhysicsSystem";
 import {ARCADE_RIGID_BODY_TYPE, ArcadeRigidBody} from "@engine/physics/arcade/arcadeRigidBody";
-import {
-    MAX_PARTICLE_CACHE_STRATEGY,
-    ParticleSystem
-} from "@engine/renderable/impl/general/partycleSystem/particleSystem";
+import {ParticleSystem} from "@engine/renderable/impl/general/partycleSystem/particleSystem";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {MathEx} from "@engine/misc/math/mathEx";
@@ -19,19 +16,19 @@ export class MainScene extends Scene {
 
         const physicsSystem:ArcadePhysicsSystem = this.game.getPhysicsSystem();
 
-        const rect1:Rectangle = new Rectangle(this.game);
+        const rect1 = new Rectangle(this.game);
         rect1.pos.setXY(10,10);
-        const rigidBody1:ArcadeRigidBody = physicsSystem.createRigidBody({type:ARCADE_RIGID_BODY_TYPE.DYNAMIC,groupNames:['platform']});
+        const rigidBody1 = physicsSystem.createRigidBody({type:ARCADE_RIGID_BODY_TYPE.DYNAMIC,groupNames:['platform']});
         rect1.setRigidBody(rigidBody1);
         this.appendChild(rect1);
 
-        const rect2:Rectangle = new Rectangle(this.game);
+        const rect2 = new Rectangle(this.game);
         rect2.size.setWH(500,15);
         rect2.pos.setXY(10,200);
         rect2.setRigidBody(physicsSystem.createRigidBody({type:ARCADE_RIGID_BODY_TYPE.KINEMATIC,groupNames:['platform']}));
         this.appendChild(rect2);
 
-        const rect3:Rectangle = new Rectangle(this.game);
+        const rect3 = new Rectangle(this.game);
         rect3.size.setWH(40,60);
         rect3.pos.setXY(200,100);
         rect3.setRigidBody(physicsSystem.createRigidBody({type:ARCADE_RIGID_BODY_TYPE.KINEMATIC,groupNames:['platform']}));
@@ -41,9 +38,9 @@ export class MainScene extends Scene {
         const particle = new Rectangle(this.game);
         particle.size.setWH(5);
         particle.transformPoint.setXY(particle.size.width/2,particle.size.height/2);
-        particle.setRigidBody(physicsSystem.createRigidBody({type:ARCADE_RIGID_BODY_TYPE.DYNAMIC,groupNames:['particles'],ignoreCollisionWithGroupNames:['particles']}));
+        particle.setRigidBody(physicsSystem.createRigidBody({type:ARCADE_RIGID_BODY_TYPE.DYNAMIC,groupNames:['particles'],ignoreCollisionWithGroupNames:['particles-']}));
 
-        const ps: ParticleSystem = new ParticleSystem(this.game, 3000);
+        const ps = new ParticleSystem(this.game, 3000);
         ps.emitAuto = false;
         ps.addParticlePrefab(particle);
 

@@ -16,9 +16,11 @@ import {SpatialCell} from "@engine/physics/common/spatialSpace";
 import {CollisionGroup} from "@engine/physics/arcade/collisionGroup";
 
 export const enum ARCADE_RIGID_BODY_TYPE {
+    // Static entities are not moveable
+    STATIC,
     // Kinematic entities are not affected by gravity, and
     // will not allow the solver to solve these elements
-    // These entities will be our platforms in the stage
+    // These entities will be our moveable platforms in the stage
     KINEMATIC ,
 
     // Dynamic entities will be completely changing and are
@@ -39,12 +41,12 @@ export interface ICollisionWith {
 }
 
 class CollisionFlags implements ICollisionWith {
-    public left: boolean = false;
-    public right: boolean = false;
-    public top: boolean = false;
-    public bottom: boolean = false;
+    public left = false;
+    public right = false;
+    public top = false;
+    public bottom = false;
 
-    public reset():void{
+    public reset():void {
         this.left = this.right = this.top = this.bottom = false;
     }
 
@@ -68,26 +70,27 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
     // todo collideWorldBounds
 
     public readonly type:'ArcadeRigidBody';
-    public readonly velocity:Point2d = new Point2d();
-    public readonly acceleration:Point2d = new Point2d();
-    public groupNames:Int = 0 as Int;
-    public ignoreCollisionWithGroupNames:Int = 0 as Int;
-    public ignoreOverlapWithGroupNames:Int = 0 as Int;
+    public readonly velocity = new Point2d();
+    public readonly acceleration = new Point2d();
+    public groupNames = 0 as Int;
+    public ignoreCollisionWithGroupNames = 0 as Int;
+    public ignoreOverlapWithGroupNames = 0 as Int;
     public readonly spatialCellsOccupied:SpatialCell[] = [];
 
-    public readonly collisionEventHandler:EventEmitterDelegate<ARCADE_COLLISION_EVENT, ArcadeRigidBody> = new EventEmitterDelegate(this.game);
+    public readonly collisionEventHandler = new EventEmitterDelegate<ARCADE_COLLISION_EVENT, ArcadeRigidBody>(this.game);
 
-    public readonly debug:boolean = false;
-    public readonly id:number = bodyCnt++;
+    public readonly debug = false;
+    public readonly id = bodyCnt++;
 
-    public gravityImpact:number = 1;
-    public acceptCollisions:boolean = true;
+    public gravityImpact = 1;
+    public acceptCollisions = true;
 
     public addInfo:Record<string, any> = {};
-    public _modelType: ARCADE_RIGID_BODY_TYPE = ARCADE_RIGID_BODY_TYPE.DYNAMIC;
+    public _modelType = ARCADE_RIGID_BODY_TYPE.DYNAMIC;
+    public _isDynamic:boolean;
     public readonly _boundRect = new RectWithUpdateId();
-    public _restitution:number = 0.5;
-    public readonly _halfSize:Size = new Size();
+    public _restitution = 0.5;
+    public readonly _halfSize = new Size();
     public readonly collisionFlags:ICollisionWith = new CollisionFlags();
     public overlappedWith:Optional<IRigidBody>;
     public readonly _collisionFlagsOld:ICollisionWith = new CollisionFlags();
@@ -97,19 +100,19 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
     public lastBoundRectId: number;
 
 
-    public _offsetX:number = 0; // to calculate character offset if it stands on KINEMATIC platform
+    public _offsetX = 0; // to calculate character offset if it stands on KINEMATIC platform
 
     private _model:RenderableModel;
     private _debugRectangle:Rectangle;
 
-    private _dirtyBoundRect:boolean = true;
+    private _dirtyBoundRect = true;
 
     private constructor(private game:Game) {
     }
 
     public nextTick():void {
 
-        const delta:number = this.game.getDeltaTime() / 1000;
+        const delta = this.game.getDeltaTime() / 1000;
 
         if (this._modelType===ARCADE_RIGID_BODY_TYPE.DYNAMIC) {
             this._oldPos.setFrom(this.pos);
@@ -118,13 +121,17 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
             this.overlappedWith = undefined;
 
             this.velocity.x += this.acceleration.x * delta;
-            if (!this._collisionFlagsOld.bottom) this.velocity.y += this.acceleration.y * delta;
+            if (!this._collisionFlagsOld.bottom) {
+                this.velocity.y += this.acceleration.y * delta;
+            }
             this.velocity.x += ArcadePhysicsSystem.gravity.x;
-            this.velocity.y += ArcadePhysicsSystem.gravity.y*this.gravityImpact;
+            this.velocity.y += ArcadePhysicsSystem.gravity.y * this.gravityImpact;
         }
 
-        this.pos.x += this.velocity.x * delta;
-        this.pos.y += this.velocity.y * delta;
+        if (!this.velocity.equals(0)) {
+            this.pos.x += this.velocity.x * delta;
+            this.pos.y += this.velocity.y * delta;
+        }
 
         const spatialSpace = this.game.getCurrentScene()._spatialSpace;
         if (spatialSpace!==undefined) {
@@ -160,7 +167,7 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
         this._halfSize.height = this._rect.height/2;
     }
 
-    // Getters for the mid point of the rect
+    // Getters for the mid-point of the rect
     public getMidX():number {
         return this._halfSize.width + this.pos.x + this._rect.x;
     }
@@ -216,8 +223,8 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
         return this._model;
     }
 
-    public clone():ArcadeRigidBody{
-        const body:ArcadeRigidBody = new ArcadeRigidBody(this.game);
+    public clone():ArcadeRigidBody {
+        const body = new ArcadeRigidBody(this.game);
         this.setClonedProperties(body);
         return body;
     }
@@ -252,6 +259,7 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
         body.ignoreOverlapWithGroupNames = this.ignoreOverlapWithGroupNames;
         body.setBoundsAndObserveModel(this._model);
         body.gravityImpact = this.gravityImpact;
+        body._isDynamic = this._isDynamic;
     }
 
 }

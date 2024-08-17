@@ -19,7 +19,6 @@ import {DebugError} from "@engine/debug/debugError";
 import {WordBrake} from "@engine/renderable/impl/ui/textField/textAlign";
 import {TextFieldWithoutCache} from "@engine/renderable/impl/ui/textField/simple/textField";
 import {Mat4} from "@engine/misc/math/mat4";
-import {arcToSvgCurve} from "@engine/renderable/impl/geometry/_internal/arcToSvgCurve";
 import {
     EndCapStyle,
     ITriangulatedPathParams,
@@ -30,6 +29,7 @@ import {BatchedImage} from "@engine/renderable/impl/general/image/batchedImage";
 import {WebGlRenderer} from "@engine/renderer/webGl/renderer/webGlRenderer";
 import {FrameBufferStack} from "@engine/renderer/webGl/base/buffer/frameBufferStack";
 import Mat16Holder = Mat4.Mat16Holder;
+import MATRIX_TYPE = Mat4.MATRIX_TYPE;
 
 
 class ContainerForDrawingSurface extends SimpleGameObjectContainer {
@@ -113,7 +113,7 @@ class DrawingSession implements IDrawingSession {
             height=-height;
         }
         if (
-            this._matrixStack.getCurrentValue().identityFlag &&
+            this._matrixStack.getCurrentValue().matrixType===MATRIX_TYPE.IDENTITY &&
             this.pathParams.lineWidth===0 &&
             this._rect.borderRadius===0
         ) {

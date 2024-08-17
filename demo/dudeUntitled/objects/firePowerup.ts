@@ -27,7 +27,7 @@ export class FirePowerup {
         animation.play();
         image.pos.setXY(tiledObject.x,tiledObject.y - tiledObject.height);
         image.setRigidBody(scene.getGame().getPhysicsSystem(ArcadePhysicsSystem).createRigidBody({
-            type: ARCADE_RIGID_BODY_TYPE.KINEMATIC,
+            type: ARCADE_RIGID_BODY_TYPE.STATIC,
             rect: undefined,
             acceptCollisions: false,
             groupNames: ['collectable']
