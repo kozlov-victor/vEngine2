@@ -21,7 +21,7 @@ export namespace arcadePhysicsHelper {
 
     const STICKY_THRESHOLD = 0.01;
 
-    export const interpolateAndResolveCollision_AABB = (playerBody:ArcadeRigidBody, pos:Point2d, entityBody:ArcadeRigidBody):void=> {
+    export const interpolateAndResolveCollision_AABB = (playerBody:ArcadeRigidBody, pos:Point2d, vel: Point2d, entityBody:ArcadeRigidBody):void=> {
         if (
             playerBody._modelType===ARCADE_RIGID_BODY_TYPE.KINEMATIC ||
             playerBody._modelType===ARCADE_RIGID_BODY_TYPE.STATIC
@@ -56,10 +56,10 @@ export namespace arcadePhysicsHelper {
             oldEntityPosX+=entityDeltaX;
             oldEntityPosY+=entityDeltaY;
         }
-        resolveCollision_AABB(playerBody, pos, entityBody);
+        resolveCollision_AABB(playerBody, pos, vel, entityBody);
     }
 
-    export const resolveCollision_AABB_withSlope =(player:ArcadeRigidBody,pos:Point2d,entity:ArcadeRigidBody):void=> {
+    export const resolveCollision_AABB_withSlope =(player:ArcadeRigidBody,pos:Point2d, vel: Point2d, entity:ArcadeRigidBody):void=> {
         const slopeType = entity.addInfo.slopeType as Optional<SLOPE_TYPE>;
         if (slopeType===undefined) return;
         const slopeKind:SLOPE_KIND = (slopeType===SLOPE_TYPE.FLOOR_UP || slopeType===SLOPE_TYPE.FLOOR_DOWN)?
@@ -69,15 +69,15 @@ export namespace arcadePhysicsHelper {
             SLOPE_DIRECTION.DOWN;
         if (slopeKind===SLOPE_KIND.FLOOR) {
             if (player.getBottom()<=entity.getBottom()+1) {
-                collidePlayer_AABB_withFloorSlope(player, pos, entity, slopeDirection);
+                collidePlayer_AABB_withFloorSlope(player, pos, vel, entity, slopeDirection);
             } else {
-                interpolateAndResolveCollision_AABB(player, pos, entity);
+                interpolateAndResolveCollision_AABB(player, pos, vel, entity);
             }
         } else {
             if (player.getTop()>=entity.getTop()-1) {
-                collidePlayer_AABB_withCeilSlope(player, pos, entity, slopeDirection);
+                collidePlayer_AABB_withCeilSlope(player, pos, vel, entity, slopeDirection);
             } else {
-                interpolateAndResolveCollision_AABB(player, pos, entity);
+                interpolateAndResolveCollision_AABB(player, pos, vel, entity);
             }
         }
     }
@@ -90,7 +90,7 @@ export namespace arcadePhysicsHelper {
         entity.collisionEventHandler.trigger(ARCADE_COLLISION_EVENT.OVERLAPPED, player);
     }
 
-    const resolveCollision_AABB = (player:ArcadeRigidBody, pos:Point2d, entity:ArcadeRigidBody):void=> {
+    const resolveCollision_AABB = (player:ArcadeRigidBody, pos:Point2d, vel: Point2d, entity:ArcadeRigidBody):void=> {
 
         // Find the mid-points of the entity and player
         const pMidX = player.getMidX();
@@ -111,19 +111,19 @@ export namespace arcadePhysicsHelper {
         if (absDX > absDY) {
             // If the player is approaching from positive X
             if (dx < 0) {
-                collidePlayerWithLeft_AABB(player,pos, entity);
+                collidePlayerWithLeft_AABB(player,pos, vel, entity);
             } else {
                 // If the player is approaching from negative X
-                collidePlayerWithRight_AABB(player, pos, entity);
+                collidePlayerWithRight_AABB(player, pos, vel, entity);
             }
             // If this collision is coming from the top or bottom more
         } else {
             // If the player is approaching from positive Y
             if (dy < 0) {
-                collidePlayerWithTop_AABB(player, pos, entity);
+                collidePlayerWithTop_AABB(player, pos, vel, entity);
             } else {
                 // If the player is approaching from negative Y
-                collidePlayerWithBottom_AABB(player, pos, entity);
+                collidePlayerWithBottom_AABB(player, pos, vel, entity);
             }
         }
     }
@@ -140,22 +140,25 @@ export namespace arcadePhysicsHelper {
         }
     }
 
-    const reflectVelocityY = (player:ArcadeRigidBody, entity:ArcadeRigidBody):void=> {
-        const restitution:number = calcCommonRestitution(player, entity);
-        player.velocity.y =
-            getComparedToSticky(
-                -player.velocity.y *
-                restitution
+    const _reflectVelocity = (player:ArcadeRigidBody, playerVelocity: Point2d, entity:ArcadeRigidBody, dim:'x'|'y')=> {
+        const restitution = calcCommonRestitution(player, entity);
+        if (entity._modelType===ARCADE_RIGID_BODY_TYPE.STATIC) {
+            playerVelocity[dim] = -playerVelocity[dim]*restitution;
+        }
+        else {
+            // v' = (m1v1 + m2v2)/(m1 + m2)
+            playerVelocity[dim] = getComparedToSticky(
+                (player.velocity[dim] + entity.velocity[dim]) * restitution
             );
+        }
     }
 
-    const reflectVelocityX = (player:ArcadeRigidBody, entity:ArcadeRigidBody):void=> {
-        const restitution:number = calcCommonRestitution(player, entity);
-        // v' = (m1v1 + m2v2)/(m1 + m2)
-        player.velocity.x = getComparedToSticky(
-            -player.velocity.x *
-            restitution
-        );
+    const reflectVelocityY = (player:ArcadeRigidBody, playerVelocity: Point2d, entity:ArcadeRigidBody):void=> {
+        _reflectVelocity(player, playerVelocity, entity, 'y');
+    }
+
+    const reflectVelocityX = (player:ArcadeRigidBody, playerVelocity: Point2d, entity:ArcadeRigidBody):void=> {
+        _reflectVelocity(player, playerVelocity, entity, 'x');
     }
 
     const emitCollisionEvents = (player:ArcadeRigidBody, entity:ArcadeRigidBody):void=> {
@@ -164,7 +167,7 @@ export namespace arcadePhysicsHelper {
         entity.collisionEventHandler.trigger(ARCADE_COLLISION_EVENT.COLLIDED, player);
     }
 
-    const collidePlayer_AABB_withFloorSlope =(player:ArcadeRigidBody, pos: Point2d, slope:ArcadeRigidBody,slopeType:SLOPE_DIRECTION):void=> {
+    const collidePlayer_AABB_withFloorSlope =(player:ArcadeRigidBody, pos: Point2d, vel: Point2d, slope:ArcadeRigidBody,slopeType:SLOPE_DIRECTION):void=> {
         const dxFactor =
             slopeType===SLOPE_DIRECTION.UP?
                 player.getRight() - slope.getLeft():
@@ -181,12 +184,12 @@ export namespace arcadePhysicsHelper {
 
             emitCollisionEvents(player, slope);
             player.collisionFlags.bottom = slope.collisionFlags.top = true;
-            reflectVelocityY(player, slope);
+            reflectVelocityY(player, vel, slope);
         }
     }
 
 
-    const collidePlayer_AABB_withCeilSlope =(player:ArcadeRigidBody, pos: Point2d, slope:ArcadeRigidBody,slopeType:SLOPE_DIRECTION):void=> {
+    const collidePlayer_AABB_withCeilSlope =(player:ArcadeRigidBody, pos: Point2d, vel: Point2d, slope:ArcadeRigidBody,slopeType:SLOPE_DIRECTION):void=> {
         const dxFactor =
             slopeType===SLOPE_DIRECTION.DOWN?
                 player.getRight() - slope.getLeft():
@@ -203,40 +206,40 @@ export namespace arcadePhysicsHelper {
 
             emitCollisionEvents(player, slope);
             player.collisionFlags.top = slope.collisionFlags.bottom = true;
-            reflectVelocityY(player, slope);
+            reflectVelocityY(player, vel, slope);
         }
     }
 
-    const collidePlayerWithTop_AABB = (player:ArcadeRigidBody, pos:Point2d, entity:ArcadeRigidBody):void=> {
+    const collidePlayerWithTop_AABB = (player:ArcadeRigidBody, pos:Point2d, vel: Point2d, entity:ArcadeRigidBody):void=> {
         if (!player._collisionFlagsOld.bottom) { // check to prevent penetration through floor
             pos.y = entity.getBottom() - player._rect.y;
         }
         player.collisionFlags.top = entity.collisionFlags.bottom = true;
         emitCollisionEvents(player, entity);
-        reflectVelocityY(player, entity);
+        reflectVelocityY(player, vel, entity);
     }
 
-    const collidePlayerWithBottom_AABB = (player:ArcadeRigidBody, pos:Point2d, entity:ArcadeRigidBody):void=> {
+    const collidePlayerWithBottom_AABB = (player:ArcadeRigidBody, pos:Point2d, vel: Point2d, entity:ArcadeRigidBody):void=> {
         pos.y = entity.getTop() - player._rect.height - player._rect.y;
         pos.x+=entity._offsetX; // move player with platform
         entity._offsetX = 0;
         player.collisionFlags.bottom = entity.collisionFlags.top = true;
         emitCollisionEvents(player, entity);
-        reflectVelocityY(player, entity);
+        reflectVelocityY(player, vel, entity);
     }
 
-    const collidePlayerWithLeft_AABB = (player:ArcadeRigidBody, pos:Point2d, entity:ArcadeRigidBody):void=>{
+    const collidePlayerWithLeft_AABB = (player:ArcadeRigidBody, pos:Point2d, vel: Point2d, entity:ArcadeRigidBody):void=>{
         pos.x = entity.getRight() - player._rect.x;
         player.collisionFlags.left = entity.collisionFlags.right = true;
         emitCollisionEvents(player, entity);
-        reflectVelocityX(player, entity);
+        reflectVelocityX(player, vel, entity);
     }
 
-    const collidePlayerWithRight_AABB = (player:ArcadeRigidBody, pos:Point2d, entity:ArcadeRigidBody):void=>{
+    const collidePlayerWithRight_AABB = (player:ArcadeRigidBody, pos:Point2d, vel: Point2d, entity:ArcadeRigidBody):void=>{
         pos.x = entity.getLeft() - player._rect.width - player._rect.x;
         player.collisionFlags.right = entity.collisionFlags.left = true;
         emitCollisionEvents(player, entity);
-        reflectVelocityX(player, entity);
+        reflectVelocityX(player, vel, entity);
     }
 
 }

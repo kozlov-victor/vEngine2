@@ -46,6 +46,8 @@ export const enum SLOPE_TYPE {
 const testedCollisionsCache = new Map<number,number>();
 const p1 = new Point2d();
 const p2 = new Point2d();
+const v1 = new Point2d();
+const v2 = new Point2d();
 
 export class ArcadePhysicsSystem implements IPhysicsSystem {
 
@@ -112,6 +114,7 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
                 const playerBody = bodies[j] as ArcadeRigidBody;
                 const playerBodyRect = playerBody.calcAndGetBoundRect();
                 p1.setFrom(playerBody.pos);
+                v1.setFrom(playerBody.velocity);
 
                 for (let k=j+1;k<max_j;++k) {
                     const entityBody = bodies[k] as ArcadeRigidBody;
@@ -122,6 +125,7 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
                     const entityBodyRect = entityBody.calcAndGetBoundRect();
                     if (!MathEx.overlapTest(playerBodyRect,entityBodyRect)) continue;
                     p2.setFrom(entityBody.pos);
+                    v2.setFrom(entityBody.velocity);
                     if (
                         !playerBody.acceptCollisions                                               ||
                         !entityBody.acceptCollisions                                               ||
@@ -136,16 +140,18 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
                         }
                     } else {
                         if (playerBody.addInfo.slopeType!==undefined || entityBody.addInfo.slopeType!==undefined) {
-                            resolveCollision_AABB_withSlope(playerBody, p1, entityBody);
-                            resolveCollision_AABB_withSlope(entityBody, p2, playerBody);
+                            resolveCollision_AABB_withSlope(playerBody, p1, v1, entityBody);
+                            resolveCollision_AABB_withSlope(entityBody, p2, v2, playerBody);
                         } else {
-                            interpolateAndResolveCollision_AABB(playerBody, p1, entityBody);
-                            interpolateAndResolveCollision_AABB(entityBody, p2, playerBody);
+                            interpolateAndResolveCollision_AABB(playerBody, p1, v1, entityBody);
+                            interpolateAndResolveCollision_AABB(entityBody, p2, v2, playerBody);
                         }
+                        playerBody.velocity.setFrom(v1);
+                        entityBody.velocity.setFrom(v2);
                     }
-                    playerBody.pos.setFrom(p1);
                     entityBody.pos.setFrom(p2);
                 }
+                playerBody.pos.setFrom(p1);
             }
             cell.clear();
         }
