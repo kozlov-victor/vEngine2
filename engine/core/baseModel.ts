@@ -21,7 +21,7 @@ export abstract class BaseModel {
         this.size.observe(()=>this._dirtyDestRect = true);
     }
 
-    public getDestRect(): Readonly<IRect> {
+    public getDestRect(): IRect {
         if (this._dirtyDestRect) {
             this._destRect.setXYWH(this.pos.x,this.pos.y,this.size.width,this.size.height);
             this._dirtyDestRect = false;

@@ -31,11 +31,10 @@ export abstract class AbstractBatchArray<T> {
         this.currentOffset = offset;
     }
 
-    public uploadToVertexBuffer(full = false):void {
+    public uploadToVertexBuffer():void {
         if (!this.dirty) return;
         this.dirty = false;
-        if (full) this.vertexBuffer.updateData(this.array);
-        else this.vertexBuffer.updateData(this.array.subarray(0,this.currentOffset));
+        this.vertexBuffer.updateData(this.array);
     }
 
     public clearUnused():void {

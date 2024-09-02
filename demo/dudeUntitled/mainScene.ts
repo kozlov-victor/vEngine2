@@ -35,7 +35,9 @@ export class MainScene extends Scene {
 
     public override onReady():void {
         this.initLevel();
-        if (Device.isMobile || Device.embeddedEngine) this.initUI();
+        if (Device.isMobile || Device.embeddedEngine) {
+            this.initUI();
+        }
         const debug = new DebugLayer(this.game);
         debug.setSolidBackground();
         debug.appendTo(this);

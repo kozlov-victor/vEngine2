@@ -18,7 +18,7 @@ export class MainScene extends Scene {
         this.appendChild(container);
 
         for (let i:number = 0;i<20;i++) {
-            const spr:Circle = new Circle(this.game);
+            const spr = new Circle(this.game);
             spr.radius = 50;
             spr.lineWidth = 3;
             spr.color.setFrom(ColorFactory.fromCSS('#e04949'));
@@ -33,19 +33,21 @@ export class MainScene extends Scene {
             spr.mouseEventHandler.on(MOUSE_EVENTS.mouseLeave, (e)=>{
                 spr.scale.setXY(1);
             });
-            spr.dragEventHandler.on(DRAG_EVENTS.dragStart, e=>{
+
+            const bh = new DraggableBehaviour(this.game);
+            spr.addBehaviour(bh);
+            bh.dragEventHandler.on(DRAG_EVENTS.dragStart, e=>{
                 spr.moveToFront();
                 spr.color.setFrom(ColorFactory.fromCSS('#eec240'));
             });
-            spr.dragEventHandler.on(DRAG_EVENTS.dragMove, e=>{
+            bh.dragEventHandler.on(DRAG_EVENTS.dragMove, e=>{
                 spr.moveToFront();
                 spr.fillColor.setFrom(ColorFactory.fromCSS('#eaacbd'));
             });
-            spr.dragEventHandler.on(DRAG_EVENTS.dragStop, e=>{
+            bh.dragEventHandler.on(DRAG_EVENTS.dragStop, e=>{
                 spr.moveToFront();
                 spr.color.setFrom(ColorFactory.fromCSS('#8340ee'));
             });
-            spr.addBehaviour(new DraggableBehaviour(this.game));
 
         }
 

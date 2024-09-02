@@ -9,7 +9,7 @@ import {VEngineTsxFactory} from "@engine/renderable/tsx/_genetic/vEngineTsxFacto
 import {Assets} from "../assets/assets";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Color} from "@engine/renderer/common/color";
-import {IObjectMouseEvent} from "@engine/control/mouse/mousePoint";
+import {ObjectMouseEvent} from "@engine/control/mouse/mousePoint";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {Reactive} from "@engine/renderable/tsx/decorator/reactive";
 import {Game} from "@engine/core/game";
@@ -30,7 +30,7 @@ export class Alert extends BaseTsxComponent {
     render(): JSX.Element {
         return (
             <v_rectangle
-                mouseMove={(e:IObjectMouseEvent)=>e.transclude = false}
+                mouseMove={(e:ObjectMouseEvent)=>e.transclude = false}
                 click={e=>this.props.hide()}
                 fillColor={{r:0,g:0,b:0,a:100}}
                 size={this.game}>

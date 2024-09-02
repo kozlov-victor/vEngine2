@@ -31,7 +31,7 @@ import {TaskQueue} from "@engine/resources/taskQueue";
 import {KeyboardEventEmitterDelegate} from "@engine/delegates/eventDelegates/keyboardEventEmitterDelegate";
 import {MouseEventEmitterDelegate} from "@engine/delegates/eventDelegates/mouseEventEmitterDelegate";
 import {GamepadEventEmitterDelegate} from "@engine/delegates/eventDelegates/gamepadEventEmitterDelegate";
-import {ISceneMouseEvent} from "@engine/control/mouse/mousePoint";
+import {SceneMouseEvent} from "@engine/control/mouse/mousePoint";
 import {SpatialSpace} from "@engine/physics/common/spatialSpace";
 import {DebugLayer} from "@engine/scene/debugLayer";
 import IDENTITY_HOLDER = Mat4.IDENTITY_HOLDER;
@@ -67,7 +67,7 @@ export abstract class Scene implements IRevalidatable, ITweenable,IFilterable,IA
 
     public readonly keyboardEventHandler = new KeyboardEventEmitterDelegate(this.game);
     public readonly gamepadEventHandler = new GamepadEventEmitterDelegate(this.game);
-    public readonly mouseEventHandler = new MouseEventEmitterDelegate<ISceneMouseEvent>(this.game,this);
+    public readonly mouseEventHandler = new MouseEventEmitterDelegate<SceneMouseEvent>(this.game,this);
     public readonly sceneEventHandler = new EventEmitterDelegate<SCENE_EVENTS,{taskQueue:TaskQueue}>(this.game);
 
     public readonly _renderingObjectStack:RenderingObjectStack;

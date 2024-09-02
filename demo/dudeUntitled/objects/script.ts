@@ -17,6 +17,7 @@ import {ColorFactory} from "@engine/renderer/common/colorFactory";
 import {Tween} from "@engine/animation/tween";
 import {DI} from "@engine/core/ioc";
 import {Game} from "@engine/core/game";
+import {TextField} from "@engine/renderable/impl/ui/textField/simple/textField";
 
 export const waitFor = (root:RenderableModel,time:number):Promise<void>=> {
     return new Promise(resolve=>{
@@ -118,7 +119,7 @@ export class Script {
     }
 
     private createPopupText(x:number, y: number, text: string) {
-        const textField = new EditTextField(this.game, this.assets.font);
+        const textField = new TextField(this.game, this.assets.font);
         textField.size.setFrom(this.game.size);
         textField.textColor.setFrom(ColorFactory.fromCSS('#36ec02'));
         textField.setText(text);

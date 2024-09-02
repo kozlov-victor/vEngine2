@@ -40,8 +40,9 @@ export class MainScene extends Scene {
         );
         this.appendChild(c);
         this.controlPoints.push(c);
-        c.addBehaviour(new DraggableBehaviour(this.game));
-        c.dragEventHandler.on(DRAG_EVENTS.dragMove,e=>{
+        const bh = new DraggableBehaviour(this.game);
+        c.addBehaviour(bh);
+        bh.dragEventHandler.on(DRAG_EVENTS.dragMove,e=>{
             this.populatePoints();
             this.updatePolyline();
         });

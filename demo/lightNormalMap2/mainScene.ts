@@ -3,7 +3,7 @@ import {LightSet} from "@engine/lighting/lightSet";
 import {LightFilter} from "@engine/renderer/webGl/filters/light/lightFilter";
 import {PointLight} from "@engine/lighting/impl/pointLight";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {ISceneMouseEvent} from "@engine/control/mouse/mousePoint";
+import {SceneMouseEvent} from "@engine/control/mouse/mousePoint";
 import {Image} from "@engine/renderable/impl/general/image/image";
 import {ITexture} from "@engine/renderer/common/texture";
 import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
@@ -46,7 +46,7 @@ export class MainScene extends Scene {
         rect.fillColor.setRGB(244,122,2);
         rect.filters = [lightFilter];
 
-        this.mouseEventHandler.on(MOUSE_EVENTS.mouseMove,(e:ISceneMouseEvent)=>{
+        this.mouseEventHandler.on(MOUSE_EVENTS.mouseMove,(e:SceneMouseEvent)=>{
             pointLight.pos.setXY(e.screenX,e.screenY);
         });
         this.appendChild(rect);

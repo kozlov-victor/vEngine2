@@ -3,7 +3,7 @@ import {Font} from "@engine/renderable/impl/general/font/font";
 import {Color} from "@engine/renderer/common/color";
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {IObjectMouseEvent, MOUSE_BUTTON} from "@engine/control/mouse/mousePoint";
+import {ObjectMouseEvent, MOUSE_BUTTON} from "@engine/control/mouse/mousePoint";
 import {MainScene} from "./mainScene";
 import {Button} from "@engine/renderable/impl/ui/button/button";
 import {Resource} from "@engine/resources/resourceDecorators";
@@ -43,7 +43,7 @@ export class IntroScene extends Scene {
         btn.setBackgroundActive(bgActive);
         btn.setPadding(15);
 
-        btn.mouseEventHandler.on(MOUSE_EVENTS.mouseUp, (e:IObjectMouseEvent)=>{
+        btn.mouseEventHandler.on(MOUSE_EVENTS.mouseUp, (e:ObjectMouseEvent)=>{
             if (e.button===MOUSE_BUTTON.LEFT) this.game.runScene(new MainScene(this.game));
         });
         this.appendChild(btn);

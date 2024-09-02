@@ -12,6 +12,7 @@ import {
 } from "@engine/animation/frameAnimation/abstract/abstractFrameAnimation";
 import {IRectJSON} from "@engine/geometry/rect";
 import {TileMap} from "@engine/renderable/impl/general/tileMap/tileMap";
+import {KeyboardControl} from "@engine/control/keyboard/keyboardControl";
 
 
 interface IParams {
@@ -42,6 +43,8 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
     private inWater = false;
     private isFiring = false;
     private isClimbing = false;
+
+    private keyboardControl: KeyboardControl;
 
     constructor(game: Game, parameters: IParams) {
         super(game, parameters as IKeyVal<any>);
@@ -117,7 +120,7 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
         return this.inWater?0.5:1;
     }
 
-    public stopClimbing(): void {
+    private stopClimbing(): void {
         if (this.onLadder) {
             this.body.velocity.y = 0;
             this.isClimbing = false;
@@ -173,7 +176,8 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
             else if (this.gameObject.scale.x<0 && this.body.velocity.x>0) this.body.velocity.x = 0;
         }
         // to avoid bumping with ground while climbing down
-        if (this.isClimbing && this.body.collisionFlags.bottom) {
+        console.log(this.keyboardControl.isPressed(KEYBOARD_KEY.UP))
+        if (this.isClimbing && this.onGround && !this.keyboardControl.isPressed(KEYBOARD_KEY.UP)) {
             this.body.velocity.y = 0;
         }
 
@@ -215,6 +219,7 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
             throw new DebugError(`cannot apply behaviour: ${this.constructor.name}, rigid body is not set`);
         }
         this.body = body;
+        this.keyboardControl = this.game.getControl(KeyboardControl);
     }
 
     private listenToCollisionsAndOverlaps():void {

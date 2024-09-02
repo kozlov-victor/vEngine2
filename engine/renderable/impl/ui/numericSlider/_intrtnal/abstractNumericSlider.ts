@@ -39,7 +39,7 @@ export abstract class AbstractNumericSlider extends WidgetContainer {
 
     private _tsxChanged:(e:IChangeNumericSliderEvent)=>void;
 
-    private draggableBehaviour:DraggableBehaviour = new DraggableBehaviour(this.game);
+    private draggableBehaviour = new DraggableBehaviour(this.game);
 
     constructor(game:Game) {
         super(game);
@@ -75,7 +75,7 @@ export abstract class AbstractNumericSlider extends WidgetContainer {
 
     public setBackgroundHandler(handler:RenderableModel):void {
         if (DEBUG && handler.parent!==undefined) throw new DebugError(`can not set handler: this object is already in use`);
-        this.handler.dragEventHandler.off(DRAG_EVENTS.dragMove);
+        this.draggableBehaviour.dragEventHandler.off(DRAG_EVENTS.dragMove);
         this.replaceChild(this.handler,handler);
         this.handler = handler;
         this.draggableBehaviour = new DraggableBehaviour(this.game);
@@ -158,7 +158,7 @@ export abstract class AbstractNumericSlider extends WidgetContainer {
     }
 
     private listenToHandlerDrag():void {
-        this.handler.dragEventHandler.on(DRAG_EVENTS.dragMove, e=>{
+        this.draggableBehaviour.dragEventHandler.on(DRAG_EVENTS.dragMove, e=>{
             this.calcValueByHandlerPosition();
         });
     }

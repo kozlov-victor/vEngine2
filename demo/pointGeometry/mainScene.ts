@@ -2,7 +2,7 @@ import {Scene} from "@engine/scene/scene";
 import {Image} from "@engine/renderable/impl/general/image/image";
 import {Vec2} from "@engine/geometry/vec2";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {ISceneMouseEvent} from "@engine/control/mouse/mousePoint";
+import {SceneMouseEvent} from "@engine/control/mouse/mousePoint";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {ITexture} from "@engine/renderer/common/texture";
 import {Resource} from "@engine/resources/resourceDecorators";
@@ -26,7 +26,7 @@ export class MainScene extends Scene {
         this.ship.transformPoint.setFrom(this.ship.anchorPoint);
         const center:Vec2 = new Vec2(this.ship.pos.x,this.ship.pos.y);
         const point:Vec2 = new Vec2(0,0);
-        this.mouseEventHandler.on(MOUSE_EVENTS.mouseMove,(p:ISceneMouseEvent)=>{
+        this.mouseEventHandler.on(MOUSE_EVENTS.mouseMove,(p:SceneMouseEvent)=>{
             point.x = p.screenX;
             point.y = p.screenY;
             console.log(point);

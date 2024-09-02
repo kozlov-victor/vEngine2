@@ -1,5 +1,5 @@
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {IObjectMouseEvent, MousePoint} from "@engine/control/mouse/mousePoint";
+import {ObjectMouseEvent, MousePoint} from "@engine/control/mouse/mousePoint";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Vec4} from "@engine/geometry/vec4";
 import {LayerTransformType} from "@engine/scene/layer";
@@ -59,31 +59,30 @@ export class MouseControlHelper {
         currentTarget:RenderableModel,
         initialTarget:RenderableModel,
         constrainObjects:RenderableModel[]
-    ):Optional<IObjectMouseEvent>{
+    ):Optional<ObjectMouseEvent>{ // return boolean if captured event is transcluded, undefined if not captured
 
         if (this.isPointInRect(mousePoint,currentTarget,constrainObjects)) {
             return this.triggerEventForObject(e,eventName,mousePoint,currentTarget,initialTarget);
         } else return undefined;
     }
 
-    public triggerEventForObject(e:MouseEvent|TouchEvent|Touch,eventName:MOUSE_EVENTS,mousePoint:MousePoint, currentTarget:RenderableModel,initialTarget:RenderableModel):IObjectMouseEvent{
+    public triggerEventForObject(e:MouseEvent|TouchEvent|Touch,eventName:MOUSE_EVENTS,mousePoint:MousePoint, currentTarget:RenderableModel,initialTarget:RenderableModel):ObjectMouseEvent{
         mousePoint.target = currentTarget;
-        const mouseEvent:IObjectMouseEvent = {
-            screenX:mousePoint.screenCoordinate.x,
-            screenY:mousePoint.screenCoordinate.y,
-            sceneX:mousePoint.sceneCoordinate.x,
-            sceneY:mousePoint.sceneCoordinate.y,
-            objectX:mousePoint.sceneCoordinate.x - currentTarget.pos.x + currentTarget.anchorPoint.x,
-            objectY:mousePoint.sceneCoordinate.y - currentTarget.pos.y + currentTarget.anchorPoint.y,
-            id:mousePoint.id,
-            currentTarget,
-            initialTarget,
-            nativeEvent: e as MouseEvent,
-            eventName,
-            isMouseDown: mousePoint.isMouseDown,
-            button: (e as MouseEvent).buttons,
-            transclude:true,
-        };
+        const mouseEvent = ObjectMouseEvent.pool.get();
+        mouseEvent.screenX = mousePoint.screenCoordinate.x;
+        mouseEvent.screenY = mousePoint.screenCoordinate.y;
+        mouseEvent.sceneX = mousePoint.sceneCoordinate.x;
+        mouseEvent.sceneY = mousePoint.sceneCoordinate.y;
+        mouseEvent.objectX = mousePoint.sceneCoordinate.x - currentTarget.pos.x + currentTarget.anchorPoint.x;
+        mouseEvent.objectY = mousePoint.sceneCoordinate.y - currentTarget.pos.y + currentTarget.anchorPoint.y;
+        mouseEvent.id = mousePoint.id;
+        mouseEvent.currentTarget = currentTarget;
+        mouseEvent.initialTarget = initialTarget;
+        mouseEvent.nativeEvent = e as MouseEvent;
+        mouseEvent.eventName = eventName;
+        mouseEvent.isMouseDown = mousePoint.isMouseDown;
+        mouseEvent.button =  (e as MouseEvent).buttons;
+        mouseEvent.transclude = true;
         currentTarget.mouseEventHandler.trigger(eventName,mouseEvent);
         return mouseEvent;
     }

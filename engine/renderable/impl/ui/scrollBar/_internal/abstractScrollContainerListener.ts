@@ -1,4 +1,4 @@
-import {IObjectMouseEvent} from "@engine/control/mouse/mousePoint";
+import {ObjectMouseEvent} from "@engine/control/mouse/mousePoint";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {MathEx} from "@engine/misc/math/mathEx";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
@@ -106,7 +106,7 @@ export abstract class AbstractScrollContainerListener {
 
     private listenToMouse():void {
         const dir:Direction = this.getDirection();
-        this.constrainContainer.mouseEventHandler.on(MOUSE_EVENTS.mouseDown, (p: IObjectMouseEvent) => {
+        this.constrainContainer.mouseEventHandler.on(MOUSE_EVENTS.mouseDown, (p: ObjectMouseEvent) => {
             this._isConstrainContainerCapturedByMouse = true;
             this._lastPoint = {
                 point: {sceneX: p.sceneX,sceneY: p.sceneY},
@@ -120,7 +120,7 @@ export abstract class AbstractScrollContainerListener {
             this._deceleration = 0;
             this._overScrollFactor = 0;
         });
-        this.constrainContainer.mouseEventHandler.on(MOUSE_EVENTS.mouseMove, (p: IObjectMouseEvent) => {
+        this.constrainContainer.mouseEventHandler.on(MOUSE_EVENTS.mouseMove, (p: ObjectMouseEvent) => {
             if (!p.isMouseDown) return;
             const canScroll:boolean = getSize(this.scrollableContainer.size,dir) > getSize(this.constrainContainer.size,dir);
             if (!canScroll) return;
@@ -140,7 +140,7 @@ export abstract class AbstractScrollContainerListener {
                 getMouseScreenCoordinates(this._lastPoint.point,dir) - getMouseScreenCoordinates(this._prevPoint.point,dir);
             this._setScrollPos();
         });
-        this.constrainContainer.mouseEventHandler.on(MOUSE_EVENTS.scroll, (p: IObjectMouseEvent) => {
+        this.constrainContainer.mouseEventHandler.on(MOUSE_EVENTS.scroll, (p: ObjectMouseEvent) => {
             if (!this._mouseScroll) return;
             const wheelDelta:number = (p.nativeEvent as WheelEvent&{wheelDelta:number}).wheelDelta;
             const newOffset:number = this.offset + wheelDelta*this._MOUSE_WHEEL_FACTOR;
@@ -151,7 +151,7 @@ export abstract class AbstractScrollContainerListener {
             this.offset=newOffset;
             this._setScrollPos();
         });
-        this.constrainContainer.mouseEventHandler.on(MOUSE_EVENTS.mouseUp, (p: IObjectMouseEvent) => {
+        this.constrainContainer.mouseEventHandler.on(MOUSE_EVENTS.mouseUp, (p: ObjectMouseEvent) => {
             this._isConstrainContainerCapturedByMouse = false;
             if (!this._lastPoint) return;
             if (!this._prevPoint) return;

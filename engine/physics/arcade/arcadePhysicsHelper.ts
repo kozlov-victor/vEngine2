@@ -143,7 +143,11 @@ export namespace arcadePhysicsHelper {
     const _reflectVelocity = (player:ArcadeRigidBody, playerVelocity: Point2d, entity:ArcadeRigidBody, dim:'x'|'y')=> {
         const restitution = calcCommonRestitution(player, entity);
         if (entity._modelType===ARCADE_RIGID_BODY_TYPE.STATIC) {
-            playerVelocity[dim] = -playerVelocity[dim]*restitution;
+            // v` = -v1
+            playerVelocity[dim] =
+                getComparedToSticky(
+                    -playerVelocity[dim] * restitution
+                );
         }
         else {
             // v' = (m1v1 + m2v2)/(m1 + m2)

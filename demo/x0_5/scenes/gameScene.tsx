@@ -5,7 +5,7 @@ import {Assets} from "../assets/assets";
 import {VEngineTsxFactory} from "@engine/renderable/tsx/_genetic/vEngineTsxFactory.h";
 import {Resource} from "@engine/resources/resourceDecorators";
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
-import {IObjectMouseEvent} from "@engine/control/mouse/mousePoint";
+import {ObjectMouseEvent} from "@engine/control/mouse/mousePoint";
 import {Reactive} from "@engine/renderable/tsx/decorator/reactive";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {BaseTsxComponent} from "@engine/renderable/tsx/base/baseTsxComponent";
@@ -98,7 +98,7 @@ class GameSceneUi extends VEngineRootComponent {
     }
 
     @Reactive.Method()
-    private onBoardMouseMove(e:IObjectMouseEvent) {
+    private onBoardMouseMove(e:ObjectMouseEvent) {
         this.currentSelection.x = (e.objectX / BOX_SIZE)|0;
         this.currentSelection.y = (e.objectY / BOX_SIZE)|0;
     }

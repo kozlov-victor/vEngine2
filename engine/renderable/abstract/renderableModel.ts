@@ -24,18 +24,15 @@ import {Layer} from "@engine/scene/layer";
 import {BaseAbstractBehaviour} from "@engine/behaviour/abstract/baseAbstractBehaviour";
 import {TweenableDelegate} from "@engine/delegates/tweenableDelegate";
 import {TimerDelegate} from "@engine/delegates/timerDelegate";
-import {EventEmitterDelegate} from "@engine/delegates/eventDelegates/eventEmitterDelegate";
 import {Incrementer} from "@engine/resources/incrementer";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
-import {IObjectMouseEvent} from "@engine/control/mouse/mousePoint";
+import {ObjectMouseEvent} from "@engine/control/mouse/mousePoint";
 import {ParentChildDelegate} from "@engine/delegates/parentChildDelegate";
 import {TransformableModel} from "@engine/renderable/abstract/transformableModel";
 import {Scene} from "@engine/scene/scene";
 import {IAnimation, ITargetAnimation} from "@engine/animation/iAnimation";
 import {IRigidBody} from "@engine/physics/common/interfaces";
 import {MouseEventEmitterDelegate} from "@engine/delegates/eventDelegates/mouseEventEmitterDelegate";
-import {DRAG_EVENTS} from "@engine/behaviour/impl/draggable/dragEvents";
-import {IDragPoint} from "@engine/behaviour/impl/draggable/dragPoint";
 import {IStateStackPointer} from "@engine/renderer/webGl/base/buffer/frameBufferStack";
 import {WidgetContainer} from "@engine/renderable/impl/ui/widgetContainer";
 import {IRealNode} from "@engine/renderable/tsx/_genetic/realNode";
@@ -72,8 +69,7 @@ export abstract class RenderableModel
 
     public readonly parent: RenderableModel;
 
-    public readonly mouseEventHandler = new MouseEventEmitterDelegate<IObjectMouseEvent>(this.game,this);
-    public readonly dragEventHandler = new EventEmitterDelegate<DRAG_EVENTS, IDragPoint>(this.game);
+    public readonly mouseEventHandler = new MouseEventEmitterDelegate<ObjectMouseEvent>(this.game,this);
 
     public readonly velocity = new Point2d(0, 0);
     public readonly interactive = false;

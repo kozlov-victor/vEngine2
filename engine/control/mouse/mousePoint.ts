@@ -9,7 +9,9 @@ export const enum MOUSE_BUTTON {
     SCROLL
 }
 
-export interface ISceneMouseEvent {
+export class SceneMouseEvent {
+    public static pool = new ObjectPool(SceneMouseEvent);
+
     screenX:number;
     screenY:number;
     sceneX:number;
@@ -21,7 +23,10 @@ export interface ISceneMouseEvent {
     button:MOUSE_BUTTON;
 }
 
-export interface IObjectMouseEvent extends ISceneMouseEvent {
+export class ObjectMouseEvent extends SceneMouseEvent {
+
+    public static override pool = new ObjectPool(ObjectMouseEvent);
+
     objectX:number;
     objectY:number;
     currentTarget:RenderableModel;
