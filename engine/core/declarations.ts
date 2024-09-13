@@ -27,13 +27,6 @@ export interface ITweenable {
     addTweenMovie(tm:TweenMovie):void;
 }
 
-export interface IEventemittable {
-    on(eventName:string,callBack:(arg?:any)=>void):(arg?:any)=>void;
-    once(eventName:string,callBack:(arg?:any)=>void):void;
-    off(eventName:string,callBack:(arg?:any)=>void):void;
-    trigger(eventName:string,data?:any):void;
-}
-
 export interface IFilterable {
     filters: IFilter[];
 }

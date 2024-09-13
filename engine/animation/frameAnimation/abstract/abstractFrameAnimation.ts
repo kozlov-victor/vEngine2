@@ -6,9 +6,9 @@ import {AnimatedImage} from "@engine/renderable/impl/general/image/animatedImage
 import {ITargetAnimation} from "@engine/animation/iAnimation";
 
 export const enum FRAME_ANIMATION_EVENTS {
-    completed =  'completed',
-    canceled  =  'canceled',
-    loop      =  'loop',
+    completed,
+    canceled,
+    loop,
 }
 
 interface IDuration {

@@ -4,12 +4,15 @@ import {Font} from "@engine/renderable/impl/general/font/font";
 import {ScrollContainerDelegate} from "@engine/renderable/impl/ui/scrollBar/scrollContainerDelegate";
 import {EventEmitterDelegate} from "@engine/delegates/eventDelegates/eventEmitterDelegate";
 
+export const enum SCROLL_EVENTS {
+    SCROLL,
+}
 
 export class ScrollableTextField extends TextField {
 
     public override readonly type:string = 'ScrollableTextField';
 
-    public readonly scrollHandler:EventEmitterDelegate<'scroll', void> = new EventEmitterDelegate(this.game);
+    public readonly scrollHandler:EventEmitterDelegate<SCROLL_EVENTS, void> = new EventEmitterDelegate(this.game);
 
     private _scrollContainerDelegate:ScrollContainerDelegate;
 
@@ -23,7 +26,7 @@ export class ScrollableTextField extends TextField {
             if (this._scrollContainerDelegate!==undefined) this._scrollContainerDelegate.destroy();
             this._scrollContainerDelegate = new ScrollContainerDelegate(this.game,this,this.rowSetContainer,this.rowSet);
             this._scrollContainerDelegate.onScroll(()=>{
-                this.scrollHandler.trigger('scroll');
+                this.scrollHandler.trigger(SCROLL_EVENTS.SCROLL);
                 this.requestTextRedraw();
             });
         }

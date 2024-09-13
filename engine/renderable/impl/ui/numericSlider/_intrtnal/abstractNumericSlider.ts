@@ -28,7 +28,7 @@ export interface IChangeNumericSliderEvent {
 
 export abstract class AbstractNumericSlider extends WidgetContainer {
 
-    public readonly changeEventHandler:EventEmitterDelegate<TOGGLE_BUTTON_EVENTS, IChangeNumericSliderEvent> = new EventEmitterDelegate(this.game);
+    public readonly changeEventHandler = new EventEmitterDelegate<TOGGLE_BUTTON_EVENTS, IChangeNumericSliderEvent>(this.game);
 
     protected abstract direction:Direction;
     protected abstract draggableConstrains:IDraggableBehaviourParameters;

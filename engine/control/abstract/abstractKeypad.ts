@@ -2,6 +2,8 @@ import {Game} from "@engine/core/game";
 import {ObservableEntity} from "@engine/geometry/abstract/observableEntity";
 import {DebugError} from "@engine/debug/debugError";
 import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
+import {Optional} from "@engine/core/declarations";
+import {KeyBoardEvent} from "@engine/control/keyboard/keyboardEvent";
 
 export const enum KEY_STATE  {
     KEY_JUST_PRESSED = 2,
@@ -14,26 +16,24 @@ export const enum KEY_STATE  {
 export abstract class KeyPadEvent extends ObservableEntity {
     public keyState:KEY_STATE;
     public button: number;
+    public nativeEvent: any;
 }
 
 export abstract class AbstractKeypad<T extends KeyPadEvent> {
-    protected game: Game;
 
     public type:string;
 
-    protected buffer: T[] = [];
-
-    private reflectKey: { control: AbstractKeypad<any> | undefined, map: Record<number, number> | undefined } = {
-        control: undefined,
-        map: undefined
+    private reflectKey = {
+        control: undefined as AbstractKeypad<any>|undefined,
+        map: undefined as Record<number, number>|undefined
     }
 
     protected abstract recycleEvent(e:T):void;
+    protected abstract createEvent():T;
 
+    private buffer:T[] = [];
 
-    constructor(game: Game) {
-        this.game = game;
-    }
+    constructor(protected game: Game) {}
 
     public reflectToControl(control: AbstractKeypad<any>, map: Record<number, number>): void {
         this.reflectKey.control = control;
@@ -41,25 +41,67 @@ export abstract class AbstractKeypad<T extends KeyPadEvent> {
     }
 
     public reflectToSelf(map: Record<number, number>): void {
-        this.reflectKey.control = this;
-        this.reflectKey.map = map;
+        this.reflectToControl(this,map);
     }
 
-    public press(event: T): void {
+    public press(button:number,nativeEvent:any): void {
+        if (this.isPressed(button)) {
+            return;
+        }
+        const event = this.createEvent();
+        event.button = button;
         event.keyState = KEY_STATE.KEY_PRESSED;
+        event.nativeEvent = nativeEvent;
         this.buffer.push(event);
-        this.notify(KEYBOARD_EVENTS.keyPressed, event);
+        this.onEventTriggered(KEYBOARD_EVENTS.keyPressed, event);
+        if (this.reflectKey.control !== undefined && this.reflectKey.map![button]!==undefined) {
+            this.reflectKey.control.press(this.reflectKey.map![button],nativeEvent);
+        }
     }
 
-    public release(event: T): void {
+    public release(button:number,nativeEvent:any): void {
+        if (!this.isPressed(button)) {
+            return;
+        }
+        const event = this.findEvent(button);
+        if (!event) return;
+        event.button = button;
         event.keyState = KEY_STATE.KEY_JUST_RELEASED;
-        this.notify(KEYBOARD_EVENTS.keyReleased, event);
+        this.onEventTriggered(KEYBOARD_EVENTS.keyReleased, event);
+        if (this.reflectKey.control !== undefined && this.reflectKey.map![button]!==undefined) {
+            this.reflectKey.control.release(this.reflectKey.map![button],nativeEvent);
+        }
+    }
+
+    public isJustPressed(key:number):boolean{
+        const event = this.findEvent(key);
+        if (event===undefined) return false;
+        return event.keyState===KEY_STATE.KEY_JUST_PRESSED;
+    }
+
+    public isJustReleased(key:number):boolean {
+        const event = this.findEvent(key);
+        if (event===undefined) return false;
+        return event.keyState === KEY_STATE.KEY_JUST_RELEASED;
+    }
+
+    public isPressed(key:number):boolean{
+        const event = this.findEvent(key);
+        if (event===undefined) return false;
+        return event.keyState>=KEY_STATE.KEY_PRESSED;
+    }
+
+    private findEvent(button:number):Optional<T> {
+        for (const event of this.buffer) {
+            if (event.button===button) return event;
+        }
+        return undefined;
     }
 
 
     public update(): void {
         for (const event of this.buffer) {
-            const keyVal: KEY_STATE = event.keyState;
+            const keyVal = event.keyState;
             switch (keyVal) {
                 case KEY_STATE.KEY_RELEASED:
                     this.buffer.splice(this.buffer.indexOf(event), 1);
@@ -72,7 +114,7 @@ export abstract class AbstractKeypad<T extends KeyPadEvent> {
                     event.keyState = KEY_STATE.KEY_PRESSED;
                     break;
                 case KEY_STATE.KEY_PRESSED:
-                    this.notify(KEYBOARD_EVENTS.keyHold, event);
+                    this.onEventTriggered(KEYBOARD_EVENTS.keyHold, event);
                     break;
                 default:
                     if (DEBUG) throw new DebugError(`unknown button state: ${keyVal}`);
@@ -81,19 +123,7 @@ export abstract class AbstractKeypad<T extends KeyPadEvent> {
         }
     }
 
-    protected notify(eventName: KEYBOARD_EVENTS, e: T): void {
-        if (this.reflectKey.control !== undefined && this.reflectKey.map![e.button]) {
-            // eslint-disable-next-line @typescript-eslint/no-this-alias
-            const self = this;
-            const clonedEvent = new class extends KeyPadEvent {
-                constructor() {
-                    super();
-                    this.keyState = e.keyState;
-                    this.button = self.reflectKey.map![e.button]
-                }
-            }
-            this.reflectKey.control!.notify(eventName,clonedEvent);
-        }
+    protected onEventTriggered(eventName: KEYBOARD_EVENTS, e: T): void {
     }
 
 }

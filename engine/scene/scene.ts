@@ -37,11 +37,11 @@ import {DebugLayer} from "@engine/scene/debugLayer";
 import IDENTITY_HOLDER = Mat4.IDENTITY_HOLDER;
 
 export const enum SCENE_EVENTS {
-    PRELOADING = 'PRELOADING',
-    PROGRESS = 'PROGRESS',
-    LOADING_COMPLETED = 'LOADING_COMPLETED',
-    CONTINUE = 'CONTINUE',
-    INACTIVATED = 'INACTIVATED'
+    PRELOADING,
+    PROGRESS,
+    LOADING_COMPLETED,
+    CONTINUE,
+    INACTIVATED
 }
 
 export abstract class Scene implements IRevalidatable, ITweenable,IFilterable,IAlphaBlendable,IInteractive {

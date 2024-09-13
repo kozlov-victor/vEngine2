@@ -9,9 +9,6 @@ import {LayerTransformType} from "@engine/scene/layer";
 import {IDragPoint} from "@engine/behaviour/impl/draggable/dragPoint";
 import {DRAG_EVENTS} from "@engine/behaviour/impl/draggable/dragEvents";
 import {EventEmitterDelegate} from "@engine/delegates/eventDelegates/eventEmitterDelegate";
-import {Mat4} from "@engine/misc/math/mat4";
-import {Point2d} from "@engine/geometry/point2d";
-import MAT16 = Mat4.MAT16;
 
 export interface IDraggableBehaviourParameters {
     constrainX?:boolean;

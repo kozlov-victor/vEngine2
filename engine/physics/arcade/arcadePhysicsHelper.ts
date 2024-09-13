@@ -1,4 +1,4 @@
-import {ARCADE_COLLISION_EVENT, ARCADE_RIGID_BODY_TYPE, ArcadeRigidBody} from "@engine/physics/arcade/arcadeRigidBody";
+import {ARCADE_COLLISION_EVENTS, ARCADE_RIGID_BODY_TYPE, ArcadeRigidBody} from "@engine/physics/arcade/arcadeRigidBody";
 import {Point2d} from "@engine/geometry/point2d";
 import {MathEx} from "@engine/misc/math/mathEx";
 import {Optional} from "@engine/core/declarations";
@@ -86,8 +86,8 @@ export namespace arcadePhysicsHelper {
         if (player.getHostModel().isDetached() || entity.getHostModel().isDetached()) return;
         player.overlappedWith = entity;
         entity.overlappedWith = player;
-        player.collisionEventHandler.trigger(ARCADE_COLLISION_EVENT.OVERLAPPED, entity);
-        entity.collisionEventHandler.trigger(ARCADE_COLLISION_EVENT.OVERLAPPED, player);
+        player.collisionEventHandler.trigger(ARCADE_COLLISION_EVENTS.OVERLAPPED, entity);
+        entity.collisionEventHandler.trigger(ARCADE_COLLISION_EVENTS.OVERLAPPED, player);
     }
 
     const resolveCollision_AABB = (player:ArcadeRigidBody, pos:Point2d, vel: Point2d, entity:ArcadeRigidBody):void=> {
@@ -167,8 +167,8 @@ export namespace arcadePhysicsHelper {
 
     const emitCollisionEvents = (player:ArcadeRigidBody, entity:ArcadeRigidBody):void=> {
         if (player.getHostModel().isDetached() || entity.getHostModel().isDetached()) return;
-        player.collisionEventHandler.trigger(ARCADE_COLLISION_EVENT.COLLIDED, entity);
-        entity.collisionEventHandler.trigger(ARCADE_COLLISION_EVENT.COLLIDED, player);
+        player.collisionEventHandler.trigger(ARCADE_COLLISION_EVENTS.COLLIDED, entity);
+        entity.collisionEventHandler.trigger(ARCADE_COLLISION_EVENTS.COLLIDED, player);
     }
 
     const collidePlayer_AABB_withFloorSlope =(player:ArcadeRigidBody, pos: Point2d, vel: Point2d, slope:ArcadeRigidBody,slopeType:SLOPE_DIRECTION):void=> {

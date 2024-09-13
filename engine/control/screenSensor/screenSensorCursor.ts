@@ -107,11 +107,11 @@ export class ScreenSensorCursor extends SimpleGameObjectContainer {
         if (!this.reflectKey.control) return;
         if (this.lastDirection!==undefined && this.lastDirection!==direction) {
             const reflected = this.reflectKey.map[this.lastDirection];
-            this.reflectKey.control.triggerKeyRelease(reflected,dummyEvent);
+            this.reflectKey.control.release(reflected,dummyEvent);
         }
         if (direction!==undefined) {
             const reflected = this.reflectKey.map[direction];
-            this.reflectKey.control.triggerKeyPress(reflected,dummyEvent);
+            this.reflectKey.control.press(reflected,dummyEvent);
             this.lastDirection = direction;
         }
     }

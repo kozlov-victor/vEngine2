@@ -1,5 +1,5 @@
 import {BaseAbstractBehaviour} from "@engine/behaviour/abstract/baseAbstractBehaviour";
-import {ARCADE_COLLISION_EVENT, ArcadeRigidBody} from "@engine/physics/arcade/arcadeRigidBody";
+import {ARCADE_COLLISION_EVENTS, ArcadeRigidBody} from "@engine/physics/arcade/arcadeRigidBody";
 import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 import {KEYBOARD_KEY} from "@engine/control/keyboard/keyboardKeys";
 import {AnimatedImage} from "@engine/renderable/impl/general/image/animatedImage";
@@ -176,7 +176,6 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
             else if (this.gameObject.scale.x<0 && this.body.velocity.x>0) this.body.velocity.x = 0;
         }
         // to avoid bumping with ground while climbing down
-        console.log(this.keyboardControl.isPressed(KEYBOARD_KEY.UP))
         if (this.isClimbing && this.onGround && !this.keyboardControl.isPressed(KEYBOARD_KEY.UP)) {
             this.body.velocity.y = 0;
         }
@@ -223,11 +222,11 @@ export class ArcadeSideScrollControl extends BaseAbstractBehaviour{
     }
 
     private listenToCollisionsAndOverlaps():void {
-        this.body.collisionEventHandler.on(ARCADE_COLLISION_EVENT.COLLIDED, b=>{
+        this.body.collisionEventHandler.on(ARCADE_COLLISION_EVENTS.COLLIDED, b=>{
             this.body.gravityImpact = 1;
             this.doGroundAnimation();
         });
-        this.body.collisionEventHandler.on(ARCADE_COLLISION_EVENT.OVERLAPPED, e=>{
+        this.body.collisionEventHandler.on(ARCADE_COLLISION_EVENTS.OVERLAPPED, e=>{
             if (this.isLadderTileId(e.addInfo.tileId)) {
                 this.body.gravityImpact = 0;
                 if (!this.isClimbing) {

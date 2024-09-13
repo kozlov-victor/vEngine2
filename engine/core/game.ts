@@ -35,7 +35,7 @@ interface ISceneWithTransition {
 }
 
 export const enum GAME_EVENTS {
-    PRELOADING = 'PRELOADING',
+    PRELOADING,
 }
 
 export class Game {

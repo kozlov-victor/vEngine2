@@ -16,6 +16,7 @@ import {IKeyboardFocusable} from "@engine/renderable/impl/ui/textField/_internal
 import {EventEmitterDelegate} from "@engine/delegates/eventDelegates/eventEmitterDelegate";
 import {TOGGLE_BUTTON_EVENTS} from "@engine/renderable/impl/ui/toggleButton/_internal/toggleButtonEvents";
 import {IRealNode} from "@engine/renderable/tsx/_genetic/realNode";
+import {SCROLL_EVENTS} from "@engine/renderable/impl/ui/textField/scrollable/scrollableTextField";
 
 export interface IChangeEditTextFieldEvent {
     target: EditTextField;
@@ -46,7 +47,7 @@ export class EditTextField extends RichTextField implements IKeyboardFocusable{
         if (this.cursor===undefined) {
             this.cursor = new Cursor(this.game,this,this.font);
             this.cursor.start(this.rowSetContainer);
-            this.scrollHandler.on('scroll', _=>{
+            this.scrollHandler.on(SCROLL_EVENTS.SCROLL, _=>{
                 this.cursor.redrawCursorView();
             });
         }

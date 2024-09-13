@@ -2,6 +2,7 @@ import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {Point2d} from "@engine/geometry/point2d";
 import {Scene} from "@engine/scene/scene";
 import {ObjectPool} from "@engine/misc/objectPool";
+import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 
 export const enum MOUSE_BUTTON {
     LEFT,
@@ -18,7 +19,7 @@ export class SceneMouseEvent {
     sceneY:number;
     id:number;
     nativeEvent: MouseEvent;
-    eventName:string;
+    eventName:MOUSE_EVENTS;
     isMouseDown: boolean;
     button:MOUSE_BUTTON;
 }

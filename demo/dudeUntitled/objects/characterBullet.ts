@@ -1,7 +1,7 @@
 import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {Game} from "@engine/core/game";
 import {ArcadePhysicsSystem} from "@engine/physics/arcade/arcadePhysicsSystem";
-import {ARCADE_COLLISION_EVENT, ARCADE_RIGID_BODY_TYPE, ArcadeRigidBody} from "@engine/physics/arcade/arcadeRigidBody";
+import {ARCADE_COLLISION_EVENTS, ARCADE_RIGID_BODY_TYPE, ArcadeRigidBody} from "@engine/physics/arcade/arcadeRigidBody";
 import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {ColorFactory} from "@engine/renderer/common/colorFactory";
 
@@ -23,7 +23,7 @@ export class CharacterBullet {
             ignoreCollisionWithGroupNames: ['characterBullet','character'],
             gravityImpact: 0.1,
         }));
-        this.container.getRigidBody<ArcadeRigidBody>().collisionEventHandler.on(ARCADE_COLLISION_EVENT.COLLIDED, e=>{
+        this.container.getRigidBody<ArcadeRigidBody>().collisionEventHandler.on(ARCADE_COLLISION_EVENTS.COLLIDED, e=>{
             this.container.getRigidBody<ArcadeRigidBody>().gravityImpact = 2;
             this.container.fillColor = COLLIDED_COLOR;
             this.container.setTimeout(()=>{

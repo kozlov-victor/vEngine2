@@ -1,7 +1,7 @@
 
 export const enum KEYBOARD_EVENTS {
-    keyPressed = 'keyPressed',
-    keyRepeated = 'keyRepeated',
-    keyReleased = 'keyReleased',
-    keyHold = 'keyHold'
+    keyPressed ,
+    keyRepeated ,
+    keyReleased ,
+    keyHold
 }

@@ -55,10 +55,10 @@ export class ShaderProgram {
         if (DEBUG && !name) {
             throw new DebugError(`no uniform name was provided!`);
         }
-        const uniformWrapper:IUniformWrapper = this._uniforms[name];
+        const uniformWrapper = this._uniforms[name];
         if (DEBUG && !uniformWrapper) {
             if (this._uniformSourceNames.indexOf(name)>-1) {
-                // its ok, uniform is present in source, but absent in bin code because is is unused and removed by compiler
+                // it`s ok, uniform is present in source, but absent in bin code because it is unused and removed by compiler
                 // so, ignore this uniform
                 return;
             }

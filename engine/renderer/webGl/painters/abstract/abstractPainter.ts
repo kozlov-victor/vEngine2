@@ -43,7 +43,7 @@ export class AbstractPainter implements IPainter, IDestroyable{
 
     protected gl:WebGLRenderingContext;
     protected program:ShaderProgram;
-    protected uniformCache:FastMap<string,IUniformValue> = new FastMap();
+    protected uniformCache = new FastMap<string,IUniformValue>();
     protected texturesToBind:ITexturesToBind = {length: 0, texturesInfo: [] as ITextureInfo[]};
     protected primitive:AbstractPrimitive;
 
@@ -89,12 +89,12 @@ export class AbstractPainter implements IPainter, IDestroyable{
         }
     }
 
-    public setUniformVector(name:string,value:UNIFORM_VALUE_ARRAY_TYPE,dirtyFlag:boolean = false):void{
+    public setUniformVector(name:string,value:UNIFORM_VALUE_ARRAY_TYPE,dirtyFlag = false):void{
         if (DEBUG && !name) {
             console.trace();
             throw new DebugError(`can not set uniform with value ${value}: name is not provided`);
         }
-        if (DEBUG && value===null  || value===undefined) {
+        if (DEBUG && (value===null || value===undefined)) {
             console.trace();
             throw new DebugError(`can not set uniform with name ${name} and value ${value}`);
         }
@@ -135,17 +135,17 @@ export class AbstractPainter implements IPainter, IDestroyable{
 
     public draw():void{
         this.bind();
-        const keys:string[] = this.uniformCache.getKeys();
-        const values:{dirty:boolean,value:UNIFORM_VALUE_TYPE}[] = this.uniformCache.getValues();
-        for (let i:number=0,length:number=keys.length;i<length;i++) {
+        const keys = this.uniformCache.getKeys();
+        const values = this.uniformCache.getValues();
+        for (let i=0,length=keys.length;i<length;i++) {
             const v = values[i];
             if (!v.dirty) continue;
             this._setUniform(keys[i],v.value);
             v.dirty = false;
         }
 
-        for (let i:number=0,max:number = this.texturesToBind.length;i<max;i++) {
-            const t:ITextureInfo = this.texturesToBind.texturesInfo[i];
+        for (let i=0,max = this.texturesToBind.length;i<max;i++) {
+            const t = this.texturesToBind.texturesInfo[i];
             t.texture.bind(t.uniformName,i,this.program);
         }
         this.texturesToBind.length = 0;

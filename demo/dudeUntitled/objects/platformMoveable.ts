@@ -3,7 +3,7 @@ import {MainScene} from "../mainScene";
 import {ITiledJSON} from "@engine/renderable/impl/general/tileMap/tileMap";
 import {TexturePackerAtlas} from "@engine/animation/frameAnimation/atlas/texturePackerAtlas";
 import {ArcadePhysicsSystem} from "@engine/physics/arcade/arcadePhysicsSystem";
-import {ARCADE_COLLISION_EVENT, ARCADE_RIGID_BODY_TYPE, ArcadeRigidBody} from "@engine/physics/arcade/arcadeRigidBody";
+import {ARCADE_COLLISION_EVENTS, ARCADE_RIGID_BODY_TYPE, ArcadeRigidBody} from "@engine/physics/arcade/arcadeRigidBody";
 import {SimpleGameObjectContainer} from "@engine/renderable/impl/general/simpleGameObjectContainer";
 import {BumpRect} from "./bumpRect";
 
@@ -32,7 +32,7 @@ export class PlatformMoveable {
         container.appendTo(scene);
         container.pos.setXY(tiledObject.x,tiledObject.y - tiledObject.height);
         rigidBody.velocity.y = -20;
-        rigidBody.collisionEventHandler.on(ARCADE_COLLISION_EVENT.OVERLAPPED, e=>{
+        rigidBody.collisionEventHandler.on(ARCADE_COLLISION_EVENTS.OVERLAPPED, e=>{
             if (e.addInfo?.host?.constructor?.name===BumpRect.name) {
                 const bumper = e.addInfo.host as BumpRect;
                 if (this.lastBumped!==bumper) {

@@ -21,7 +21,6 @@ import type {Line} from "@engine/renderable/impl/geometry/line";
 import {ICubeMapTexture, ITexture} from "@engine/renderer/common/texture";
 import {DebugUtil} from "@engine/renderer/webGl/debug/debugUtil";
 import {ClazzEx, IDestroyable, Optional} from "@engine/core/declarations";
-import {RendererHelper} from "@engine/renderer/abstract/rendererHelper";
 import {WebGlRendererHelper} from "@engine/renderer/webGl/renderer/webGlRendererHelper";
 import {INTERPOLATION_MODE} from "@engine/renderer/webGl/base/abstract/abstractTexture";
 import {SimpleColoredRectPainter} from "@engine/renderer/webGl/painters/impl/base/simpleRect/simpleColoredRectPainter";

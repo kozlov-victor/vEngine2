@@ -1,6 +1,6 @@
 import {AnimatedImage} from "@engine/renderable/impl/general/image/animatedImage";
 import {ArcadePhysicsSystem} from "@engine/physics/arcade/arcadePhysicsSystem";
-import {ARCADE_COLLISION_EVENT, ARCADE_RIGID_BODY_TYPE, ArcadeRigidBody} from "@engine/physics/arcade/arcadeRigidBody";
+import {ARCADE_COLLISION_EVENTS, ARCADE_RIGID_BODY_TYPE, ArcadeRigidBody} from "@engine/physics/arcade/arcadeRigidBody";
 import {Rect} from "@engine/geometry/rect";
 import {TexturePackerAtlas} from "@engine/animation/frameAnimation/atlas/texturePackerAtlas";
 import {AtlasFrameAnimation} from "@engine/animation/frameAnimation/atlas/atlasFrameAnimation";
@@ -188,7 +188,7 @@ export class Character {
                     break;
             }
         });
-        this.body.collisionEventHandler.on(ARCADE_COLLISION_EVENT.OVERLAPPED, e=>{
+        this.body.collisionEventHandler.on(ARCADE_COLLISION_EVENTS.OVERLAPPED, e=>{
             if ([12,13].includes(e.addInfo.tileId)) this.acceptDamage();
         });
     }

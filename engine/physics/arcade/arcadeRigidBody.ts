@@ -28,9 +28,9 @@ export const enum ARCADE_RIGID_BODY_TYPE {
     DYNAMIC
 }
 
-export const enum ARCADE_COLLISION_EVENT {
-    COLLIDED = 'collided',
-    OVERLAPPED = 'overlapped',
+export const enum ARCADE_COLLISION_EVENTS {
+    COLLIDED,
+    OVERLAPPED,
 }
 
 export interface ICollisionWith {
@@ -77,7 +77,7 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
     public ignoreOverlapWithGroupNames = 0 as Int;
     public readonly spatialCellsOccupied:SpatialCell[] = [];
 
-    public readonly collisionEventHandler = new EventEmitterDelegate<ARCADE_COLLISION_EVENT, ArcadeRigidBody>(this.game);
+    public readonly collisionEventHandler = new EventEmitterDelegate<ARCADE_COLLISION_EVENTS, ArcadeRigidBody>(this.game);
 
     public readonly debug = false;
     public readonly id = bodyCnt++;
@@ -230,7 +230,7 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
     }
 
     public onCollidedWithGroup(groupName:string, callBack: (arg:ArcadeRigidBody)=>void): (arg:ArcadeRigidBody)=>void {
-        return this.collisionEventHandler.on(ARCADE_COLLISION_EVENT.COLLIDED,e=>{
+        return this.collisionEventHandler.on(ARCADE_COLLISION_EVENTS.COLLIDED, e=>{
             const groupNameMask = CollisionGroup.getBitMaskByName(groupName);
             if (groupNameMask===undefined) return;
             if ((e.groupNames & groupNameMask)>0) {
@@ -239,7 +239,7 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
         });
     }
     public onOverlappedWithGroup(groupName:string, callBack: (arg:ArcadeRigidBody)=>void): (arg:ArcadeRigidBody)=>void {
-        return this.collisionEventHandler.on(ARCADE_COLLISION_EVENT.OVERLAPPED,e=>{
+        return this.collisionEventHandler.on(ARCADE_COLLISION_EVENTS.OVERLAPPED, e=>{
             const groupNameMask = CollisionGroup.getBitMaskByName(groupName);
             if (groupNameMask===undefined) return;
             if ((e.groupNames & groupNameMask)>0) {

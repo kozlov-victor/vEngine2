@@ -53,19 +53,19 @@ export class ScreenSensorButton extends SimpleGameObjectContainer {
     public reflectToKeyboardControl(control: KeyboardControl, keyBoardButton:number): void {
         this.reflectKey.control = control;
         this.reflectKey.keyBoardButton = keyBoardButton;
-        if (control.isPressed(keyBoardButton)) control.triggerKeyRelease(keyBoardButton,dummyEvent);
+        if (control.isPressed(keyBoardButton)) control.release(keyBoardButton,dummyEvent);
     }
 
     private press():void {
         if (!this.reflectKey.control) return;
         this.btn.alpha = alphaPressed;
-        this.reflectKey.control.triggerKeyPress(this.reflectKey.keyBoardButton,dummyEvent);
+        this.reflectKey.control.press(this.reflectKey.keyBoardButton,dummyEvent);
     }
 
     private release():void {
         if (!this.reflectKey.control) return;
         this.btn.alpha = alphaNormal;
-        this.reflectKey.control.triggerKeyRelease(this.reflectKey.keyBoardButton,dummyEvent);
+        this.reflectKey.control.release(this.reflectKey.keyBoardButton,dummyEvent);
     }
 
 }

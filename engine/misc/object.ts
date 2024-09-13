@@ -12,7 +12,7 @@ export const isCommonArray = (a:unknown):a is unknown[]=> {
 };
 
 export const isTypedArray = (a:unknown):a is Float32Array|Int32Array=> {
-    return !!((a as {buffer:ArrayBufferLike}).buffer);
+    return ((a as {buffer:ArrayBufferLike}).buffer)!==undefined;
 };
 
 export const isArray = (a:unknown):a is Float32Array|Int32Array|unknown[]=> {
@@ -37,15 +37,16 @@ export const isNotNumber = (value:unknown):boolean=> {
 
 
 export const isEqualArray = (a:Float32Array|Int32Array|unknown[],b:Float32Array|Int32Array|unknown[]):boolean=>{
-    for (let i:number=0,max=a.length;i<max;++i) {
+    if (a.length!==b.length) return false;
+    for (let i=0,max=a.length;i<max;++i) {
         if (a[i]!==b[i]) return false;
     }
     return true;
 };
 
 export const removeFromArray = (arr:unknown[],predicate:(item:unknown)=>boolean):number=> {
-    let i:number = arr.length;
-    let cnt:number = 0;
+    let i = arr.length;
+    let cnt = 0;
     while (i--) {
         if (predicate(arr[i])) {
             arr.splice(i, 1);

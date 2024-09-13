@@ -1,9 +1,8 @@
 import {Game} from "@engine/core/game";
 import {IControl} from "@engine/control/abstract/iControl";
 import {AbstractKeypad, KEY_STATE} from "@engine/control/abstract/abstractKeypad";
-import {Optional} from "@engine/core/declarations";
 import {GAME_PAD_BUTTON} from "@engine/control/gamepad/gamePadKeys";
-import {GamePadEvent} from "@engine/control/gamepad/gamePadEvents";
+import {GamePadEvent} from "@engine/control/gamepad/gamePadEvent";
 import {KEYBOARD_EVENTS} from "@engine/control/abstract/keyboardEvents";
 
 // g.vibrationActuator.playEffect("dual-rumble", {
@@ -68,7 +67,6 @@ const [gamePadGetter,isEnabled] = gamePadGetterFactory();
 // https://www.w3.org/TR/gamepad/
 export class GamePadControl extends AbstractKeypad<GamePadEvent> implements IControl{
 
-
     constructor(game:Game){
         super(game);
     }
@@ -79,9 +77,11 @@ export class GamePadControl extends AbstractKeypad<GamePadEvent> implements ICon
 
     public override readonly type = 'GamePadControl';
 
-    declare protected buffer:GamePadEvent[];
-
     private _gamepads:Gamepad[];
+
+    protected createEvent(): GamePadEvent {
+        return GamePadEvent.pool.get();
+    }
 
     protected recycleEvent(e: GamePadEvent): void {
         GamePadEvent.pool.recycle(e);
@@ -142,43 +142,14 @@ export class GamePadControl extends AbstractKeypad<GamePadEvent> implements ICon
 
     public destroy():void {}
 
-    protected override notify(eventName: KEYBOARD_EVENTS, e: GamePadEvent): void {
-        super.notify(eventName,e);
-        this.game.getCurrentScene().gamepadEventHandler.trigger(eventName,e);
-    }
-
-    private pressButton(button:number,value:number,gamePadIndex:number,eventFromBuffer:Optional<GamePadEvent>):void {
-        if (eventFromBuffer===undefined) {
-            const eventJustCreated = GamePadEvent.pool.get();
-
-            eventJustCreated.button = button;
-            eventJustCreated.gamePadIndex = gamePadIndex;
-            eventJustCreated.value = value;
-            this.press(eventJustCreated);
-        } else {
-            eventFromBuffer.value = value;
-        }
-    }
-
-
-    private releaseButton(eventFromBuffer:Optional<GamePadEvent>):void{
-        if (eventFromBuffer!==undefined) {
-            if (!GamePadControl.isReleased(eventFromBuffer)) this.release(eventFromBuffer);
-        }
-    }
-
-
     private pollButtons(gp:Gamepad,gamePadIndex:number):void {
         const maxButtons = gp.buttons.length;
         for (let i=0;i<maxButtons;i++) {
             const btn = gp.buttons[i];
-
-            const eventFromBuffer = this.findEvent(i, gamePadIndex);
             if (btn.pressed) {
-                this.pressButton(i, btn.value, gamePadIndex, eventFromBuffer);
+                this.press(i,undefined); // btn.value, gamePadIndex
             }
-            else this.releaseButton(eventFromBuffer);
-
+            else this.release(i,undefined);
         }
     }
 
@@ -196,42 +167,32 @@ export class GamePadControl extends AbstractKeypad<GamePadEvent> implements ICon
         if (Math.abs(axis1)<GamePadControl.SENSITIVITY) axis1 = 0;
 
         if (axis0>0) {
-            const eventFromBuffer = this.findEvent(btnRight, gamePadIndex);
-            this.pressButton(btnRight,axis0,gamePadIndex,eventFromBuffer);
+            this.press(btnRight,undefined); // axis0,gamePadIndex
         } else {
-            const eventFromBuffer = this.findEvent(btnRight, gamePadIndex);
-            this.releaseButton(eventFromBuffer);
+            this.release(btnRight,undefined);
         }
         if (axis0<0) {
-            const eventFromBuffer = this.findEvent(btnLeft, gamePadIndex);
-            this.pressButton(btnLeft,axis0,gamePadIndex,eventFromBuffer);
+            this.press(btnLeft,undefined); // axis0,gamePadIndex
         } else {
-            const eventFromBuffer = this.findEvent(btnLeft, gamePadIndex);
-            this.releaseButton(eventFromBuffer);
+            this.release(btnLeft,undefined);
         }
 
         if (axis1>0) {
-            const eventFromBuffer = this.findEvent(btnDown, gamePadIndex);
-            this.pressButton(btnDown,axis1,gamePadIndex,eventFromBuffer);
+            this.press(btnDown,undefined); // axis1,gamePadIndex
         } else {
-            const eventFromBuffer = this.findEvent(btnDown, gamePadIndex);
-            this.releaseButton(eventFromBuffer);
+            this.release(btnDown,undefined);
         }
         if (axis1<0) {
-            const eventFromBuffer = this.findEvent(btnUp, gamePadIndex);
-            this.pressButton(btnUp,axis1,gamePadIndex,eventFromBuffer);
+            this.press(btnUp,undefined); // axis1,gamePadIndex
         } else {
-            const eventFromBuffer = this.findEvent(btnUp, gamePadIndex);
-            this.releaseButton(eventFromBuffer);
+            this.release(btnUp,undefined);
         }
 
     }
 
-    private findEvent(button:number,gamePadIndex:number):Optional<GamePadEvent> {
-        for (const event of this.buffer) {
-            if (event.button===button && event.gamePadIndex === gamePadIndex) return event;
-        }
-        return undefined;
+    protected override onEventTriggered(eventName: KEYBOARD_EVENTS, e: GamePadEvent): void {
+        super.onEventTriggered(eventName,e);
+        this.game.getCurrentScene().gamepadEventHandler.trigger(eventName,e);
     }
 
 }
