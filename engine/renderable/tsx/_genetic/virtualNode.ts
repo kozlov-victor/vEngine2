@@ -2,17 +2,18 @@ import {BaseTsxComponent} from "@engine/renderable/tsx/base/baseTsxComponent";
 
 export interface IBaseProps {
     __id?:number;
+    trackBy?:string;
+    children?:any[];
+    ref?:(el:any)=>void;
 }
 
 export class VirtualNode implements INode, JSX.Element {
 
-    public index:number = 0;
-    public loopIndex:number = undefined!;
     public type = 'virtualNode' as const;
     public parentComponent:BaseTsxComponent;
 
     constructor(
-        public readonly props: Readonly<Record<string, any>>,
+        public readonly props: IBaseProps & Readonly<Record<string, any>>,
         public readonly tagName:string,
         public readonly children:VirtualNode[] = [],
     ) {}

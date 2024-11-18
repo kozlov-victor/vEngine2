@@ -9,7 +9,7 @@ export interface IRigidBody extends ICloneable<IRigidBody>{
     type:string;
     velocity:Point2d;
     acceleration:Point2d;
-    _isDynamic:boolean;
+    _isMoveable:boolean;
     groupNames:Int;
     ignoreCollisionWithGroupNames:Int;
     ignoreOverlapWithGroupNames:Int;

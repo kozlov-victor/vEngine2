@@ -35,7 +35,7 @@ export class MainScene extends Scene {
         bg.lineWidth = 1;
         bg.borderRadius = 10;
 
-        const tf:TextField = new ScrollableTextField(this.game,this.fnt);
+        const tf = new ScrollableTextField(this.game,this.fnt);
         tf.size.setWH(450,300);
         tf.setBackground(bg);
         tf.textColor.setRGB(122,244,245);
@@ -47,7 +47,7 @@ export class MainScene extends Scene {
         tf.setText("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.");
         this.appendChild(tf);
 
-        const tf3:TextField = new ScrollableTextField(this.game,this.fnt);
+        const tf3 = new ScrollableTextField(this.game,this.fnt);
         tf3.size.setWH(250,300);
         tf3.pos.setXY(460,0);
         tf3.setBackground(bg.clone());
@@ -116,7 +116,7 @@ export class MainScene extends Scene {
             );
         });
 
-        const scrollView:ScrollView = new ScrollView(this.game);
+        const scrollView = new ScrollView(this.game);
         const scrollBg = new Rectangle(this.game);
         scrollBg.fillColor = ColorFactory.fromCSS(`#fff`);
         scrollView.setBackground(scrollBg);
@@ -134,7 +134,7 @@ export class MainScene extends Scene {
         scrollView._scrollableContainer.size.setFrom(new Size(410,400));
         scrollView.setMargin(10);
         scrollView.setPadding(5);
-        const label:TextField = new  TextField(this.game,this.fnt);
+        const label = new  TextField(this.game,this.fnt);
         label.setText("scroll");
         label.setAutoSize(true);
         label.alpha = 0.6;

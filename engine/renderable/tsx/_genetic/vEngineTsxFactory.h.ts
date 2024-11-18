@@ -5,9 +5,10 @@ import {BaseTsxComponent} from "@engine/renderable/tsx/base/baseTsxComponent";
 const flattenDeep = <T>(arr:(T[]|T)[]):T[]=> {
     const res =  arr.reduce((acc, val) => {
         if (Array.isArray(val)) {
-            val.forEach((v,i)=>{
-                (v as any).loopIndex=i;
-            });
+            // val.forEach((v,i)=>{
+            //     if (v instanceof VirtualNode) {
+            //     }
+            // });
             return (acc as T[]).concat(flattenDeep(val as T[]));
         } else return (acc as T[]).concat(val as T);
     },[]);
@@ -15,13 +16,15 @@ const flattenDeep = <T>(arr:(T[]|T)[]):T[]=> {
 };
 
 export const getComponentUuid = (props:Record<string, any>)=>{
-    return props.trackBy ??  props.__id;
+    return props.trackBy ?
+        `${props.trackBy}_${props.__id}`:
+        props.__id;
 }
 
 
-export class VEngineTsxFactory<T> {
+export class VEngineTsxFactory {
 
-    private static componentInstances:Record<number, BaseTsxComponent> = {};
+    private static componentInstances:Record<string, BaseTsxComponent> = {};
 
     private static renderComponent(instance:BaseTsxComponent,props: Record<string, any>) {
         (instance as any).props = props;
@@ -34,7 +37,7 @@ export class VEngineTsxFactory<T> {
 
     public static createElement(
         item:string|((props:Record<string, any>)=>VirtualNode|VirtualFragment)|{new: BaseTsxComponent},
-        props:Record<string, any>|null,
+        props:Record<string, any>,
         ...children: (VirtualNode|VirtualFragment|string|number|any)[]
     ):JSX.Element {
         if (props===null) props = {};
@@ -42,14 +45,13 @@ export class VEngineTsxFactory<T> {
         const flattenedChildren:(VirtualNode|VirtualFragment)[] =
             flattenDeep(children).
             map((it,i)=>{
-                if ((it as unknown as string)?.substr!==undefined || (it as unknown as number)?.toFixed!==undefined) {
+                if (
+                    (it as unknown as string)?.substr!==undefined ||
+                    (it as unknown as number)?.toFixed!==undefined ||
+                    (it===true)
+                ) {
                     return  new VirtualTextNode(String(it));
                 }
-                // else if (
-                //     typeof it === 'object'
-                // ) {
-                //     return  new VirtualTextNode(''+it);
-                // }
                 else return it;
             }).
             filter(it=>!!it); // remove null, false and undefined;
@@ -66,14 +68,15 @@ export class VEngineTsxFactory<T> {
 
         if ((item as any).__VEngineTsxComponent) {
             const uuid = getComponentUuid(props);
+            let instance:BaseTsxComponent;
             if (VEngineTsxFactory.componentInstances[uuid]) {
-                const instance = VEngineTsxFactory.componentInstances[uuid];
+                instance = VEngineTsxFactory.componentInstances[uuid];
                 return this.renderComponent(instance,propsWithChildren);
             } else {
-                const instance = new (item as any)(propsWithChildren) as BaseTsxComponent;
+                instance = new (item as any)(propsWithChildren) as BaseTsxComponent;
                 VEngineTsxFactory.componentInstances[uuid] = instance;
-                return this.renderComponent(instance,propsWithChildren);
             }
+            return this.renderComponent(instance,propsWithChildren);
         }
         else if ((item as (props:Record<string, any>)=>VirtualNode).call!==undefined) {
             return (item as (arg: any) => VirtualNode)(propsWithChildren);

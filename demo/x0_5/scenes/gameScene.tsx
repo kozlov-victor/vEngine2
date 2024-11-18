@@ -19,6 +19,7 @@ import {ColorFactory} from "@engine/renderer/common/colorFactory";
 import {Color} from "@engine/renderer/common/color";
 import {MenuScene} from "./menuScene";
 import {DI} from "@engine/core/ioc";
+import {ReactiveVEngine} from "@engine/renderable/tsx/vEngine/reactive-vEngine";
 
 const BOX_SIZE = 20;
 const winCellColor = ColorFactory.fromCSS('red');
@@ -72,27 +73,27 @@ class GameSceneUi extends VEngineRootComponent {
         super(game);
     }
 
-    @Reactive.OnKeyPressed(KEYBOARD_KEY.UP)
+    @ReactiveVEngine.OnKeyPressed(KEYBOARD_KEY.UP)
     private onKeyUp() {
         this.moveSelectionByKeys(0,-1);
     }
 
-    @Reactive.OnKeyPressed(KEYBOARD_KEY.DOWN)
+    @ReactiveVEngine.OnKeyPressed(KEYBOARD_KEY.DOWN)
     private onKeyDown() {
         this.moveSelectionByKeys(0,1);
     }
 
-    @Reactive.OnKeyPressed(KEYBOARD_KEY.LEFT)
+    @ReactiveVEngine.OnKeyPressed(KEYBOARD_KEY.LEFT)
     private onKeyLeft() {
         this.moveSelectionByKeys(-1,0);
     }
 
-    @Reactive.OnKeyPressed(KEYBOARD_KEY.RIGHT)
+    @ReactiveVEngine.OnKeyPressed(KEYBOARD_KEY.RIGHT)
     private onKeyRight() {
         this.moveSelectionByKeys(1,0);
     }
 
-    @Reactive.OnKeyPressed(KEYBOARD_KEY.ENTER)
+    @ReactiveVEngine.OnKeyPressed(KEYBOARD_KEY.ENTER)
     private onKeyEnter() {
         this.onCellClicked(this.currentSelection.y,this.currentSelection.x);
     }

@@ -10,6 +10,7 @@ export abstract class VEngineTsxComponent extends BaseTsxComponent {
     private rootNativeElement:IRealNode;
     private rootVirtualElement:VirtualNode;
     private rendering:boolean = false;
+    private tid:any;
 
 
     protected constructor(
@@ -17,13 +18,13 @@ export abstract class VEngineTsxComponent extends BaseTsxComponent {
     ) {
         super();
         if (VEngineTsxRootHolder.ROOT) {
-            // collect garbage from ald root component
+            // collect garbage from old root component
             VEngineTsxFactory.clean();
         }
         VEngineTsxRootHolder.ROOT = this;
     }
 
-    public override _triggerRendering():void{
+    private renderImmediately() {
         if (this.rendering) return;
         this.rendering = true;
         if (this.rootNativeElement!==undefined) {
@@ -32,15 +33,19 @@ export abstract class VEngineTsxComponent extends BaseTsxComponent {
         this.rendering = false;
     }
 
+    public override _triggerRendering():void{
+        clearTimeout(this.tid);
+        this.tid = setTimeout(()=>{
+            this.renderImmediately();
+            this.tid = undefined;
+        },1);
+    }
+
     public mountTo(root:IRealNode):void {
         root.removeChildren();
         this.rootNativeElement = root;
-        this._triggerRendering();
+        this.renderImmediately();
         this.onMounted();
-    }
-
-    public destroy():void {
-        VEngineTsxFactory.destroyElement(this.rootVirtualElement);
     }
 
 }

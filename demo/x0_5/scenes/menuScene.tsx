@@ -13,6 +13,7 @@ import {Rectangle} from "@engine/renderable/impl/geometry/rectangle";
 import {ColorFactory} from "@engine/renderer/common/colorFactory";
 import {Color} from "@engine/renderer/common/color";
 import {DI} from "@engine/core/ioc";
+import {ReactiveVEngine} from "@engine/renderable/tsx/vEngine/reactive-vEngine";
 
 interface ILevel {
     label: string;
@@ -49,22 +50,22 @@ class MenuSceneUI extends VEngineRootComponent {
         super(game);
     }
 
-    @Reactive.OnKeyPressed(KEYBOARD_KEY.ENTER)
+    @ReactiveVEngine.OnKeyPressed(KEYBOARD_KEY.ENTER)
     private onEnterKey() {
         this.go();
     }
 
-    @Reactive.OnKeyPressed(KEYBOARD_KEY.BACKSPACE)
+    @ReactiveVEngine.OnKeyPressed(KEYBOARD_KEY.BACKSPACE)
     private onBackSpaceKey() {
         window.close();
     }
 
-    @Reactive.OnKeyPressed(KEYBOARD_KEY.UP)
+    @ReactiveVEngine.OnKeyPressed(KEYBOARD_KEY.UP)
     private onUpKey() {
         this.selectNextLevel(-1);
     }
 
-    @Reactive.OnKeyPressed(KEYBOARD_KEY.DOWN)
+    @ReactiveVEngine.OnKeyPressed(KEYBOARD_KEY.DOWN)
     private onDownKey() {
         this.selectNextLevel(1);
     }

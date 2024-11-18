@@ -87,7 +87,7 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
 
     public addInfo:Record<string, any> = {};
     public _modelType = ARCADE_RIGID_BODY_TYPE.DYNAMIC;
-    public _isDynamic:boolean;
+    public _isMoveable:boolean;
     public readonly _boundRect = new RectWithUpdateId();
     public _restitution = 0.5;
     public readonly _halfSize = new Size();
@@ -259,7 +259,7 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
         body.ignoreOverlapWithGroupNames = this.ignoreOverlapWithGroupNames;
         body.setBoundsAndObserveModel(this._model);
         body.gravityImpact = this.gravityImpact;
-        body._isDynamic = this._isDynamic;
+        body._isMoveable = this._isMoveable;
     }
 
 }

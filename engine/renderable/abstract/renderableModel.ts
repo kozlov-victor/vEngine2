@@ -373,11 +373,12 @@ export abstract class RenderableModel
         return this._scene === undefined;
     }
 
-    private _registerEventFromProps(props: any,ev:MOUSE_EVENTS) {
-        if (props[ev] !== undefined && this.tsxEvents[ev] !== props[ev]) {
-            if (this.tsxEvents[ev] !== undefined) this.mouseEventHandler.off(ev, this.tsxEvents[ev]);
-            this.mouseEventHandler.on(ev, props[ev]);
-            this.tsxEvents[ev] = props[ev];
+
+    private _registerEventFromProps(props: ITransformableProps & IPositionableProps, eventName: 'click'|'mouseUp'|'mouseMove'|'mouseLeave', ev:MOUSE_EVENTS) {
+        if (props[eventName] !== undefined && this.tsxEvents[eventName] !== props[eventName]) {
+            if (this.tsxEvents[eventName] !== undefined) this.mouseEventHandler.off(ev, this.tsxEvents[eventName]);
+            this.mouseEventHandler.on(ev, props[eventName]);
+            this.tsxEvents[eventName] = props[eventName];
         }
     }
 
@@ -470,10 +471,10 @@ export abstract class RenderableModel
         else if (props.layoutPos) this._calculateLayoutPos(props.layoutPos,parent);
         else if (props.pos) this.pos.setFrom(props.pos);
 
-        this._registerEventFromProps(props, MOUSE_EVENTS.click);
-        this._registerEventFromProps(props, MOUSE_EVENTS.mouseUp);
-        this._registerEventFromProps(props, MOUSE_EVENTS.mouseMove);
-        this._registerEventFromProps(props, MOUSE_EVENTS.mouseLeave);
+        this._registerEventFromProps(props, 'click',MOUSE_EVENTS.click);
+        this._registerEventFromProps(props, 'mouseUp',MOUSE_EVENTS.mouseUp);
+        this._registerEventFromProps(props, 'mouseMove',MOUSE_EVENTS.mouseMove);
+        this._registerEventFromProps(props, 'mouseLeave',MOUSE_EVENTS.mouseLeave);
 
         super.setProps(props,parent);
     }

@@ -109,6 +109,7 @@ export namespace arcadePhysicsHelper {
 
         //If the object is approaching from the sides
         if (absDX > absDY) {
+            const currPenetrationDeepness = absDX;
             // If the player is approaching from positive X
             if (dx < 0) {
                 collidePlayerWithLeft_AABB(player,pos, vel, entity);
@@ -118,6 +119,7 @@ export namespace arcadePhysicsHelper {
             }
             // If this collision is coming from the top or bottom more
         } else {
+            const currPenetrationDeepness = absDY;
             // If the player is approaching from positive Y
             if (dy < 0) {
                 collidePlayerWithTop_AABB(player, pos, vel, entity);
@@ -142,7 +144,7 @@ export namespace arcadePhysicsHelper {
 
     const _reflectVelocity = (player:ArcadeRigidBody, playerVelocity: Point2d, entity:ArcadeRigidBody, dim:'x'|'y')=> {
         const restitution = calcCommonRestitution(player, entity);
-        if (entity._modelType===ARCADE_RIGID_BODY_TYPE.STATIC) {
+        if (entity._modelType===ARCADE_RIGID_BODY_TYPE.STATIC || entity._modelType===ARCADE_RIGID_BODY_TYPE.KINEMATIC) {
             // v` = -v1
             playerVelocity[dim] =
                 getComparedToSticky(

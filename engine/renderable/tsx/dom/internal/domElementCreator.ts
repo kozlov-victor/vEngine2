@@ -4,7 +4,8 @@ import {HTMLElementWrap} from "@engine/renderable/tsx/dom/internal/HTMLElementWr
 
 const ELEMENT_PROPERTIES = ['value','checked','selected','focus','disabled','readonly'];
 const SPECIAL_ATTRIBUTES = ['children','__id'];
-const svgTags = ['svg','g','rect','path','circle','line'];
+
+const svgTags = ['svg','g','rect','path','circle','line','text','tspan','image','clipPath','defs'];
 
 export class ElementFactory {
 
@@ -62,6 +63,9 @@ export class DomElementCreator extends AbstractElementCreator<HTMLElementWrap>{
     setProps(model: HTMLElementWrap, virtualNode:VirtualNode,parent:HTMLElementWrap): void {
         const props = virtualNode.props;
         const el = model.htmlElement;
+        if (el.nodeType==8) { // comment node
+            return;
+        }
         if (el.nodeType===3) {
             const virtualTextNode = virtualNode as VirtualTextNode;
             if (virtualTextNode.text!==model.attributes.text) {
@@ -69,10 +73,23 @@ export class DomElementCreator extends AbstractElementCreator<HTMLElementWrap>{
                 (el as Text).data = virtualTextNode.text;
             }
         } else {
+
+            if (!props) {
+                console.error(`something is wrong with this node`);
+                console.error({virtualNode, parent});
+                return;
+            }
+
             const htmlEl = el as HTMLElement;
             for (const key of Object.keys(props)) {
                 if (key.indexOf('on')===0) {// events
                     (htmlEl as Record<string, any>)[key] = props[key];
+                }
+                else if (key==='dataset') {
+                    const dataset = props[key] ?? {};
+                    for (const dataKey of Object.keys(dataset)) { // todo reconcile old object with new one
+                        htmlEl.dataset[dataKey] = dataset[dataKey];
+                    }
                 }
                 else if (model.attributes[key]!==props[key]) {
                     model.attributes[key] = props[key];
@@ -95,13 +112,13 @@ export class DomElementCreator extends AbstractElementCreator<HTMLElementWrap>{
                     if (key==='htmlFor') attrName = 'for';
                     else if (key==='className') attrName = 'class';
                     else if (key==='ref') {
-                        virtualNode.props.ref(el);
-                        continue;
+                        props.ref!(el);
                     }
 
                     if (ELEMENT_PROPERTIES.indexOf(key)>-1) { // property
-                        (htmlEl as any)[key] = props[key];
-                    } else { // attribute
+                        (htmlEl as any)[key] = props[key] ?? '';
+                    }
+                    else { // attribute
                         const value = props[key];
                         if (value===null || value===undefined) htmlEl.removeAttribute(attrName);
                         else htmlEl.setAttribute(attrName,props[key]);

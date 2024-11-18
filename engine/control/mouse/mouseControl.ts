@@ -1,10 +1,12 @@
 import {Game} from "../../core/game";
+import {RenderableModel} from "@engine/renderable/abstract/renderableModel";
 import {IControl} from "@engine/control/abstract/iControl";
 import {DebugError} from "@engine/debug/debugError";
 import {MousePoint, ObjectMouseEvent, SceneMouseEvent} from "@engine/control/mouse/mousePoint";
 import {MOUSE_EVENTS} from "@engine/control/mouse/mouseEvents";
 import {LayerTransformType} from "@engine/scene/layer";
 import {MouseControlHelper} from "@engine/control/mouse/mouseControlHelper";
+import {Optional} from "@engine/core/declarations";
 import {CapturedObjectsByTouchIdHolder} from "@engine/control/mouse/capturedObjectsByTouchIdHolder";
 
 
@@ -230,26 +232,24 @@ export class MouseControl implements IControl {
                 if (capturedEvent!==undefined) {
                     if (!capturedEvent.transclude) {
                         propagationCancelled = true;
-                        ObjectMouseEvent.pool.recycle(capturedEvent);
                         break;
                     }
                     if (mouseEvent===MOUSE_EVENTS.mouseMove) this._capturedObjectsByTouchIdHolder.add(mousePoint.id,obj);
                     // propagate event to parents
-                    // let parent:Optional<RenderableModel> = obj.parent;
-                    // while (parent!==undefined) {
-                    //     const propagationEvent =
-                    //         this._helper.captureObject(e,mouseEvent,mousePoint,parent, obj, constrainObjects);
-                    //     if (propagationEvent!==undefined) {
-                    //         if (!propagationEvent.transclude) {
-                    //             propagationCancelled = true;
-                    //             break;
-                    //         }
-                    //         if (mouseEvent===MOUSE_EVENTS.mouseMove) this._capturedObjectsByTouchIdHolder.add(mousePoint.id,parent);
-                    //     }
-                    //     parent = parent.parent;
-                    // }
-                    // break;
-                    ObjectMouseEvent.pool.recycle(capturedEvent);
+                    let parent:Optional<RenderableModel> = obj.parent;
+                    while (parent!==undefined) {
+                        const propagationEvent =
+                            this._helper.captureObject(e,mouseEvent,mousePoint,parent, obj, constrainObjects);
+                        if (propagationEvent!==undefined) {
+                            if (!propagationEvent.transclude) {
+                                propagationCancelled = true;
+                                break;
+                            }
+                            if (mouseEvent===MOUSE_EVENTS.mouseMove) this._capturedObjectsByTouchIdHolder.add(mousePoint.id,parent);
+                        }
+                        parent = parent.parent;
+                    }
+                    break;
                 }
             }
         }

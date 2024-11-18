@@ -119,7 +119,7 @@ export class SpatialSpace {
                 this.notEmptyCellsToCheck.add(c);
                 this.notEmptyCells.push(c);
             }
-            c.hasDynamicObjects = c.hasDynamicObjects || body._isDynamic;
+            c.hasDynamicObjects = c.hasDynamicObjects || body._isMoveable;
             //c.debugView.fillColor = activeColor;
         }
     }

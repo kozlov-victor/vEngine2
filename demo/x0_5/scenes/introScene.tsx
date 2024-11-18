@@ -10,6 +10,7 @@ import {MenuScene} from "./menuScene";
 import {ColorFactory} from "@engine/renderer/common/colorFactory";
 import {DI} from "@engine/core/ioc";
 import {Reactive} from "@engine/renderable/tsx/decorator/reactive";
+import {ReactiveVEngine} from "@engine/renderable/tsx/vEngine/reactive-vEngine";
 
 @DI.Injectable()
 class IntroSceneUi extends VEngineRootComponent {
@@ -28,12 +29,12 @@ class IntroSceneUi extends VEngineRootComponent {
         window.close();
     }
 
-    @Reactive.OnceKeyPressed(KEYBOARD_KEY.SOFT_RIGHT)
+    @ReactiveVEngine.OnceKeyPressed(KEYBOARD_KEY.SOFT_RIGHT)
     private onSoftRight() {
         this.go();
     }
 
-    @Reactive.OnceKeyPressed(KEYBOARD_KEY.SOFT_RIGHT)
+    @ReactiveVEngine.OnceKeyPressed(KEYBOARD_KEY.SOFT_RIGHT)
     private onSoftLeft() {
         this.exit();
     }

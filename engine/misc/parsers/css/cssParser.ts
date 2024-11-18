@@ -13,7 +13,7 @@ interface CssRule {
 
 interface CssObject {
     selector: string[];
-    type: string;
+    type?: string;
     comments: string;
     styles: any;
     subStyles: CssObject[];
@@ -130,7 +130,7 @@ export class CssParser {
                     subStyles: [],
                     styles: [],
                     comments: '',
-                    type: undefined!
+                    type: undefined,
                 }
                 if (selector === '@font-face') {
                     style.type = 'font-face';

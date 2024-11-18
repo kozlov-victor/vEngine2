@@ -158,7 +158,7 @@ export class Hero extends AbstractCharacter {
     }
 
     private listenKeys():void {
-        const jumpVelocity:number = 200;
+        const jumpVelocity = 200;
         this.game.getCurrentScene().keyboardEventHandler.on(KEYBOARD_EVENTS.keyHold, e=>{
             switch (e.button) {
                 case KEYBOARD_KEY.LEFT:
@@ -170,7 +170,7 @@ export class Hero extends AbstractCharacter {
                     this.direction = RIGHT;
                     break;
                 case KEYBOARD_KEY.SPACE:
-                    if (this.renderableImage.getRigidBody<ArcadeRigidBody>()!.collisionFlags.bottom) {
+                    if (this.renderableImage.getRigidBody<ArcadeRigidBody>().collisionFlags.bottom) {
                         this.jump(jumpVelocity);
                         this.soundJump.play();
                     }

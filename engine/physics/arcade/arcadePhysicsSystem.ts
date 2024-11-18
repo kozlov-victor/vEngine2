@@ -51,7 +51,7 @@ const v2 = new Point2d();
 
 export class ArcadePhysicsSystem implements IPhysicsSystem {
 
-    public static readonly gravity:Point2d = new Point2d(0,5);
+    public static readonly gravity = new Point2d(0,5);
     public static SPATIAL_CELL_SIZE = new Size(32,32);
 
     constructor(private game:Game) {
@@ -61,7 +61,7 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
         type Clazz = new(game:Game) => ArcadeRigidBody; // "unprivate" constructor
         const body = new (ArcadeRigidBody as Clazz)(this.game);
         body._modelType = params?.type??body._modelType;
-        body._isDynamic =
+        body._isMoveable =
             body._modelType === ARCADE_RIGID_BODY_TYPE.DYNAMIC ||
             body._modelType === ARCADE_RIGID_BODY_TYPE.KINEMATIC;
         body._restitution = params?.restitution??body._restitution;
@@ -102,6 +102,7 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
         }
 
         testedCollisionsCache.clear();
+
         const cells = scene._spatialSpace.getCellsToCheck();
         for (let i=0,max_i=cells.length;i<max_i;++i) {
             const cell = cells[i];

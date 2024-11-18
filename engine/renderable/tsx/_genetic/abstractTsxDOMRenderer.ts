@@ -1,9 +1,9 @@
 import {VEngineTsxComponent} from "@engine/renderable/tsx/_genetic/vEngineTsxComponent";
-import {VirtualNode} from "@engine/renderable/tsx/_genetic/virtualNode";
+import {VirtualCommentNode, VirtualNode} from "@engine/renderable/tsx/_genetic/virtualNode";
 import {Optional} from "@engine/core/declarations";
 import {IRealNode} from "@engine/renderable/tsx/_genetic/realNode";
 import {AbstractElementCreator} from "@engine/renderable/tsx/_genetic/abstractElementCreator";
-import {VEngineTsxFactory} from "@engine/renderable/tsx/_genetic/vEngineTsxFactory.h";
+import {getComponentUuid, VEngineTsxFactory} from "@engine/renderable/tsx/_genetic/vEngineTsxFactory.h";
 import {BaseTsxComponent} from "@engine/renderable/tsx/base/baseTsxComponent";
 import {VirtualFragment} from "@engine/renderable/tsx/_genetic/virtualFragment";
 
@@ -36,6 +36,15 @@ export abstract class AbstractTsxDOMRenderer<T extends IRealNode> {
         return newVirtualDom;
     }
 
+    private needToBeDestroyed(oldNode:VirtualNode,newChildren:VirtualNode[]) {
+        if (!newChildren) return true;
+        const uuid = getComponentUuid(oldNode.props);
+        for (const ch of newChildren) {
+            if (uuid===getComponentUuid(ch.props)) return true;
+        }
+        return false;
+    }
+
     private removeNode(node:T,vNode:VirtualNode):void {
         node.removeSelf();
         VEngineTsxFactory.destroyElement(vNode);
@@ -45,7 +54,9 @@ export abstract class AbstractTsxDOMRenderer<T extends IRealNode> {
         const newNode = this.elementCreator.createElementByTagName(newVirtualNode);
         this.setGenericProps(newNode,newVirtualNode,parent);
         parent.replaceChild(node,newNode);
-        VEngineTsxFactory.destroyElement(oldVirtualNode);
+        if (this.needToBeDestroyed(oldVirtualNode,newVirtualNode.children)) {
+            VEngineTsxFactory.destroyElement(oldVirtualNode);
+        }
         return newNode;
     }
 
@@ -76,9 +87,8 @@ export abstract class AbstractTsxDOMRenderer<T extends IRealNode> {
         }
         else if (newVirtualNode!==undefined && oldVirtualNode!==undefined && newRealNode!==undefined) {
             if (
-                newVirtualNode.index !==oldVirtualNode.index ||
+                newVirtualNode.props?.trackBy !==oldVirtualNode.props?.trackBy ||
                 newVirtualNode.props?.__id !==oldVirtualNode.props?.__id ||
-                newVirtualNode.loopIndex!==oldVirtualNode.loopIndex ||
                 newVirtualNode.tagName!==oldVirtualNode.tagName
             ) { // replace node
                 newRealNode = this.replaceNode(newRealNode,oldVirtualNode,newVirtualNode,parent);
@@ -110,7 +120,14 @@ export abstract class AbstractTsxDOMRenderer<T extends IRealNode> {
     }
 
     private setGenericProps(model:T,virtualNode:VirtualNode,parent:IRealNode) {
-        if (virtualNode?.props?.ref!==undefined) virtualNode.props.ref(model);
+        if (virtualNode?.props?.ref!==undefined) {
+            if (virtualNode instanceof VirtualCommentNode) {
+                virtualNode.props.ref(virtualNode.parentComponent);
+            }
+            else {
+                virtualNode.props.ref(model);
+            }
+        }
         this.elementCreator.setProps(model,virtualNode,parent);
     }
 

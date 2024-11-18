@@ -42,7 +42,7 @@
             display: flex;
             flex-direction: column;
         }
-        html,body,.layout {
+        html,body,#root,.layout {
             height: 100%;
         }
         body  {
@@ -58,8 +58,6 @@
             position: relative;
         }
         .up {
-            display: block;
-            dislpay: flex;
             width: 320px;
         }
         .down {
@@ -157,10 +155,11 @@
 
 </script>
 
+<div id="root"></div>
+
 <script>
     document.write('<script src="./out/_index.js?modified='+new Date().getTime()+'"></sc'+'ript>');
 </script>
-
 
 </body>
 </html>
