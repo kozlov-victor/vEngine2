@@ -109,7 +109,6 @@ export namespace arcadePhysicsHelper {
 
         //If the object is approaching from the sides
         if (absDX > absDY) {
-            const currPenetrationDeepness = absDX;
             // If the player is approaching from positive X
             if (dx < 0) {
                 collidePlayerWithLeft_AABB(player,pos, vel, entity);
