@@ -124,7 +124,7 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
             if (!this._collisionFlagsOld.bottom) {
                 this.velocity.y += this.acceleration.y * delta;
             }
-            this.velocity.x += ArcadePhysicsSystem.gravity.x;
+            this.velocity.x += ArcadePhysicsSystem.gravity.x * this.gravityImpact;
             this.velocity.y += ArcadePhysicsSystem.gravity.y * this.gravityImpact;
         }
 
