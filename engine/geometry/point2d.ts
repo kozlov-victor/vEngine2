@@ -35,18 +35,18 @@ export class Point2d extends ObservableEntity implements ICloneable<Point2d>, IP
     }
     public static pool = new ObjectPool<Point2d>(Point2d,4);
 
-    private _x:number = 0;
-    private _y:number = 0;
+    private _x = 0;
+    private _y = 0;
 
     protected _arr = new Float32Array([0,0,0]);
 
     // noinspection JSSuspiciousNameCombination
-    public setXY(x:number = 0,y:number = x):this{
+    public setXY(x = 0,y = x):this{
         if (DEBUG && (isNotNumber(x) || isNotNumber(y))) {
             console.trace();
             throw new DebugError(`Point2d: wrong numeric arguments ${x},${y}`);
         }
-        const changed:boolean = this._x!==x || this._y!==y;
+        const changed = this._x!==x || this._y!==y;
         if (changed) {
             this._x = x;
             this._y = y;
@@ -102,7 +102,7 @@ export class Point2d extends ObservableEntity implements ICloneable<Point2d>, IP
         return this;
     }
 
-    public negative():this{
+    public negate():this{
         this.setXY(-this._x,-this._y);
         return this;
     }

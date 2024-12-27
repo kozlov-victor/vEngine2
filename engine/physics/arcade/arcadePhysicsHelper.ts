@@ -14,70 +14,78 @@ const enum SLOPE_DIRECTION {
     DOWN
 }
 
+class InterpolationInfo {
+    lengthMax = 0;
+    delta = new Point2d();
+    dynamic = false;
+    oldPos = new Point2d();
+    newPos = new Point2d();
+}
+
 export namespace arcadePhysicsHelper {
 
     const abs = Math.abs;
     const max = Math.max;
 
     const STICKY_THRESHOLD = 0.01;
+    const playerInterpolationInfo = new InterpolationInfo();
+    const entityInterpolationInfo = new InterpolationInfo();
 
-    export const interpolateAndResolveCollision_AABB = (playerBody:ArcadeRigidBody, pos:Point2d, vel: Point2d, entityBody:ArcadeRigidBody):void=> {
-        if (
-            playerBody._modelType===ARCADE_RIGID_BODY_TYPE.KINEMATIC ||
-            playerBody._modelType===ARCADE_RIGID_BODY_TYPE.STATIC
-        ) return;
-        let oldEntityPosX:number;
-        let oldEntityPosY:number;
-        if (entityBody._modelType===ARCADE_RIGID_BODY_TYPE.KINEMATIC) {
-            oldEntityPosX = entityBody.pos.x;
-            oldEntityPosY = entityBody.pos.y;
-        } else {
-            oldEntityPosX = entityBody._oldPos.x;
-            oldEntityPosY = entityBody._oldPos.y;
-        }
-        const newEntityPosX = entityBody.pos.x;
-        const newEntityPosY = entityBody.pos.y;
-        const entityLengthX = newEntityPosX - oldEntityPosX;
-        const entityLengthY = newEntityPosY - oldEntityPosY;
-        const entityLengthMax = max(abs(entityLengthX),abs(entityLengthY));
-        const entityDeltaX = entityLengthX/entityLengthMax;
-        const entityDeltaY = entityLengthY/entityLengthMax;
-        let step = entityLengthMax;
-        const playerBodyRect = playerBody.calcAndGetBoundRect();
-        while (step-->0) {
-            if (step===0) {
-                entityBody.pos.setXY(newEntityPosX,newEntityPosY);
-            } else {
-                entityBody.pos.setXY(oldEntityPosX,oldEntityPosY);
+    const calculateInterpolationInfo = (body:ArcadeRigidBody, info:InterpolationInfo):void=> {
+        info.oldPos.setFrom(body._oldPos);
+        info.newPos.setFrom(body.pos);
+        const lengthX = body._oldPos.x - body.pos.x;
+        const lengthY = body._oldPos.y - body.pos.y;
+        info.lengthMax = max(abs(lengthX),abs(lengthY));
+        info.delta.setXY(lengthX===0?0:lengthX/info.lengthMax, lengthY===0?0:lengthY/info.lengthMax);
+        info.dynamic = body._modelType===ARCADE_RIGID_BODY_TYPE.DYNAMIC;
+    }
+
+    export const interpolate_AABB = (playerBody:ArcadeRigidBody, entityBody:ArcadeRigidBody):void=>{
+        if (playerBody._modelType===ARCADE_RIGID_BODY_TYPE.DYNAMIC || entityBody._modelType===ARCADE_RIGID_BODY_TYPE.DYNAMIC) {
+
+            calculateInterpolationInfo(playerBody, playerInterpolationInfo);
+            calculateInterpolationInfo(entityBody, entityInterpolationInfo);
+
+            let step = Math.max(playerInterpolationInfo.lengthMax,entityInterpolationInfo.lengthMax);
+            while (step-->0) {
+                if (step===0) {
+                    if (playerInterpolationInfo.dynamic) playerBody.pos.setFrom(playerInterpolationInfo.newPos);
+                    if (entityInterpolationInfo.dynamic) entityBody.pos.setFrom(entityInterpolationInfo.newPos);
+                } else {
+                    if (playerInterpolationInfo.dynamic) playerBody.pos.setFrom(playerInterpolationInfo.oldPos);
+                    if (entityInterpolationInfo.dynamic) entityBody.pos.setFrom(entityInterpolationInfo.oldPos);
+                }
+
+                if (MathEx.overlapTest(playerBody.calcAndGetBoundRect(),entityBody.calcAndGetBoundRect())) break;
+
+                if (playerInterpolationInfo.dynamic) playerInterpolationInfo.oldPos.add(playerInterpolationInfo.delta);
+                if (entityInterpolationInfo.dynamic) entityInterpolationInfo.oldPos.add(entityInterpolationInfo.delta);
             }
-            if (MathEx.overlapTest(playerBodyRect,entityBody.calcAndGetBoundRect())) {
-                break;
-            }
-            oldEntityPosX+=entityDeltaX;
-            oldEntityPosY+=entityDeltaY;
         }
-        resolveCollision_AABB(playerBody, pos, vel, entityBody);
     }
 
     export const resolveCollision_AABB_withSlope =(player:ArcadeRigidBody,pos:Point2d, vel: Point2d, entity:ArcadeRigidBody):void=> {
         const slopeType = entity.addInfo.slopeType as Optional<SLOPE_TYPE>;
         if (slopeType===undefined) return;
-        const slopeKind:SLOPE_KIND = (slopeType===SLOPE_TYPE.FLOOR_UP || slopeType===SLOPE_TYPE.FLOOR_DOWN)?
+        const slopeKind = (slopeType===SLOPE_TYPE.FLOOR_UP || slopeType===SLOPE_TYPE.FLOOR_DOWN)?
             SLOPE_KIND.FLOOR:SLOPE_KIND.CEIL;
-        const slopeDirection:SLOPE_DIRECTION = (slopeType===SLOPE_TYPE.FLOOR_UP || slopeType===SLOPE_TYPE.CEIL_UP)?
+        const slopeDirection = (slopeType===SLOPE_TYPE.FLOOR_UP || slopeType===SLOPE_TYPE.CEIL_UP)?
             SLOPE_DIRECTION.UP:
             SLOPE_DIRECTION.DOWN;
         if (slopeKind===SLOPE_KIND.FLOOR) {
             if (player.getBottom()<=entity.getBottom()+1) {
                 collidePlayer_AABB_withFloorSlope(player, pos, vel, entity, slopeDirection);
             } else {
-                interpolateAndResolveCollision_AABB(player, pos, vel, entity);
+                interpolate_AABB(player, entity);
+                resolveCollision_AABB(player, pos, vel, entity);
             }
         } else {
             if (player.getTop()>=entity.getTop()-1) {
                 collidePlayer_AABB_withCeilSlope(player, pos, vel, entity, slopeDirection);
             } else {
-                interpolateAndResolveCollision_AABB(player, pos, vel, entity);
+                interpolate_AABB(player, entity);
+                resolveCollision_AABB(player, pos, vel, entity);
             }
         }
     }
@@ -90,7 +98,9 @@ export namespace arcadePhysicsHelper {
         entity.collisionEventHandler.trigger(ARCADE_COLLISION_EVENTS.OVERLAPPED, player);
     }
 
-    const resolveCollision_AABB = (player:ArcadeRigidBody, pos:Point2d, vel: Point2d, entity:ArcadeRigidBody):void=> {
+    export const resolveCollision_AABB = (player:ArcadeRigidBody, pos:Point2d, vel: Point2d, entity:ArcadeRigidBody):void=> {
+
+        if (player._modelType!==ARCADE_RIGID_BODY_TYPE.DYNAMIC) return;
 
         // Find the mid-points of the entity and player
         const pMidX = player.getMidX();
