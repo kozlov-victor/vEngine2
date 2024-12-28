@@ -14,12 +14,100 @@ const enum SLOPE_DIRECTION {
     DOWN
 }
 
+class InterpolationInfo {
+    lengthMax = 0;
+    delta = new Point2d();
+    dynamic = false;
+    oldPos = new Point2d();
+    newPos = new Point2d();
+}
+
 export namespace arcadePhysicsHelper {
 
     const abs = Math.abs;
     const max = Math.max;
 
     const STICKY_THRESHOLD = 0.01;
+
+
+    const playerInterpolationInfo = new InterpolationInfo();
+    const entityInterpolationInfo = new InterpolationInfo();
+
+    const calculateInterpolationInfo = (body:ArcadeRigidBody, info:InterpolationInfo):void=> {
+        info.oldPos.setFrom(body._oldPos);
+        info.newPos.setFrom(body.pos);
+        const lengthX = body.pos.x - body._oldPos.x;
+        const lengthY = body.pos.y - body._oldPos.y;
+        info.lengthMax = max(abs(lengthX),abs(lengthY));
+        info.delta.setXY(info.lengthMax===0?0:lengthX/info.lengthMax, info.lengthMax===0?0:lengthY/info.lengthMax);
+        info.dynamic = body._modelType===ARCADE_RIGID_BODY_TYPE.DYNAMIC;
+    }
+
+    export const interpolate_AABB = (playerBody:ArcadeRigidBody, entityBody:ArcadeRigidBody):void=>{
+        if (playerBody._modelType===ARCADE_RIGID_BODY_TYPE.DYNAMIC || entityBody._modelType===ARCADE_RIGID_BODY_TYPE.DYNAMIC) {
+
+            calculateInterpolationInfo(playerBody, playerInterpolationInfo);
+            calculateInterpolationInfo(entityBody, entityInterpolationInfo);
+
+            let step = Math.max(playerInterpolationInfo.lengthMax,entityInterpolationInfo.lengthMax);
+            while (step-->0) {
+                if (step===0) {
+                    if (playerInterpolationInfo.dynamic) playerBody.pos.setFrom(playerInterpolationInfo.newPos);
+                    if (entityInterpolationInfo.dynamic) entityBody.pos.setFrom(entityInterpolationInfo.newPos);
+                } else {
+                    if (playerInterpolationInfo.dynamic) playerBody.pos.setFrom(playerInterpolationInfo.oldPos);
+                    if (entityInterpolationInfo.dynamic) entityBody.pos.setFrom(entityInterpolationInfo.oldPos);
+                }
+
+                if (MathEx.overlapTest(playerBody.calcAndGetBoundRect(),entityBody.calcAndGetBoundRect())) break;
+
+                if (playerInterpolationInfo.dynamic) playerInterpolationInfo.oldPos.add(playerInterpolationInfo.delta);
+                if (entityInterpolationInfo.dynamic) entityInterpolationInfo.oldPos.add(entityInterpolationInfo.delta);
+            }
+        }
+    }
+
+    export const resolveCollision_AABB2 = (player:ArcadeRigidBody, pos:Point2d, vel: Point2d, entity:ArcadeRigidBody):void=> {
+
+        if (player._modelType!==ARCADE_RIGID_BODY_TYPE.DYNAMIC) return;
+
+        // Find the mid-points of the entity and player
+        const pMidX = player.getMidX();
+        const pMidY = player.getMidY();
+        const eMidX = entity.getMidX();
+        const eMidY = entity.getMidY();
+
+        // To find the side of entry calculate based on
+        // the normalized sides
+        const dx = (eMidX - pMidX) / entity._halfSize.width;
+        const dy = (eMidY - pMidY) / entity._halfSize.height;
+
+        // Calculate the absolute change in x and y
+        const absDX = abs(dx);
+        const absDY = abs(dy);
+
+        //If the object is approaching from the sides
+        if (absDX > absDY) {
+            // If the player is approaching from positive X
+            if (dx < 0) {
+                collidePlayerWithLeft_AABB(player,pos, vel, entity);
+            } else {
+                // If the player is approaching from negative X
+                collidePlayerWithRight_AABB(player, pos, vel, entity);
+            }
+            // If this collision is coming from the top or bottom more
+        } else {
+            const currPenetrationDeepness = absDY;
+            // If the player is approaching from positive Y
+            if (dy < 0) {
+                collidePlayerWithTop_AABB(player, pos, vel, entity);
+            } else {
+                // If the player is approaching from negative Y
+                collidePlayerWithBottom_AABB(player, pos, vel, entity);
+            }
+        }
+    }
+
 
     export const interpolateAndResolveCollision_AABB = (playerBody:ArcadeRigidBody, pos:Point2d, vel: Point2d, entityBody:ArcadeRigidBody):void=> {
         if (
