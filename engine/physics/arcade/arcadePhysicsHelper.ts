@@ -159,13 +159,17 @@ export namespace arcadePhysicsHelper {
             if (player.getBottom()<=entity.getBottom()+1) {
                 collidePlayer_AABB_withFloorSlope(player, pos, vel, entity, slopeDirection);
             } else {
-                interpolateAndResolveCollision_AABB(player, pos, vel, entity);
+                interpolate_AABB(player, entity);
+                resolveCollision_AABB2(player, pos, vel, entity);
+                //interpolateAndResolveCollision_AABB(player, pos, vel, entity);
             }
         } else {
             if (player.getTop()>=entity.getTop()-1) {
                 collidePlayer_AABB_withCeilSlope(player, pos, vel, entity, slopeDirection);
             } else {
-                interpolateAndResolveCollision_AABB(player, pos, vel, entity);
+                interpolate_AABB(player, entity);
+                resolveCollision_AABB2(player, pos, vel, entity);
+                //interpolateAndResolveCollision_AABB(player, pos, vel, entity);
             }
         }
     }
