@@ -35,6 +35,8 @@ export class MainScene extends Scene {
         spr.scale.setXY(0.1);
         this.gamepadEventHandler.on(KEYBOARD_EVENTS.keyHold, (e:IGamePadEvent)=>{
 
+
+
             switch (e.button) {
                 case GAME_PAD_BUTTON.STICK_L_LEFT:
                     spr.pos.addX(e.value);

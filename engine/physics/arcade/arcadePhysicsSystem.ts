@@ -12,7 +12,6 @@ import {Size} from "@engine/geometry/size";
 import {arcadePhysicsHelper} from "@engine/physics/arcade/arcadePhysicsHelper";
 import resolveOverlap_AABB = arcadePhysicsHelper.resolveOverlap_AABB;
 import resolveCollision_AABB_withSlope = arcadePhysicsHelper.resolveCollision_AABB_withSlope;
-import interpolateAndResolveCollision_AABB = arcadePhysicsHelper.interpolateAndResolveCollision_AABB;
 import resolveCollision_AABB2 = arcadePhysicsHelper.resolveCollision_AABB2;
 import interpolate_AABB = arcadePhysicsHelper.interpolate_AABB;
 
@@ -146,8 +145,6 @@ export class ArcadePhysicsSystem implements IPhysicsSystem {
                             resolveCollision_AABB_withSlope(playerBody, p1, v1, entityBody);
                             resolveCollision_AABB_withSlope(entityBody, p2, v2, playerBody);
                         } else {
-                            //interpolateAndResolveCollision_AABB(playerBody, p1, v1, entityBody);
-                            //interpolateAndResolveCollision_AABB(entityBody, p2, v2, playerBody);
                             interpolate_AABB(playerBody, entityBody);
                             resolveCollision_AABB2(playerBody, p1, v1, entityBody);
                             resolveCollision_AABB2(entityBody, p2, v2, playerBody);

@@ -109,45 +109,7 @@ export namespace arcadePhysicsHelper {
     }
 
 
-    export const interpolateAndResolveCollision_AABB = (playerBody:ArcadeRigidBody, pos:Point2d, vel: Point2d, entityBody:ArcadeRigidBody):void=> {
-        if (
-            playerBody._modelType===ARCADE_RIGID_BODY_TYPE.KINEMATIC ||
-            playerBody._modelType===ARCADE_RIGID_BODY_TYPE.STATIC
-        ) return;
-        let oldEntityPosX:number;
-        let oldEntityPosY:number;
-        if (entityBody._modelType===ARCADE_RIGID_BODY_TYPE.KINEMATIC) {
-            oldEntityPosX = entityBody.pos.x;
-            oldEntityPosY = entityBody.pos.y;
-        } else {
-            oldEntityPosX = entityBody._oldPos.x;
-            oldEntityPosY = entityBody._oldPos.y;
-        }
-        const newEntityPosX = entityBody.pos.x;
-        const newEntityPosY = entityBody.pos.y;
-        const entityLengthX = newEntityPosX - oldEntityPosX;
-        const entityLengthY = newEntityPosY - oldEntityPosY;
-        const entityLengthMax = max(abs(entityLengthX),abs(entityLengthY));
-        const entityDeltaX = entityLengthX/entityLengthMax;
-        const entityDeltaY = entityLengthY/entityLengthMax;
-        let step = entityLengthMax;
-        const playerBodyRect = playerBody.calcAndGetBoundRect();
-        while (step-->0) {
-            if (step===0) {
-                entityBody.pos.setXY(newEntityPosX,newEntityPosY);
-            } else {
-                entityBody.pos.setXY(oldEntityPosX,oldEntityPosY);
-            }
-            if (MathEx.overlapTest(playerBodyRect,entityBody.calcAndGetBoundRect())) {
-                break;
-            }
-            oldEntityPosX+=entityDeltaX;
-            oldEntityPosY+=entityDeltaY;
-        }
-        resolveCollision_AABB(playerBody, pos, vel, entityBody);
-    }
-
-    export const resolveCollision_AABB_withSlope =(player:ArcadeRigidBody,pos:Point2d, vel: Point2d, entity:ArcadeRigidBody):void=> {
+    export const resolveCollision_AABB_withSlope = (player:ArcadeRigidBody,pos:Point2d, vel: Point2d, entity:ArcadeRigidBody):void=> {
         const slopeType = entity.addInfo.slopeType as Optional<SLOPE_TYPE>;
         if (slopeType===undefined) return;
         const slopeKind:SLOPE_KIND = (slopeType===SLOPE_TYPE.FLOOR_UP || slopeType===SLOPE_TYPE.FLOOR_DOWN)?
@@ -161,7 +123,6 @@ export namespace arcadePhysicsHelper {
             } else {
                 interpolate_AABB(player, entity);
                 resolveCollision_AABB2(player, pos, vel, entity);
-                //interpolateAndResolveCollision_AABB(player, pos, vel, entity);
             }
         } else {
             if (player.getTop()>=entity.getTop()-1) {
@@ -169,7 +130,6 @@ export namespace arcadePhysicsHelper {
             } else {
                 interpolate_AABB(player, entity);
                 resolveCollision_AABB2(player, pos, vel, entity);
-                //interpolateAndResolveCollision_AABB(player, pos, vel, entity);
             }
         }
     }
@@ -180,45 +140,6 @@ export namespace arcadePhysicsHelper {
         entity.overlappedWith = player;
         player.collisionEventHandler.trigger(ARCADE_COLLISION_EVENTS.OVERLAPPED, entity);
         entity.collisionEventHandler.trigger(ARCADE_COLLISION_EVENTS.OVERLAPPED, player);
-    }
-
-    const resolveCollision_AABB = (player:ArcadeRigidBody, pos:Point2d, vel: Point2d, entity:ArcadeRigidBody):void=> {
-
-        // Find the mid-points of the entity and player
-        const pMidX = player.getMidX();
-        const pMidY = player.getMidY();
-        const eMidX = entity.getMidX();
-        const eMidY = entity.getMidY();
-
-        // To find the side of entry calculate based on
-        // the normalized sides
-        const dx = (eMidX - pMidX) / entity._halfSize.width;
-        const dy = (eMidY - pMidY) / entity._halfSize.height;
-
-        // Calculate the absolute change in x and y
-        const absDX = abs(dx);
-        const absDY = abs(dy);
-
-        //If the object is approaching from the sides
-        if (absDX > absDY) {
-            // If the player is approaching from positive X
-            if (dx < 0) {
-                collidePlayerWithLeft_AABB(player,pos, vel, entity);
-            } else {
-                // If the player is approaching from negative X
-                collidePlayerWithRight_AABB(player, pos, vel, entity);
-            }
-            // If this collision is coming from the top or bottom more
-        } else {
-            const currPenetrationDeepness = absDY;
-            // If the player is approaching from positive Y
-            if (dy < 0) {
-                collidePlayerWithTop_AABB(player, pos, vel, entity);
-            } else {
-                // If the player is approaching from negative Y
-                collidePlayerWithBottom_AABB(player, pos, vel, entity);
-            }
-        }
     }
 
     const calcCommonRestitution = (player:ArcadeRigidBody, entity:ArcadeRigidBody):number=> {

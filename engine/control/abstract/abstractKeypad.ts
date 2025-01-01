@@ -44,7 +44,7 @@ export abstract class AbstractKeypad<T extends KeyPadEvent> {
         this.reflectToControl(this,map);
     }
 
-    public press(button:number,nativeEvent:any): void {
+    public press(button:number, nativeEvent:any): void {
         if (this.isPressed(button)) {
             return;
         }
