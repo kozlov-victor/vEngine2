@@ -122,6 +122,9 @@ export namespace arcadePhysicsHelper {
             ) {
                 collidePlayer_AABB_withFloorSlope(player, pos, vel, entity, slopeDirection);
             } else {
+                //if approach from sides, ignore to allow correct slope resolution
+                if (slopeDirection===SLOPE_DIRECTION.UP && player.getLeft()<=entity.getLeft()) return;
+                if (slopeDirection===SLOPE_DIRECTION.DOWN && player.getRight()>=entity.getRight()) return;
                 interpolate_AABB(player, entity);
                 resolveCollision_AABB(player, pos, vel, entity);
             }
