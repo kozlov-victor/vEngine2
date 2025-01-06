@@ -12,7 +12,7 @@ import {Size} from "@engine/geometry/size";
 import {arcadePhysicsHelper} from "@engine/physics/arcade/arcadePhysicsHelper";
 import resolveOverlap_AABB = arcadePhysicsHelper.resolveOverlap_AABB;
 import resolveCollision_AABB_withSlope = arcadePhysicsHelper.resolveCollision_AABB_withSlope;
-import resolveCollision_AABB2 = arcadePhysicsHelper.resolveCollision_AABB2;
+import resolveCollision_AABB2 = arcadePhysicsHelper.resolveCollision_AABB;
 import interpolate_AABB = arcadePhysicsHelper.interpolate_AABB;
 
 export interface ICreateRigidBodyParams {
@@ -32,7 +32,7 @@ const intersect = (a:Int,b:Int):boolean=> {
 };
 
 export const enum SLOPE_TYPE {
-    FLOOR_UP = 200,
+    FLOOR_UP,
     FLOOR_DOWN,
     CEIL_UP,
     CEIL_DOWN

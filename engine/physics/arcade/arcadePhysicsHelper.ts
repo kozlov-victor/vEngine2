@@ -67,7 +67,7 @@ export namespace arcadePhysicsHelper {
         }
     }
 
-    export const resolveCollision_AABB2 = (player:ArcadeRigidBody, pos:Point2d, vel: Point2d, entity:ArcadeRigidBody):void=> {
+    export const resolveCollision_AABB = (player:ArcadeRigidBody, pos:Point2d, vel: Point2d, entity:ArcadeRigidBody):void=> {
 
         if (player._modelType!==ARCADE_RIGID_BODY_TYPE.DYNAMIC) return;
 
@@ -97,7 +97,6 @@ export namespace arcadePhysicsHelper {
             }
             // If this collision is coming from the top or bottom more
         } else {
-            const currPenetrationDeepness = absDY;
             // If the player is approaching from positive Y
             if (dy < 0) {
                 collidePlayerWithTop_AABB(player, pos, vel, entity);
@@ -112,24 +111,26 @@ export namespace arcadePhysicsHelper {
     export const resolveCollision_AABB_withSlope = (player:ArcadeRigidBody,pos:Point2d, vel: Point2d, entity:ArcadeRigidBody):void=> {
         const slopeType = entity.addInfo.slopeType as Optional<SLOPE_TYPE>;
         if (slopeType===undefined) return;
-        const slopeKind:SLOPE_KIND = (slopeType===SLOPE_TYPE.FLOOR_UP || slopeType===SLOPE_TYPE.FLOOR_DOWN)?
+        const slopeKind = (slopeType===SLOPE_TYPE.FLOOR_UP || slopeType===SLOPE_TYPE.FLOOR_DOWN)?
             SLOPE_KIND.FLOOR:SLOPE_KIND.CEIL;
-        const slopeDirection:SLOPE_DIRECTION = (slopeType===SLOPE_TYPE.FLOOR_UP || slopeType===SLOPE_TYPE.CEIL_UP)?
+        const slopeDirection = (slopeType===SLOPE_TYPE.FLOOR_UP || slopeType===SLOPE_TYPE.CEIL_UP)?
             SLOPE_DIRECTION.UP:
             SLOPE_DIRECTION.DOWN;
         if (slopeKind===SLOPE_KIND.FLOOR) {
-            if (player.getBottom()<=entity.getBottom()+1) {
+            if (
+                player.getBottom()<=entity.getBottom()+1
+            ) {
                 collidePlayer_AABB_withFloorSlope(player, pos, vel, entity, slopeDirection);
             } else {
                 interpolate_AABB(player, entity);
-                resolveCollision_AABB2(player, pos, vel, entity);
+                resolveCollision_AABB(player, pos, vel, entity);
             }
         } else {
             if (player.getTop()>=entity.getTop()-1) {
                 collidePlayer_AABB_withCeilSlope(player, pos, vel, entity, slopeDirection);
             } else {
                 interpolate_AABB(player, entity);
-                resolveCollision_AABB2(player, pos, vel, entity);
+                resolveCollision_AABB(player, pos, vel, entity);
             }
         }
     }

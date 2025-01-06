@@ -84,7 +84,6 @@ export class ArcadeRigidBody implements IRigidBody, ICloneable<ArcadeRigidBody> 
 
     public gravityImpact = 1;
     public acceptCollisions = true;
-
     public addInfo:Record<string, any> = {};
     public _modelType = ARCADE_RIGID_BODY_TYPE.DYNAMIC;
     public _isMoveable:boolean;
