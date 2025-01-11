@@ -4,15 +4,6 @@ import {MathEx} from "@engine/misc/math/mathEx";
 import {Optional} from "@engine/core/declarations";
 import {SLOPE_TYPE} from "@engine/physics/arcade/arcadePhysicsSystem";
 
-const enum SLOPE_KIND {
-    FLOOR,
-    CEIL
-}
-
-const enum SLOPE_DIRECTION {
-    UP,
-    DOWN
-}
 
 class InterpolationInfo {
     lengthMax = 0;
@@ -107,36 +98,118 @@ export namespace arcadePhysicsHelper {
         }
     }
 
+    export const handleSlopeCollision = (
+        player: ArcadeRigidBody,
+        pos: Point2d,
+        vel: Point2d,
+        entity: ArcadeRigidBody
+    ): void => {
 
-    export const resolveCollision_AABB_withSlope = (player:ArcadeRigidBody,pos:Point2d, vel: Point2d, entity:ArcadeRigidBody):void=> {
-        const slopeType = entity.addInfo.slopeType as Optional<SLOPE_TYPE>;
+        if (player._modelType!==ARCADE_RIGID_BODY_TYPE.DYNAMIC) return;
+
+        const slopeType = entity.addInfo.slopeType;
         if (slopeType===undefined) return;
-        const slopeKind = (slopeType===SLOPE_TYPE.FLOOR_UP || slopeType===SLOPE_TYPE.FLOOR_DOWN)?
-            SLOPE_KIND.FLOOR:SLOPE_KIND.CEIL;
-        const slopeDirection = (slopeType===SLOPE_TYPE.FLOOR_UP || slopeType===SLOPE_TYPE.CEIL_UP)?
-            SLOPE_DIRECTION.UP:
-            SLOPE_DIRECTION.DOWN;
-        if (slopeKind===SLOPE_KIND.FLOOR) {
-            if (
-                player.getBottom()<=entity.getBottom()+1
-            ) {
-                collidePlayer_AABB_withFloorSlope(player, pos, vel, entity, slopeDirection);
-            } else {
-                //if approach from sides, ignore to allow correct slope resolution
-                if (slopeDirection===SLOPE_DIRECTION.UP && player.getLeft()<=entity.getLeft()) return;
-                if (slopeDirection===SLOPE_DIRECTION.DOWN && player.getRight()>=entity.getRight()) return;
-                interpolate_AABB(player, entity);
-                resolveCollision_AABB(player, pos, vel, entity);
+
+        const playerBottom = player.getBottom();
+        const playerLeft = player.getLeft();
+        const playerRight = player.getRight();
+        const playerHeight = player._rect.height;
+
+        const tileBottom = entity.getBottom();
+        const tileTop = entity.getTop();
+        const tileLeft = entity.getLeft();
+        const tileRight = entity.getRight();
+        const tileWidth = entity._rect.width;
+        const tileHeight = entity._rect.height;
+
+        const bufferZone = 1; // Відступ
+        let slopeY: number;
+
+        switch (slopeType) {
+            case SLOPE_TYPE.FLOOR_UP: {
+                // Підлога піднімається зліва направо
+                if (playerBottom<=tileBottom+bufferZone) {
+                    const delta = MathEx.clamp(playerRight - tileLeft,0,tileWidth);
+                    const slopeFactor = tileHeight * delta/tileWidth;
+                    slopeY = tileBottom - slopeFactor - playerHeight - player._rect.y - bufferZone;
+                    if (player.pos.y>slopeY) {
+                        pos.y = slopeY;
+                        emitCollisionEvents(player, entity);
+                        player.collisionFlags.bottom = entity.collisionFlags.top = true;
+                        reflectVelocityY(player, vel, entity);
+                    }
+                }
+                else {
+                    //if approach from sides, ignore to allow correct slope resolution
+                    //if (player.getLeft()<=entity.getLeft()) return;
+                    interpolate_AABB(player, entity);
+                    resolveCollision_AABB(player, pos, vel, entity);
+                }
+                break;
             }
-        } else {
-            if (player.getTop()>=entity.getTop()-1) {
-                collidePlayer_AABB_withCeilSlope(player, pos, vel, entity, slopeDirection);
-            } else {
-                interpolate_AABB(player, entity);
-                resolveCollision_AABB(player, pos, vel, entity);
+
+            case SLOPE_TYPE.FLOOR_DOWN: {
+                // Підлога опускається зліва направо
+                if (playerBottom<=tileBottom+bufferZone) {
+                    const delta = MathEx.clamp(playerLeft - tileLeft,0,tileWidth);
+                    const slopeFactor = tileHeight - tileHeight * delta/tileWidth;
+                    slopeY = tileBottom - slopeFactor - playerHeight - player._rect.y - bufferZone;
+                    if (player.pos.y>slopeY) {
+                        pos.y = slopeY;
+                        emitCollisionEvents(player, entity);
+                        player.collisionFlags.bottom = entity.collisionFlags.top = true;
+                        reflectVelocityY(player, vel, entity);
+                    }
+                }
+                else {
+                    //if (player.getRight()>=entity.getRight()) return;
+                    interpolate_AABB(player, entity);
+                    resolveCollision_AABB(player, pos, vel, entity);
+                }
+                break;
+            }
+
+            case SLOPE_TYPE.CEIL_UP: {
+                // Стеля піднімається зліва направо
+                if (player.getTop()>=entity.getTop()-bufferZone) {
+                    const delta = MathEx.clamp(playerLeft  - tileLeft,0,tileWidth);
+                    const slopeFactor = tileHeight - tileHeight * delta/tileWidth;
+                    slopeY = tileTop + slopeFactor - player._rect.y + bufferZone;
+                    if (player.pos.y<slopeY) {
+                        pos.y = slopeY;
+                        emitCollisionEvents(player, entity);
+                        player.collisionFlags.top = entity.collisionFlags.bottom = true;
+                        reflectVelocityY(player, vel, entity);
+                    }
+                }
+                else {
+                    interpolate_AABB(player, entity);
+                    resolveCollision_AABB(player, pos, vel, entity);
+                }
+                break;
+            }
+
+            case SLOPE_TYPE.CEIL_DOWN: {
+                // Стеля піднімається зліва направо
+                if (player.getTop()>=entity.getTop()-bufferZone) {
+                    const delta = MathEx.clamp(playerRight  - tileLeft,0,tileWidth);
+                    const slopeFactor = tileHeight * delta/tileWidth;
+                    slopeY = tileTop + slopeFactor - player._rect.y + bufferZone;
+                    if (player.pos.y<slopeY) {
+                        pos.y = slopeY;
+                        emitCollisionEvents(player, entity);
+                        player.collisionFlags.top = entity.collisionFlags.bottom = true;
+                        reflectVelocityY(player, vel, entity);
+                    }
+                }
+                else {
+                    interpolate_AABB(player, entity);
+                    resolveCollision_AABB(player, pos, vel, entity);
+                }
+                break;
             }
         }
-    }
+    };
 
     export const resolveOverlap_AABB = (player:ArcadeRigidBody, entity:ArcadeRigidBody):void=> {
         if (player.getHostModel().isDetached() || entity.getHostModel().isDetached()) return;
@@ -187,49 +260,6 @@ export namespace arcadePhysicsHelper {
         if (player.getHostModel().isDetached() || entity.getHostModel().isDetached()) return;
         player.collisionEventHandler.trigger(ARCADE_COLLISION_EVENTS.COLLIDED, entity);
         entity.collisionEventHandler.trigger(ARCADE_COLLISION_EVENTS.COLLIDED, player);
-    }
-
-    const collidePlayer_AABB_withFloorSlope =(player:ArcadeRigidBody, pos: Point2d, vel: Point2d, slope:ArcadeRigidBody,slopeType:SLOPE_DIRECTION):void=> {
-        const dxFactor =
-            slopeType===SLOPE_DIRECTION.UP?
-                player.getRight() - slope.getLeft():
-                player.getLeft()  - slope.getLeft();
-        const dx = MathEx.clamp(dxFactor,0,slope._rect.width);
-        const slopeFactor = slope._rect.height * dx/slope._rect.width;
-        const slopeCorrection =
-            slopeType===SLOPE_DIRECTION.UP?
-                slopeFactor:
-                slope._rect.height - slopeFactor;
-        const onSlopePosY = slope.getBottom() - slopeCorrection - player._rect.height - player._rect.y - 1;
-        if (player.pos.y>onSlopePosY) {
-            pos.y = onSlopePosY;
-
-            emitCollisionEvents(player, slope);
-            player.collisionFlags.bottom = slope.collisionFlags.top = true;
-            reflectVelocityY(player, vel, slope);
-        }
-    }
-
-
-    const collidePlayer_AABB_withCeilSlope =(player:ArcadeRigidBody, pos: Point2d, vel: Point2d, slope:ArcadeRigidBody,slopeType:SLOPE_DIRECTION):void=> {
-        const dxFactor =
-            slopeType===SLOPE_DIRECTION.DOWN?
-                player.getRight() - slope.getLeft():
-                player.getLeft()  - slope.getLeft();
-        const dx = MathEx.clamp(dxFactor,0,slope._rect.width);
-        const slopeFactor = slope._rect.height * dx/slope._rect.width;
-        const slopeCorrection =
-            slopeType===SLOPE_DIRECTION.DOWN?
-                slopeFactor:
-                slope._rect.height - slopeFactor;
-        const onSlopePosY = slope.getTop() + slopeCorrection - player._rect.y + 1;
-        if (player.pos.y<onSlopePosY) {
-            pos.y = onSlopePosY;
-
-            emitCollisionEvents(player, slope);
-            player.collisionFlags.top = slope.collisionFlags.bottom = true;
-            reflectVelocityY(player, vel, slope);
-        }
     }
 
     const collidePlayerWithTop_AABB = (player:ArcadeRigidBody, pos:Point2d, vel: Point2d, entity:ArcadeRigidBody):void=> {
