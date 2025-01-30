@@ -47,7 +47,7 @@ export class MainScene extends Scene {
             oldX = undefined;
             oldY = undefined;
         });
-        surface.mouseEventHandler.on(MOUSE_EVENTS.mousePressed, e=>{
+        surface.mouseEventHandler.on(MOUSE_EVENTS.rightClick, e=>{
             surface.clear();
         });
     }

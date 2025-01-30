@@ -61,6 +61,10 @@ export namespace arcadePhysicsHelper {
     export const resolveCollision_AABB = (player:ArcadeRigidBody, pos:Point2d, vel: Point2d, entity:ArcadeRigidBody):void=> {
 
         if (player._modelType!==ARCADE_RIGID_BODY_TYPE.DYNAMIC) return;
+        if (player.velocity.x>0 && !entity.acceptCollisionsFromSides.left) return;
+        if (player.velocity.x<0 && !entity.acceptCollisionsFromSides.right) return;
+        if (player.velocity.y<0 && !entity.acceptCollisionsFromSides.bottom) return;
+        if (player.velocity.y>0 && !entity.acceptCollisionsFromSides.top) return;
 
         // Find the mid-points of the entity and player
         const pMidX = player.getMidX();

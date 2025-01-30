@@ -25,7 +25,8 @@ export class PlatformMoveable {
         const rigidBody = scene.getGame().getPhysicsSystem(ArcadePhysicsSystem).createRigidBody({
             type: ARCADE_RIGID_BODY_TYPE.KINEMATIC,
             rect: undefined,
-        })
+        });
+        rigidBody.acceptCollisionsFromSides.bottom = false;
 
         container.setRigidBody(rigidBody);
         container.getRigidBody<ArcadeRigidBody>().addInfo.host = this;

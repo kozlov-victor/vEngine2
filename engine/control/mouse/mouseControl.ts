@@ -10,7 +10,8 @@ import {Optional} from "@engine/core/declarations";
 import {CapturedObjectsByTouchIdHolder} from "@engine/control/mouse/capturedObjectsByTouchIdHolder";
 
 
-const LEFT_MOUSE_BTN  = 0 as const;
+const LEFT_MOUSE_BTN  = 1 as const;
+const RIGHT_MOUSE_BTN  = 2 as const;
 
 class MouseEventThrottler {
     private event:MOUSE_EVENTS;
@@ -67,7 +68,7 @@ export class MouseControl implements IControl {
                 return;
             }
 
-            //console.log('ontouchstart');
+            //console.log('on touch start');
             let l = e.touches.length;
             while (l--){
                 this.resolveClick((e.touches[l] as Touch));
@@ -78,17 +79,19 @@ export class MouseControl implements IControl {
                 return;
             }
 
-            //console.log('onmousedown');
-            if (e.button === LEFT_MOUSE_BTN) this.resolveClick(e);
-            else {
-                this.resolveButtonPressed(e);
-            }
+            //console.log('on moused down');
+            if (e.buttons === LEFT_MOUSE_BTN) this.resolveClick(e);
+            if (e.buttons === RIGHT_MOUSE_BTN) this.resolveRightClick(e);
+            else this.resolveMouseDown(e,e.buttons);
         };
-        container.onpointerdown = (e:MouseEvent):void=>{
+        container.onpointerdown = (e:PointerEvent):void=>{
             if (this.mouseEventThrottler.checkSameEventAndSet(MOUSE_EVENTS.mouseDown, e.clientX,e.clientY)) {
                 return;
             }
-            this.resolveClick(e);
+            //console.log('on pointer down',e);
+            if (e.buttons === LEFT_MOUSE_BTN) this.resolveClick(e);
+            else if (e.buttons === RIGHT_MOUSE_BTN) this.resolveRightClick(e);
+            else this.resolveMouseDown(e,e.buttons);
         };
         // mouseUp
         container.ontouchend = container.ontouchcancel = (e:TouchEvent):void=>{
@@ -100,7 +103,7 @@ export class MouseControl implements IControl {
             e.preventDefault();
             let l:number = e.changedTouches.length;
             while (l--){
-                this.resolveMouseUp(e.changedTouches[l]);
+                this.resolveMouseUp(e.changedTouches[l],LEFT_MOUSE_BTN);
             }
         };
         document.body.ontouchend = document.body.ontouchcancel = (e:TouchEvent):void=>{
@@ -112,7 +115,7 @@ export class MouseControl implements IControl {
             //console.log('ontouchend body');
             while (l--){
                 const point = this._helper.resolvePoint(e.changedTouches[l]);
-                this.resolveMouseUp(e.changedTouches[l]);
+                this.resolveMouseUp(e.changedTouches[l],LEFT_MOUSE_BTN);
                 MousePoint.pool.recycle(point);
             }
         };
@@ -120,13 +123,13 @@ export class MouseControl implements IControl {
             container.onpointercancel =
             container.onpointerleave =
             container.onpointerup =
-                (e: MouseEvent):void=>{
+                (e: PointerEvent):void=>{
                     if (this.mouseEventThrottler.checkSameEventAndSet(MOUSE_EVENTS.mouseUp, e.clientX,e.clientY)) {
                         return;
                     }
 
                     //console.log('onpointerup');
-                    this.resolveMouseUp(e);
+                    this.resolveMouseUp(e,LEFT_MOUSE_BTN);
                 };
         container.onmouseup = (e:MouseEvent):void=>{
             if (this.mouseEventThrottler.checkSameEventAndSet(MOUSE_EVENTS.mouseUp, e.clientX,e.clientY)) {
@@ -134,19 +137,19 @@ export class MouseControl implements IControl {
             }
 
             //console.log('onmouseup');
-            this.resolveMouseUp(e);
+            this.resolveMouseUp(e,e.buttons);
         };
-        document.body.onpointerup = (e: MouseEvent):void=>{
+        document.body.onpointerup = (e: PointerEvent):void=>{
             if (this.mouseEventThrottler.checkSameEventAndSet(MOUSE_EVENTS.mouseUp, e.clientX,e.clientY)) {
                 return;
             }
-            this.resolveMouseUp(e);
+            this.resolveMouseUp(e,e.buttons);
         };
         document.body.onmouseup = (e: MouseEvent):void=>{
             if (this.mouseEventThrottler.checkSameEventAndSet(MOUSE_EVENTS.mouseUp, e.clientX,e.clientY)) {
                 return;
             }
-            this.resolveMouseUp(e);
+            this.resolveMouseUp(e,e.buttons);
         };
         // mouseMove
         container.ontouchmove = (e:TouchEvent):void=>{
@@ -157,7 +160,7 @@ export class MouseControl implements IControl {
             e.preventDefault(); // to prevent canvas moving
             let l:number = e.touches.length;
             while (l--){
-                this.resolveMouseMove(e.touches[l],true);
+                this.resolveMouseMove(e.touches[l],LEFT_MOUSE_BTN);
             }
         };
         container.onpointermove = (e:PointerEvent):void=>{
@@ -165,7 +168,7 @@ export class MouseControl implements IControl {
             if (this.mouseEventThrottler.checkSameEventAndSet(MOUSE_EVENTS.mouseMove, e.clientX,e.clientY)) {
                 return;
             }
-            this.resolveMouseMove(e,e.pressure>0);
+            this.resolveMouseMove(e,e.pressure>0?LEFT_MOUSE_BTN:undefined);
         };
         container.onmousemove = (e:MouseEvent):void=>{
             if (this.mouseEventThrottler.checkSameEventAndSet(MOUSE_EVENTS.mouseMove, e.clientX,e.clientY)) {
@@ -173,8 +176,8 @@ export class MouseControl implements IControl {
             }
 
             //console.log('mousemove',e.clientX,e.clientY,e.buttons,e.button);
-            const isMouseDown:boolean = e.buttons === 1;
-            this.resolveMouseMove(e,isMouseDown);
+            const button = e.button===0?undefined:e.button;
+            this.resolveMouseMove(e,button);
         };
         // other
         container.ondblclick = (e:MouseEvent):void=>{ // todo now only on pc
@@ -205,10 +208,11 @@ export class MouseControl implements IControl {
         });
     }
 
-    private triggerEvent(e:MouseEvent|Touch, mouseEvent:MOUSE_EVENTS, isMouseDown = false):MousePoint{
+    private triggerEvent(e:MouseEvent|Touch, mouseEvent:MOUSE_EVENTS, mouseButton?: number):MousePoint{
         const scene = this.game.getCurrentScene();
         const mousePoint = this._helper.resolvePoint(e);
-        mousePoint.isMouseDown = isMouseDown;
+        mousePoint.isMouseDown = mouseButton!==undefined;
+        mousePoint.button = mouseButton;
 
         const objectStackItems = this.game.getCurrentScene()._renderingObjectStack.get();
         let i = objectStackItems.length; // reversed loop
@@ -263,8 +267,8 @@ export class MouseControl implements IControl {
             sceneMouseEvent.id = mousePoint.id;
             sceneMouseEvent.eventName = mouseEvent;
             sceneMouseEvent.nativeEvent = e as MouseEvent;
-            sceneMouseEvent.button = (e as MouseEvent).buttons;
-            sceneMouseEvent.isMouseDown = isMouseDown;
+            sceneMouseEvent.button = mouseButton;
+            sceneMouseEvent.isMouseDown = mouseButton!==undefined;
             scene.mouseEventHandler.trigger(mouseEvent,sceneMouseEvent);
             SceneMouseEvent.pool.recycle(sceneMouseEvent);
         }
@@ -274,17 +278,21 @@ export class MouseControl implements IControl {
     }
 
     private resolveClick(e:Touch|MouseEvent):void {
-        MousePoint.pool.recycle(this.triggerEvent(e,MOUSE_EVENTS.click));
-        MousePoint.pool.recycle(this.triggerEvent(e,MOUSE_EVENTS.mouseDown));
+        MousePoint.pool.recycle(this.triggerEvent(e,MOUSE_EVENTS.click,LEFT_MOUSE_BTN));
+        MousePoint.pool.recycle(this.triggerEvent(e,MOUSE_EVENTS.mouseDown,LEFT_MOUSE_BTN));
     }
 
-    private resolveButtonPressed(e:Touch|MouseEvent):void {
-        MousePoint.pool.recycle(this.triggerEvent(e,MOUSE_EVENTS.click));
-        MousePoint.pool.recycle(this.triggerEvent(e,MOUSE_EVENTS.mousePressed));
+    private resolveRightClick(e:Touch|MouseEvent):void {
+        MousePoint.pool.recycle(this.triggerEvent(e,MOUSE_EVENTS.rightClick,RIGHT_MOUSE_BTN));
+        MousePoint.pool.recycle(this.triggerEvent(e,MOUSE_EVENTS.mouseDown,RIGHT_MOUSE_BTN));
     }
 
-    private resolveMouseMove(e:Touch|MouseEvent|PointerEvent,isMouseDown:boolean):void {
-        const point = this.triggerEvent(e,MOUSE_EVENTS.mouseMove,isMouseDown);
+    private resolveMouseDown(e:Touch|MouseEvent,mouseButton:number):void {
+        MousePoint.pool.recycle(this.triggerEvent(e,MOUSE_EVENTS.mouseDown,mouseButton));
+    }
+
+    private resolveMouseMove(e:Touch|MouseEvent|PointerEvent,mouseButton?:number):void {
+        const point = this.triggerEvent(e,MOUSE_EVENTS.mouseMove,mouseButton);
         const capturedNew = this._capturedObjectsByTouchIdHolder.getByTouchId(point.id);
         const capturedOld = this._capturedObjectsByTouchIdPrevHolder.getByTouchId(point.id);
         // mouse enter
@@ -311,8 +319,8 @@ export class MouseControl implements IControl {
         MousePoint.pool.recycle(point);
     }
 
-    private resolveMouseUp(e:MouseEvent|Touch):void {
-        const point = this.triggerEvent(e,MOUSE_EVENTS.mouseUp);
+    private resolveMouseUp(e:MouseEvent|Touch,mouseButton:number):void {
+        const point = this.triggerEvent(e,MOUSE_EVENTS.mouseUp,mouseButton);
         const capturedNew = this._capturedObjectsByTouchIdHolder.getByTouchId(point.id);
         const capturedOld = this._capturedObjectsByTouchIdPrevHolder.getByTouchId(point.id);
         for (let i = 0; i < capturedOld.length; i++) {

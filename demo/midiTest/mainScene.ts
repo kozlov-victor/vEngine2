@@ -30,6 +30,7 @@ export class MainScene extends Scene {
         // https://www.midis101.com/search/Jazz
         const midiTracks = [
             'BACH-988',
+            'vivaldi_winter',
             'TurnThePage',
             'jazzinterlude50',
             'Seek_and_Destroy',

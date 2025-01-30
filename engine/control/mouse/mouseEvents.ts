@@ -1,7 +1,7 @@
 
 export const enum MOUSE_EVENTS  {
     click           ,
-    mousePressed    ,
+    rightClick      ,
     mouseDown       ,
     mouseMove       ,
     mouseLeave      ,

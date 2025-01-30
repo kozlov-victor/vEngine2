@@ -23,6 +23,7 @@ export class MidiTracker {
     private numOfTracks:number;
     private channelPresets:CHANNEL_PRESET[] = Array(16);
     private instrument = new Instrument();
+    private _loop = false;
     public readonly _oscillators: Oscillator[] = [];
 
     constructor(public readonly sampleRate: number = 11025) {}
@@ -33,8 +34,11 @@ export class MidiTracker {
         this.numOfTracks = 0;
         this._oscillators.length = 0;
         this.instrument.resetCache();
-        const l = this.channelPresets.length;
-        for (let i=0;i<l;i++) {
+        this._setChannelPresets();
+    }
+
+    private _setChannelPresets() {
+        for (let i=0;i<this.channelPresets.length;i++) {
             this.channelPresets[i] = {
                 balance: 0.5,
                 velocity: 1,
@@ -93,7 +97,7 @@ export class MidiTracker {
             const outputDataLeft = outputBuffer.getChannelData(0);
             const outputDataRight = outputBuffer.getChannelData(1);
             for (let i = 0; i < inputBuffer.length; i++) {
-                if (ptr>=this.lastEventSampleNum && this._oscillators.length===0) {
+                if (!this._loop && ptr>=this.lastEventSampleNum && this._oscillators.length===0) {
                     this.playingContext.stop();
                     break;
                 }
@@ -101,8 +105,18 @@ export class MidiTracker {
                 outputDataLeft[i] = sample.L;
                 outputDataRight[i] = sample.R;
                 ptr++;
+                if (this._loop && ptr>=this.lastEventSampleNum) {
+                    ptr = 0;
+                    this._oscillators.length = 0;
+                    this._setChannelPresets();
+                    console.log('loop');
+                }
             }
         };
+    }
+
+    public loop(value:boolean) {
+        this._loop = value;
     }
 
     private execCommand(command: INTERNAL_MIDI_COMMAND):void {
@@ -182,7 +196,7 @@ export class MidiTracker {
             }
             case 'setPan': {
                 console.log(`pan: ${command.payload.value} for channel ${command.channel.channelNumber}`);
-                const currentChannel:CHANNEL_PRESET = this.channelPresets[command.channel.channelNumber];
+                const currentChannel = this.channelPresets[command.channel.channelNumber];
                 currentChannel.balance = command.payload.value;
                 break;
             }
@@ -214,8 +228,8 @@ export class MidiTracker {
         }
 
         const sumAll: SAMPLE = {L: 0, R: 0};
-        for (let i: number = 0; i < this._oscillators.length; i++) {
-            const sample: SAMPLE = this._oscillators[i].generateSample(currentSampleNum);
+        for (let i = 0; i < this._oscillators.length; i++) {
+            const sample = this._oscillators[i].generateSample(currentSampleNum);
             sumAll.L += sample.L;
             sumAll.R += sample.R;
         }

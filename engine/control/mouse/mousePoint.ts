@@ -21,7 +21,7 @@ export class SceneMouseEvent {
     nativeEvent: MouseEvent;
     eventName:MOUSE_EVENTS;
     isMouseDown: boolean;
-    button:MOUSE_BUTTON;
+    button?:MOUSE_BUTTON;
 }
 
 export class ObjectMouseEvent extends SceneMouseEvent {
@@ -43,5 +43,6 @@ export class MousePoint {
     public id:number;
     public target:RenderableModel|Scene;
     public isMouseDown:boolean;
+    public button?:number;
 }
 

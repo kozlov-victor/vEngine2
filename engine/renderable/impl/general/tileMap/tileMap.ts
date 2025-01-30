@@ -8,7 +8,7 @@ import {DrawingSurface} from "@engine/renderable/impl/surface/drawingSurface";
 import {RenderableModelWithTexture} from "@engine/renderable/abstract/renderableModelWithTexture";
 import {ITexture} from "@engine/renderer/common/texture";
 import {ArcadePhysicsSystem, SLOPE_TYPE} from "@engine/physics/arcade/arcadePhysicsSystem";
-import {ARCADE_RIGID_BODY_TYPE} from "@engine/physics/arcade/arcadeRigidBody";
+import {ARCADE_RIGID_BODY_TYPE, ArcadeRigidBody} from "@engine/physics/arcade/arcadeRigidBody";
 import {IRectJSON} from "@engine/geometry/rect";
 import {IRigidBody} from "@engine/physics/common/interfaces";
 import {Point2d} from "@engine/geometry/point2d";
@@ -185,11 +185,38 @@ export class TileMap extends RenderableModelWithTexture {
         return result;
     }
 
+    private _getDataValueAtCellXYSafe(x:number,y:number) {
+        if (x<0 || y<0 || x>this._numOfTilesInMapByX-1 || y>this._numOfTilesInMapByY-1) return undefined;
+        return this.getDataValueAtCellXY(x,y);
+    }
+
     private _isTileCollideableCandidate(x:number,y:number) {
-        if (x<0 || y<0 || x>this._numOfTilesInMapByX-1 || y>this._numOfTilesInMapByY-1) return true;
-        const tileId = this.getDataValueAtCellXY(x,y);
+        const tileId = this._getDataValueAtCellXYSafe(x,y);
         if (tileId===undefined) return false;
         return this._isTileCollideable(tileId);
+    }
+
+    /*
+       /
+      /
+    X/!--------!
+    / ! corner !
+   /  ! slope  !
+  /---!--------!
+     */
+    private _checkCornerSlope(rigidBody:ArcadeRigidBody, x:number,y:number) {
+        if (
+            this._collisionInfo.slopes?.floorUp?.includes(this._getDataValueAtCellXYSafe(x-1,y)!) &&
+            this._collisionInfo.slopes?.floorUp?.includes(this._getDataValueAtCellXYSafe(x,y-1)!)
+        ) {
+            rigidBody.acceptCollisionsFromSides.left = false;
+        }
+        else if (
+            this._collisionInfo.slopes?.floorDown?.includes(this._getDataValueAtCellXYSafe(x+1,y)!) &&
+            this._collisionInfo.slopes?.floorDown?.includes(this._getDataValueAtCellXYSafe(x,y-1)!)
+        ) {
+            rigidBody.acceptCollisionsFromSides.right = false;
+        }
     }
 
     constructor(game:Game,texture:ITexture){
@@ -355,12 +382,15 @@ export class TileMap extends RenderableModelWithTexture {
                     acceptCollisions: this._isTileCollideable(tileId),
                 });
                 rigidBody.addInfo = {tile:true,tileId,tileX:x,tileY:y};
+                this._checkCornerSlope(rigidBody, x, y);
 
                 if (collisionInfo.slopes?.floorUp?.includes(tileId)) {
                     rigidBody.addInfo.slopeType = SLOPE_TYPE.FLOOR_UP;
+                    rigidBody.acceptCollisionsFromSides.left = false;
                 }
                 else if (collisionInfo.slopes?.floorDown?.includes(tileId)) {
                     rigidBody.addInfo.slopeType = SLOPE_TYPE.FLOOR_DOWN;
+                    rigidBody.acceptCollisionsFromSides.right = false;
                 }
                 else if (collisionInfo.slopes?.ceilUp?.includes(tileId)) {
                     rigidBody.addInfo.slopeType = SLOPE_TYPE.CEIL_UP;
